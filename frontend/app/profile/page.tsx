@@ -9,6 +9,7 @@ import { Card } from '@/components/ui/Card';
 import { Loading } from '@/components/ui/Loading';
 import { Toast } from '@/components/ui/Toast';
 import Link from 'next/link';
+import { PageWrapper, BackLink } from '@/components/ui/DesignSystem';
 
 interface ProfileFormData {
   firstName: string;
@@ -154,14 +155,17 @@ export default function ProfilePage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <Loading text="Loading profile..." />
-      </div>
+      <PageWrapper>
+        <div className="min-h-screen flex items-center justify-center bg-earth-50/30">
+          <Loading text="Loading profile..." />
+        </div>
+      </PageWrapper>
     );
   }
 
   return (
-    <div className="max-w-4xl mx-auto">
+    <PageWrapper>
+    <div className="max-w-4xl mx-auto px-4 py-8 bg-earth-50/30 min-h-screen">
       {toast && (
         <Toast
           message={toast.message}
@@ -338,6 +342,11 @@ export default function ProfilePage() {
           </Card>
         </div>
       </div>
+
+      <div className="mt-8">
+        <BackLink href="/" label="Return to Home" />
+      </div>
     </div>
+    </PageWrapper>
   );
 }

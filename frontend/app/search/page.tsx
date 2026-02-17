@@ -16,6 +16,12 @@ import { searchClient, ALGOLIA_INDEX_ALL } from '@/lib/algolia';
 import Link from 'next/link';
 import { Loading } from '@/components/Loading';
 import { Breadcrumbs } from '@/components/ui/Breadcrumbs';
+import {
+  PageWrapper,
+  LeafPattern,
+  Tag,
+  BackLink,
+} from '@/components/ui/DesignSystem';
 
 // Type icons mapping
 const typeIcons: Record<string, string> = {
@@ -147,15 +153,46 @@ function SearchContent() {
   const initialQuery = searchParams.get('q') || '';
 
   return (
-    <div className="max-w-7xl mx-auto">
-      <Breadcrumbs
-        items={[
-          { label: 'Home', href: '/' },
-          { label: 'Search' },
-        ]}
-        className="mb-6"
-      />
+    <PageWrapper>
+      {/* Hero Section */}
+      <div className="relative overflow-hidden bg-gradient-to-br from-earth-50 via-sage-50/50 to-cream-100 border-b border-sage-200/50">
+        <LeafPattern opacity={0.04} />
+        <div className="absolute top-20 left-10 w-64 h-64 bg-sage-300/20 rounded-full blur-3xl" />
+        <div className="absolute bottom-10 right-20 w-48 h-48 bg-earth-300/15 rounded-full blur-3xl" />
 
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
+          <Breadcrumbs
+            items={[
+              { label: 'Home', href: '/' },
+              { label: 'Search' },
+            ]}
+            className="mb-8"
+          />
+
+          <div className="max-w-2xl">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-sage-500 to-earth-600 flex items-center justify-center shadow-lg">
+                <svg className="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
+              </div>
+              <span className="text-sage-600 font-medium tracking-wide uppercase text-sm">
+                Search Database
+              </span>
+            </div>
+
+            <h1 className="font-serif text-4xl md:text-5xl lg:text-6xl font-bold text-earth-900 mb-4 leading-tight">
+              Search
+            </h1>
+
+            <p className="text-lg md:text-xl text-sage-700 leading-relaxed">
+              Find herbs, modalities, conditions, practitioners, and formulas in our comprehensive database.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <InstantSearch
         searchClient={searchClient}
         indexName={ALGOLIA_INDEX_ALL}
@@ -167,16 +204,8 @@ function SearchContent() {
       >
         <Configure hitsPerPage={12} />
 
-        {/* Header */}
+        {/* Search Box */}
         <div className="mb-8">
-          <h1 className="text-4xl md:text-5xl font-serif font-bold text-earth-800 mb-3">
-            Search
-          </h1>
-          <p className="text-xl text-sage-700 max-w-2xl mb-6">
-            Find herbs, modalities, conditions, practitioners, and formulas in our comprehensive database.
-          </p>
-
-          {/* Search Box */}
           <div className="relative max-w-2xl">
             <SearchBox
               placeholder="Search for herbs, modalities, conditions..."
@@ -257,15 +286,9 @@ function SearchContent() {
                     Enter keywords above to search our database of herbs, healing modalities, health conditions, practitioners, and traditional formulas.
                   </p>
                   <div className="flex flex-wrap justify-center gap-2">
-                    <span className="text-sm bg-white text-sage-700 px-3 py-1.5 rounded-full border border-sage-200">
-                      Try: &ldquo;ginger&rdquo;
-                    </span>
-                    <span className="text-sm bg-white text-sage-700 px-3 py-1.5 rounded-full border border-sage-200">
-                      Try: &ldquo;anxiety&rdquo;
-                    </span>
-                    <span className="text-sm bg-white text-sage-700 px-3 py-1.5 rounded-full border border-sage-200">
-                      Try: &ldquo;acupuncture&rdquo;
-                    </span>
+                    <Tag variant="sage" size="sm">Try: &ldquo;ginger&rdquo;</Tag>
+                    <Tag variant="sage" size="sm">Try: &ldquo;anxiety&rdquo;</Tag>
+                    <Tag variant="sage" size="sm">Try: &ldquo;acupuncture&rdquo;</Tag>
                   </div>
                 </div>
               }
@@ -361,13 +384,9 @@ function SearchContent() {
         </div>
       </InstantSearch>
 
-      {/* Back Link */}
-      <div className="text-center mt-12">
-        <Link href="/" className="text-sage-600 hover:text-sage-800 font-medium">
-          ← Back to Home
-        </Link>
+      <BackLink href="/" label="Return to Home" />
       </div>
-    </div>
+    </PageWrapper>
   );
 }
 

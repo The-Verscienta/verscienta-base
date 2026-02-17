@@ -6,6 +6,7 @@ import { SortDropdown } from '@/components/ui/SortDropdown';
 import { ServerPagination, PaginationInfo } from '@/components/ui/ServerPagination';
 import { ClinicMap } from '@/components/clinic/ClinicMap';
 import type { ClinicEntity } from '@/types/drupal';
+import { PageWrapper, LeafPattern, Tag, BackLink } from '@/components/ui/DesignSystem';
 
 export const dynamic = 'force-dynamic';
 
@@ -101,26 +102,33 @@ export default async function ClinicsPage({ searchParams }: PageProps) {
     }));
 
   return (
-    <div className="max-w-7xl mx-auto">
-      {/* Breadcrumbs */}
-      <Breadcrumbs
-        items={[
-          { label: 'Home', href: '/' },
-          { label: 'Clinics' },
-        ]}
-        className="mb-6"
-      />
-
-      {/* Header */}
-      <div className="mb-10">
-        <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-6">
+    <PageWrapper>
+    <div className="relative overflow-hidden bg-gradient-to-br from-earth-50 via-sage-50/50 to-cream-100 border-b border-sage-200/50">
+      <LeafPattern opacity={0.04} />
+      <div className="absolute top-20 left-10 w-64 h-64 bg-sage-300/20 rounded-full blur-3xl" />
+      <div className="absolute bottom-10 right-20 w-48 h-48 bg-earth-300/15 rounded-full blur-3xl" />
+      <div className="relative max-w-7xl mx-auto px-4 py-8">
+        <Breadcrumbs
+          items={[
+            { label: 'Home', href: '/' },
+            { label: 'Clinics' },
+          ]}
+          className="mb-6"
+        />
+        <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4">
           <div>
-            <h1 className="text-4xl md:text-5xl font-serif font-bold text-earth-800 mb-3">
+            <h1 className="text-4xl md:text-5xl font-serif font-bold text-earth-900 mb-3">
               Find Clinics
             </h1>
-            <p className="text-xl text-sage-700 max-w-2xl">
+            <p className="text-xl text-sage-700 max-w-2xl mb-4">
               Discover holistic health clinics offering natural healing modalities and integrative care.
             </p>
+            <div className="flex flex-wrap gap-2">
+              {acceptingCount > 0 && (
+                <Tag variant="sage" size="sm">{acceptingCount} accepting new patients</Tag>
+              )}
+              <Tag variant="earth" size="sm">{total} clinic{total !== 1 ? 's' : ''} listed</Tag>
+            </div>
           </div>
           <div className="flex items-center gap-4">
             <SortDropdown options={SORT_OPTIONS} defaultValue="-created" />
@@ -131,19 +139,10 @@ export default async function ClinicsPage({ searchParams }: PageProps) {
             />
           </div>
         </div>
-
-        {/* Quick stats */}
-        <div className="flex flex-wrap gap-3">
-          {acceptingCount > 0 && (
-            <span className="text-xs px-3 py-1.5 rounded-full font-medium bg-green-100 text-green-700 border border-green-200">
-              {acceptingCount} accepting new patients
-            </span>
-          )}
-          <span className="text-xs px-3 py-1.5 rounded-full font-medium bg-sage-100 text-sage-700 border border-sage-200">
-            {total} clinic{total !== 1 ? 's' : ''} listed
-          </span>
-        </div>
       </div>
+    </div>
+
+    <div className="max-w-7xl mx-auto px-4 py-8">
 
       {/* Map Section */}
       {mapMarkers.length > 0 && (
@@ -183,7 +182,7 @@ export default async function ClinicsPage({ searchParams }: PageProps) {
                 <Link
                   key={clinic.id}
                   href={`/clinics/${clinic.id}`}
-                  className="group bg-white rounded-xl shadow-sm hover:shadow-xl border border-gray-100 hover:border-sage-200 transition-all overflow-hidden"
+                  className="group bg-white rounded-xl shadow-sm hover:shadow-xl border border-earth-200 hover:border-sage-200 transition-all overflow-hidden"
                 >
                   {/* Card Header */}
                   <div className="bg-gradient-to-br from-sage-50 to-earth-50 border-b border-gray-100">
@@ -314,15 +313,8 @@ export default async function ClinicsPage({ searchParams }: PageProps) {
         </div>
       </div>
 
-      {/* Back Link */}
-      <div className="text-center">
-        <Link
-          href="/"
-          className="text-sage-600 hover:text-sage-800 font-medium"
-        >
-          ← Back to Home
-        </Link>
-      </div>
+      <BackLink href="/" label="Return to Home" />
     </div>
+    </PageWrapper>
   );
 }

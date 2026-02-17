@@ -5,6 +5,15 @@ import type { ConditionEntity, ModalityEntity, FormulaEntity } from '@/types/dru
 import { Breadcrumbs } from '@/components/ui/Breadcrumbs';
 import { SafeHtml } from '@/components/ui/SafeHtml';
 import { getTextValue, hasTextContent } from '@/lib/drupal-helpers';
+import {
+  PageWrapper,
+  LeafPattern,
+  Section,
+  BotanicalDivider,
+  Tag,
+  DisclaimerBox,
+  BackLink,
+} from '@/components/ui/DesignSystem';
 
 interface ConditionDetailProps {
   params: Promise<{
@@ -59,230 +68,243 @@ export default async function ConditionDetailPage({ params }: ConditionDetailPro
   const relatedFormulas = await getRelatedFormulas(id);
   const name = condition.title || 'Condition';
 
+  const severityVariant = condition.field_severity === 'mild' ? 'sage' : condition.field_severity === 'moderate' ? 'gold' : 'warm';
+
   return (
-    <div className="max-w-4xl mx-auto">
-      {/* Breadcrumbs */}
-      <Breadcrumbs
-        items={[
-          { label: 'Home', href: '/' },
-          { label: 'Conditions', href: '/conditions' },
-          { label: name },
-        ]}
-        className="mb-6"
-      />
+    <PageWrapper>
+      {/* Hero Section */}
+      <div className="relative overflow-hidden bg-gradient-to-br from-earth-50 via-sage-50/50 to-cream-100 border-b border-sage-200/50">
+        <LeafPattern opacity={0.04} />
+        <div className="absolute top-20 left-10 w-64 h-64 bg-sage-300/20 rounded-full blur-3xl" />
+        <div className="absolute bottom-10 right-20 w-48 h-48 bg-earth-300/15 rounded-full blur-3xl" />
 
-      {/* Header */}
-      <div className="bg-white rounded-lg shadow-lg p-8 mb-6">
-        <div className="flex items-start justify-between mb-6">
-          <div>
-            <div className="text-6xl mb-4">🏥</div>
-            <h1 className="text-4xl font-bold text-earth-800 mb-2">
-              {name}
-            </h1>
-            {condition.field_severity && (
-              <span
-                className={`inline-block px-3 py-1 rounded-lg font-medium ${
-                  condition.field_severity === 'mild'
-                    ? 'bg-green-100 text-green-700'
-                    : condition.field_severity === 'moderate'
-                    ? 'bg-yellow-100 text-yellow-700'
-                    : 'bg-red-100 text-red-700'
-                }`}
-              >
-                Severity: {condition.field_severity.charAt(0).toUpperCase() + condition.field_severity.slice(1)}
-              </span>
-            )}
-          </div>
-        </div>
+        <div className="relative max-w-6xl mx-auto px-4 py-8">
+          <Breadcrumbs
+            items={[
+              { label: 'Home', href: '/' },
+              { label: 'Conditions', href: '/conditions' },
+              { label: name },
+            ]}
+            className="mb-8"
+          />
 
-        {/* Description */}
-        {condition.body?.value && (
-          <div className="mb-6">
-            <h3 className="text-xl font-semibold text-earth-800 mb-3">Overview</h3>
-            <div className="prose max-w-none">
-              <SafeHtml html={condition.body.value} />
+          <div className="bg-white rounded-3xl shadow-xl border border-earth-200 relative overflow-hidden">
+            <div className="absolute -right-12 -top-12 w-64 h-64 opacity-5 pointer-events-none">
+              <div className="text-8xl">🏥</div>
+            </div>
+            <div className="relative p-8 md:p-12">
+              <h1 className="font-serif text-5xl md:text-6xl font-bold text-earth-900 mb-4 tracking-tight">
+                {name}
+              </h1>
+
+              {condition.field_severity && (
+                <div className="flex flex-wrap gap-2 mt-4">
+                  <Tag variant={severityVariant} size="md">
+                    Severity: {condition.field_severity.charAt(0).toUpperCase() + condition.field_severity.slice(1)}
+                  </Tag>
+                </div>
+              )}
             </div>
           </div>
+        </div>
+      </div>
+
+      {/* Main Content */}
+      <div className="max-w-6xl mx-auto px-4 py-8 space-y-8">
+        {condition.body?.value && (
+          <Section
+            id="overview"
+            variant="default"
+            title="Overview"
+            icon={
+              <svg className="w-8 h-8 text-sage-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            }
+          >
+            <div className="prose max-w-none text-earth-700">
+              <SafeHtml html={condition.body.value} />
+            </div>
+          </Section>
         )}
 
-        {/* Symptoms */}
         {condition.field_symptoms && condition.field_symptoms.length > 0 && (
-          <div className="mb-6">
-            <h3 className="text-xl font-semibold text-earth-800 mb-3">Common Symptoms</h3>
+          <Section
+            id="symptoms"
+            variant="default"
+            title="Common Symptoms"
+            icon={
+              <svg className="w-8 h-8 text-sage-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+              </svg>
+            }
+          >
             <ul className="grid md:grid-cols-2 gap-2">
               {condition.field_symptoms.map((symptom, idx) => (
                 <li key={idx} className="flex items-start gap-2">
                   <span className="text-sage-600 mt-1">•</span>
-                  <span className="text-gray-700">{symptom}</span>
+                  <span className="text-earth-700">{symptom}</span>
                 </li>
               ))}
             </ul>
-          </div>
+          </Section>
         )}
-      </div>
 
-      {/* Recommended Modalities */}
-      {condition.field_modalities && condition.field_modalities.length > 0 && (
-        <div className="bg-white rounded-lg shadow-lg p-8 mb-6">
-          <h2 className="text-2xl font-bold text-earth-800 mb-4">
-            Recommended Holistic Modalities
-          </h2>
-          <p className="text-gray-600 mb-4">
-            These holistic health modalities may be beneficial for managing {name}:
-          </p>
+        {condition.field_modalities && condition.field_modalities.length > 0 && (
+          <>
+            <BotanicalDivider />
+            <Section
+              id="modalities"
+              variant="default"
+              title="Recommended Holistic Modalities"
+              icon={
+                <svg className="w-8 h-8 text-sage-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                </svg>
+            }
+            >
+              <p className="text-earth-600 mb-4">
+                These holistic health modalities may be beneficial for managing {name}:
+              </p>
+              <div className="grid md:grid-cols-2 gap-4">
+                {condition.field_modalities.map((modality: any) => (
+                  <Link
+                    key={modality.id}
+                    href={`/modalities/${modality.id}`}
+                    className="block border border-earth-200 rounded-xl p-4 hover:shadow-lg hover:border-sage-400 transition"
+                  >
+                    <div className="flex items-start justify-between">
+                      <div>
+                        <h3 className="font-bold text-earth-800 text-lg mb-1">
+                          {modality.title || 'Modality'}
+                        </h3>
+                        {modality.field_excels_at && modality.field_excels_at.length > 0 && (
+                          <p className="text-sm text-earth-600">
+                            Excels at: {modality.field_excels_at.slice(0, 2).join(', ')}
+                          </p>
+                        )}
+                      </div>
+                      <span className="text-sage-600 text-sm font-medium">
+                        Learn More →
+                      </span>
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            </Section>
+          </>
+        )}
 
-          <div className="grid md:grid-cols-2 gap-4">
-            {condition.field_modalities.map((modality: any) => (
-              <Link
-                key={modality.id}
-                href={`/modalities/${modality.id}`}
-                className="block border border-sage-200 rounded-lg p-4 hover:shadow-md hover:border-sage-400 transition"
-              >
-                <div className="flex items-start justify-between">
-                  <div>
-                    <h3 className="font-bold text-earth-800 text-lg mb-1">
-                      {modality.title || 'Modality'}
-                    </h3>
-                    {modality.field_excels_at && modality.field_excels_at.length > 0 && (
-                      <p className="text-sm text-gray-600">
-                        Excels at: {modality.field_excels_at.slice(0, 2).join(', ')}
+        {relatedFormulas.length > 0 && (
+          <>
+            <BotanicalDivider />
+            <Section
+              id="formulas"
+              variant="default"
+              title={`Herbal Formulas for ${name}`}
+              icon={
+                <svg className="w-8 h-8 text-sage-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
+                </svg>
+            }
+            >
+              <p className="text-earth-600 mb-4">
+                Traditional herbal formulas that may help with this condition:
+              </p>
+              <div className="grid md:grid-cols-2 gap-4">
+                {relatedFormulas.map((formula) => (
+                  <Link
+                    key={formula.id}
+                    href={`/formulas/${formula.id}`}
+                    className="block border border-earth-200 rounded-xl p-4 hover:shadow-lg hover:border-sage-400 transition"
+                  >
+                    <div className="flex items-start justify-between mb-2">
+                      <h3 className="font-bold text-earth-800 text-lg">
+                        {formula.title}
+                      </h3>
+                      <Tag variant="sage" size="sm">
+                        {formula.field_herb_ingredients?.length || 0} herbs
+                      </Tag>
+                    </div>
+                    {hasTextContent(formula.field_formula_description) && (
+                      <p className="text-sm text-earth-600 mb-3 line-clamp-2">
+                        {getTextValue(formula.field_formula_description)}
                       </p>
                     )}
-                  </div>
-                  <span className="text-sage-600 text-sm font-medium">
-                    Learn More →
-                  </span>
-                </div>
-              </Link>
-            ))}
-          </div>
-        </div>
-      )}
+                    <div className="text-sage-600 text-sm font-medium">
+                      View Formula →
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            </Section>
+          </>
+        )}
 
-      {/* Related Formulas */}
-      {relatedFormulas.length > 0 && (
-        <div className="bg-white rounded-lg shadow-lg p-8 mb-6">
-          <h2 className="text-2xl font-bold text-earth-800 mb-4">
-            Herbal Formulas for {name}
+        <BotanicalDivider />
+        <Section
+          id="approach"
+          variant="feature"
+          title="Holistic Management Approach"
+          icon={
+            <svg className="w-8 h-8 text-sage-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+          }
+        >
+          <div className="space-y-4 text-earth-700">
+            <div>
+              <h3 className="font-semibold text-earth-800 mb-2 flex items-center gap-2">
+                <span>🧘</span>
+                Mind-Body Practices
+              </h3>
+              <p className="text-sm">
+                Consider incorporating stress reduction techniques, meditation, and gentle movement
+                practices to support overall well-being.
+              </p>
+            </div>
+            <div>
+              <h3 className="font-semibold text-earth-800 mb-2 flex items-center gap-2">
+                <span>🥗</span>
+                Dietary Considerations
+              </h3>
+              <p className="text-sm">
+                A whole-foods, nutrient-dense diet can support the body's natural healing processes.
+                Consider consulting with a nutritionist for personalized guidance.
+              </p>
+            </div>
+            <div>
+              <h3 className="font-semibold text-earth-800 mb-2 flex items-center gap-2">
+                <span>💚</span>
+                Lifestyle Modifications
+              </h3>
+              <p className="text-sm">
+                Adequate sleep, regular physical activity, and stress management are foundational
+                to managing most health conditions holistically.
+              </p>
+            </div>
+          </div>
+        </Section>
+
+        <DisclaimerBox />
+
+        <div className="bg-gradient-to-r from-earth-700 via-sage-700 to-earth-800 text-white p-8 rounded-2xl shadow-xl text-center">
+          <h2 className="text-2xl font-serif font-bold mb-4">
+            Need Professional Guidance?
           </h2>
-          <p className="text-gray-600 mb-4">
-            Traditional herbal formulas that may help with this condition:
+          <p className="mb-6 opacity-90 max-w-2xl mx-auto">
+            Connect with qualified holistic health practitioners who can provide personalized care.
           </p>
-
-          <div className="grid md:grid-cols-2 gap-4">
-            {relatedFormulas.map((formula) => (
-              <Link
-                key={formula.id}
-                href={`/formulas/${formula.id}`}
-                className="block border border-sage-200 rounded-lg p-4 hover:shadow-md hover:border-sage-400 transition"
-              >
-                <div className="flex items-start justify-between mb-2">
-                  <h3 className="font-bold text-earth-800 text-lg">
-                    {formula.title}
-                  </h3>
-                  <span className="text-xs bg-sage-100 text-sage-700 px-2 py-1 rounded">
-                    {formula.field_herb_ingredients?.length || 0} herbs
-                  </span>
-                </div>
-
-                {hasTextContent(formula.field_formula_description) && (
-                  <p className="text-sm text-gray-600 mb-3 line-clamp-2">
-                    {getTextValue(formula.field_formula_description)}
-                  </p>
-                )}
-
-                <div className="text-sage-600 text-sm font-medium">
-                  View Formula →
-                </div>
-              </Link>
-            ))}
-          </div>
+          <Link
+            href="/practitioners"
+            className="inline-block bg-white text-earth-800 px-8 py-3 rounded-xl font-semibold hover:bg-earth-50 transition shadow-lg"
+          >
+            Find a Practitioner
+          </Link>
         </div>
-      )}
 
-      {/* Lifestyle Recommendations */}
-      <div className="bg-gradient-to-r from-sage-50 to-earth-50 rounded-lg p-8 mb-6 border border-sage-200">
-        <h2 className="text-2xl font-bold text-earth-800 mb-4">
-          Holistic Management Approach
-        </h2>
-        <div className="space-y-4 text-gray-700">
-          <div>
-            <h3 className="font-semibold text-earth-700 mb-2 flex items-center gap-2">
-              <span>🧘</span>
-              Mind-Body Practices
-            </h3>
-            <p className="text-sm">
-              Consider incorporating stress reduction techniques, meditation, and gentle movement
-              practices to support overall well-being.
-            </p>
-          </div>
-
-          <div>
-            <h3 className="font-semibold text-earth-700 mb-2 flex items-center gap-2">
-              <span>🥗</span>
-              Dietary Considerations
-            </h3>
-            <p className="text-sm">
-              A whole-foods, nutrient-dense diet can support the body's natural healing processes.
-              Consider consulting with a nutritionist for personalized guidance.
-            </p>
-          </div>
-
-          <div>
-            <h3 className="font-semibold text-earth-700 mb-2 flex items-center gap-2">
-              <span>💚</span>
-              Lifestyle Modifications
-            </h3>
-            <p className="text-sm">
-              Adequate sleep, regular physical activity, and stress management are foundational
-              to managing most health conditions holistically.
-            </p>
-          </div>
-        </div>
+        <BackLink href="/conditions" label="Back to All Conditions" />
       </div>
-
-      {/* Disclaimer */}
-      <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-6 mb-6">
-        <div className="flex items-start gap-3">
-          <span className="text-2xl">⚠️</span>
-          <div>
-            <h3 className="font-bold text-gray-900 mb-2">Important Medical Disclaimer</h3>
-            <p className="text-sm text-gray-700">
-              This information is provided for educational purposes only and is not intended
-              to diagnose, treat, cure, or prevent any disease. It should not replace
-              professional medical advice, diagnosis, or treatment. Always consult with
-              a qualified healthcare provider before making any changes to your health regimen,
-              especially if you have a medical condition or are taking medications.
-            </p>
-          </div>
-        </div>
-      </div>
-
-      {/* CTA Section */}
-      <div className="bg-gradient-to-r from-earth-700 to-sage-700 text-white p-8 rounded-lg shadow-xl text-center mb-6">
-        <h2 className="text-2xl font-bold mb-4">
-          Need Professional Guidance?
-        </h2>
-        <p className="mb-6 opacity-90">
-          Connect with qualified holistic health practitioners who can provide personalized care.
-        </p>
-        <Link
-          href="/practitioners"
-          className="inline-block bg-white text-earth-800 px-8 py-3 rounded-lg font-semibold hover:bg-earth-50 transition shadow-lg"
-        >
-          Find a Practitioner
-        </Link>
-      </div>
-
-      {/* Back Link */}
-      <div className="text-center">
-        <Link
-          href="/conditions"
-          className="inline-block text-sage-600 hover:text-sage-800 font-medium"
-        >
-          ← Back to All Conditions
-        </Link>
-      </div>
-    </div>
+    </PageWrapper>
   );
 }

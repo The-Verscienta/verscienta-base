@@ -4,6 +4,15 @@ import Link from 'next/link';
 import { Breadcrumbs } from '@/components/ui/Breadcrumbs';
 import { SafeHtml } from '@/components/ui/SafeHtml';
 import { ModalityEntity } from '@/types';
+import {
+  PageWrapper,
+  LeafPattern,
+  Section,
+  BotanicalDivider,
+  Tag,
+  DisclaimerBox,
+  BackLink,
+} from '@/components/ui/DesignSystem';
 
 interface ModalityDetailProps {
   params: Promise<{
@@ -13,15 +22,34 @@ interface ModalityDetailProps {
 
 async function getModality(id: string): Promise<ModalityEntity | null> {
   try {
-    console.log('Fetching modality with ID:', id);
-    // Note: field_conditions doesn't exist as an entity reference in Drupal yet
-    // When added, include it here: 'include': 'field_conditions'
     const modality = await drupal.getResource<ModalityEntity>('node--modality', id);
     return modality;
   } catch (error) {
     console.error('Failed to fetch modality:', error);
     return null;
   }
+}
+
+// Modality icon - healing/hands
+function ModalityIcon() {
+  return (
+    <svg viewBox="0 0 48 48" className="w-full h-full" fill="none">
+      <circle cx="24" cy="24" r="20" fill="url(#modGrad)" opacity="0.1" />
+      <path
+        d="M24 12c-6 4-10 8-10 14a10 10 0 0020 0c0-6-4-10-10-14z"
+        fill="url(#modGrad)"
+        opacity="0.25"
+      />
+      <circle cx="24" cy="22" r="6" stroke="url(#modGrad)" strokeWidth="2" fill="none" />
+      <path d="M24 16v-4M24 32v4M18 22h-4M30 22h4" stroke="url(#modGrad)" strokeWidth="2" strokeLinecap="round" />
+      <defs>
+        <linearGradient id="modGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stopColor="#4a7c59" />
+          <stop offset="100%" stopColor="#6b8f71" />
+        </linearGradient>
+      </defs>
+    </svg>
+  );
 }
 
 export default async function ModalityDetailPage({ params }: ModalityDetailProps) {
@@ -33,129 +61,173 @@ export default async function ModalityDetailPage({ params }: ModalityDetailProps
   }
 
   const title = modality.title || 'Modality';
+  const description = modality.body?.value || (modality as { field_description?: string }).field_description;
 
   return (
-    <div className="max-w-4xl mx-auto">
-      {/* Breadcrumbs */}
-      <Breadcrumbs
-        items={[
-          { label: 'Home', href: '/' },
-          { label: 'Modalities', href: '/modalities' },
-          { label: title },
-        ]}
-        className="mb-6"
-      />
+    <PageWrapper>
+      {/* Hero Section */}
+      <div className="relative overflow-hidden bg-gradient-to-br from-earth-50 via-sage-50/50 to-cream-100 border-b border-sage-200/50">
+        <LeafPattern opacity={0.04} />
+        <div className="absolute top-20 left-10 w-64 h-64 bg-sage-300/20 rounded-full blur-3xl" />
+        <div className="absolute bottom-10 right-20 w-48 h-48 bg-earth-300/15 rounded-full blur-3xl" />
 
-      {/* Header */}
-      <div className="bg-white rounded-lg shadow-lg p-8 mb-6">
-        <div className="flex items-start justify-between mb-4">
-          <div>
-            <div className="text-5xl mb-4">🧘</div>
-            <h1 className="text-4xl font-bold text-earth-800 mb-2">
-              {modality.title}
-            </h1>
+        <div className="relative max-w-6xl mx-auto px-4 py-8">
+          <Breadcrumbs
+            items={[
+              { label: 'Home', href: '/' },
+              { label: 'Modalities', href: '/modalities' },
+              { label: title },
+            ]}
+            className="mb-8"
+          />
+
+          <div className="bg-white rounded-3xl shadow-xl border border-earth-200 relative overflow-hidden">
+            <div className="absolute -right-12 -top-12 w-64 h-64 opacity-5 pointer-events-none">
+              <ModalityIcon />
+            </div>
+            <div className="relative p-8 md:p-12">
+              <h1 className="font-serif text-5xl md:text-6xl font-bold text-earth-900 mb-4 tracking-tight">
+                {title}
+              </h1>
+
+              {modality.field_excels_at && modality.field_excels_at.length > 0 && (
+                <div className="flex flex-wrap gap-2 mt-4">
+                  {modality.field_excels_at.map((item: string, idx: number) => (
+                    <Tag key={idx} variant="sage" size="md">
+                      {item}
+                    </Tag>
+                  ))}
+                </div>
+              )}
+            </div>
           </div>
         </div>
+      </div>
 
-        {/* Description */}
-        {modality.body?.value && (
-          <div className="prose max-w-none mb-6">
-            <SafeHtml html={modality.body.value} />
-          </div>
+      {/* Main Content */}
+      <div className="max-w-6xl mx-auto px-4 py-8 space-y-8">
+        {description && (
+          <Section
+            id="overview"
+            variant="default"
+            title="Overview"
+            icon={
+              <svg className="w-8 h-8 text-sage-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            }
+          >
+            <div className="prose max-w-none text-earth-700">
+              {typeof description === 'string' && description.startsWith('<') ? (
+                <SafeHtml html={description} />
+              ) : (
+                <p className="whitespace-pre-wrap">{description}</p>
+              )}
+            </div>
+          </Section>
         )}
 
-        {/* Excels At */}
         {modality.field_excels_at && modality.field_excels_at.length > 0 && (
-          <div className="mb-6">
-            <h3 className="text-lg font-semibold text-earth-800 mb-3">This Modality Excels At:</h3>
-            <div className="grid md:grid-cols-2 gap-3">
+          <Section
+            id="excels-at"
+            variant="feature"
+            title="This Modality Excels At"
+            icon="✓"
+          >
+            <div className="grid md:grid-cols-2 gap-4">
               {modality.field_excels_at.map((item: string, idx: number) => (
                 <div
                   key={idx}
-                  className="flex items-center bg-sage-50 p-3 rounded-lg"
+                  className="flex items-center gap-3 bg-white/60 p-4 rounded-xl border border-sage-200"
                 >
-                  <span className="text-sage-600 mr-2">✓</span>
-                  <span className="text-gray-800">{item}</span>
+                  <span className="text-sage-600 text-xl">✓</span>
+                  <span className="text-earth-800">{item}</span>
                 </div>
               ))}
             </div>
-          </div>
+          </Section>
         )}
-      </div>
 
-      {/* Benefits */}
-      {modality.field_benefits && (
-        <div className="bg-white rounded-lg shadow-lg p-8 mb-6">
-          <h2 className="text-2xl font-bold text-earth-800 mb-4">
-            Benefits
-          </h2>
-          <div className="prose max-w-none">
-            {typeof modality.field_benefits === 'string' ? (
-              <p>{modality.field_benefits}</p>
-            ) : (
-              <pre className="bg-gray-50 p-4 rounded-lg text-sm overflow-auto">
-                {JSON.stringify(modality.field_benefits, null, 2)}
-              </pre>
-            )}
+        {modality.field_benefits && (
+          <Section
+            id="benefits"
+            variant="cultural"
+            title="Benefits"
+            icon={
+              <svg className="w-8 h-8 text-sage-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            }
+          >
+            <div className="prose max-w-none">
+              {typeof modality.field_benefits === 'string' ? (
+                <p className="text-earth-700 whitespace-pre-wrap">{modality.field_benefits}</p>
+              ) : (
+                <p className="text-earth-700">{String(modality.field_benefits)}</p>
+              )}
+            </div>
+          </Section>
+        )}
+
+        {modality.field_conditions && modality.field_conditions.length > 0 && (
+          <Section
+            id="conditions"
+            variant="card"
+            title="May Help With These Conditions"
+            icon="🩺"
+          >
+            <div className="grid md:grid-cols-2 gap-4">
+              {modality.field_conditions.map((condition: { id: string; title?: string }) => (
+                <Link
+                  key={condition.id}
+                  href={`/conditions/${condition.id}`}
+                  className="flex items-center gap-3 bg-earth-50 hover:bg-earth-100 p-4 rounded-xl border border-earth-200 transition"
+                >
+                  <span className="text-earth-600">🩺</span>
+                  <span className="text-earth-800 font-medium">{condition.title || 'View Condition'}</span>
+                  <svg className="w-5 h-5 text-earth-400 ml-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  </svg>
+                </Link>
+              ))}
+            </div>
+          </Section>
+        )}
+
+        <BotanicalDivider />
+
+        {/* CTA - Find Practitioners */}
+        <div className="relative bg-gradient-to-r from-sage-600 via-sage-700 to-earth-700 rounded-2xl p-8 md:p-12 text-white text-center overflow-hidden">
+          <div className="absolute inset-0 opacity-10 pointer-events-none" style={{
+            backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 5c-2 8-8 14-16 16 8 2 14 8 16 16 2-8 8-14 16-16-8-2-14-8-16-16z' fill='%23ffffff' fill-opacity='1'/%3E%3C/svg%3E")`,
+            backgroundSize: '60px 60px'
+          }} />
+          <div className="relative">
+            <h2 className="font-serif text-3xl font-bold mb-4">
+              Find {title} Practitioners
+            </h2>
+            <p className="mb-6 text-white/90 max-w-2xl mx-auto leading-relaxed">
+              Connect with qualified practitioners who specialize in this modality.
+            </p>
+            <Link
+              href={`/practitioners?modality=${modality.id}`}
+              className="inline-flex items-center gap-2 bg-white text-earth-800 px-8 py-3 rounded-xl font-semibold hover:bg-cream-50 transition shadow-lg hover:shadow-xl"
+            >
+              Find Practitioners
+              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+              </svg>
+            </Link>
           </div>
         </div>
-      )}
 
-      {/* Related Conditions */}
-      {modality.field_conditions && modality.field_conditions.length > 0 && (
-        <div className="bg-white rounded-lg shadow-lg p-8 mb-6">
-          <h2 className="text-2xl font-bold text-earth-800 mb-4">
-            May Help With These Conditions
-          </h2>
-          <div className="grid md:grid-cols-2 gap-3">
-            {modality.field_conditions.map((condition: any) => (
-              <Link
-                key={condition.id}
-                href={`/conditions/${condition.id}`}
-                className="flex items-center bg-earth-50 p-3 rounded-lg hover:bg-earth-100 transition"
-              >
-                <span className="text-earth-600 mr-2">🩺</span>
-                <span className="text-gray-800">{condition.title || 'View Condition'}</span>
-              </Link>
-            ))}
-          </div>
-        </div>
-      )}
+        <DisclaimerBox title="Disclaimer">
+          This information is for educational purposes only. Always consult with a qualified
+          healthcare provider before starting any new treatment or therapy.
+        </DisclaimerBox>
 
-      {/* Find Practitioners */}
-      <div className="bg-gradient-to-r from-earth-700 to-sage-700 text-white p-8 rounded-lg shadow-xl text-center mb-6">
-        <h2 className="text-2xl font-bold mb-4">
-          Find {modality.title} Practitioners
-        </h2>
-        <p className="mb-6 opacity-90">
-          Connect with qualified practitioners who specialize in this modality.
-        </p>
-        <Link
-          href={`/practitioners?modality=${modality.id}`}
-          className="inline-block bg-white text-earth-800 px-8 py-3 rounded-lg font-semibold hover:bg-earth-50 transition shadow-lg"
-        >
-          Find Practitioners
-        </Link>
+        <BackLink href="/modalities" label="Return to All Modalities" />
       </div>
-
-      {/* Disclaimer */}
-      <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-6 mb-6">
-        <p className="text-sm text-yellow-800">
-          <strong>Disclaimer:</strong> This information is for educational purposes only.
-          Always consult with a qualified healthcare provider before starting any new
-          treatment or therapy.
-        </p>
-      </div>
-
-      {/* Back Link */}
-      <div className="text-center">
-        <Link
-          href="/modalities"
-          className="inline-block text-sage-600 hover:text-sage-800 font-medium"
-        >
-          ← Back to All Modalities
-        </Link>
-      </div>
-    </div>
+    </PageWrapper>
   );
 }

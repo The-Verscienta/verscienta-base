@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import { PageWrapper, BackLink } from '@/components/ui/DesignSystem';
 
 export default function ForgotPasswordPage() {
   const [email, setEmail] = useState('');
@@ -36,7 +37,8 @@ export default function ForgotPasswordPage() {
   };
 
   return (
-    <div className="min-h-[80vh] flex items-center justify-center p-4">
+    <PageWrapper>
+    <div className="min-h-[80vh] flex items-center justify-center p-4 bg-earth-50/50">
       <div className="w-full max-w-md">
         {/* Logo/Brand */}
         <div className="text-center mb-8">
@@ -48,7 +50,7 @@ export default function ForgotPasswordPage() {
           </Link>
         </div>
 
-        <div className="bg-white rounded-2xl shadow-xl p-8">
+        <div className="bg-white rounded-2xl shadow-xl border border-earth-200 p-8">
           {status === 'success' ? (
             <div className="text-center">
               <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
@@ -158,12 +160,11 @@ export default function ForgotPasswordPage() {
           )}
         </div>
 
-        <div className="text-center mt-6">
-          <Link href="/" className="text-sm text-sage-600 hover:text-sage-800">
-            ← Back to Home
-          </Link>
+        <div className="mt-6">
+          <BackLink href="/" label="Return to Home" />
         </div>
       </div>
     </div>
+    </PageWrapper>
   );
 }

@@ -5,6 +5,14 @@ import Image from 'next/image';
 import type { HerbEntity, DrupalTextField } from '@/types/drupal';
 import { Breadcrumbs } from '@/components/ui/Breadcrumbs';
 import { SafeHtml } from '@/components/ui/SafeHtml';
+import {
+  PageWrapper,
+  BotanicalDivider,
+  Section,
+  Tag,
+  DisclaimerBox,
+  BackLink,
+} from '@/components/ui/DesignSystem';
 
 // Helper to extract text value from Drupal text field
 function getTextValue(field: DrupalTextField): string | null {
@@ -32,92 +40,6 @@ async function getHerb(id: string): Promise<HerbEntity | null> {
     console.error('Failed to fetch herb:', error);
     return null;
   }
-}
-
-// Decorative botanical SVG border
-function BotanicalDivider({ className = '' }: { className?: string }) {
-  return (
-    <div className={`flex items-center justify-center py-6 ${className}`}>
-      <svg viewBox="0 0 200 24" className="w-48 h-6 text-earth-300" fill="currentColor">
-        <path d="M100 12c-8-8-20-10-30-8s-18 8-25 8-15-4-25-4-18 4-20 4v4c2 0 10-4 20-4s18 4 25 4 15-6 25-8 22 0 30 8c8-8 20-10 30-8s18 8 25 8 15-4 25-4 18 4 20 4v-4c-2 0-10 4-20 4s-18-4-25-4-15 6-25 8-22 0-30-8z" opacity="0.6"/>
-        <circle cx="100" cy="12" r="4"/>
-        <circle cx="85" cy="12" r="2"/>
-        <circle cx="115" cy="12" r="2"/>
-      </svg>
-    </div>
-  );
-}
-
-// Section component with consistent styling
-function Section({
-  id,
-  title,
-  icon,
-  variant = 'default',
-  children
-}: {
-  id: string;
-  title: string;
-  icon: string;
-  variant?: 'default' | 'warning' | 'tcm' | 'cultural';
-  children: React.ReactNode;
-}) {
-  const variants = {
-    default: 'bg-white border-earth-200',
-    warning: 'bg-gradient-to-br from-red-50 to-orange-50 border-red-200',
-    tcm: 'bg-gradient-to-br from-amber-50 via-orange-50 to-red-50 border-amber-300',
-    cultural: 'bg-gradient-to-br from-sage-50 via-earth-50 to-gold-50 border-sage-300',
-  };
-
-  const titleColors = {
-    default: 'text-earth-800',
-    warning: 'text-red-800',
-    tcm: 'text-amber-900',
-    cultural: 'text-earth-800',
-  };
-
-  return (
-    <section id={id} className={`relative border rounded-2xl p-8 mb-8 scroll-mt-24 ${variants[variant]}`}>
-      {/* Decorative corner */}
-      <div className="absolute top-0 right-0 w-24 h-24 opacity-10 pointer-events-none">
-        <svg viewBox="0 0 100 100" className="w-full h-full text-earth-600">
-          <path d="M100 0v100H0C55 100 100 55 100 0z" fill="currentColor"/>
-        </svg>
-      </div>
-
-      <h2 className={`font-serif text-2xl md:text-3xl font-bold mb-6 flex items-center gap-3 ${titleColors[variant]}`}>
-        <span className="text-3xl">{icon}</span>
-        {title}
-      </h2>
-      {children}
-    </section>
-  );
-}
-
-// Tag/Badge component
-function Tag({
-  children,
-  variant = 'sage'
-}: {
-  children: React.ReactNode;
-  variant?: 'sage' | 'earth' | 'amber' | 'blue' | 'purple' | 'red' | 'cyan' | 'orange';
-}) {
-  const variants = {
-    sage: 'bg-sage-100 text-sage-800 border-sage-200',
-    earth: 'bg-earth-100 text-earth-800 border-earth-200',
-    amber: 'bg-amber-100 text-amber-800 border-amber-200',
-    blue: 'bg-blue-100 text-blue-800 border-blue-200',
-    purple: 'bg-purple-100 text-purple-800 border-purple-200',
-    red: 'bg-red-100 text-red-800 border-red-200',
-    cyan: 'bg-cyan-100 text-cyan-800 border-cyan-200',
-    orange: 'bg-orange-100 text-orange-800 border-orange-200',
-  };
-
-  return (
-    <span className={`inline-flex items-center px-3 py-1.5 rounded-full text-sm font-medium border ${variants[variant]} transition-all hover:scale-105`}>
-      {children}
-    </span>
-  );
 }
 
 export default async function HerbDetailPage({ params }: HerbDetailProps) {
@@ -154,6 +76,7 @@ export default async function HerbDetailPage({ params }: HerbDetailProps) {
   if (herb.field_preparation_methods?.length) tocItems.push({ id: 'preparation', label: 'Preparation' });
 
   return (
+    <PageWrapper>
     <div className="min-h-screen bg-gradient-to-b from-earth-50 via-white to-sage-50">
       {/* Decorative background pattern */}
       <div className="fixed inset-0 pointer-events-none opacity-[0.02]" style={{
@@ -890,40 +813,10 @@ export default async function HerbDetailPage({ params }: HerbDetailProps) {
 
             <BotanicalDivider />
 
-            {/* Disclaimer */}
-            <div className="bg-gradient-to-r from-amber-50 to-yellow-50 border border-amber-200 rounded-2xl p-8 shadow-sm">
-              <div className="flex gap-4">
-                <div className="flex-shrink-0">
-                  <div className="w-12 h-12 bg-amber-100 rounded-xl flex items-center justify-center">
-                    <svg className="w-6 h-6 text-amber-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                      <path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
-                    </svg>
-                  </div>
-                </div>
-                <div>
-                  <h3 className="font-bold text-amber-900 text-lg mb-2">Important Disclaimer</h3>
-                  <p className="text-amber-800 leading-relaxed">
-                    This information is provided for educational and informational purposes only.
-                    It is not intended to diagnose, treat, cure, or prevent any disease. Always
-                    consult with a qualified healthcare provider or licensed herbalist before using
-                    any herbal remedy, especially if you are pregnant, nursing, taking medications,
-                    or have any medical conditions.
-                  </p>
-                </div>
-              </div>
-            </div>
+            <DisclaimerBox />
 
-            {/* Back Link */}
-            <div className="text-center py-8">
-              <Link
-                href="/herbs"
-                className="inline-flex items-center gap-3 text-earth-600 hover:text-earth-800 font-semibold text-lg transition-colors group"
-              >
-                <svg className="w-5 h-5 transition-transform group-hover:-translate-x-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                  <path d="M19 12H5M12 19l-7-7 7-7"/>
-                </svg>
-                Back to Materia Medica
-              </Link>
+            <div className="py-8">
+              <BackLink href="/herbs" label="Back to Materia Medica" />
             </div>
           </main>
 
@@ -932,5 +825,6 @@ export default async function HerbDetailPage({ params }: HerbDetailProps) {
         </div>
       </div>
     </div>
+    </PageWrapper>
   );
 }

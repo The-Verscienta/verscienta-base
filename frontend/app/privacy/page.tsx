@@ -1,24 +1,34 @@
-import Link from 'next/link';
-
-export const metadata = {
-  title: 'Privacy Policy - Verscienta Health',
-  description: 'Privacy Policy for Verscienta Health - Learn how we collect, use, and protect your data.',
-};
+import {
+  PageWrapper,
+  LeafPattern,
+  BackLink,
+} from '@/components/ui/DesignSystem';
 
 export default function PrivacyPage() {
   return (
-    <div className="max-w-4xl mx-auto">
-      {/* Header */}
-      <div className="text-center mb-12">
-        <h1 className="text-4xl md:text-5xl font-serif font-bold text-earth-800 mb-4">
+    <PageWrapper>
+    <div className="relative overflow-hidden bg-gradient-to-br from-earth-50 via-sage-50/50 to-cream-100 border-b border-sage-200/50">
+      <LeafPattern opacity={0.04} />
+      <div className="absolute top-20 right-20 w-64 h-64 bg-sage-300/20 rounded-full blur-3xl" />
+      <div className="absolute bottom-10 left-10 w-48 h-48 bg-earth-300/15 rounded-full blur-3xl" />
+      <div className="relative max-w-4xl mx-auto px-4 py-12 md:py-16 text-center">
+        <div className="inline-flex items-center gap-2 bg-white/60 backdrop-blur-sm rounded-full px-4 py-2 border border-earth-200/50 mb-6">
+          <svg className="w-4 h-4 text-sage-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+          </svg>
+          <span className="text-sage-700 font-medium text-sm">Your Privacy Matters</span>
+        </div>
+        <h1 className="text-4xl md:text-5xl font-serif font-bold text-earth-900 mb-2">
           Privacy Policy
         </h1>
         <p className="text-sage-700">
           Last updated: January 2025
         </p>
       </div>
+    </div>
 
-      <div className="bg-white rounded-2xl shadow-lg p-8 md:p-12">
+    <div className="max-w-4xl mx-auto px-4 py-8">
+      <div className="bg-white rounded-2xl shadow-lg border border-earth-200 p-8 md:p-12">
         <div className="prose prose-earth max-w-none">
           <section className="mb-8">
             <h2 className="text-2xl font-serif font-bold text-earth-800 mb-4">Introduction</h2>
@@ -153,12 +163,10 @@ export default function PrivacyPage() {
         </div>
       </div>
 
-      {/* Back Link */}
-      <div className="text-center mt-8">
-        <Link href="/" className="text-sage-600 hover:text-sage-800 font-medium">
-          ← Back to Home
-        </Link>
+      <div className="mt-8">
+        <BackLink href="/" label="Return to Home" />
       </div>
     </div>
+    </PageWrapper>
   );
 }

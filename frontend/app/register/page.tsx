@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { TurnstileWidget } from '@/components/auth/TurnstileWidget';
+import { PageWrapper, BackLink } from '@/components/ui/DesignSystem';
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -103,6 +104,7 @@ export default function RegisterPage() {
   };
 
   return (
+    <PageWrapper>
     <div className="min-h-[85vh] flex">
       {/* Left Side - Illustration */}
       <div className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-sage-600 via-sage-700 to-earth-700 p-12 items-center justify-center relative overflow-hidden">
@@ -156,7 +158,7 @@ export default function RegisterPage() {
       </div>
 
       {/* Right Side - Form */}
-      <div className="w-full lg:w-1/2 flex items-center justify-center p-8 bg-gray-50 overflow-y-auto">
+      <div className="w-full lg:w-1/2 flex items-center justify-center p-8 bg-earth-50/50 overflow-y-auto">
         <div className="w-full max-w-md">
           {/* Logo/Brand */}
           <div className="text-center mb-6">
@@ -168,7 +170,7 @@ export default function RegisterPage() {
             </Link>
           </div>
 
-          <div className="bg-white rounded-2xl shadow-xl p-8">
+          <div className="bg-white rounded-2xl shadow-xl border border-earth-200 p-8">
             <div className="text-center mb-6">
               <h2 className="text-2xl font-bold text-earth-800 mb-2">
                 Create Your Account
@@ -446,13 +448,10 @@ export default function RegisterPage() {
             </Link>
           </p>
 
-          <div className="text-center mt-4">
-            <Link href="/" className="text-sm text-sage-600 hover:text-sage-800">
-              ← Back to Home
-            </Link>
-          </div>
+          <BackLink href="/" label="Return to Home" />
         </div>
       </div>
     </div>
+    </PageWrapper>
   );
 }

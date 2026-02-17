@@ -7,6 +7,14 @@ import type { ClinicEntity } from '@/types/drupal';
 import { Breadcrumbs } from '@/components/ui/Breadcrumbs';
 import { SafeHtml } from '@/components/ui/SafeHtml';
 import { ClinicMap } from '@/components/clinic/ClinicMap';
+import {
+  PageWrapper,
+  LeafPattern,
+  Section,
+  Tag,
+  DisclaimerBox,
+  BackLink,
+} from '@/components/ui/DesignSystem';
 
 interface ClinicDetailProps {
   params: Promise<{
@@ -96,72 +104,66 @@ export default async function ClinicDetailPage({ params }: ClinicDetailProps) {
     : [];
 
   return (
-    <div className="max-w-4xl mx-auto">
-      {/* Breadcrumbs */}
-      <Breadcrumbs
-        items={[
-          { label: 'Home', href: '/' },
-          { label: 'Clinics', href: '/clinics' },
-          { label: name },
-        ]}
-        className="mb-6"
-      />
-
-      {/* Header */}
-      <div className="bg-white rounded-lg shadow-lg overflow-hidden mb-6">
-        {/* Hero image */}
-        {clinic.field_images?.[0] && (clinic.field_images[0].uri?.url || clinic.field_images[0].url) && (
-          <div className="relative w-full h-56 md:h-72">
-            <Image
-              src={clinic.field_images[0].uri?.url || clinic.field_images[0].url!}
-              alt={clinic.field_images[0].meta?.alt || name}
-              fill
-              priority
-              className="object-cover"
-              sizes="(max-width: 896px) 100vw, 896px"
-            />
-          </div>
-        )}
-        <div className="p-8">
-          <div className="flex items-start justify-between mb-6">
-            <div>
-              {!(clinic.field_images?.[0] && (clinic.field_images[0].uri?.url || clinic.field_images[0].url)) && (
-                <div className="text-6xl mb-4">🏥</div>
-              )}
-              <h1 className="text-4xl font-bold text-earth-800 mb-2">{name}</h1>
+    <PageWrapper>
+      <div className="relative overflow-hidden bg-gradient-to-br from-earth-50 via-sage-50/50 to-cream-100 border-b border-sage-200/50">
+        <LeafPattern opacity={0.04} />
+        <div className="absolute top-20 left-10 w-64 h-64 bg-sage-300/20 rounded-full blur-3xl" />
+        <div className="absolute bottom-10 right-20 w-48 h-48 bg-earth-300/15 rounded-full blur-3xl" />
+        <div className="relative max-w-6xl mx-auto px-4 py-8">
+          <Breadcrumbs
+            items={[
+              { label: 'Home', href: '/' },
+              { label: 'Clinics', href: '/clinics' },
+              { label: name },
+            ]}
+            className="mb-8"
+          />
+          <div className="bg-white rounded-3xl shadow-xl border border-earth-200 relative overflow-hidden">
+            {clinic.field_images?.[0] && (clinic.field_images[0].uri?.url || clinic.field_images[0].url) && (
+              <div className="relative w-full h-56 md:h-72">
+                <Image
+                  src={clinic.field_images[0].uri?.url || clinic.field_images[0].url!}
+                  alt={clinic.field_images[0].meta?.alt || name}
+                  fill
+                  priority
+                  className="object-cover"
+                  sizes="(max-width: 896px) 100vw, 896px"
+                />
+              </div>
+            ) : (
+              <div className="absolute -right-12 -top-12 w-64 h-64 opacity-5 pointer-events-none text-8xl">🏥</div>
+            )}
+            <div className="relative p-8 md:p-12">
+              <h1 className="font-serif text-5xl md:text-6xl font-bold text-earth-900 mb-2 tracking-tight">
+                {name}
+              </h1>
               {fullAddress && (
-                <p className="text-lg text-sage-600">{fullAddress}</p>
+                <p className="text-lg text-sage-600 mb-4">{fullAddress}</p>
               )}
-            </div>
-            <div className="text-right">
-              {clinic.field_accepting_new_patients ? (
-                <span className="inline-block bg-green-100 text-green-700 px-3 py-1 rounded-lg font-medium">
-                  Accepting New Patients
-                </span>
-              ) : (
-                <span className="inline-block bg-gray-100 text-gray-600 px-3 py-1 rounded-lg font-medium">
-                  Not Accepting Patients
-                </span>
-              )}
-            </div>
-          </div>
-
-          {/* Body / Description */}
-          {clinic.body && (
-            <div className="mb-6">
-              <h3 className="text-xl font-semibold text-earth-800 mb-3">About</h3>
-              <div className="prose max-w-none">
-                <SafeHtml html={clinic.body.processed || clinic.body.value} />
+              <div className="flex flex-wrap gap-2">
+                {clinic.field_accepting_new_patients ? (
+                  <Tag variant="sage">Accepting New Patients</Tag>
+                ) : (
+                  <Tag variant="muted">Not Accepting Patients</Tag>
+                )}
               </div>
             </div>
-          )}
+          </div>
         </div>
       </div>
 
+    <div className="max-w-6xl mx-auto px-4 py-8 space-y-8">
+      {clinic.body && (
+        <Section id="about" variant="default" title="About" icon="🏥">
+          <div className="prose max-w-none text-earth-700">
+            <SafeHtml html={clinic.body.processed || clinic.body.value} />
+          </div>
+        </Section>
+      )}
+
       {/* Image Gallery */}
       {clinic.field_images && clinic.field_images.length > 1 && (
-        <div className="bg-white rounded-lg shadow-lg p-8 mb-6">
-          <h2 className="text-2xl font-bold text-earth-800 mb-4">Photos</h2>
+        <Section id="photos" variant="default" title="Photos" icon="📷">
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
             {clinic.field_images.slice(1).map((image, idx) => {
               const imgUrl = image.uri?.url || image.url;
@@ -179,12 +181,10 @@ export default async function ClinicDetailPage({ params }: ClinicDetailProps) {
               );
             })}
           </div>
-        </div>
+        </Section>
       )}
 
-      {/* Contact Information */}
-      <div className="bg-white rounded-lg shadow-lg p-8 mb-6">
-        <h2 className="text-2xl font-bold text-earth-800 mb-4">Contact Information</h2>
+      <Section id="contact" variant="default" title="Contact Information" icon="📧">
         <div className="grid md:grid-cols-2 gap-6">
           {fullAddress && (
             <div>
@@ -239,56 +239,41 @@ export default async function ClinicDetailPage({ params }: ClinicDetailProps) {
             </div>
           )}
         </div>
-      </div>
+      </Section>
 
-      {/* Operating Hours */}
       {clinic.field_hours && (
-        <div className="bg-white rounded-lg shadow-lg p-8 mb-6">
-          <h2 className="text-2xl font-bold text-earth-800 mb-4 flex items-center gap-2">
-            <span>🕐</span> Operating Hours
-          </h2>
-          <div className="prose max-w-none text-gray-700">
+        <Section id="hours" variant="default" title="Operating Hours" icon="🕐">
+          <div className="prose max-w-none text-earth-700">
             <SafeHtml html={clinic.field_hours} />
           </div>
-        </div>
+        </Section>
       )}
 
-      {/* Insurance Accepted */}
       {clinic.field_insurance_accepted && clinic.field_insurance_accepted.length > 0 && (
-        <div className="bg-white rounded-lg shadow-lg p-8 mb-6">
-          <h2 className="text-2xl font-bold text-earth-800 mb-4">Insurance Accepted</h2>
+        <Section id="insurance" variant="default" title="Insurance Accepted" icon="🛡️">
           <div className="flex flex-wrap gap-2">
             {clinic.field_insurance_accepted.map((insurance) => (
-              <span
-                key={insurance}
-                className="bg-blue-50 text-blue-700 px-3 py-1.5 rounded-lg text-sm font-medium border border-blue-200"
-              >
+              <Tag key={insurance} variant="blue">
                 {insuranceLabels[insurance] || insurance}
-              </span>
+              </Tag>
             ))}
           </div>
-        </div>
+        </Section>
       )}
 
-      {/* Map */}
       {mapMarkers.length > 0 && (
-        <div className="bg-white rounded-lg shadow-lg p-8 mb-6">
-          <h2 className="text-2xl font-bold text-earth-800 mb-4">Location</h2>
+        <Section id="location" variant="default" title="Location" icon="📍">
           <ClinicMap
             clinics={mapMarkers}
             singleClinic
             zoom={15}
             className="h-[300px] rounded-lg overflow-hidden"
           />
-        </div>
+        </Section>
       )}
 
-      {/* Modalities */}
       {clinic.field_modalities && clinic.field_modalities.length > 0 && (
-        <div className="bg-white rounded-lg shadow-lg p-8 mb-6">
-          <h2 className="text-2xl font-bold text-earth-800 mb-4">
-            Modalities & Services
-          </h2>
+        <Section id="modalities" variant="default" title="Modalities & Services" icon="🧘">
           <div className="grid md:grid-cols-2 gap-4">
             {clinic.field_modalities.map((modality) => (
               <Link
@@ -303,13 +288,11 @@ export default async function ClinicDetailPage({ params }: ClinicDetailProps) {
               </Link>
             ))}
           </div>
-        </div>
+        </Section>
       )}
 
-      {/* Practitioners */}
       {clinic.field_practitioners && clinic.field_practitioners.length > 0 && (
-        <div className="bg-white rounded-lg shadow-lg p-8 mb-6">
-          <h2 className="text-2xl font-bold text-earth-800 mb-4">Our Practitioners</h2>
+        <Section id="practitioners" variant="default" title="Our Practitioners" icon="👨‍⚕️">
           <div className="grid sm:grid-cols-2 gap-4">
             {clinic.field_practitioners.map((practitioner) => {
               const practImg = practitioner.field_images?.[0];
@@ -349,13 +332,11 @@ export default async function ClinicDetailPage({ params }: ClinicDetailProps) {
               );
             })}
           </div>
-        </div>
+        </Section>
       )}
 
-      {/* Google Reviews Link */}
       {clinic.field_google_place_id && (
-        <div className="bg-white rounded-lg shadow-lg p-8 mb-6">
-          <h2 className="text-2xl font-bold text-earth-800 mb-4">Reviews</h2>
+        <Section id="reviews" variant="default" title="Reviews" icon="⭐">
           <a
             href={`https://search.google.com/local/reviews?placeid=${clinic.field_google_place_id}`}
             target="_blank"
@@ -370,12 +351,11 @@ export default async function ClinicDetailPage({ params }: ClinicDetailProps) {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
             </svg>
           </a>
-        </div>
+        </Section>
       )}
 
-      {/* CTA Section */}
-      <div className="bg-gradient-to-r from-earth-700 to-sage-700 text-white p-8 rounded-lg shadow-xl text-center mb-6">
-        <h2 className="text-2xl font-bold mb-4">Ready to Visit?</h2>
+      <div className="bg-gradient-to-r from-earth-700 via-sage-700 to-earth-800 text-white p-8 rounded-2xl shadow-xl text-center">
+        <h2 className="text-2xl font-serif font-bold mb-4">Ready to Visit?</h2>
         <p className="mb-6 opacity-90">
           Contact {name} to schedule an appointment and begin your wellness journey.
         </p>
@@ -399,24 +379,10 @@ export default async function ClinicDetailPage({ params }: ClinicDetailProps) {
         </div>
       </div>
 
-      {/* Disclaimer */}
-      <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-6 mb-6">
-        <p className="text-sm text-yellow-800">
-          <strong>Note:</strong> Clinic listings are provided for informational purposes.
-          Please verify credentials and conduct your own research before scheduling appointments.
-          This platform does not endorse specific clinics or practitioners.
-        </p>
-      </div>
+      <DisclaimerBox />
 
-      {/* Back Link */}
-      <div className="text-center">
-        <Link
-          href="/clinics"
-          className="inline-block text-sage-600 hover:text-sage-800 font-medium"
-        >
-          ← Back to All Clinics
-        </Link>
-      </div>
+      <BackLink href="/clinics" label="Back to All Clinics" />
     </div>
+    </PageWrapper>
   );
 }

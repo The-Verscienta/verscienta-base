@@ -3,44 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { contactFormSchema, formatZodErrors } from '@/lib/validation';
-
-// Inline components since this is a client component
-function LeafPattern({ opacity = 0.05 }: { opacity?: number }) {
-  return (
-    <div className="absolute inset-0 pointer-events-none" style={{ opacity }}>
-      <svg className="w-full h-full" xmlns="http://www.w3.org/2000/svg">
-        <defs>
-          <pattern id="contact-leaf-pattern" x="0" y="0" width="60" height="60" patternUnits="userSpaceOnUse">
-            <path
-              d="M30 5 Q35 15 30 25 Q25 15 30 5"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="1"
-              className="text-sage-600"
-            />
-            <path
-              d="M10 35 Q15 45 10 55 Q5 45 10 35"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="1"
-              className="text-earth-600"
-              transform="rotate(45, 10, 45)"
-            />
-            <path
-              d="M50 35 Q55 45 50 55 Q45 45 50 35"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="1"
-              className="text-sage-600"
-              transform="rotate(-30, 50, 45)"
-            />
-          </pattern>
-        </defs>
-        <rect width="100%" height="100%" fill="url(#contact-leaf-pattern)" />
-      </svg>
-    </div>
-  );
-}
+import { PageWrapper, LeafPattern, BackLink } from '@/components/ui/DesignSystem';
 
 export default function ContactPage() {
   const [formData, setFormData] = useState({
@@ -84,6 +47,7 @@ export default function ContactPage() {
   };
 
   return (
+    <PageWrapper>
     <div className="min-h-screen bg-gradient-to-b from-cream-50 to-white">
       {/* Hero Section */}
       <div className="relative overflow-hidden bg-gradient-to-br from-earth-50 via-sage-50/50 to-cream-100 border-b border-earth-200/50">
@@ -116,7 +80,7 @@ export default function ContactPage() {
         <div className="grid md:grid-cols-3 gap-8">
           {/* Contact Info */}
           <div className="md:col-span-1 space-y-6">
-            <div className="bg-white rounded-2xl shadow-sm border border-earth-100 p-6 hover:shadow-md transition-shadow">
+            <div className="bg-white rounded-2xl shadow-sm border border-earth-200 p-6 hover:shadow-md transition-shadow">
               <h2 className="font-serif text-lg font-semibold text-earth-800 mb-5">Get in Touch</h2>
 
               <div className="space-y-5">
@@ -192,7 +156,7 @@ export default function ContactPage() {
 
           {/* Contact Form */}
           <div className="md:col-span-2">
-            <div className="bg-white rounded-2xl shadow-sm border border-earth-100 p-8">
+            <div className="bg-white rounded-2xl shadow-sm border border-earth-200 p-8">
               <h2 className="font-serif text-xl font-semibold text-earth-800 mb-6">Send us a Message</h2>
 
               {status === 'success' ? (
@@ -354,19 +318,11 @@ export default function ContactPage() {
           </div>
         </div>
 
-        {/* Back Link */}
-        <div className="text-center mt-12">
-          <Link
-            href="/"
-            className="inline-flex items-center gap-2 text-sage-600 hover:text-earth-700 font-medium transition-colors"
-          >
-            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-            </svg>
-            Return to Home
-          </Link>
+        <div className="mt-12">
+          <BackLink href="/" label="Return to Home" />
         </div>
       </div>
     </div>
+    </PageWrapper>
   );
 }

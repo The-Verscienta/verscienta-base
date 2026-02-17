@@ -9,7 +9,16 @@ import { SafeHtml } from '@/components/ui/SafeHtml';
 import { GroupedIngredientsList } from '@/components/formula';
 import { HerbRoleBadge } from '@/components/formula/HerbRoleBadge';
 import { SimilarFormulasSkeleton, ContributionsSkeleton } from '@/components/formula/LoadingSkeletons';
-import { getTextValue, getProcessedValue, hasTextContent } from '@/lib/drupal-helpers';
+import { getTextValue, hasTextContent } from '@/lib/drupal-helpers';
+import {
+  PageWrapper,
+  LeafPattern,
+  Section,
+  BotanicalDivider,
+  Tag,
+  DisclaimerBox,
+  BackLink,
+} from '@/components/ui/DesignSystem';
 
 // ISR: Revalidate every 5 minutes
 export const revalidate = 300;
@@ -163,240 +172,222 @@ export default async function FormulaDetailPage({ params }: FormulaDetailProps) 
   const weightUnit = formula.field_total_weight_unit || 'g';
 
   return (
-    <div className="max-w-4xl mx-auto">
-      {/* Breadcrumbs */}
-      <Breadcrumbs
-        items={[
-          { label: 'Home', href: '/' },
-          { label: 'Formulas', href: '/formulas' },
-          { label: name },
-        ]}
-        className="mb-6"
-      />
+    <PageWrapper>
+      {/* Hero Section */}
+      <div className="relative overflow-hidden bg-gradient-to-br from-earth-50 via-sage-50/50 to-cream-100 border-b border-sage-200/50">
+        <LeafPattern opacity={0.04} />
+        <div className="absolute top-20 left-10 w-64 h-64 bg-sage-300/20 rounded-full blur-3xl" />
+        <div className="absolute bottom-10 right-20 w-48 h-48 bg-earth-300/15 rounded-full blur-3xl" />
 
-      {/* Header */}
-      <div className="bg-white rounded-lg shadow-lg p-8 mb-6">
-        <div className="flex items-start justify-between mb-6">
-          <div>
-            <div className="text-6xl mb-4">🌿</div>
-            <h1 className="text-4xl font-bold text-earth-800 mb-2">
-              {name}
-            </h1>
-            {totalWeight > 0 && (
-              <p className="text-lg text-sage-600">
-                Total Formula Weight: {totalWeight} {weightUnit}
-              </p>
-            )}
+        <div className="relative max-w-6xl mx-auto px-4 py-8">
+          <Breadcrumbs
+            items={[
+              { label: 'Home', href: '/' },
+              { label: 'Formulas', href: '/formulas' },
+              { label: name },
+            ]}
+            className="mb-8"
+          />
+
+          <div className="bg-white rounded-3xl shadow-xl border border-earth-200 relative overflow-hidden">
+            <div className="absolute -right-12 -top-12 w-64 h-64 opacity-5 pointer-events-none text-8xl">🌿</div>
+            <div className="relative p-8 md:p-12">
+              <h1 className="font-serif text-5xl md:text-6xl font-bold text-earth-900 mb-4 tracking-tight">
+                {name}
+              </h1>
+              {totalWeight > 0 && (
+                <p className="text-lg text-sage-600">
+                  Total Formula Weight: {totalWeight} {weightUnit}
+                </p>
+              )}
+              {formula.field_use_cases && formula.field_use_cases.length > 0 && (
+                <div className="flex flex-wrap gap-2 mt-4">
+                  {formula.field_use_cases.map((useCase, idx) => (
+                    <Tag key={idx} variant="sage" size="md">
+                      {useCase}
+                    </Tag>
+                  ))}
+                </div>
+              )}
+            </div>
           </div>
         </div>
+      </div>
 
-        {/* Description - sanitized to prevent XSS */}
+      {/* Main Content */}
+      <div className="max-w-6xl mx-auto px-4 py-8 space-y-8">
         {(formula.body?.value || hasTextContent(formula.field_formula_description)) && (
-          <div className="mb-6">
-            <h3 className="text-xl font-semibold text-earth-800 mb-3">Description</h3>
-            <div className="prose max-w-none">
-              {formula.body?.value && (
-                <SafeHtml html={formula.body.value} />
-              )}
+          <Section
+            id="description"
+            variant="default"
+            title="Description"
+            icon={
+              <svg className="w-8 h-8 text-sage-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            }
+          >
+            <div className="prose max-w-none text-earth-700">
+              {formula.body?.value && <SafeHtml html={formula.body.value} />}
               {hasTextContent(formula.field_formula_description) && !formula.body?.value && (
                 <p>{getTextValue(formula.field_formula_description)}</p>
               )}
             </div>
-          </div>
+          </Section>
         )}
 
-        {/* Use Cases */}
-        {formula.field_use_cases && formula.field_use_cases.length > 0 && (
-          <div className="mb-6">
-            <h3 className="text-xl font-semibold text-earth-800 mb-3">Use Cases</h3>
-            <div className="flex flex-wrap gap-2">
-              {formula.field_use_cases.map((useCase, idx) => (
-                <span
-                  key={idx}
-                  className="bg-earth-100 text-earth-700 px-4 py-2 rounded-lg font-medium"
-                >
-                  {useCase}
-                </span>
-              ))}
-            </div>
-          </div>
-        )}
-
-        {/* Conditions */}
         {formula.field_conditions && formula.field_conditions.length > 0 && (
-          <div className="mb-6">
-            <h3 className="text-xl font-semibold text-earth-800 mb-3">Related Conditions</h3>
+          <Section
+            id="conditions"
+            variant="default"
+            title="Related Conditions"
+            icon={
+              <svg className="w-8 h-8 text-sage-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+              </svg>
+            }
+          >
             <div className="flex flex-wrap gap-2">
               {formula.field_conditions.map((condition) => (
                 <Link
                   key={condition.id}
                   href={`/conditions/${condition.id}`}
-                  className="bg-sage-100 hover:bg-sage-200 text-sage-700 px-4 py-2 rounded-lg font-medium transition"
+                  className="inline-flex"
                 >
-                  {condition.title || 'Condition'}
+                  <Tag variant="sage" size="md">
+                    {condition.title || 'Condition'}
+                  </Tag>
                 </Link>
               ))}
             </div>
-          </div>
+          </Section>
         )}
-      </div>
 
-      {/* Herb Ingredients */}
-      <div className="bg-white rounded-lg shadow-lg p-8 mb-6">
-        <h2 className="text-2xl font-bold text-earth-800 mb-4">
-          Herb Ingredients
-        </h2>
+        <BotanicalDivider />
 
-        {!formula.field_herb_ingredients || formula.field_herb_ingredients.length === 0 ? (
-          <p className="text-gray-600">No ingredients specified for this formula.</p>
-        ) : (
-          <>
-            {/* Enhanced Ingredient Cards with Role/Function */}
-            <div className="mb-6">
-              <GroupedIngredientsList
-                ingredients={formula.field_herb_ingredients}
-                totalWeight={totalWeight}
-              />
-            </div>
-
-            {/* Summary Table */}
-            <div className="bg-sage-50 rounded-lg p-4 border border-sage-200">
-              <h3 className="font-semibold text-earth-800 mb-3">Formula Summary</h3>
-              <div className="overflow-x-auto">
-                <table className="w-full text-sm">
-                  <thead>
-                    <tr className="border-b border-sage-300">
-                      <th className="text-left py-2 px-2 font-semibold text-gray-700">Herb</th>
-                      <th className="text-left py-2 px-2 font-semibold text-gray-700">Role</th>
-                      <th className="text-right py-2 px-2 font-semibold text-gray-700">Quantity</th>
-                      <th className="text-right py-2 px-2 font-semibold text-gray-700">Percentage</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {formula.field_herb_ingredients.map((ingredient, idx) => {
-                      // Ensure numeric values for calculations
-                      const fieldPercentage = typeof ingredient.field_percentage === 'string'
-                        ? parseFloat(ingredient.field_percentage)
-                        : (ingredient.field_percentage || 0);
-                      const fieldQuantity = typeof ingredient.field_quantity === 'string'
-                        ? parseFloat(ingredient.field_quantity)
-                        : (ingredient.field_quantity || 0);
-                      const percentage = fieldPercentage ||
-                        (totalWeight > 0 ? (fieldQuantity / totalWeight * 100) : 0);
-
-                      return (
-                        <tr key={idx} className="border-b border-sage-200">
-                          <td className="py-2 px-2">
-                            <Link
-                              href={`/herbs/${ingredient.id}`}
-                              className="text-earth-700 hover:text-earth-900 hover:underline"
-                            >
-                              {ingredient.title || 'Herb'}
-                            </Link>
-                          </td>
-                          <td className="py-2 px-2">
-                            {ingredient.field_role ? (
-                              <HerbRoleBadge role={ingredient.field_role} size="sm" />
-                            ) : (
-                              <span className="text-gray-400">-</span>
-                            )}
-                          </td>
-                          <td className="py-2 px-2 text-right">
-                            {ingredient.field_quantity} {ingredient.field_unit}
-                          </td>
-                          <td className="py-2 px-2 text-right">
-                            {percentage > 0 ? `${percentage.toFixed(1)}%` : '-'}
-                          </td>
-                        </tr>
-                      );
-                    })}
-                    {totalWeight > 0 && (
-                      <tr className="font-bold bg-sage-100">
-                        <td className="py-2 px-2">Total</td>
-                        <td className="py-2 px-2"></td>
-                        <td className="py-2 px-2 text-right">{totalWeight} {weightUnit}</td>
-                        <td className="py-2 px-2 text-right">100%</td>
-                      </tr>
-                    )}
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </>
-        )}
-      </div>
-
-      {/* Similar Formulas - Lazy loaded */}
-      <Suspense fallback={<SimilarFormulasSkeleton />}>
-        <SimilarFormulas formulaId={id} minSimilarity={10} maxResults={5} />
-      </Suspense>
-
-      {/* Preparation & Dosage */}
-      <div className="bg-white rounded-lg shadow-lg p-8 mb-6">
-        <h2 className="text-2xl font-bold text-earth-800 mb-4">
-          Preparation & Dosage
-        </h2>
-
-        <div className="space-y-4">
-          {hasTextContent(formula.field_preparation_instructions) ? (
-            <div>
-              <h3 className="text-lg font-semibold text-earth-700 mb-2 flex items-center gap-2">
-                <span>🔥</span>
-                Preparation Instructions
-              </h3>
-              <p className="text-gray-700 bg-gray-50 p-4 rounded-lg">
-                {getTextValue(formula.field_preparation_instructions)}
-              </p>
-            </div>
-          ) : (
-            <p className="text-gray-600">No preparation instructions provided.</p>
-          )}
-
-          {hasTextContent(formula.field_dosage) && (
-            <div>
-              <h3 className="text-lg font-semibold text-earth-700 mb-2 flex items-center gap-2">
-                <span>💊</span>
-                Dosage
-              </h3>
-              <p className="text-gray-700 bg-gray-50 p-4 rounded-lg">
-                {getTextValue(formula.field_dosage)}
-              </p>
-            </div>
-          )}
-        </div>
-      </div>
-
-      {/* Community Contributions - Lazy loaded */}
-      <Suspense fallback={<ContributionsSkeleton />}>
-        <ContributionsSection formulaId={id} formulaTitle={name} />
-      </Suspense>
-
-      {/* Disclaimer */}
-      <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-6 mb-6">
-        <div className="flex items-start gap-3">
-          <span className="text-2xl">⚠️</span>
-          <div>
-            <h3 className="font-bold text-gray-900 mb-2">Important Notice</h3>
-            <p className="text-sm text-gray-700">
-              This formula is provided for informational and educational purposes only.
-              It is not intended to diagnose, treat, cure, or prevent any disease.
-              Always consult with a qualified healthcare practitioner or licensed herbalist
-              before using herbal formulas, especially if you are pregnant, nursing, taking
-              medications, or have any medical conditions.
-            </p>
-          </div>
-        </div>
-      </div>
-
-      {/* Back Link */}
-      <div className="text-center">
-        <Link
-          href="/formulas"
-          className="inline-block text-sage-600 hover:text-sage-800 font-medium"
+        <Section
+          id="ingredients"
+          variant="default"
+          title="Herb Ingredients"
+          icon={
+            <svg className="w-8 h-8 text-sage-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
+            </svg>
+          }
         >
-          ← Back to All Formulas
-        </Link>
+          {!formula.field_herb_ingredients || formula.field_herb_ingredients.length === 0 ? (
+            <p className="text-earth-600">No ingredients specified for this formula.</p>
+          ) : (
+            <>
+              <div className="mb-6">
+                <GroupedIngredientsList
+                  ingredients={formula.field_herb_ingredients}
+                  totalWeight={totalWeight}
+                />
+              </div>
+              <div className="bg-sage-50 rounded-xl p-4 border border-sage-200">
+                <h3 className="font-semibold text-earth-800 mb-3">Formula Summary</h3>
+                <div className="overflow-x-auto">
+                  <table className="w-full text-sm">
+                    <thead>
+                      <tr className="border-b border-sage-300">
+                        <th className="text-left py-2 px-2 font-semibold text-earth-700">Herb</th>
+                        <th className="text-left py-2 px-2 font-semibold text-earth-700">Role</th>
+                        <th className="text-right py-2 px-2 font-semibold text-earth-700">Quantity</th>
+                        <th className="text-right py-2 px-2 font-semibold text-earth-700">%</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {formula.field_herb_ingredients.map((ingredient, idx) => {
+                        const fieldPercentage = typeof ingredient.field_percentage === 'string'
+                          ? parseFloat(ingredient.field_percentage)
+                          : (ingredient.field_percentage || 0);
+                        const fieldQuantity = typeof ingredient.field_quantity === 'string'
+                          ? parseFloat(ingredient.field_quantity)
+                          : (ingredient.field_quantity || 0);
+                        const percentage = fieldPercentage ||
+                          (totalWeight > 0 ? (fieldQuantity / totalWeight * 100) : 0);
+                        return (
+                          <tr key={idx} className="border-b border-sage-200">
+                            <td className="py-2 px-2">
+                              <Link href={`/herbs/${ingredient.id}`} className="text-earth-700 hover:text-earth-900 hover:underline">
+                                {ingredient.title || 'Herb'}
+                              </Link>
+                            </td>
+                            <td className="py-2 px-2">
+                              {ingredient.field_role ? <HerbRoleBadge role={ingredient.field_role} size="sm" /> : <span className="text-earth-400">-</span>}
+                            </td>
+                            <td className="py-2 px-2 text-right">{ingredient.field_quantity} {ingredient.field_unit}</td>
+                            <td className="py-2 px-2 text-right">{percentage > 0 ? `${percentage.toFixed(1)}%` : '-'}</td>
+                          </tr>
+                        );
+                      })}
+                      {totalWeight > 0 && (
+                        <tr className="font-bold bg-sage-100">
+                          <td className="py-2 px-2">Total</td>
+                          <td className="py-2 px-2"></td>
+                          <td className="py-2 px-2 text-right">{totalWeight} {weightUnit}</td>
+                          <td className="py-2 px-2 text-right">100%</td>
+                        </tr>
+                      )}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </>
+          )}
+        </Section>
+
+        <Suspense fallback={<SimilarFormulasSkeleton />}>
+          <SimilarFormulas formulaId={id} minSimilarity={10} maxResults={5} />
+        </Suspense>
+
+        <BotanicalDivider />
+
+        <Section
+          id="preparation"
+          variant="default"
+          title="Preparation & Dosage"
+          icon={
+            <svg className="w-8 h-8 text-sage-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
+            </svg>
+          }
+        >
+          <div className="space-y-4">
+            {hasTextContent(formula.field_preparation_instructions) ? (
+              <div>
+                <h3 className="text-lg font-semibold text-earth-700 mb-2 flex items-center gap-2">
+                  <span>🔥</span> Preparation Instructions
+                </h3>
+                <p className="text-earth-700 bg-earth-50/50 p-4 rounded-xl border border-earth-100">
+                  {getTextValue(formula.field_preparation_instructions)}
+                </p>
+              </div>
+            ) : (
+              <p className="text-earth-600">No preparation instructions provided.</p>
+            )}
+            {hasTextContent(formula.field_dosage) && (
+              <div>
+                <h3 className="text-lg font-semibold text-earth-700 mb-2 flex items-center gap-2">
+                  <span>💊</span> Dosage
+                </h3>
+                <p className="text-earth-700 bg-earth-50/50 p-4 rounded-xl border border-earth-100">
+                  {getTextValue(formula.field_dosage)}
+                </p>
+              </div>
+            )}
+          </div>
+        </Section>
+
+        <Suspense fallback={<ContributionsSkeleton />}>
+          <ContributionsSection formulaId={id} formulaTitle={name} />
+        </Suspense>
+
+        <DisclaimerBox />
+
+        <BackLink href="/formulas" label="Back to All Formulas" />
       </div>
-    </div>
+    </PageWrapper>
   );
 }

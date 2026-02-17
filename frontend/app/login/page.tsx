@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { loginSchema, formatZodErrors } from '@/lib/validation';
+import { PageWrapper, BackLink } from '@/components/ui/DesignSystem';
 
 export default function LoginPage() {
   const router = useRouter();
@@ -65,6 +66,7 @@ export default function LoginPage() {
   };
 
   return (
+    <PageWrapper>
     <div className="min-h-[85vh] flex">
       {/* Left Side - Illustration */}
       <div className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-earth-600 via-earth-700 to-sage-700 p-12 items-center justify-center relative overflow-hidden">
@@ -113,7 +115,7 @@ export default function LoginPage() {
       </div>
 
       {/* Right Side - Form */}
-      <div className="w-full lg:w-1/2 flex items-center justify-center p-8 bg-gray-50">
+      <div className="w-full lg:w-1/2 flex items-center justify-center p-8 bg-earth-50/50">
         <div className="w-full max-w-md">
           {/* Logo/Brand */}
           <div className="text-center mb-8">
@@ -125,7 +127,7 @@ export default function LoginPage() {
             </Link>
           </div>
 
-          <div className="bg-white rounded-2xl shadow-xl p-8">
+          <div className="bg-white rounded-2xl shadow-xl border border-earth-200 p-8">
             <div className="text-center mb-8">
               <h2 className="text-2xl font-bold text-earth-800 mb-2">
                 Sign In
@@ -289,13 +291,10 @@ export default function LoginPage() {
             </Link>
           </p>
 
-          <div className="text-center mt-4">
-            <Link href="/" className="text-sm text-sage-600 hover:text-sage-800">
-              ← Back to Home
-            </Link>
-          </div>
+          <BackLink href="/" label="Return to Home" />
         </div>
       </div>
     </div>
+    </PageWrapper>
   );
 }

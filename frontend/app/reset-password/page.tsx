@@ -3,6 +3,7 @@
 import { useState, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
+import { PageWrapper, BackLink } from '@/components/ui/DesignSystem';
 
 function ResetPasswordForm() {
   const router = useRouter();
@@ -276,7 +277,8 @@ function ResetPasswordForm() {
 
 export default function ResetPasswordPage() {
   return (
-    <div className="min-h-[80vh] flex items-center justify-center p-4">
+    <PageWrapper>
+    <div className="min-h-[80vh] flex items-center justify-center p-4 bg-earth-50/50">
       <div className="w-full max-w-md">
         {/* Logo/Brand */}
         <div className="text-center mb-8">
@@ -288,7 +290,7 @@ export default function ResetPasswordPage() {
           </Link>
         </div>
 
-        <div className="bg-white rounded-2xl shadow-xl p-8">
+        <div className="bg-white rounded-2xl shadow-xl border border-earth-200 p-8">
           <Suspense fallback={
             <div className="text-center py-8">
               <div className="w-8 h-8 border-2 border-earth-600 border-t-transparent rounded-full animate-spin mx-auto" />
@@ -299,12 +301,11 @@ export default function ResetPasswordPage() {
           </Suspense>
         </div>
 
-        <div className="text-center mt-6">
-          <Link href="/" className="text-sm text-sage-600 hover:text-sage-800">
-            ← Back to Home
-          </Link>
+        <div className="mt-6">
+          <BackLink href="/" label="Return to Home" />
         </div>
       </div>
     </div>
+    </PageWrapper>
   );
 }

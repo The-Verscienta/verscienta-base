@@ -6,6 +6,15 @@ import type { PractitionerEntity } from '@/types/drupal';
 import { Breadcrumbs } from '@/components/ui/Breadcrumbs';
 import { SafeHtml } from '@/components/ui/SafeHtml';
 import { ClinicMap } from '@/components/clinic/ClinicMap';
+import {
+  PageWrapper,
+  LeafPattern,
+  Section,
+  BotanicalDivider,
+  Tag,
+  DisclaimerBox,
+  BackLink,
+} from '@/components/ui/DesignSystem';
 
 interface PractitionerDetailProps {
   params: Promise<{
@@ -50,94 +59,112 @@ export default async function PractitionerDetailPage({ params }: PractitionerDet
     .join(', ');
 
   return (
-    <div className="max-w-4xl mx-auto">
-      {/* Breadcrumbs */}
-      <Breadcrumbs
-        items={[
-          { label: 'Home', href: '/' },
-          { label: 'Practitioners', href: '/practitioners' },
-          { label: name },
-        ]}
-        className="mb-6"
-      />
+    <PageWrapper>
+      {/* Hero Section */}
+      <div className="relative overflow-hidden bg-gradient-to-br from-earth-50 via-sage-50/50 to-cream-100 border-b border-sage-200/50">
+        <LeafPattern opacity={0.04} />
+        <div className="absolute top-20 left-10 w-64 h-64 bg-sage-300/20 rounded-full blur-3xl" />
+        <div className="absolute bottom-10 right-20 w-48 h-48 bg-earth-300/15 rounded-full blur-3xl" />
 
-      {/* Header */}
-      <div className="bg-white rounded-lg shadow-lg overflow-hidden mb-6">
-        {/* Hero image */}
-        {practitioner.field_images?.[0] && (practitioner.field_images[0].uri?.url || practitioner.field_images[0].url) && (
-          <div className="relative w-full h-56 md:h-72">
-            <Image
-              src={practitioner.field_images[0].uri?.url || practitioner.field_images[0].url!}
-              alt={practitioner.field_images[0].meta?.alt || name}
-              fill
-              priority
-              className="object-cover"
-              sizes="(max-width: 896px) 100vw, 896px"
-            />
-          </div>
-        )}
-        <div className="p-8">
-        <div className="flex items-start justify-between mb-6">
-          <div>
-            {!(practitioner.field_images?.[0] && (practitioner.field_images[0].uri?.url || practitioner.field_images[0].url)) && (
-              <div className="text-6xl mb-4">👨‍⚕️</div>
-            )}
-            <h1 className="text-4xl font-bold text-earth-800 mb-2">{name}</h1>
-            {practitioner.field_credentials && (
-              <p className="text-lg text-sage-600">{practitioner.field_credentials}</p>
-            )}
-          </div>
-          <div className="text-right">
-            {practitioner.field_accepting_new_patients ||
-            practitioner.field_accepting_patients ? (
-              <span className="inline-block bg-green-100 text-green-700 px-3 py-1 rounded-lg font-medium">
-                Accepting New Patients
-              </span>
+        <div className="relative max-w-6xl mx-auto px-4 py-8">
+          <Breadcrumbs
+            items={[
+              { label: 'Home', href: '/' },
+              { label: 'Practitioners', href: '/practitioners' },
+              { label: name },
+            ]}
+            className="mb-8"
+          />
+
+          <div className="bg-white rounded-3xl shadow-xl border border-earth-200 relative overflow-hidden">
+            {practitioner.field_images?.[0] && (practitioner.field_images[0].uri?.url || practitioner.field_images[0].url) ? (
+              <div className="relative w-full h-56 md:h-72">
+                <Image
+                  src={practitioner.field_images[0].uri?.url || practitioner.field_images[0].url!}
+                  alt={practitioner.field_images[0].meta?.alt || name}
+                  fill
+                  priority
+                  className="object-cover"
+                  sizes="(max-width: 896px) 100vw, 896px"
+                />
+              </div>
             ) : (
-              <span className="inline-block bg-gray-100 text-gray-600 px-3 py-1 rounded-lg font-medium">
-                Not Accepting Patients
-              </span>
+              <div className="absolute -right-12 -top-12 w-64 h-64 opacity-5 pointer-events-none text-8xl">👨‍⚕️</div>
             )}
-          </div>
-        </div>
-
-        {/* Bio */}
-        {practitioner.field_bio && (
-          <div className="mb-6">
-            <h3 className="text-xl font-semibold text-earth-800 mb-3">About</h3>
-            <div className="prose max-w-none">
-              <SafeHtml html={practitioner.field_bio} />
+            <div className="relative p-8 md:p-12">
+              <h1 className="font-serif text-5xl md:text-6xl font-bold text-earth-900 mb-2 tracking-tight">
+                {name}
+              </h1>
+              {practitioner.field_credentials && (
+                <p className="text-lg text-sage-600 mb-4">{practitioner.field_credentials}</p>
+              )}
+              <div className="flex flex-wrap gap-2">
+                {practitioner.field_accepting_new_patients || practitioner.field_accepting_patients ? (
+                  <Tag variant="sage">Accepting New Patients</Tag>
+                ) : (
+                  <Tag variant="muted">Not Accepting Patients</Tag>
+                )}
+                {practitioner.field_practice_type && (
+                  <Tag variant="earth">{practitioner.field_practice_type}</Tag>
+                )}
+              </div>
             </div>
           </div>
-        )}
-
-        {/* Practice Details */}
-        <div className="grid md:grid-cols-2 gap-6">
-          {practitioner.field_practice_type && (
-            <div>
-              <h3 className="text-lg font-semibold text-earth-700 mb-2">Practice Type</h3>
-              <span className="bg-sage-100 text-sage-700 px-3 py-1 rounded-lg text-sm capitalize">
-                {practitioner.field_practice_type}
-              </span>
-            </div>
-          )}
-
-          {practitioner.field_years_experience !== undefined && (
-            <div>
-              <h3 className="text-lg font-semibold text-earth-700 mb-2">Experience</h3>
-              <p className="text-gray-700">
-                {practitioner.field_years_experience} years of experience
-              </p>
-            </div>
-          )}
-        </div>
         </div>
       </div>
 
-      {/* Clinic Affiliation */}
+      {/* Main Content */}
+      <div className="max-w-6xl mx-auto px-4 py-8 space-y-8">
+        {practitioner.field_bio && (
+          <Section
+            id="about"
+            variant="default"
+            title="About"
+            icon="👨‍⚕️"
+          >
+            <div className="prose max-w-none text-earth-700">
+              <SafeHtml html={practitioner.field_bio} />
+            </div>
+          </Section>
+        )}
+
+        {(practitioner.field_practice_type || practitioner.field_years_experience !== undefined) && (
+          <Section
+            id="practice"
+            variant="default"
+            title="Practice Details"
+            icon={
+              <svg className="w-8 h-8 text-sage-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+              </svg>
+            }
+          >
+            <div className="grid md:grid-cols-2 gap-6">
+              {practitioner.field_practice_type && (
+                <div>
+                  <h3 className="text-lg font-semibold text-earth-700 mb-2">Practice Type</h3>
+                  <Tag variant="sage">{practitioner.field_practice_type}</Tag>
+                </div>
+              )}
+              {practitioner.field_years_experience !== undefined && (
+                <div>
+                  <h3 className="text-lg font-semibold text-earth-700 mb-2">Experience</h3>
+                  <p className="text-earth-700">
+                    {practitioner.field_years_experience} years of experience
+                  </p>
+                </div>
+              )}
+            </div>
+          </Section>
+        )}
+
       {practitioner.field_clinic && (
-        <div className="bg-white rounded-lg shadow-lg p-8 mb-6">
-          <h2 className="text-2xl font-bold text-earth-800 mb-4">Clinic Affiliation</h2>
+        <Section
+          id="clinic"
+          variant="default"
+          title="Clinic Affiliation"
+          icon="🏥"
+        >
           <Link
             href={`/clinics/${practitioner.field_clinic.id}`}
             className="group flex items-center gap-4 p-4 rounded-lg border border-sage-200 hover:border-sage-400 hover:shadow-md transition-all bg-sage-50"
@@ -155,13 +182,12 @@ export default async function PractitionerDetailPage({ params }: PractitionerDet
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
             </svg>
           </Link>
-        </div>
+        </Section>
       )}
 
       {/* Image Gallery (if multiple images) */}
       {practitioner.field_images && practitioner.field_images.length > 1 && (
-        <div className="bg-white rounded-lg shadow-lg p-8 mb-6">
-          <h2 className="text-2xl font-bold text-earth-800 mb-4">Photos</h2>
+        <Section id="photos" variant="default" title="Photos" icon="📷">
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
             {practitioner.field_images.slice(1).map((image, idx) => {
               const imgUrl = image.uri?.url || image.url;
@@ -179,12 +205,10 @@ export default async function PractitionerDetailPage({ params }: PractitionerDet
               );
             })}
           </div>
-        </div>
+        </Section>
       )}
 
-      {/* Contact Information */}
-      <div className="bg-white rounded-lg shadow-lg p-8 mb-6">
-        <h2 className="text-2xl font-bold text-earth-800 mb-4">Contact Information</h2>
+      <Section id="contact" variant="default" title="Contact Information" icon="📧">
 
         <div className="grid md:grid-cols-2 gap-6">
           {fullAddress && (
@@ -240,14 +264,10 @@ export default async function PractitionerDetailPage({ params }: PractitionerDet
             </div>
           )}
         </div>
-      </div>
+      </Section>
 
-      {/* Modalities */}
       {practitioner.field_modalities && practitioner.field_modalities.length > 0 && (
-        <div className="bg-white rounded-lg shadow-lg p-8 mb-6">
-          <h2 className="text-2xl font-bold text-earth-800 mb-4">
-            Specializations & Modalities
-          </h2>
+        <Section id="modalities" variant="default" title="Specializations & Modalities" icon="🧘">
           <div className="grid md:grid-cols-2 gap-4">
             {practitioner.field_modalities.map((modality) => (
               <Link
@@ -262,13 +282,11 @@ export default async function PractitionerDetailPage({ params }: PractitionerDet
               </Link>
             ))}
           </div>
-        </div>
+        </Section>
       )}
 
-      {/* Map */}
       {practitioner.field_latitude && practitioner.field_longitude && (
-        <div className="bg-white rounded-lg shadow-lg p-8 mb-6">
-          <h2 className="text-2xl font-bold text-earth-800 mb-4">Location</h2>
+        <Section id="location" variant="default" title="Location" icon="📍">
           <ClinicMap
             clinics={[{
               id: practitioner.id,
@@ -281,12 +299,11 @@ export default async function PractitionerDetailPage({ params }: PractitionerDet
             zoom={15}
             className="h-[300px] rounded-lg overflow-hidden"
           />
-        </div>
+        </Section>
       )}
 
-      {/* CTA Section */}
-      <div className="bg-gradient-to-r from-earth-700 to-sage-700 text-white p-8 rounded-lg shadow-xl text-center mb-6">
-        <h2 className="text-2xl font-bold mb-4">Ready to Schedule?</h2>
+      <div className="bg-gradient-to-r from-earth-700 via-sage-700 to-earth-800 text-white p-8 rounded-2xl shadow-xl text-center">
+        <h2 className="text-2xl font-serif font-bold mb-4">Ready to Schedule?</h2>
         <p className="mb-6 opacity-90">
           Contact {name} to schedule a consultation and begin your wellness journey.
         </p>
@@ -310,24 +327,10 @@ export default async function PractitionerDetailPage({ params }: PractitionerDet
         </div>
       </div>
 
-      {/* Disclaimer */}
-      <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-6 mb-6">
-        <p className="text-sm text-yellow-800">
-          <strong>Note:</strong> Practitioner listings are provided for informational purposes.
-          Please verify credentials and conduct your own research before scheduling appointments.
-          This platform does not endorse specific practitioners.
-        </p>
-      </div>
+      <DisclaimerBox />
 
-      {/* Back Link */}
-      <div className="text-center">
-        <Link
-          href="/practitioners"
-          className="inline-block text-sage-600 hover:text-sage-800 font-medium"
-        >
-          ← Back to All Practitioners
-        </Link>
+      <BackLink href="/practitioners" label="Back to All Practitioners" />
       </div>
-    </div>
+    </PageWrapper>
   );
 }

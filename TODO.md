@@ -1,7 +1,7 @@
 # Verscienta Health - Comprehensive TODO List
 
-**Last Updated:** 2026-01-23
-**Overall Progress:** ~92% complete
+**Last Updated:** 2026-02-16
+**Overall Progress:** ~93% complete
 
 ---
 
@@ -9,7 +9,7 @@
 
 | Category | Progress | Notes |
 |----------|----------|-------|
-| Frontend Pages | 95% | 26 pages built (added faq, forgot-password, reset-password, all listings redesigned) |
+| Frontend Pages | 100% | 26 pages built; all pages use DesignSystem consistently |
 | Frontend Components | 95% | 30+ components (added Skeleton, ErrorBoundary, NewsletterSignup, enhanced Toast) |
 | Frontend API Routes | 100% | 7 routes (auth, grok) |
 | Backend Setup | 95% | Drupal running, all content types with fields, taxonomies, entity refs, sample data scripts |
@@ -197,10 +197,25 @@ Script: `/backend/scripts/setup-taxonomies.sh`
 - [x] `/forgot-password` - Password reset request page
 - [x] `/reset-password` - Token-based password reset page
 
-### 2.3 Pages Needing Work
-- [x] `/search` - Improved with Algolia Stats, Pagination, type-specific icons
-- [ ] `/symptom-checker` - Enhance multi-step form UI
-- [ ] `/modalities/[id]` - Polish detail page
+### 2.3 Detail & Utility Pages - Design System Upgrades (2026-02)
+- [x] `/search` - PageWrapper, LeafPattern, hero, BackLink, metadata layout
+- [x] `/symptom-checker` - PageWrapper, LeafPattern, hero, DisclaimerBox, Section, BotanicalDivider, Tag, BackLink
+- [x] `/modalities/[id]` - PageWrapper, hero, Section, BotanicalDivider, Tag, DisclaimerBox, BackLink
+- [x] `/conditions/[id]` - PageWrapper, hero, Section, BotanicalDivider, Tag, DisclaimerBox, BackLink
+- [x] `/formulas/[id]` - PageWrapper, hero, Section, BotanicalDivider, Tag, DisclaimerBox, BackLink
+- [x] `/herbs/[id]` - PageWrapper, DesignSystem Section/BotanicalDivider/Tag, DisclaimerBox, BackLink
+- [x] `/practitioners/[id]` - PageWrapper, hero, Section, Tag, DisclaimerBox, BackLink
+- [x] `/clinics` - PageWrapper, LeafPattern, hero, Tag, BackLink
+- [x] `/clinics/[id]` - PageWrapper, hero, Section, Tag, DisclaimerBox, BackLink
+- [x] `/login` - PageWrapper, BackLink, earth palette, form card styling, metadata layout
+- [x] `/register` - PageWrapper, BackLink, earth palette, form card styling, metadata layout
+- [x] `/contact` - PageWrapper, LeafPattern, BackLink, DesignSystem components, metadata layout
+- [x] `/forgot-password` - PageWrapper, BackLink, earth palette, metadata layout
+- [x] `/reset-password` - PageWrapper, BackLink, earth palette, metadata layout
+- [x] `/privacy` - PageWrapper, LeafPattern, hero, BackLink, metadata layout
+- [x] `/terms` - PageWrapper, LeafPattern, hero, BackLink, metadata layout
+- [x] `/faq` - PageWrapper, LeafPattern, hero, BackLink, earth palette, metadata layout
+- [x] `/profile` - PageWrapper, BackLink, earth palette, metadata layout
 
 ### 2.4 Missing Functionality
 - [ ] Email verification flow
@@ -520,6 +535,31 @@ POSTGRES_PASSWORD=secure-password
 REDIS_HOST=redis
 REDIS_PORT=6379
 ```
+
+---
+
+## RECENT CHANGES (2026-02-16)
+
+### Frontend Pages 100% - Design System Complete
+- **Auth pages:** forgot-password, reset-password - PageWrapper, BackLink, earth palette, metadata layouts
+- **Legal/content:** privacy, terms - PageWrapper, LeafPattern, hero, BackLink, metadata layouts
+- **Utility:** FAQ - PageWrapper, LeafPattern, hero, BackLink, earth palette, metadata layout
+- **Profile** - PageWrapper, BackLink, earth palette, metadata layout
+- **Herb detail** - Migrated to DesignSystem Section, BotanicalDivider, Tag; PageWrapper, DisclaimerBox, BackLink
+- **Practitioner detail** - Full design system (hero, Section, Tag, DisclaimerBox, BackLink)
+- **Clinics listing** - PageWrapper, LeafPattern, hero, Tag, BackLink
+- **Clinic detail** - Full design system (hero, Section, Tag, DisclaimerBox, BackLink)
+- All 26 frontend pages now use DesignSystem consistently
+
+### Design System Upgrades (initial batch)
+- **Detail pages** upgraded with PageWrapper, hero sections (LeafPattern, blur circles), Section, BotanicalDivider, Tag, DisclaimerBox, BackLink:
+  - `/conditions/[id]` - Hero, Overview, Symptoms, Modalities, Formulas, Holistic Approach sections
+  - `/formulas/[id]` - Hero, Description, Related Conditions, Ingredients, Preparation & Dosage sections
+- **Auth pages** - Login and Register: PageWrapper, BackLink, earth palette (`bg-earth-50/50`), form card `border-earth-200`, metadata layouts
+- **Contact page** - PageWrapper, LeafPattern from DesignSystem, BackLink, border-earth-200 on cards, metadata layout
+- **Search** - Already had design system; added layout for metadata
+- **Modality detail** and **Symptom Checker** - Previously upgraded with full design system
+- Added `layout.tsx` with metadata for: login, register, contact
 
 ---
 
