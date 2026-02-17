@@ -119,7 +119,7 @@ export default async function ClinicDetailPage({ params }: ClinicDetailProps) {
             className="mb-8"
           />
           <div className="bg-white rounded-3xl shadow-xl border border-earth-200 relative overflow-hidden">
-            {clinic.field_images?.[0] && (clinic.field_images[0].uri?.url || clinic.field_images[0].url) && (
+            {clinic.field_images?.[0] && (clinic.field_images[0].uri?.url || clinic.field_images[0].url) ? (
               <div className="relative w-full h-56 md:h-72">
                 <Image
                   src={clinic.field_images[0].uri?.url || clinic.field_images[0].url!}
