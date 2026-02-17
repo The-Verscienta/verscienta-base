@@ -241,6 +241,7 @@ ddev drush php:eval "
 
 ddev drush field:create node condition field_symptoms --field-label="Symptoms" --field-type=string --cardinality=-1
 ddev drush field:create node condition field_severity --field-label="Severity" --field-type=list_string --cardinality=1
+ddev drush field:create node condition field_condition_description --field-label="Description" --field-type=text_long --cardinality=1
 
 # Practitioner
 ddev drush php:eval "
@@ -253,6 +254,7 @@ ddev drush php:eval "
 "
 
 ddev drush field:create node practitioner field_practice_type --field-label="Practice Type" --field-type=list_string --cardinality=1
+ddev drush field:create node practitioner field_bio --field-label="Biography" --field-type=text_long --cardinality=1
 ddev drush field:create node practitioner field_address --field-label="Address" --field-type=string_long --cardinality=1
 ddev drush field:create node practitioner field_latitude --field-label="Latitude" --field-type=decimal --cardinality=1
 ddev drush field:create node practitioner field_longitude --field-label="Longitude" --field-type=decimal --cardinality=1
@@ -307,6 +309,22 @@ echo -e "${GREEN}✓ Cache cleared${NC}"
 echo ""
 
 echo "============================================================"
+echo "PHASE 7: Sample Content (Optional)"
+echo "============================================================"
+echo ""
+read -p "Create sample herbs, modalities, conditions, and more? (y/n) " -n 1 -r
+echo
+if [[ $REPLY =~ ^[Yy]$ ]]; then
+    echo -e "${BLUE}Creating sample content...${NC}"
+    ddev exec "cd /var/www/html && drush php:script scripts/create-sample-content.php"
+    echo -e "${GREEN}✓ Sample content created${NC}"
+else
+    echo -e "${YELLOW}Skipping sample content. Run later with:${NC}"
+    echo "  ddev exec \"cd /var/www/html/backend && drush php:script scripts/create-sample-content.php\""
+fi
+echo ""
+
+echo "============================================================"
 echo -e "${GREEN}✓ SETUP COMPLETE!${NC}"
 echo "============================================================"
 echo ""
@@ -314,9 +332,8 @@ echo "Your Verscienta Health backend is now ready!"
 echo ""
 echo "Next steps:"
 echo ""
-echo "1. Create sample content:"
-echo "   ddev drush uli"
-echo "   Visit the URL and go to /node/add/herb"
+echo "1. (If skipped) Create sample content:"
+    echo "   ddev exec \"cd /var/www/html && drush php:script scripts/create-sample-content.php\""
 echo ""
 echo "2. Test JSON:API endpoints:"
 echo "   curl -k https://backend.ddev.site/jsonapi/node/herb"

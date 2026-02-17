@@ -124,6 +124,7 @@ This will:
 - ✅ Configure JSON:API endpoints
 - ✅ Set up CORS
 - ✅ Configure permissions
+- ✅ Optionally create sample content (10 herbs, 6 modalities, 6 conditions, 4 practitioners, 4 formulas)
 
 **See [DRUPAL-SETUP-INSTRUCTIONS.md](DRUPAL-SETUP-INSTRUCTIONS.md) for detailed instructions.**
 
@@ -315,6 +316,23 @@ Visit the following pages:
 ---
 
 ## 📝 Creating Content
+
+### Sample Content (Recommended for Development)
+
+To populate the database with sample herbs, modalities, conditions, practitioners, and formulas:
+
+```bash
+# From project root (with DDEV running)
+ddev exec "cd /var/www/html && drush php:script scripts/create-sample-content.php"
+```
+
+Or run the wrapper script:
+```bash
+chmod +x backend/scripts/create-sample-content.sh
+./backend/scripts/create-sample-content.sh
+```
+
+Creates: 10 herbs, 6 modalities, 6 conditions, 4 practitioners, 4 formulas. Safe to run multiple times (skips existing content).
 
 ### Via Drupal UI
 
