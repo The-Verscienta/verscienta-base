@@ -129,6 +129,7 @@
 - `/backend/scripts/setup-all.sh` - Master setup script
 
 ### 1.3 Taxonomies (COMPLETE - script created)
+
 - [x] Herb Family vocabulary (20 botanical families)
 - [x] Modality Category vocabulary (14 categories)
 - [x] TCM Categories vocabulary (30+ categories)
@@ -187,6 +188,7 @@ Script: `/backend/scripts/setup-taxonomies.sh`
 ## 2. FRONTEND - Pages (MOSTLY COMPLETE)
 
 ### 2.1 Pages Updated with Design System
+
 - [x] `/herbs` - Redesigned with breadcrumbs, temperature badges, featured section
 - [x] `/modalities` - Redesigned with icon mapping, category highlights, CTA
 - [x] `/conditions` - Redesigned with severity badges, symptom checker CTA
@@ -196,6 +198,7 @@ Script: `/backend/scripts/setup-taxonomies.sh`
 - [x] `/register` - 2-step form, password strength indicator, terms agreement
 
 ### 2.2 New Pages Created
+
 - [x] `/about` - About us page
 - [x] `/contact` - Contact form page
 - [x] `/privacy` - Privacy policy page
@@ -205,6 +208,7 @@ Script: `/backend/scripts/setup-taxonomies.sh`
 - [x] `/reset-password` - Token-based password reset page
 
 ### 2.3 Detail & Utility Pages - Design System Upgrades (2026-02)
+
 - [x] `/search` - PageWrapper, LeafPattern, hero, BackLink, metadata layout
 - [x] `/symptom-checker` - PageWrapper, LeafPattern, hero, DisclaimerBox, Section, BotanicalDivider, Tag, BackLink
 - [x] `/modalities/[id]` - PageWrapper, hero, Section, BotanicalDivider, Tag, DisclaimerBox, BackLink
@@ -225,6 +229,7 @@ Script: `/backend/scripts/setup-taxonomies.sh`
 - [x] `/profile` - PageWrapper, BackLink, earth palette, metadata layout
 
 ### 2.4 Missing Functionality
+
 - [ ] Email verification flow
 - [ ] User favorites/bookmarks system
 - [ ] User reviews submission
@@ -235,6 +240,7 @@ Script: `/backend/scripts/setup-taxonomies.sh`
 ## 3. FRONTEND - Components & Features (MOSTLY COMPLETE)
 
 ### 3.1 UI Components Created
+
 - [x] Breadcrumbs component
 - [x] Pagination component
 - [x] FilterPanel component (with MobileFilterDrawer)
@@ -253,6 +259,7 @@ Script: `/backend/scripts/setup-taxonomies.sh`
 - [ ] Navigation component (separate from header)
 
 ### 3.2 Feature Enhancements
+
 - [x] Toast notifications integration (global provider in layout)
 - [x] Loading skeletons for better UX
 - [x] Error boundaries for graceful error handling
@@ -264,6 +271,7 @@ Script: `/backend/scripts/setup-taxonomies.sh`
 - [ ] Advanced filtering (faceted search)
 
 ### 3.3 Accessibility
+
 - [ ] Screen reader testing
 - [ ] Keyboard navigation audit
 - [ ] Color contrast verification
@@ -276,6 +284,7 @@ Script: `/backend/scripts/setup-taxonomies.sh`
 ## 4. EXTERNAL SERVICES CONFIGURATION (HIGH PRIORITY)
 
 ### 4.1 Algolia Search (COMPLETE)
+
 - [x] Create Algolia account
 - [x] Create search index
 - [x] Configure searchable attributes
@@ -286,6 +295,7 @@ Script: `/backend/scripts/setup-taxonomies.sh`
 - [ ] Create Drupal hook for content sync on save/update (optional)
 
 ### 4.2 Grok AI (xAI)
+
 - [ ] Obtain xAI API key
 - [ ] Add to .env (XAI_API_KEY)
 - [ ] Test symptom analysis endpoint
@@ -692,4 +702,4 @@ REDIS_PORT=6379
 
 ---
 
-*This TODO list should be updated as tasks are completed. Mark items with [x] when do
+*This TODO list should be updated as tasks are completed. Mark items with [x] when done.*
