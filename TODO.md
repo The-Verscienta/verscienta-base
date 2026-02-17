@@ -8,7 +8,7 @@
 ## Summary
 
 | Category | Progress | Notes |
-|----------|----------|-------|
+| ---------- | ---------- | -------- |
 | Frontend Pages | 100% | 26 pages built; all pages use DesignSystem consistently |
 | Frontend Components | 95% | 30+ components (added Skeleton, ErrorBoundary, NewsletterSignup, enhanced Toast) |
 | Frontend API Routes | 100% | 7 routes (auth, grok) |
@@ -22,8 +22,9 @@
 
 ## CURRENT STATUS (2026-01-22)
 
-### Working Now:
-- DDEV running at https://backend.ddev.site
+### Working Now
+
+- DDEV running at <https://backend.ddev.site>
 - Drupal 11.2.5 installed and configured
 - JSON:API endpoints working
 - OAuth 2.0 configured (Client ID: e6ab6cee-b624-4103-8b06-ccff335ca6f7)
@@ -47,7 +48,8 @@
 - **NEW:** Zod validation for all forms
 - **NEW:** Improved search page with Algolia Stats and Pagination
 
-### Next Steps:
+### Next Steps
+
 1. ~~**Run backend setup scripts** when DDEV is started~~ (DONE)
 2. ~~Configure Algolia~~ (DONE - `npm run index-algolia`)
 3. Configure external services (Turnstile, xAI API keys)
@@ -61,6 +63,7 @@
 ## 1. BACKEND - Drupal Setup (MOSTLY COMPLETE)
 
 ### 1.1 Drupal Installation & Configuration
+
 - [x] Complete DDEV setup
 - [x] Run Drupal site installation
 - [x] Enable core modules (jsonapi, rest, serialization, content_translation, locale)
@@ -82,6 +85,7 @@
   - [x] focal_point
 
 ### 1.2 Content Types Creation (COMPLETE - scripts created)
+
 - [x] **Herb** content type (comprehensive)
   - [x] Botanical information fields (scientific_name, family, genus, species)
   - [x] TCM properties (temperature, flavor, channel entry)
@@ -134,6 +138,7 @@
 Script: `/backend/scripts/setup-taxonomies.sh`
 
 ### 1.4 Paragraph Types
+
 - [ ] herb_common_name
 - [ ] tcm_properties
 - [ ] active_constituent
@@ -157,6 +162,7 @@ Script: `/backend/scripts/setup-taxonomies.sh`
 - [ ] image_info
 
 ### 1.5 OAuth & Security
+
 - [ ] Configure Simple OAuth module
 - [ ] Generate OAuth key pair (private.key, public.key)
 - [ ] Create OAuth client for Next.js frontend
@@ -170,6 +176,7 @@ Script: `/backend/scripts/setup-taxonomies.sh`
   - [ ] Administrator (full access)
 
 ### 1.6 Views & API Endpoints
+
 - [ ] Create Views for JSON:API endpoints
 - [ ] Configure jsonapi_extras for custom endpoints
 - [ ] Set up search_api indexes
@@ -685,4 +692,4 @@ REDIS_PORT=6379
 
 ---
 
-*This TODO list should be updated as tasks are completed. Mark items with [x] when done.*
+*This TODO list should be updated as tasks are completed. Mark items with [x] when do

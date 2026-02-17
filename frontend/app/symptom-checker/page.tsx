@@ -1,10 +1,10 @@
 'use client';
 
 import { useState } from 'react';
+import { Breadcrumbs } from '@/components/ui/Breadcrumbs';
 import {
   PageWrapper,
   LeafPattern,
-  Breadcrumbs,
   DisclaimerBox,
   Section,
   BotanicalDivider,
