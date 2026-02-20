@@ -13,6 +13,17 @@ import {
   DisclaimerBox,
   BackLink,
 } from '@/components/ui/DesignSystem';
+import {
+  popularityMap,
+  onsetSpeedMap,
+  costTierMap,
+  palatabilityMap,
+  pregnancySafetyMap,
+  availabilityMap,
+  bestSeasonMap,
+  evidenceStrengthMap,
+  getFieldConfig,
+} from '@/lib/decision-field-maps';
 
 // Helper to extract text value from Drupal text field
 function getTextValue(field: DrupalTextField): string | null {
@@ -74,6 +85,9 @@ export default async function HerbDetailPage({ params }: HerbDetailProps) {
     tocItems.push({ id: 'cultural', label: 'Cultural Context' });
   }
   if (herb.field_preparation_methods?.length) tocItems.push({ id: 'preparation', label: 'Preparation' });
+  if (herb.field_popularity || herb.field_cost_tier || herb.field_availability || herb.field_palatability || herb.field_pregnancy_safety || herb.field_best_season) {
+    tocItems.push({ id: 'practical', label: 'Practical Info' });
+  }
 
   return (
     <PageWrapper>
@@ -197,6 +211,37 @@ export default async function HerbDetailPage({ params }: HerbDetailProps) {
                       </div>
                     )}
                   </div>
+
+                  {/* Quick Facts Tags */}
+                  {(herb.field_popularity || herb.field_beginner_friendly || herb.field_editors_pick || herb.field_onset_speed || herb.field_evidence_strength) && (
+                    <div className="flex flex-wrap gap-2 mt-6">
+                      {herb.field_editors_pick && (
+                        <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-semibold bg-amber-100 text-amber-800 border border-amber-200">
+                          &#9733; Editor&apos;s Pick
+                        </span>
+                      )}
+                      {herb.field_popularity && (() => { const c = getFieldConfig(popularityMap, herb.field_popularity); return c ? (
+                        <span className={`inline-flex items-center gap-1 px-3 py-1.5 rounded-full text-sm font-medium ${c.bg} ${c.text}`}>
+                          {c.icon && <span>{c.icon}</span>}{c.label}
+                        </span>
+                      ) : null; })()}
+                      {herb.field_beginner_friendly && (
+                        <span className="inline-flex items-center gap-1 px-3 py-1.5 rounded-full text-sm font-medium bg-green-100 text-green-700">
+                          Beginner Friendly
+                        </span>
+                      )}
+                      {herb.field_onset_speed && (() => { const c = getFieldConfig(onsetSpeedMap, herb.field_onset_speed); return c ? (
+                        <span className={`inline-flex items-center gap-1 px-3 py-1.5 rounded-full text-sm font-medium ${c.bg} ${c.text}`}>
+                          {c.icon && <span>{c.icon}</span>}{c.label}
+                        </span>
+                      ) : null; })()}
+                      {herb.field_evidence_strength && (() => { const c = getFieldConfig(evidenceStrengthMap, herb.field_evidence_strength); return c ? (
+                        <span className={`inline-flex items-center px-3 py-1.5 rounded-full text-sm font-medium ${c.bg} ${c.text}`}>
+                          {c.label}
+                        </span>
+                      ) : null; })()}
+                    </div>
+                  )}
                 </div>
               </div>
 
@@ -681,6 +726,44 @@ export default async function HerbDetailPage({ params }: HerbDetailProps) {
                       )}
                     </div>
                   ))}
+                </div>
+              </Section>
+            )}
+
+            {/* Practical Information */}
+            {(herb.field_cost_tier || herb.field_availability || herb.field_palatability || herb.field_best_season || herb.field_pregnancy_safety) && (
+              <Section id="practical" title="Practical Information" icon="&#x1F4CB;">
+                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+                  {herb.field_cost_tier && (() => { const c = getFieldConfig(costTierMap, herb.field_cost_tier); return c ? (
+                    <div className="bg-white rounded-xl p-5 border border-earth-100 shadow-sm">
+                      <h3 className="text-xs font-bold text-earth-500 uppercase tracking-wider mb-2">Cost</h3>
+                      <span className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${c.bg} ${c.text}`}>{c.label}</span>
+                    </div>
+                  ) : null; })()}
+                  {herb.field_availability && (() => { const c = getFieldConfig(availabilityMap, herb.field_availability); return c ? (
+                    <div className="bg-white rounded-xl p-5 border border-earth-100 shadow-sm">
+                      <h3 className="text-xs font-bold text-earth-500 uppercase tracking-wider mb-2">Availability</h3>
+                      <span className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${c.bg} ${c.text}`}>{c.label}</span>
+                    </div>
+                  ) : null; })()}
+                  {herb.field_palatability && (() => { const c = getFieldConfig(palatabilityMap, herb.field_palatability); return c ? (
+                    <div className="bg-white rounded-xl p-5 border border-earth-100 shadow-sm">
+                      <h3 className="text-xs font-bold text-earth-500 uppercase tracking-wider mb-2">Taste</h3>
+                      <span className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${c.bg} ${c.text}`}>{c.label}</span>
+                    </div>
+                  ) : null; })()}
+                  {herb.field_best_season && (() => { const c = getFieldConfig(bestSeasonMap, herb.field_best_season); return c ? (
+                    <div className="bg-white rounded-xl p-5 border border-earth-100 shadow-sm">
+                      <h3 className="text-xs font-bold text-earth-500 uppercase tracking-wider mb-2">Best Season</h3>
+                      <span className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${c.bg} ${c.text}`}>{c.label}</span>
+                    </div>
+                  ) : null; })()}
+                  {herb.field_pregnancy_safety && (() => { const c = getFieldConfig(pregnancySafetyMap, herb.field_pregnancy_safety); return c ? (
+                    <div className="bg-white rounded-xl p-5 border border-earth-100 shadow-sm">
+                      <h3 className="text-xs font-bold text-earth-500 uppercase tracking-wider mb-2">Pregnancy Safety</h3>
+                      <span className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${c.bg} ${c.text}`}>{c.label}</span>
+                    </div>
+                  ) : null; })()}
                 </div>
               </Section>
             )}

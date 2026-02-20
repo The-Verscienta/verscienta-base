@@ -32,6 +32,8 @@ export const metadata = {
   description: 'Explore our comprehensive collection of medicinal herbs, their therapeutic uses, benefits, and safety information.',
 };
 
+import { popularityMap, getFieldConfig } from '@/lib/decision-field-maps';
+
 interface Herb {
   id: string;
   type: string;
@@ -49,6 +51,9 @@ interface Herb {
   field_common_names?: string[];
   field_primary_actions?: string[];
   field_tcm_temperature?: string;
+  field_popularity?: string;
+  field_beginner_friendly?: boolean;
+  field_editors_pick?: boolean;
   field_images?: Array<{
     id: string;
     type: string;
@@ -110,6 +115,9 @@ function getHerbData(herb: Herb) {
     commonNames: herb.field_common_names || herb.attributes?.field_common_names || [],
     primaryActions: herb.field_primary_actions || [],
     tcmTemperature: herb.field_tcm_temperature,
+    popularity: herb.field_popularity,
+    beginnerFriendly: herb.field_beginner_friendly,
+    editorsPick: herb.field_editors_pick,
     summary: herb.body?.summary || herb.body?.processed?.replace(/<[^>]*>/g, '').slice(0, 150) ||
              herb.attributes?.body?.summary,
     imageUrl: herb.field_images?.[0]?.uri?.url || herb.field_images?.[0]?.url || null,
@@ -272,6 +280,45 @@ export default async function HerbsPage({ searchParams }: PageProps) {
           />
         ) : (
           <>
+            {/* Editor's Picks */}
+            {(() => {
+              const picks = herbs.filter(h => getHerbData(h).editorsPick);
+              return picks.length > 0 ? (
+                <div className="mb-12">
+                  <h2 className="font-serif text-2xl font-bold text-earth-800 mb-6 flex items-center gap-2">
+                    <span className="text-amber-500">&#9733;</span> Editor&apos;s Picks
+                  </h2>
+                  <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {picks.map((herb) => {
+                      const data = getHerbData(herb);
+                      return (
+                        <Link
+                          key={herb.id}
+                          href={`/herbs/${herb.id}`}
+                          className="group relative bg-gradient-to-br from-amber-50 via-cream-50 to-sage-50 rounded-2xl shadow-sm hover:shadow-xl border-2 border-amber-200 hover:border-amber-300 transition-all duration-300 overflow-hidden p-6"
+                        >
+                          <div className="absolute top-3 right-3">
+                            <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold bg-amber-100 text-amber-800 border border-amber-200">
+                              &#9733; Pick
+                            </span>
+                          </div>
+                          <h3 className="font-serif text-lg font-bold text-earth-800 mb-1 group-hover:text-sage-700 transition-colors">{data.title}</h3>
+                          {data.scientificName && <p className="text-sm italic text-sage-600 mb-2">{data.scientificName}</p>}
+                          {data.summary && <p className="text-sm text-earth-600 line-clamp-2">{data.summary}...</p>}
+                          <div className="mt-3 flex flex-wrap gap-1.5">
+                            {data.popularity && (() => { const c = getFieldConfig(popularityMap, data.popularity); return c ? (
+                              <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${c.bg} ${c.text}`}>{c.label}</span>
+                            ) : null; })()}
+                            {data.beginnerFriendly && <span className="text-xs px-2 py-0.5 rounded-full font-medium bg-green-100 text-green-700">Beginner Friendly</span>}
+                          </div>
+                        </Link>
+                      );
+                    })}
+                  </div>
+                </div>
+              ) : null;
+            })()}
+
             {/* Herbs Grid */}
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-12">
               {herbs.map((herb) => {
@@ -375,6 +422,17 @@ export default async function HerbsPage({ searchParams }: PageProps) {
                               +{data.primaryActions.length - 2}
                             </span>
                           )}
+                        </div>
+                      )}
+
+                      {/* Decision indicators */}
+                      {(data.popularity || data.beginnerFriendly || data.editorsPick) && (
+                        <div className="flex flex-wrap gap-1.5 mb-3">
+                          {data.editorsPick && <span className="text-xs px-2 py-0.5 rounded-full font-semibold bg-amber-100 text-amber-800">&#9733; Pick</span>}
+                          {data.popularity && (() => { const c = getFieldConfig(popularityMap, data.popularity); return c ? (
+                            <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${c.bg} ${c.text}`}>{c.label}</span>
+                          ) : null; })()}
+                          {data.beginnerFriendly && <span className="text-xs px-2 py-0.5 rounded-full font-medium bg-green-100 text-green-700">Beginner</span>}
                         </div>
                       )}
 

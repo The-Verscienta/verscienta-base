@@ -19,6 +19,14 @@ import {
   DisclaimerBox,
   BackLink,
 } from '@/components/ui/DesignSystem';
+import {
+  formulaPopularityMap,
+  preparationDifficultyMap,
+  treatmentDurationMap,
+  formulaCategoryMap,
+  evidenceStrengthMap,
+  getFieldConfig,
+} from '@/lib/decision-field-maps';
 
 // ISR: Revalidate every 5 minutes
 export const revalidate = 300;
@@ -149,6 +157,15 @@ async function getFormula(id: string): Promise<FormulaEntity | null> {
       field_use_cases: data.attributes?.field_use_cases,
       field_herb_ingredients: herbIngredients,
       field_conditions: conditions,
+      field_formula_popularity: data.attributes?.field_formula_popularity,
+      field_preparation_difficulty: data.attributes?.field_preparation_difficulty,
+      field_available_premade: data.attributes?.field_available_premade,
+      field_commercial_forms: data.attributes?.field_commercial_forms,
+      field_treatment_duration: data.attributes?.field_treatment_duration,
+      field_formula_era: data.attributes?.field_formula_era,
+      field_formula_category: data.attributes?.field_formula_category,
+      field_editors_pick: data.attributes?.field_editors_pick,
+      field_evidence_strength: data.attributes?.field_evidence_strength,
     };
   } catch (error) {
     console.error('Failed to fetch formula:', error);
@@ -209,6 +226,35 @@ export default async function FormulaDetailPage({ params }: FormulaDetailProps) 
                   ))}
                 </div>
               )}
+
+              {/* Decision Tags */}
+              {(formula.field_editors_pick || formula.field_formula_popularity || formula.field_formula_category || formula.field_available_premade || formula.field_formula_era) && (
+                <div className="flex flex-wrap items-center gap-2 mt-4">
+                  {formula.field_editors_pick && (
+                    <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-semibold bg-amber-100 text-amber-800 border border-amber-200">
+                      &#9733; Editor&apos;s Pick
+                    </span>
+                  )}
+                  {formula.field_formula_popularity && (() => { const c = getFieldConfig(formulaPopularityMap, formula.field_formula_popularity); return c ? (
+                    <span className={`inline-flex items-center gap-1 px-3 py-1.5 rounded-full text-sm font-medium ${c.bg} ${c.text}`}>
+                      {c.icon && <span>{c.icon}</span>}{c.label}
+                    </span>
+                  ) : null; })()}
+                  {formula.field_formula_category && (() => { const c = getFieldConfig(formulaCategoryMap, formula.field_formula_category); return c ? (
+                    <span className={`inline-flex items-center px-3 py-1.5 rounded-full text-sm font-medium ${c.bg} ${c.text}`}>{c.label}</span>
+                  ) : null; })()}
+                  {formula.field_available_premade && (
+                    <span className="inline-flex items-center px-3 py-1.5 rounded-full text-sm font-medium bg-green-100 text-green-700">
+                      Pre-made Available
+                    </span>
+                  )}
+                  {formula.field_formula_era && (
+                    <span className="inline-flex items-center px-3 py-1.5 rounded-full text-sm font-medium bg-earth-100 text-earth-700">
+                      {formula.field_formula_era}
+                    </span>
+                  )}
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -259,6 +305,47 @@ export default async function FormulaDetailPage({ params }: FormulaDetailProps) 
                   </Tag>
                 </Link>
               ))}
+            </div>
+          </Section>
+        )}
+
+        {/* Practical Details */}
+        {(formula.field_preparation_difficulty || formula.field_treatment_duration || formula.field_commercial_forms || formula.field_evidence_strength) && (
+          <Section
+            id="practical"
+            variant="default"
+            title="Practical Details"
+            icon={
+              <svg className="w-8 h-8 text-sage-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+              </svg>
+            }
+          >
+            <div className="grid md:grid-cols-2 gap-4">
+              {formula.field_preparation_difficulty && (() => { const c = getFieldConfig(preparationDifficultyMap, formula.field_preparation_difficulty); return c ? (
+                <div className="bg-white rounded-xl p-5 border border-earth-100 shadow-sm">
+                  <h3 className="text-xs font-bold text-earth-500 uppercase tracking-wider mb-2">Preparation Difficulty</h3>
+                  <span className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${c.bg} ${c.text}`}>{c.label}</span>
+                </div>
+              ) : null; })()}
+              {formula.field_treatment_duration && (() => { const c = getFieldConfig(treatmentDurationMap, formula.field_treatment_duration); return c ? (
+                <div className="bg-white rounded-xl p-5 border border-earth-100 shadow-sm">
+                  <h3 className="text-xs font-bold text-earth-500 uppercase tracking-wider mb-2">Treatment Duration</h3>
+                  <span className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${c.bg} ${c.text}`}>{c.label}</span>
+                </div>
+              ) : null; })()}
+              {formula.field_commercial_forms && (
+                <div className="bg-white rounded-xl p-5 border border-earth-100 shadow-sm">
+                  <h3 className="text-xs font-bold text-earth-500 uppercase tracking-wider mb-2">Commercial Forms</h3>
+                  <p className="text-earth-700">{formula.field_commercial_forms}</p>
+                </div>
+              )}
+              {formula.field_evidence_strength && (() => { const c = getFieldConfig(evidenceStrengthMap, formula.field_evidence_strength); return c ? (
+                <div className="bg-white rounded-xl p-5 border border-earth-100 shadow-sm">
+                  <h3 className="text-xs font-bold text-earth-500 uppercase tracking-wider mb-2">Evidence Strength</h3>
+                  <span className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${c.bg} ${c.text}`}>{c.label}</span>
+                </div>
+              ) : null; })()}
             </div>
           </Section>
         )}

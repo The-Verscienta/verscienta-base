@@ -14,6 +14,7 @@ import {
   DisclaimerBox,
   BackLink,
 } from '@/components/ui/DesignSystem';
+import { formulaCategoryMap, getFieldConfig } from '@/lib/decision-field-maps';
 
 // ISR: Revalidate every 5 minutes for fresh data with caching benefits
 export const revalidate = 300;
@@ -242,6 +243,41 @@ export default async function FormulasPage({ searchParams }: PageProps) {
           />
         ) : (
           <>
+            {/* Editor's Picks */}
+            {(() => {
+              const picks = formulas.filter(f => f.field_editors_pick);
+              return picks.length > 0 ? (
+                <div className="mb-12">
+                  <h2 className="font-serif text-2xl font-bold text-earth-800 mb-6 flex items-center gap-2">
+                    <span className="text-amber-500">&#9733;</span> Editor&apos;s Picks
+                  </h2>
+                  <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {picks.map((formula) => (
+                      <Link
+                        key={formula.id}
+                        href={`/formulas/${formula.id}`}
+                        className="group bg-gradient-to-br from-amber-50 via-cream-50 to-sage-50 rounded-2xl p-6 border-2 border-amber-200 hover:border-amber-300 hover:shadow-xl transition-all duration-300"
+                      >
+                        <div className="flex items-start justify-between mb-2">
+                          <h3 className="font-serif text-lg font-bold text-earth-800 group-hover:text-earth-600 transition-colors">{formula.title}</h3>
+                          <span className="text-xs px-2 py-0.5 rounded-full font-semibold bg-amber-100 text-amber-800 border border-amber-200">&#9733; Pick</span>
+                        </div>
+                        {getTextValue(formula.field_formula_description) && (
+                          <p className="text-sm text-earth-600 line-clamp-2 mb-3">{getTextValue(formula.field_formula_description)}</p>
+                        )}
+                        <div className="flex flex-wrap gap-1.5">
+                          {formula.field_formula_category && (() => { const c = getFieldConfig(formulaCategoryMap, formula.field_formula_category); return c ? (
+                            <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${c.bg} ${c.text}`}>{c.label}</span>
+                          ) : null; })()}
+                          {formula.field_available_premade && <span className="text-xs px-2 py-0.5 rounded-full font-medium bg-green-100 text-green-700">Pre-made</span>}
+                        </div>
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              ) : null;
+            })()}
+
             {/* Featured Formulas */}
             <div className="grid md:grid-cols-2 gap-6 mb-12">
               {formulas.slice(0, 2).map((formula) => {
@@ -363,6 +399,17 @@ export default async function FormulasPage({ searchParams }: PageProps) {
                             <p className="text-xs text-earth-500 mb-3">
                               Total: {formula.field_total_weight}{formula.field_total_weight_unit || 'g'}
                             </p>
+                          )}
+
+                          {/* Decision indicators */}
+                          {(formula.field_editors_pick || formula.field_formula_category || formula.field_available_premade) && (
+                            <div className="flex flex-wrap gap-1.5 mb-3">
+                              {formula.field_editors_pick && <span className="text-xs px-2 py-0.5 rounded-full font-semibold bg-amber-100 text-amber-800">&#9733; Pick</span>}
+                              {formula.field_formula_category && (() => { const c = getFieldConfig(formulaCategoryMap, formula.field_formula_category); return c ? (
+                                <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${c.bg} ${c.text}`}>{c.label}</span>
+                              ) : null; })()}
+                              {formula.field_available_premade && <span className="text-xs px-2 py-0.5 rounded-full font-medium bg-green-100 text-green-700">Pre-made</span>}
+                            </div>
                           )}
 
                           <div className="pt-4 border-t border-earth-100">

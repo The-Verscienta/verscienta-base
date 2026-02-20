@@ -172,6 +172,18 @@ export interface HerbEntity extends DrupalNode {
   field_peer_review_status?: string;
   field_average_rating?: number;
   field_review_count?: number;
+
+  // Decision-Making Fields
+  field_popularity?: 'staple' | 'common' | 'specialty' | 'rare' | 'obscure';
+  field_beginner_friendly?: boolean;
+  field_onset_speed?: 'fast_acting' | 'moderate' | 'cumulative';
+  field_cost_tier?: 'budget' | 'moderate' | 'premium' | 'expensive';
+  field_palatability?: 'pleasant' | 'neutral' | 'bitter' | 'very_bitter' | 'pungent';
+  field_pregnancy_safety?: 'generally_safe' | 'use_caution' | 'avoid' | 'contraindicated';
+  field_availability?: 'widely_available' | 'specialty_stores' | 'online_only' | 'hard_to_source' | 'practitioner_only';
+  field_best_season?: 'spring' | 'summer' | 'autumn' | 'winter' | 'year_round';
+  field_evidence_strength?: 'strong' | 'moderate' | 'preliminary' | 'traditional_only';
+  field_editors_pick?: boolean;
 }
 
 export interface ModalityEntity extends DrupalNode {
@@ -182,6 +194,17 @@ export interface ModalityEntity extends DrupalNode {
     id: string;
     type: string;
   }[];
+
+  // Decision-Making Fields
+  field_session_cost_range?: string;
+  field_self_practice?: boolean;
+  field_sessions_needed?: string;
+  field_pairs_well_with?: Array<{
+    id: string;
+    type: string;
+    title?: string;
+  }>;
+  field_editors_pick?: boolean;
 }
 
 export interface ConditionEntity extends DrupalNode {
@@ -203,6 +226,13 @@ export interface ConditionEntity extends DrupalNode {
     type: string;
     title?: string;
   }>;
+
+  // Decision-Making Fields
+  field_self_treatable?: 'yes' | 'with_guidance' | 'professional_recommended' | 'professional_required';
+  field_holistic_response_time?: 'days' | 'weeks' | 'months' | 'varies_widely';
+  field_complementary_approaches?: DrupalFormattedText;
+  field_quick_summary?: string;
+  field_editors_pick?: boolean;
 }
 
 export interface PractitionerEntity extends DrupalNode {
@@ -356,6 +386,17 @@ export interface FormulaEntity extends DrupalNode {
     type: string;
     title?: string;
   }[];
+
+  // Decision-Making Fields
+  field_formula_popularity?: 'classic_staple' | 'commonly_prescribed' | 'specialty' | 'historical_rare';
+  field_preparation_difficulty?: 'easy' | 'moderate' | 'advanced' | 'practitioner_only';
+  field_available_premade?: boolean;
+  field_commercial_forms?: string;
+  field_treatment_duration?: 'acute_short' | 'weeks' | 'months' | 'seasonal' | 'constitutional_long';
+  field_formula_era?: string;
+  field_formula_category?: 'tonifying' | 'clearing_heat' | 'releasing_exterior' | 'regulating_qi' | 'blood_invigorating' | 'phlegm_resolving' | 'digestive' | 'calming' | 'warming_interior' | 'other';
+  field_editors_pick?: boolean;
+  field_evidence_strength?: 'strong' | 'moderate' | 'preliminary' | 'traditional_only';
 }
 
 export type ContributionType = 'clinical_note' | 'modification' | 'addition';

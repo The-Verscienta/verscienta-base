@@ -13,6 +13,7 @@ import {
   DisclaimerBox,
   BackLink,
 } from '@/components/ui/DesignSystem';
+import { getFieldConfig } from '@/lib/decision-field-maps';
 
 interface ModalityDetailProps {
   params: Promise<{
@@ -90,9 +91,19 @@ export default async function ModalityDetailPage({ params }: ModalityDetailProps
                 {title}
               </h1>
 
-              {modality.field_excels_at && modality.field_excels_at.length > 0 && (
+              {(modality.field_excels_at?.length || modality.field_editors_pick || modality.field_self_practice) && (
                 <div className="flex flex-wrap gap-2 mt-4">
-                  {modality.field_excels_at.map((item: string, idx: number) => (
+                  {modality.field_editors_pick && (
+                    <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-semibold bg-amber-100 text-amber-800 border border-amber-200">
+                      &#9733; Editor&apos;s Pick
+                    </span>
+                  )}
+                  {modality.field_self_practice && (
+                    <span className="inline-flex items-center px-3 py-1.5 rounded-full text-sm font-medium bg-green-100 text-green-700">
+                      Can Self-Practice
+                    </span>
+                  )}
+                  {modality.field_excels_at?.map((item: string, idx: number) => (
                     <Tag key={idx} variant="sage" size="md">
                       {item}
                     </Tag>
@@ -190,6 +201,54 @@ export default async function ModalityDetailPage({ params }: ModalityDetailProps
                   </svg>
                 </Link>
               ))}
+            </div>
+          </Section>
+        )}
+
+        {/* Session Details */}
+        {(modality.field_session_cost_range || modality.field_sessions_needed || (modality.field_pairs_well_with && modality.field_pairs_well_with.length > 0)) && (
+          <Section
+            id="session-details"
+            variant="default"
+            title="Session Details"
+            icon={
+              <svg className="w-8 h-8 text-sage-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            }
+          >
+            <div className="grid md:grid-cols-2 gap-4">
+              {modality.field_session_cost_range && (
+                <div className="bg-white rounded-xl p-5 border border-earth-100 shadow-sm">
+                  <h3 className="text-xs font-bold text-earth-500 uppercase tracking-wider mb-2">Cost Range</h3>
+                  <p className="text-lg font-semibold text-earth-800">{modality.field_session_cost_range}</p>
+                </div>
+              )}
+              {modality.field_sessions_needed && (
+                <div className="bg-white rounded-xl p-5 border border-earth-100 shadow-sm">
+                  <h3 className="text-xs font-bold text-earth-500 uppercase tracking-wider mb-2">Sessions Needed</h3>
+                  <p className="text-earth-700">{modality.field_sessions_needed}</p>
+                </div>
+              )}
+              {modality.field_pairs_well_with && modality.field_pairs_well_with.length > 0 && (
+                <div className="bg-white rounded-xl p-5 border border-earth-100 shadow-sm md:col-span-2">
+                  <h3 className="text-xs font-bold text-earth-500 uppercase tracking-wider mb-3">Pairs Well With</h3>
+                  <div className="flex flex-wrap gap-2">
+                    {modality.field_pairs_well_with.map((paired) => (
+                      <Link
+                        key={paired.id}
+                        href={`/modalities/${paired.id}`}
+                        className="inline-flex items-center gap-2 bg-sage-50 hover:bg-sage-100 text-sage-800 px-4 py-2 rounded-full text-sm font-medium transition border border-sage-200"
+                      >
+                        {paired.title || 'View Modality'}
+                        <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                        </svg>
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
           </Section>
         )}

@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import type { ConditionEntity } from '@/types/drupal';
+import { selfTreatableMap, getFieldConfig } from '@/lib/decision-field-maps';
 
 interface ConditionCardProps {
   condition: ConditionEntity;
@@ -24,9 +25,10 @@ export function ConditionCard({
     ? severityStyles[condition.field_severity.toLowerCase()] || null
     : null;
 
-  const summary = condition.body?.processed
-    ? condition.body.processed.replace(/<[^>]*>/g, '').slice(0, 150)
-    : null;
+  const summary = condition.field_quick_summary
+    || (condition.body?.processed
+      ? condition.body.processed.replace(/<[^>]*>/g, '').slice(0, 150)
+      : null);
 
   if (variant === 'compact') {
     return (
@@ -66,17 +68,23 @@ export function ConditionCard({
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
             </svg>
           </div>
-          {severity && (
-            <span className={`text-xs px-3 py-1 rounded-full font-medium ${severity.bg} ${severity.text}`}>
-              {severity.label}
-            </span>
-          )}
+          <div className="flex flex-wrap gap-1.5">
+            {severity && (
+              <span className={`text-xs px-3 py-1 rounded-full font-medium ${severity.bg} ${severity.text}`}>
+                {severity.label}
+              </span>
+            )}
+            {condition.field_editors_pick && <span className="text-xs px-2 py-0.5 rounded-full font-semibold bg-amber-100 text-amber-800">&#9733; Pick</span>}
+            {condition.field_self_treatable && (() => { const c = getFieldConfig(selfTreatableMap, condition.field_self_treatable); return c ? (
+              <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${c.bg} ${c.text}`}>{c.label}</span>
+            ) : null; })()}
+          </div>
         </div>
 
         <h2 className="text-2xl font-bold text-earth-800 mb-2">{condition.title}</h2>
 
         {summary && (
-          <p className="text-gray-600 mb-4 line-clamp-2">{summary}...</p>
+          <p className="text-gray-600 mb-4 line-clamp-2">{summary}{!condition.field_quick_summary ? '...' : ''}</p>
         )}
 
         {condition.field_symptoms && condition.field_symptoms.length > 0 && (
@@ -114,17 +122,23 @@ export function ConditionCard({
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
           </svg>
         </div>
-        {severity && (
-          <span className={`text-xs px-2.5 py-1 rounded-full font-medium ${severity.bg} ${severity.text}`}>
-            {severity.label}
-          </span>
-        )}
+        <div className="flex flex-wrap gap-1.5">
+          {severity && (
+            <span className={`text-xs px-2.5 py-1 rounded-full font-medium ${severity.bg} ${severity.text}`}>
+              {severity.label}
+            </span>
+          )}
+          {condition.field_editors_pick && <span className="text-xs px-2 py-0.5 rounded-full font-semibold bg-amber-100 text-amber-800">&#9733; Pick</span>}
+          {condition.field_self_treatable && (() => { const c = getFieldConfig(selfTreatableMap, condition.field_self_treatable); return c ? (
+            <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${c.bg} ${c.text}`}>{c.label}</span>
+          ) : null; })()}
+        </div>
       </div>
 
       <h2 className="text-xl font-bold text-earth-800 mb-2">{condition.title}</h2>
 
       {summary && (
-        <p className="text-sm text-gray-600 mb-4 line-clamp-2">{summary}...</p>
+        <p className="text-sm text-gray-600 mb-4 line-clamp-2">{summary}{!condition.field_quick_summary ? '...' : ''}</p>
       )}
 
       {condition.field_symptoms && condition.field_symptoms.length > 0 && (

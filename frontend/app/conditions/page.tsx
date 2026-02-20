@@ -13,6 +13,7 @@ import {
   DisclaimerBox,
   BackLink,
 } from '@/components/ui/DesignSystem';
+import { selfTreatableMap, getFieldConfig } from '@/lib/decision-field-maps';
 
 // Use dynamic rendering to avoid build errors when backend is unavailable
 export const dynamic = 'force-dynamic';
@@ -237,6 +238,38 @@ export default async function ConditionsPage({ searchParams }: PageProps) {
           />
         ) : (
           <>
+            {/* Editor's Picks */}
+            {(() => {
+              const picks = conditions.filter(c => c.field_editors_pick);
+              return picks.length > 0 ? (
+                <div className="mb-12">
+                  <h2 className="font-serif text-2xl font-bold text-earth-800 mb-6 flex items-center gap-2">
+                    <span className="text-amber-500">&#9733;</span> Editor&apos;s Picks
+                  </h2>
+                  <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {picks.map((condition) => (
+                      <Link
+                        key={condition.id}
+                        href={`/conditions/${condition.id}`}
+                        className="group bg-gradient-to-br from-amber-50 via-cream-50 to-sage-50 rounded-2xl p-6 border-2 border-amber-200 hover:border-amber-300 hover:shadow-xl transition-all duration-300"
+                      >
+                        <div className="flex items-start justify-between mb-2">
+                          <h3 className="font-serif text-lg font-bold text-earth-800 group-hover:text-earth-600 transition-colors">{condition.title}</h3>
+                          <span className="text-xs px-2 py-0.5 rounded-full font-semibold bg-amber-100 text-amber-800 border border-amber-200">&#9733; Pick</span>
+                        </div>
+                        {condition.field_quick_summary && <p className="text-sm text-earth-600 mb-3">{condition.field_quick_summary}</p>}
+                        <div className="flex flex-wrap gap-1.5">
+                          {condition.field_self_treatable && (() => { const c = getFieldConfig(selfTreatableMap, condition.field_self_treatable); return c ? (
+                            <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${c.bg} ${c.text}`}>{c.label}</span>
+                          ) : null; })()}
+                        </div>
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              ) : null;
+            })()}
+
             {/* Featured Conditions */}
             <div className="grid md:grid-cols-2 gap-6 mb-12">
               {conditions.slice(0, 2).map((condition) => {
@@ -354,6 +387,21 @@ export default async function ConditionsPage({ searchParams }: PageProps) {
                                     +{condition.field_symptoms.length - 2}
                                   </span>
                                 )}
+                              </div>
+                            </div>
+                          )}
+
+                          {/* Decision indicators */}
+                          {(condition.field_editors_pick || condition.field_self_treatable || condition.field_quick_summary) && (
+                            <div className="mb-3">
+                              {condition.field_quick_summary && (
+                                <p className="text-xs text-earth-500 mb-2 line-clamp-1">{condition.field_quick_summary}</p>
+                              )}
+                              <div className="flex flex-wrap gap-1.5">
+                                {condition.field_editors_pick && <span className="text-xs px-2 py-0.5 rounded-full font-semibold bg-amber-100 text-amber-800">&#9733; Pick</span>}
+                                {condition.field_self_treatable && (() => { const c = getFieldConfig(selfTreatableMap, condition.field_self_treatable); return c ? (
+                                  <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${c.bg} ${c.text}`}>{c.label}</span>
+                                ) : null; })()}
                               </div>
                             </div>
                           )}

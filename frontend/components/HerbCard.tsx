@@ -1,6 +1,7 @@
 'use client';
 import { useEffect, useState } from 'react';
 import { drupal } from '@/lib/drupal';
+import { popularityMap, getFieldConfig } from '@/lib/decision-field-maps';
 
 interface HerbCardProps {
   herbId: string;
@@ -54,6 +55,17 @@ export function HerbCard({
       
       {variant === 'detailed' && (
         <>
+          {/* Decision indicators */}
+          {(herb.field_editors_pick || herb.field_popularity || herb.field_beginner_friendly) && (
+            <div className="flex flex-wrap gap-1.5 mt-2">
+              {herb.field_editors_pick && <span className="text-xs px-2 py-0.5 rounded-full font-semibold bg-amber-100 text-amber-800">&#9733; Pick</span>}
+              {herb.field_popularity && (() => { const c = getFieldConfig(popularityMap, herb.field_popularity); return c ? (
+                <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${c.bg} ${c.text}`}>{c.label}</span>
+              ) : null; })()}
+              {herb.field_beginner_friendly && <span className="text-xs px-2 py-0.5 rounded-full font-medium bg-green-100 text-green-700">Beginner Friendly</span>}
+            </div>
+          )}
+
           {herb.field_common_names && (
             <div className="mt-2">
               <strong>Common Names:</strong>
@@ -65,14 +77,14 @@ export function HerbCard({
               </span>
             </div>
           )}
-          
+
           {herb.field_therapeutic_uses && (
             <div className="mt-3">
               <strong>Therapeutic Uses:</strong>
               <p className="mt-1">{herb.field_therapeutic_uses}</p>
             </div>
           )}
-          
+
           {herb.field_contraindications && (
             <div className="mt-3 text-red-600">
               <strong>Contraindications:</strong>

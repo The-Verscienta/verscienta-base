@@ -14,6 +14,11 @@ import {
   DisclaimerBox,
   BackLink,
 } from '@/components/ui/DesignSystem';
+import {
+  selfTreatableMap,
+  holisticResponseTimeMap,
+  getFieldConfig,
+} from '@/lib/decision-field-maps';
 
 interface ConditionDetailProps {
   params: Promise<{
@@ -97,11 +102,24 @@ export default async function ConditionDetailPage({ params }: ConditionDetailPro
                 {name}
               </h1>
 
-              {condition.field_severity && (
+              {(condition.field_severity || condition.field_editors_pick || condition.field_self_treatable || condition.field_holistic_response_time) && (
                 <div className="flex flex-wrap gap-2 mt-4">
-                  <Tag variant={severityVariant} size="md">
-                    Severity: {condition.field_severity.charAt(0).toUpperCase() + condition.field_severity.slice(1)}
-                  </Tag>
+                  {condition.field_severity && (
+                    <Tag variant={severityVariant} size="md">
+                      Severity: {condition.field_severity.charAt(0).toUpperCase() + condition.field_severity.slice(1)}
+                    </Tag>
+                  )}
+                  {condition.field_editors_pick && (
+                    <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-semibold bg-amber-100 text-amber-800 border border-amber-200">
+                      &#9733; Editor&apos;s Pick
+                    </span>
+                  )}
+                  {condition.field_self_treatable && (() => { const c = getFieldConfig(selfTreatableMap, condition.field_self_treatable); return c ? (
+                    <span className={`inline-flex items-center px-3 py-1.5 rounded-full text-sm font-medium ${c.bg} ${c.text}`}>{c.label}</span>
+                  ) : null; })()}
+                  {condition.field_holistic_response_time && (() => { const c = getFieldConfig(holisticResponseTimeMap, condition.field_holistic_response_time); return c ? (
+                    <span className={`inline-flex items-center px-3 py-1.5 rounded-full text-sm font-medium ${c.bg} ${c.text}`}>Response: {c.label}</span>
+                  ) : null; })()}
                 </div>
               )}
             </div>
@@ -283,6 +301,17 @@ export default async function ConditionDetailPage({ params }: ConditionDetailPro
                 to managing most health conditions holistically.
               </p>
             </div>
+            {condition.field_complementary_approaches && (typeof condition.field_complementary_approaches === 'string' ? condition.field_complementary_approaches : condition.field_complementary_approaches?.value) && (
+              <div>
+                <h3 className="font-semibold text-earth-800 mb-2 flex items-center gap-2">
+                  <span>🌱</span>
+                  Complementary Approaches
+                </h3>
+                <div className="prose prose-sm max-w-none text-earth-700">
+                  <SafeHtml html={typeof condition.field_complementary_approaches === 'string' ? condition.field_complementary_approaches : (condition.field_complementary_approaches?.value || '')} />
+                </div>
+              </div>
+            )}
           </div>
         </Section>
 

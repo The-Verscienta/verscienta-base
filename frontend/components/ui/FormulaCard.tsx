@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import type { FormulaEntity } from '@/types/drupal';
 import { getTextValue } from '@/lib/drupal-helpers';
+import { formulaCategoryMap, getFieldConfig } from '@/lib/decision-field-maps';
 
 interface FormulaCardProps {
   formula: FormulaEntity;
@@ -102,6 +103,17 @@ export function FormulaCard({
                 {formula.field_use_cases.slice(0, 2).join(', ')}
                 {formula.field_use_cases.length > 2 && `, +${formula.field_use_cases.length - 2} more`}
               </p>
+            </div>
+          )}
+
+          {/* Decision indicators */}
+          {(formula.field_editors_pick || formula.field_formula_category || formula.field_available_premade) && (
+            <div className="flex flex-wrap gap-1.5 mb-4">
+              {formula.field_editors_pick && <span className="text-xs px-2 py-0.5 rounded-full font-semibold bg-amber-100 text-amber-800">&#9733; Pick</span>}
+              {formula.field_formula_category && (() => { const c = getFieldConfig(formulaCategoryMap, formula.field_formula_category); return c ? (
+                <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${c.bg} ${c.text}`}>{c.label}</span>
+              ) : null; })()}
+              {formula.field_available_premade && <span className="text-xs px-2 py-0.5 rounded-full font-medium bg-green-100 text-green-700">Pre-made</span>}
             </div>
           )}
         </div>

@@ -34,6 +34,9 @@ interface Modality {
   type: string;
   title: string;
   field_excels_at?: string[];
+  field_self_practice?: boolean;
+  field_session_cost_range?: string;
+  field_editors_pick?: boolean;
   body?: {
     value: string;
     summary?: string;
@@ -235,6 +238,40 @@ export default async function ModalitiesPage({ searchParams }: PageProps) {
           />
         ) : (
           <>
+            {/* Editor's Picks */}
+            {(() => {
+              const picks = modalities.filter(m => m.field_editors_pick);
+              return picks.length > 0 ? (
+                <div className="mb-12">
+                  <h2 className="font-serif text-2xl font-bold text-earth-800 mb-6 flex items-center gap-2">
+                    <span className="text-amber-500">&#9733;</span> Editor&apos;s Picks
+                  </h2>
+                  <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {picks.map((modality) => {
+                      const summary = modality.body?.summary || modality.body?.processed?.replace(/<[^>]*>/g, '').slice(0, 150);
+                      return (
+                        <Link
+                          key={modality.id}
+                          href={`/modalities/${modality.id}`}
+                          className="group bg-gradient-to-br from-amber-50 via-cream-50 to-sage-50 rounded-2xl p-6 border-2 border-amber-200 hover:border-amber-300 hover:shadow-xl transition-all duration-300"
+                        >
+                          <div className="flex items-start justify-between mb-2">
+                            <h3 className="font-serif text-lg font-bold text-earth-800 group-hover:text-sage-700 transition-colors">{modality.title}</h3>
+                            <span className="text-xs px-2 py-0.5 rounded-full font-semibold bg-amber-100 text-amber-800 border border-amber-200">&#9733; Pick</span>
+                          </div>
+                          {summary && <p className="text-sm text-earth-600 line-clamp-2 mb-3">{summary}...</p>}
+                          <div className="flex flex-wrap gap-1.5">
+                            {modality.field_self_practice && <span className="text-xs px-2 py-0.5 rounded-full font-medium bg-green-100 text-green-700">Self-Practice</span>}
+                            {modality.field_session_cost_range && <span className="text-xs px-2 py-0.5 rounded-full font-medium bg-blue-100 text-blue-700">{modality.field_session_cost_range}</span>}
+                          </div>
+                        </Link>
+                      );
+                    })}
+                  </div>
+                </div>
+              ) : null;
+            })()}
+
             {/* Featured Modalities */}
             <div className="grid md:grid-cols-2 gap-6 mb-12">
               {modalities.slice(0, 2).map((modality) => {
@@ -334,6 +371,15 @@ export default async function ModalitiesPage({ searchParams }: PageProps) {
                                   {item}
                                 </Tag>
                               ))}
+                            </div>
+                          )}
+
+                          {/* Decision indicators */}
+                          {(modality.field_editors_pick || modality.field_self_practice || modality.field_session_cost_range) && (
+                            <div className="flex flex-wrap gap-1.5 mb-3">
+                              {modality.field_editors_pick && <span className="text-xs px-2 py-0.5 rounded-full font-semibold bg-amber-100 text-amber-800">&#9733; Pick</span>}
+                              {modality.field_self_practice && <span className="text-xs px-2 py-0.5 rounded-full font-medium bg-green-100 text-green-700">Self-Practice</span>}
+                              {modality.field_session_cost_range && <span className="text-xs px-2 py-0.5 rounded-full font-medium bg-blue-100 text-blue-700">{modality.field_session_cost_range}</span>}
                             </div>
                           )}
 
