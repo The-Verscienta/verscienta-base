@@ -1,8 +1,19 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { analyzeSymptoms } from '@/lib/grok';
 import { checkRateLimit, getClientIdentifier, RATE_LIMITS, createRateLimitHeaders } from '@/lib/rate-limit';
+import { validateCsrfToken } from '@/lib/csrf';
+import { symptomAnalysisSchema, formatZodErrors } from '@/lib/validation';
 
 export async function POST(request: NextRequest) {
+  // Validate CSRF token
+  const csrf = validateCsrfToken(request);
+  if (!csrf.valid) {
+    return NextResponse.json(
+      { error: 'Invalid request. Please refresh the page and try again.' },
+      { status: 403 }
+    );
+  }
+
   // Apply rate limiting for AI endpoints
   const identifier = getClientIdentifier(request);
   const rateLimitResult = checkRateLimit(`grok:analysis:${identifier}`, RATE_LIMITS.ai);
@@ -25,15 +36,17 @@ export async function POST(request: NextRequest) {
   try {
 
     const body = await request.json();
-    const { symptoms, followUpAnswers, context } = body;
 
-    // Validate input
-    if (!symptoms || typeof symptoms !== 'string' || symptoms.trim().length < 10) {
+    // Validate with Zod schema
+    const validation = symptomAnalysisSchema.safeParse(body);
+    if (!validation.success) {
       return NextResponse.json(
-        { error: 'Please provide detailed symptoms (at least 10 characters)' },
+        { error: 'Validation failed', errors: formatZodErrors(validation.error) },
         { status: 400 }
       );
     }
+
+    const { symptoms, followUpAnswers, context } = validation.data;
 
     // Check for XAI API key
     if (!process.env.XAI_API_KEY) {

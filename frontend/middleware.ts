@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
+import { generateCsrfToken, CSRF_COOKIE_NAME } from '@/lib/csrf';
 
 /**
  * Generate a cryptographically secure nonce for CSP
@@ -73,6 +74,18 @@ export function middleware(request: NextRequest) {
       'Strict-Transport-Security',
       'max-age=31536000; includeSubDomains; preload'
     );
+  }
+
+  // Set CSRF token cookie if not already present
+  const existingCsrf = request.cookies.get(CSRF_COOKIE_NAME)?.value;
+  if (!existingCsrf) {
+    const csrfToken = generateCsrfToken();
+    response.cookies.set(CSRF_COOKIE_NAME, csrfToken, {
+      httpOnly: false, // Must be readable by JavaScript
+      secure: isProduction,
+      sameSite: 'lax',
+      path: '/',
+    });
   }
 
   return response;

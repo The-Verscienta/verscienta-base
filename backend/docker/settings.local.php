@@ -39,6 +39,22 @@ if (getenv('TRUSTED_HOST_PATTERNS')) {
 // Config sync directory
 $settings['config_sync_directory'] = '../config/sync';
 
+// Security: Secure session cookies
+$settings['session_cookie_secure'] = TRUE;
+$settings['session_cookie_httponly'] = TRUE;
+$settings['session_cookie_samesite'] = 'Lax';
+
+// Security: Disable unnecessary error output in production
+$config['system.logging']['error_level'] = 'hide';
+
+// Security: File permissions hardening
+$settings['file_chmod_directory'] = 0755;
+$settings['file_chmod_file'] = 0644;
+
+// Security: Restrict permissions for settings files
+ini_set('session.use_strict_mode', '1');
+ini_set('session.use_only_cookies', '1');
+
 // Redis configuration from environment
 if (getenv('REDIS_HOST') && class_exists('Drupal') && \Drupal::hasContainer()) {
   try {

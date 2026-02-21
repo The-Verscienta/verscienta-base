@@ -2,8 +2,19 @@ import { NextRequest, NextResponse } from 'next/server';
 import { authenticateUser } from '@/lib/auth';
 import { cookies } from 'next/headers';
 import { checkRateLimit, getClientIdentifier, RATE_LIMITS, createRateLimitHeaders } from '@/lib/rate-limit';
+import { validateCsrfToken } from '@/lib/csrf';
+import { loginSchema, formatZodErrors } from '@/lib/validation';
 
 export async function POST(request: NextRequest) {
+  // Validate CSRF token
+  const csrf = validateCsrfToken(request);
+  if (!csrf.valid) {
+    return NextResponse.json(
+      { error: 'Invalid request. Please refresh the page and try again.' },
+      { status: 403 }
+    );
+  }
+
   // Apply rate limiting
   const identifier = getClientIdentifier(request);
   const rateLimitResult = checkRateLimit(`auth:login:${identifier}`, RATE_LIMITS.auth);
@@ -25,14 +36,17 @@ export async function POST(request: NextRequest) {
 
   try {
     const body = await request.json();
-    const { username, password } = body;
 
-    if (!username || !password) {
+    // Validate with Zod schema
+    const validation = loginSchema.safeParse(body);
+    if (!validation.success) {
       return NextResponse.json(
-        { error: 'Username and password are required' },
+        { error: 'Validation failed', errors: formatZodErrors(validation.error) },
         { status: 400 }
       );
     }
+
+    const { username, password } = validation.data;
 
     // Authenticate with Drupal
     const tokens = await authenticateUser(username, password);

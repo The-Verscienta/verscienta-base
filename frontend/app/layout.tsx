@@ -41,6 +41,7 @@ export const metadata: Metadata = {
       { url: '/apple-icon.svg', type: 'image/svg+xml' },
     ],
   },
+  manifest: '/manifest.json',
 };
 
 export default async function RootLayout({
@@ -57,13 +58,20 @@ export default async function RootLayout({
       <body className="font-sans">
         <ToastProvider position="bottom-right">
           <div className="min-h-screen bg-gradient-to-b from-earth-50 to-sage-50">
+            {/* Skip to content link for keyboard/screen reader users */}
+            <a
+              href="#main-content"
+              className="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-[100] focus:px-4 focus:py-2 focus:bg-sage-600 focus:text-white focus:rounded-lg focus:shadow-lg focus:outline-none"
+            >
+              Skip to main content
+            </a>
             <Header />
 
-          <main className="container-custom py-8 md:py-12">
+          <main id="main-content" className="container-custom py-8 md:py-12" role="main">
             {children}
           </main>
 
-          <footer className="relative bg-gradient-to-b from-earth-800 via-earth-900 to-earth-950 text-white mt-16 overflow-hidden">
+          <footer role="contentinfo" aria-label="Site footer" className="relative bg-gradient-to-b from-earth-800 via-earth-900 to-earth-950 text-white mt-16 overflow-hidden">
             {/* Decorative botanical background */}
             <div className="absolute inset-0 pointer-events-none">
               <div className="absolute top-0 left-0 w-96 h-96 bg-sage-600/5 rounded-full blur-3xl" />

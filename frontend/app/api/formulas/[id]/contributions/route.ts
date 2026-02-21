@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
 import { checkRateLimit, getClientIdentifier, RATE_LIMITS, createRateLimitHeaders } from '@/lib/rate-limit';
 import { formulaContributionSchema, formatZodErrors } from '@/lib/validation';
+import { validateCsrfToken } from '@/lib/csrf';
 import { cachedFetch, memoryCache, CACHE_TTL } from '@/lib/cache';
 import type { FormulaContribution } from '@/types/drupal';
 
@@ -122,6 +123,15 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
 
 // POST: Submit a new contribution (requires authentication)
 export async function POST(request: NextRequest, { params }: RouteParams) {
+  // Validate CSRF token
+  const csrf = validateCsrfToken(request);
+  if (!csrf.valid) {
+    return NextResponse.json(
+      { error: 'Invalid request. Please refresh the page and try again.' },
+      { status: 403 }
+    );
+  }
+
   const { id: formulaId } = await params;
 
   // Apply rate limiting

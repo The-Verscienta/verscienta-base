@@ -80,6 +80,26 @@
     line-height: 1.5;
   }
 
+  /* Accessible focus styles - visible only for keyboard users */
+  :focus-visible {
+    @apply outline-2 outline-offset-2 outline-sage-500;
+  }
+
+  /* Remove default focus outline for mouse users */
+  :focus:not(:focus-visible) {
+    outline: none;
+  }
+
+  /* Reduced motion preferences */
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+
   /* Headings */
   h1, h2, h3, h4, h5, h6 {
     @apply font-serif font-bold text-gray-900;
@@ -471,15 +491,30 @@
   }
 }
 
-/* Dark Mode Support (Optional) */
-@media (prefers-color-scheme: dark) {
-  .dark-mode-auto {
-    @apply bg-gray-900 text-gray-100;
-  }
+/* Dark Mode Support */
+.dark {
+  --color-bg: #1a1e1a;
+  --color-bg-card: #242824;
+  --color-bg-elevated: #2e332e;
+  --color-text: #e6ede6;
+  --color-text-muted: #adbfad;
+  --color-border: #3d5a3d;
+}
 
-  .dark-mode-auto .card-standard {
-    @apply bg-gray-800 border-gray-700;
-  }
+.dark body {
+  @apply bg-[var(--color-bg)] text-[var(--color-text)];
+}
+
+.dark .card-standard {
+  @apply bg-[var(--color-bg-card)] border-[var(--color-border)];
+}
+
+.dark .card-botanical {
+  @apply bg-[var(--color-bg-card)] border-[var(--color-border)];
+}
+
+.dark h1, .dark h2, .dark h3, .dark h4, .dark h5, .dark h6 {
+  @apply text-[var(--color-text)];
 }
 
 /* ==========================================================================

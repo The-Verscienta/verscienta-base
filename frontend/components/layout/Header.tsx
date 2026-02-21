@@ -4,6 +4,8 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useState, useEffect } from 'react';
 import { UserMenu } from '@/components/auth/UserMenu';
+import { DarkModeToggle } from '@/components/ui/DarkModeToggle';
+import { LanguageSwitcher } from '@/components/ui/LanguageSwitcher';
 
 // Decorative leaf SVG for the logo
 function LogoLeaf() {
@@ -119,11 +121,12 @@ export function Header() {
           </Link>
 
           {/* Desktop Navigation */}
-          <nav className="hidden lg:flex items-center gap-1">
+          <nav aria-label="Main navigation" className="hidden lg:flex items-center gap-1">
             {primaryLinks.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
+                aria-current={isActive(link.href) ? 'page' : undefined}
                 className={`relative px-3 xl:px-4 py-2 rounded-lg font-medium text-sm transition-all duration-200 ${
                   isActive(link.href)
                     ? 'bg-white/15 text-white'
@@ -142,6 +145,11 @@ export function Header() {
               <button
                 onClick={() => setResourcesOpen(!resourcesOpen)}
                 onBlur={() => setTimeout(() => setResourcesOpen(false), 150)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Escape') setResourcesOpen(false);
+                }}
+                aria-expanded={resourcesOpen}
+                aria-haspopup="true"
                 className={`flex items-center gap-1.5 px-3 xl:px-4 py-2 rounded-lg font-medium text-sm transition-all duration-200 ${
                   resourcesOpen
                     ? 'bg-white/15 text-white'
@@ -154,15 +162,19 @@ export function Header() {
 
               {/* Dropdown Menu */}
               {resourcesOpen && (
-                <div className="absolute top-full right-0 mt-2 w-56 bg-white rounded-xl shadow-xl shadow-earth-900/20 border border-earth-100 overflow-hidden animate-fade-in">
+                <div
+                  role="menu"
+                  className="absolute top-full right-0 mt-2 w-56 bg-white rounded-xl shadow-xl shadow-earth-900/20 border border-earth-100 overflow-hidden animate-fade-in"
+                >
                   <div className="p-2">
                     {resourceLinks.map((link) => (
                       <Link
                         key={link.href}
                         href={link.href}
+                        role="menuitem"
                         className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-earth-700 hover:bg-earth-50 hover:text-earth-900 transition-colors"
                       >
-                        <span className="text-lg">{link.icon}</span>
+                        <span className="text-lg" aria-hidden="true">{link.icon}</span>
                         <span className="font-medium text-sm">{link.label}</span>
                       </Link>
                     ))}
@@ -189,6 +201,14 @@ export function Header() {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
               </svg>
             </Link>
+
+            {/* Language Switcher */}
+            <div className="hidden md:block">
+              <LanguageSwitcher />
+            </div>
+
+            {/* Dark Mode Toggle */}
+            <DarkModeToggle />
 
             {/* User Menu (Desktop) */}
             <div className="hidden lg:block">
@@ -233,11 +253,12 @@ export function Header() {
         <div className="bg-earth-800/95 backdrop-blur-md border-t border-white/10">
           <div className="max-w-7xl mx-auto px-4 py-4">
             {/* Primary Links */}
-            <nav className="space-y-1 mb-4">
+            <nav aria-label="Mobile navigation" className="space-y-1 mb-4">
               {primaryLinks.map((link) => (
                 <Link
                   key={link.href}
                   href={link.href}
+                  aria-current={isActive(link.href) ? 'page' : undefined}
                   className={`flex items-center gap-3 px-4 py-3 rounded-xl font-medium transition-all ${
                     isActive(link.href)
                       ? 'bg-white/15 text-white'

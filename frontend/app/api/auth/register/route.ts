@@ -2,8 +2,19 @@ import { NextRequest, NextResponse } from 'next/server';
 import { registerUser } from '@/lib/auth';
 import { requireTurnstileVerification } from '@/lib/turnstile';
 import { checkRateLimit, getClientIdentifier, RATE_LIMITS, createRateLimitHeaders } from '@/lib/rate-limit';
+import { validateCsrfToken } from '@/lib/csrf';
+import { registerSchema, formatZodErrors } from '@/lib/validation';
 
 export async function POST(request: NextRequest) {
+  // Validate CSRF token
+  const csrf = validateCsrfToken(request);
+  if (!csrf.valid) {
+    return NextResponse.json(
+      { error: 'Invalid request. Please refresh the page and try again.' },
+      { status: 403 }
+    );
+  }
+
   // Apply rate limiting
   const identifier = getClientIdentifier(request);
   const rateLimitResult = checkRateLimit(`auth:register:${identifier}`, RATE_LIMITS.auth);
@@ -25,14 +36,13 @@ export async function POST(request: NextRequest) {
 
   try {
     const body = await request.json();
-    const { username, email, password, firstName, lastName, turnstileToken } = body;
 
     // Verify Turnstile CAPTCHA
     const clientIp = request.headers.get('x-forwarded-for')?.split(',')[0] ||
                      request.headers.get('x-real-ip') ||
                      'unknown';
 
-    const verification = await requireTurnstileVerification(turnstileToken, clientIp);
+    const verification = await requireTurnstileVerification(body.turnstileToken, clientIp);
 
     if (!verification.verified) {
       return NextResponse.json(
@@ -41,21 +51,16 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    if (!username || !email || !password) {
+    // Validate with Zod schema
+    const validation = registerSchema.safeParse(body);
+    if (!validation.success) {
       return NextResponse.json(
-        { error: 'Username, email, and password are required' },
-        { status: 400 }
+        { error: 'Validation failed', errors: formatZodErrors(validation.error) },
+        { status: 400, headers: rateLimitHeaders }
       );
     }
 
-    // Validate email format
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
-      return NextResponse.json(
-        { error: 'Invalid email format' },
-        { status: 400 }
-      );
-    }
+    const { username, email, password, firstName, lastName } = validation.data;
 
     // Register user in Drupal
     const user = await registerUser({

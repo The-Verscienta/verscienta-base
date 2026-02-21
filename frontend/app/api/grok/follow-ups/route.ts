@@ -1,8 +1,18 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { generateFollowUpQuestions } from '@/lib/grok';
 import { checkRateLimit, getClientIdentifier, RATE_LIMITS, createRateLimitHeaders } from '@/lib/rate-limit';
+import { validateCsrfToken } from '@/lib/csrf';
 
 export async function POST(request: NextRequest) {
+  // Validate CSRF token
+  const csrf = validateCsrfToken(request);
+  if (!csrf.valid) {
+    return NextResponse.json(
+      { error: 'Invalid request. Please refresh the page and try again.' },
+      { status: 403 }
+    );
+  }
+
   // Apply rate limiting for AI endpoints
   const identifier = getClientIdentifier(request);
   const rateLimitResult = checkRateLimit(`grok:followups:${identifier}`, RATE_LIMITS.ai);
