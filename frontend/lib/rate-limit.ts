@@ -132,6 +132,12 @@ export const RATE_LIMITS = {
     interval: 60 * 1000, // 1 minute
     maxRequests: 30, // 30 requests per minute
   },
+
+  // Symbolic compute endpoints (cheaper than AI, more than general API)
+  symbolic: {
+    interval: 60 * 1000, // 1 minute
+    maxRequests: 15, // 15 requests per minute
+  },
 } as const;
 
 /**

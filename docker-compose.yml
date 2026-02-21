@@ -49,10 +49,37 @@ services:
     networks:
       - verscienta_network
 
+  dragonfly:
+    image: docker.dragonflydb.io/dragonflydb/dragonfly:latest
+    container_name: verscienta_dragonfly
+    ports:
+      - "6380:6379"
+    volumes:
+      - dragonfly_data:/data
+    networks:
+      - verscienta_network
+
+  sympy-compute:
+    build:
+      context: ./services/sympy-compute
+      dockerfile: Dockerfile
+    container_name: verscienta_sympy
+    depends_on:
+      - dragonfly
+    environment:
+      CACHE_URL: redis://dragonfly:6379/0
+      API_KEY: ${SYMPY_API_KEY:-changeme}
+      LOG_LEVEL: ${SYMPY_LOG_LEVEL:-info}
+    ports:
+      - "8001:8000"
+    networks:
+      - verscienta_network
+
 volumes:
   postgres_data:
   redis_data:
   drupal_files:
+  dragonfly_data:
 
 networks:
   verscienta_network:

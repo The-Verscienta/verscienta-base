@@ -219,6 +219,26 @@ export const formulaContributionSchema = z.object({
   path: ['clinical_note'],
 });
 
+// SymPy Compute Schemas
+export const symbolicComputeSchema = z.object({
+  operation: z.enum(['solve', 'simplify', 'diff', 'integrate', 'convert_units']),
+  expression: z.string().min(1, 'Expression is required').max(500, 'Expression too long'),
+  variables: z.record(z.string()).optional(),
+  assumptions: z.record(z.boolean()).optional(),
+});
+
+export const dosageComputeSchema = z.object({
+  herb_name: z.string().min(1, 'Herb name is required').max(100),
+  body_weight_kg: z.number().positive('Weight must be positive').max(500),
+  dose_per_kg_mg: z.number().positive('Dose must be positive').max(10000),
+  constraints: z.object({
+    max_daily_mg: z.number().positive().optional(),
+    interaction_factor: z.number().min(0).max(1).optional(),
+  }).optional(),
+  age_years: z.number().min(0).max(120).optional(),
+  form: z.enum(['powder', 'tincture', 'capsule', 'tea', 'decoction', 'extract']).optional(),
+});
+
 // Utility function to validate and parse data
 export function validateData<T extends z.ZodType>(
   schema: T,
@@ -262,3 +282,5 @@ export type FormulaInput = z.infer<typeof formulaSchema>;
 export type FormulaIngredientInput = z.infer<typeof formulaIngredientSchema>;
 export type HerbModificationInput = z.infer<typeof herbModificationSchema>;
 export type FormulaContributionInput = z.infer<typeof formulaContributionSchema>;
+export type SymbolicComputeInput = z.infer<typeof symbolicComputeSchema>;
+export type DosageComputeInput = z.infer<typeof dosageComputeSchema>;

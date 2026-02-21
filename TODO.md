@@ -303,6 +303,20 @@ Script: `/backend/scripts/setup-taxonomies.sh`
 - [ ] Configure rate limiting
 - [ ] Set up Redis caching for responses
 
+### 4.5 SymPy Compute Service
+
+- [x] Create Python FastAPI microservice (`services/sympy-compute/`)
+- [x] Add DragonflyDB cache container to Docker stack
+- [x] Create Next.js proxy route (`/api/symbolic-compute`)
+- [x] Create TypeScript client library (`lib/sympy-compute.ts`)
+- [x] Add Zod validation schemas for symbolic/dosage requests
+- [x] Add `symbolic` rate limit tier (15 req/min)
+- [x] Add environment variables to `.env.example` files
+- [ ] Deploy and test with `docker compose up`
+- [ ] Run Python tests (`pytest`)
+- [ ] Integrate dosage computation into herb detail pages
+- [ ] Integrate symbolic math into formula builder
+
 ### 4.3 Cloudflare Turnstile
 
 - [ ] Create Cloudflare account
@@ -542,6 +556,14 @@ Script: `/backend/scripts/setup-taxonomies.sh`
 2. Dark mode
 3. PWA features
 4. Additional content pages
+
+### Phase 5 - Intelligent Health Platform
+
+1. SymPy compute service — dosage precision, constraint solving, unit conversion
+2. TCM Knowledge Graph (Neo4j) — herb-formula-meridian-condition relationships
+3. Grok + SymPy hybrid — LLM reasoning with exact math verification
+4. Pharmacokinetics modeling — absorption, half-life, bioavailability calculations
+5. Formula optimization engine — multi-herb interaction analysis
 
 ---
 
