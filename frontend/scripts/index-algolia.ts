@@ -94,6 +94,13 @@ function transformHerb(node: any): AlgoliaRecord {
     flavor_profile: node.attributes?.field_flavor_profile || '',
     parts_used: node.attributes?.field_parts_used || '',
     url: `/herbs/${node.id}`,
+    // TCM enrichment fields
+    herb_latin_name: node.attributes?.field_herb_latin_name || '',
+    herb_pinyin_name: node.attributes?.field_herb_pinyin_name || '',
+    tcm_taste: node.attributes?.field_tcm_properties?.field_tcm_taste || [],
+    tcm_temperature: node.attributes?.field_tcm_properties?.field_tcm_temperature || '',
+    tcm_meridians: node.attributes?.field_tcm_properties?.field_tcm_meridians || [],
+    source_dbs: node.attributes?.field_herb_source_dbs || [],
   };
 }
 
@@ -293,7 +300,9 @@ async function indexAll(): Promise<void> {
     searchableAttributes: [
       'title', 'name', 'description', 'scientific_name',
       'common_names', 'symptoms', 'excels_at', 'actions',
-      'indications', 'therapeutic_uses', 'credentials', 'location'
+      'indications', 'therapeutic_uses', 'credentials', 'location',
+      'herb_latin_name', 'herb_pinyin_name', 'tcm_taste',
+      'tcm_temperature', 'tcm_meridians',
     ],
   });
 

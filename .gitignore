@@ -52,3 +52,12 @@ tmp/
 temp/
 
 ./claude
+
+# TCM ingestion data files (downloaded CSVs)
+scripts/tcm-ingest/data/*.csv
+scripts/tcm-ingest/data/*.json
+scripts/tcm-ingest/data/*.zip
+scripts/tcm-ingest/data/*.tsv
+scripts/tcm-ingest/logs/
+scripts/tcm-ingest/.venv/
+scripts/tcm-ingest/.env

@@ -36,6 +36,15 @@ export interface AlgoliaHerb {
   contraindications?: string;
   type: 'herb';
   url: string;
+  // TCM enrichment fields
+  herb_latin_name?: string;
+  herb_pinyin_name?: string;
+  tcm_taste?: string[];
+  tcm_temperature?: string;
+  tcm_meridians?: string[];
+  ingredient_count?: number;
+  target_count?: number;
+  source_dbs?: string[];
 }
 
 export interface AlgoliaModality {

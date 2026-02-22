@@ -35,6 +35,15 @@ export interface HerbEntity extends DrupalNode {
   // Unique identifier
   field_herb_id?: string;
 
+  // TCM Database Fields (HERB 2.0)
+  field_herb2_id?: number;
+  field_pubchem_cid?: number;
+  field_smiles?: string;
+  field_molecular_weight?: number;
+  field_herb_source_dbs?: string[];
+  field_herb_latin_name?: string;
+  field_herb_pinyin_name?: string;
+
   // Botanical Information
   field_scientific_name?: string;
   field_common_names?: Array<{
@@ -399,6 +408,77 @@ export interface FormulaEntity extends DrupalNode {
   field_evidence_strength?: 'strong' | 'moderate' | 'preliminary' | 'traditional_only';
 }
 
+// TCM Database Entities
+
+export interface TcmIngredientEntity extends DrupalNode {
+  type: 'node--tcm_ingredient';
+  field_ingredient_id?: number;
+  field_pubchem_cid?: number;
+  field_cas_number?: string;
+  field_smiles?: string;
+  field_molecular_weight?: number;
+  field_herb_sources?: Array<{
+    id: string;
+    type: string;
+    title?: string;
+  }>;
+  field_source_db?: string;
+}
+
+export interface TcmTargetInteractionEntity extends DrupalNode {
+  type: 'node--tcm_target_interaction';
+  field_ingredient_ref?: {
+    id: string;
+    type: string;
+    title?: string;
+  };
+  field_herb_ref?: {
+    id: string;
+    type: string;
+    title?: string;
+  };
+  field_target_name?: string;
+  field_uniprot_id?: string;
+  field_gene_name?: string;
+  field_score?: number;
+  field_evidence_type?: string[];
+  field_source_db?: string;
+}
+
+export interface TcmClinicalEvidenceEntity extends DrupalNode {
+  type: 'node--tcm_clinical_evidence';
+  field_evidence_id?: string;
+  field_herb_refs?: Array<{
+    id: string;
+    type: string;
+    title?: string;
+  }>;
+  field_formula_ref?: {
+    id: string;
+    type: string;
+    title?: string;
+  };
+  field_study_type?: string[];
+  field_summary?: DrupalFormattedText;
+  field_outcome?: DrupalFormattedText;
+  field_source_url?: {
+    uri: string;
+    title?: string;
+  };
+  field_source_db?: string;
+}
+
+export interface ImportLogEntity extends DrupalNode {
+  type: 'node--import_log';
+  field_source_db?: string;
+  field_records_processed?: number;
+  field_records_created?: number;
+  field_records_updated?: number;
+  field_records_skipped?: number;
+  field_errors?: DrupalFormattedText;
+  field_duration_seconds?: number;
+}
+
 export type ContributionType = 'clinical_note' | 'modification' | 'addition';
 export type ContributionStatus = 'pending' | 'approved' | 'rejected';
 export type ModificationAction = 'add' | 'remove' | 'modify';
@@ -549,4 +629,20 @@ export function isClinicEntity(entity: DrupalNode): entity is ClinicEntity {
 
 export function isReviewEntity(entity: DrupalNode): entity is ReviewEntity {
   return entity.type === 'node--review';
+}
+
+export function isTcmIngredientEntity(entity: DrupalNode): entity is TcmIngredientEntity {
+  return entity.type === 'node--tcm_ingredient';
+}
+
+export function isTcmTargetInteractionEntity(entity: DrupalNode): entity is TcmTargetInteractionEntity {
+  return entity.type === 'node--tcm_target_interaction';
+}
+
+export function isTcmClinicalEvidenceEntity(entity: DrupalNode): entity is TcmClinicalEvidenceEntity {
+  return entity.type === 'node--tcm_clinical_evidence';
+}
+
+export function isImportLogEntity(entity: DrupalNode): entity is ImportLogEntity {
+  return entity.type === 'node--import_log';
 }
