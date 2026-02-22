@@ -19,6 +19,7 @@ import {
   DisclaimerBox,
   BackLink,
 } from '@/components/ui/DesignSystem';
+import { SymbolicVerifyButton } from '@/components/ui/SymbolicVerifyButton';
 import {
   formulaPopularityMap,
   preparationDifficultyMap,
@@ -419,6 +420,12 @@ export default async function FormulaDetailPage({ params }: FormulaDetailProps) 
                       )}
                     </tbody>
                   </table>
+                </div>
+                <div className="mt-3">
+                  <SymbolicVerifyButton
+                    herbId={name}
+                    formulaId={id}
+                  />
                 </div>
               </div>
             </>

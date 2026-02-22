@@ -189,6 +189,18 @@ export default function SymptomCheckerPage() {
                         </Tag>
                       ))}
                     </div>
+                    {process.env.NEXT_PUBLIC_SYMBOLIC_FEATURE === 'true' && results.recommendations.herbs?.length > 0 && (
+                      <p className="mt-4 text-sm text-earth-600">
+                        Want precise dosage math?{' '}
+                        <a
+                          href={`/herbs`}
+                          className="text-sage-600 hover:text-sage-800 underline font-medium transition-colors"
+                        >
+                          Refine dosage mathematically
+                        </a>{' '}
+                        on individual herb pages.
+                      </p>
+                    )}
                   </div>
                 )}
               </div>

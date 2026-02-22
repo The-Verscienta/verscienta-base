@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { headers } from 'next/headers';
 import { Inter, Crimson_Pro, JetBrains_Mono, Noto_Serif_SC } from 'next/font/google';
+import 'katex/dist/katex.min.css';
 import './globals.css';
 import { Header } from '@/components/layout/Header';
 import { ToastProvider } from '@/components/ui/Toast';

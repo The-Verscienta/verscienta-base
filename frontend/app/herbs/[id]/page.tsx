@@ -13,6 +13,7 @@ import {
   DisclaimerBox,
   BackLink,
 } from '@/components/ui/DesignSystem';
+import { SymbolicVerifyButton } from '@/components/ui/SymbolicVerifyButton';
 import {
   popularityMap,
   onsetSpeedMap,
@@ -525,6 +526,9 @@ export default async function HerbDetailPage({ params }: HerbDetailProps) {
                       )}
                     </div>
                   ))}
+                </div>
+                <div className="mt-4">
+                  <SymbolicVerifyButton herbId={name} />
                 </div>
               </Section>
             )}
