@@ -47,7 +47,9 @@ jobs:
           NEXT_PUBLIC_DRUPAL_BASE_URL: https://backend.ddev.site
       - run: npx playwright test
         env:
-          PLAYWRIGHT_BASE_URL: http://localhost:3000
+          CI: "true"
+          PORT: "3000"
+          NEXT_PUBLIC_DRUPAL_BASE_URL: https://backend.ddev.site
 
       - uses: actions/upload-artifact@v4
         if: failure()
