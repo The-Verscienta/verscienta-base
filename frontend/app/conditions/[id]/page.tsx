@@ -1,7 +1,11 @@
 import { drupal } from '@/lib/drupal';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
+import type { Metadata } from 'next';
 import type { ConditionEntity, ModalityEntity, FormulaEntity } from '@/types/drupal';
+
+// ISR: revalidate every 5 minutes
+export const revalidate = 300;
 import { Breadcrumbs } from '@/components/ui/Breadcrumbs';
 import { SafeHtml } from '@/components/ui/SafeHtml';
 import { getTextValue, hasTextContent } from '@/lib/drupal-helpers';
@@ -60,6 +64,24 @@ async function getRelatedFormulas(conditionId: string): Promise<FormulaEntity[]>
       // Silently return empty array if content type doesn't exist or any error
       return [];
     });
+}
+
+export async function generateMetadata({ params }: ConditionDetailProps): Promise<Metadata> {
+  const { id } = await params;
+  const condition = await getCondition(id);
+
+  if (!condition) {
+    return { title: 'Condition Not Found - Verscienta Health' };
+  }
+
+  const name = condition.title || 'Condition';
+  const description = condition.body?.processed?.replace(/<[^>]*>/g, '').slice(0, 160)
+    || `Learn about ${name} — symptoms, holistic approaches, and natural remedies.`;
+
+  return {
+    title: `${name} - Health Condition - Verscienta Health`,
+    description,
+  };
 }
 
 export default async function ConditionDetailPage({ params }: ConditionDetailProps) {

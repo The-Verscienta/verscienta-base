@@ -1,6 +1,6 @@
 # Verscienta Health - Comprehensive TODO List
 
-**Last Updated:** 2026-02-19
+**Last Updated:** 2026-02-22
 **Overall Progress:** ~98% complete
 
 ---
@@ -13,10 +13,11 @@
 | Frontend Components | 100% | 35+ components (DarkModeToggle, LanguageSwitcher, Navigation, FavoriteButton, ReviewForm, BookingForm) |
 | Frontend API Routes | 100% | 11 routes (auth, grok, reviews, bookings, verify-email) |
 | Backend Setup | 100% | Drupal running, all content types, fields, taxonomies, entity refs, paragraph types, security hardening |
-| External Services | 40% | Algolia configured and indexed |
-| Testing | 80% | Jest + RTL (71 tests), Playwright E2E (5 spec files) |
+| External Services | 55% | Algolia configured + TCM enrichment, SymPy service built |
+| Testing | 88% | Jest + RTL (148 tests / 13 suites), Playwright E2E (5 spec files) |
 | Deployment | 80% | Docker setup, CI/CD workflows (test.yml, lint.yml), PWA manifest |
-| Documentation | 70% | Good docs, needs API documentation |
+| Documentation | 80% | Good docs, DATA_SOURCES.md added, needs API documentation |
+| TCM Data Pipeline | 100% | Ingestion scripts, content types, knowledge graph, Algolia enrichment |
 
 ---
 
@@ -269,7 +270,7 @@ Script: `/backend/scripts/setup-taxonomies.sh`
 - [x] Image optimization (WebP/AVIF, lazy loading, OptimizedImage component)
 - [x] Server-side pagination for listings (ServerPagination component)
 - [x] Sort functionality for listings (SortDropdown component)
-- [ ] Advanced filtering (faceted search)
+- [x] Advanced filtering (faceted search) — TCM temperature, taste, meridians facets on search page + Algolia faceting attributes configured
 
 ### 3.3 Accessibility
 
@@ -294,6 +295,8 @@ Script: `/backend/scripts/setup-taxonomies.sh`
 - [x] Index Drupal content (manual or automated)
 - [x] Create indexing script (`npm run index-algolia`)
 - [ ] Create Drupal hook for content sync on save/update (optional)
+- [x] Add TCM fields to Algolia herb transform (latin_name, pinyin_name, taste, temperature, meridians)
+- [x] Update searchable attributes for TCM fields
 
 ### 4.2 Grok AI (xAI)
 
@@ -314,8 +317,9 @@ Script: `/backend/scripts/setup-taxonomies.sh`
 - [x] Add environment variables to `.env.example` files
 - [ ] Deploy and test with `docker compose up`
 - [ ] Run Python tests (`pytest`)
-- [ ] Integrate dosage computation into herb detail pages
-- [ ] Integrate symbolic math into formula builder
+- [x] Integrate dosage computation into herb detail pages (SymbolicVerifyButton in dosage section)
+- [x] Integrate symbolic math into formula detail pages (SymbolicVerifyButton in ingredients table)
+- [ ] Integrate symbolic math into formula builder (requires formula builder feature)
 
 ### 4.3 Cloudflare Turnstile
 
@@ -380,8 +384,9 @@ Script: `/backend/scripts/setup-taxonomies.sh`
 ### 7.1 Frontend Testing
 
 - [x] Set up Jest + React Testing Library
-- [x] Write component tests (csrf, sanitize, validation, rate-limit, useFavorites - 71 tests)
-- [ ] Write API route tests
+- [x] Write component tests (csrf, sanitize, validation, rate-limit, useFavorites, LatexEquation, SymbolicVerifyButton, useSymbolicVerification)
+- [x] Write API route tests (symbolic-feedback: 9 tests, knowledge-graph: 6 tests)
+- [x] Write lib tests (formula-similarity: 21 tests, analytics: 6 tests, sympy-compute: 10 tests)
 - [x] Write hook tests (useFavorites)
 - [x] Set up Playwright for E2E tests
 - [x] Write E2E tests:
@@ -414,7 +419,7 @@ Script: `/backend/scripts/setup-taxonomies.sh`
 - [x] Optimize images (AVIF/WebP format, OptimizedImage component)
 - [x] Implement code splitting (Next.js automatic code splitting)
 - [x] Lazy load components (dynamic imports, lazy loading images)
-- [ ] Configure ISR (Incremental Static Regeneration)
+- [x] Configure ISR (Incremental Static Regeneration) — 300s revalidate on all listing + detail pages
 - [ ] Add service worker for caching
 - [x] Optimize bundle size (compression enabled, static asset caching)
 
@@ -476,13 +481,21 @@ Script: `/backend/scripts/setup-taxonomies.sh`
 - [ ] Add 5-10 classical formulas
 - [ ] Add sample reviews
 
-### 10.2 Content Import
+### 10.2 Content Import / TCM Data Pipeline
 
-- [ ] Create CSV import templates
-- [ ] Set up Feeds/Migrate module
-- [ ] Import bulk herb data
-- [ ] Import bulk modality data
-- [ ] Verify data integrity
+- [x] Create Python ingestion pipeline (`scripts/tcm-ingest/`)
+- [x] HERB 2.0 CSV ingest script (`ingest_herb2.py`)
+- [x] BATMAN-TCM predicted interactions ingest (`ingest_batman.py`)
+- [x] PubChem molecular enrichment (`enrich_pubchem.py`)
+- [x] Drupal JSON:API client with upsert logic (`drupal_client.py`)
+- [x] Field mapping from CSV to Drupal (`field_mapper.py`)
+- [x] Monthly cron update script (`cron-update.sh`)
+- [x] Create TCM content types setup script (`setup-tcm-content-types.sh`)
+- [x] Document data sources (`DATA_SOURCES.md`)
+- [ ] Download HERB 2.0 data and run initial ingest
+- [ ] Download BATMAN-TCM data and run ingest
+- [ ] Run PubChem enrichment
+- [ ] Verify data integrity post-ingest
 
 ---
 
@@ -515,6 +528,7 @@ Script: `/backend/scripts/setup-taxonomies.sh`
 - [x] Quick stats display
 - [x] Link to Drupal admin
 - [x] Content overview
+- [x] Knowledge Graph viewer (`/admin/knowledge-graph`) — herb → ingredient → target → condition visualization with react-force-graph-2d, feature-flagged via `NEXT_PUBLIC_KNOWLEDGE_GRAPH=true`
 
 ### 11.5 Advanced Features
 
@@ -559,11 +573,12 @@ Script: `/backend/scripts/setup-taxonomies.sh`
 
 ### Phase 5 - Intelligent Health Platform
 
-1. SymPy compute service — dosage precision, constraint solving, unit conversion
-2. TCM Knowledge Graph (Neo4j) — herb-formula-meridian-condition relationships
-3. Grok + SymPy hybrid — LLM reasoning with exact math verification
-4. Pharmacokinetics modeling — absorption, half-life, bioavailability calculations
-5. Formula optimization engine — multi-herb interaction analysis
+1. ~~SymPy compute service~~ — dosage precision, constraint solving, unit conversion (DONE)
+2. ~~TCM Knowledge Graph~~ — herb-ingredient-target-condition visualization (DONE — react-force-graph-2d at `/admin/knowledge-graph`)
+3. ~~TCM Data Pipeline~~ — HERB 2.0, BATMAN-TCM, PubChem ingestion scripts (DONE)
+4. Grok + SymPy hybrid — LLM reasoning with exact math verification
+5. Pharmacokinetics modeling — absorption, half-life, bioavailability calculations
+6. Formula optimization engine — multi-herb interaction analysis
 
 ---
 
@@ -602,6 +617,31 @@ POSTGRES_PASSWORD=secure-password
 REDIS_HOST=redis
 REDIS_PORT=6379
 ```
+
+---
+
+## RECENT CHANGES (2026-02-22)
+
+### TCM Database Ingestion Pipeline
+
+- **DATA_SOURCES.md** — documented HERB 2.0, BATMAN-TCM 2.0, FooDB, PubChem (formats, URLs, licenses, field descriptions)
+- **setup-tcm-content-types.sh** — Drush script creating 4 new content types + 7 new herb fields:
+  - `tcm_ingredient` — chemical compounds (ingredient_id, pubchem_cid, cas_number, smiles, molecular_weight, herb_sources)
+  - `tcm_target_interaction` — herb/ingredient → protein target links (target_name, uniprot_id, gene_name, score, evidence_type)
+  - `tcm_clinical_evidence` — clinical trial/study references (study_type, summary, outcome, source_url)
+  - `import_log` — ingestion run tracking (records processed/created/updated/skipped, errors, duration)
+  - Herb extended: field_herb2_id, field_pubchem_cid, field_smiles, field_molecular_weight, field_herb_source_dbs, field_herb_latin_name, field_herb_pinyin_name
+- **scripts/tcm-ingest/** — Python CLI pipeline (8 files):
+  - `ingest_herb2.py` — HERB 2.0 CSV → Drupal JSON:API upsert (herbs, ingredients, targets, clinical evidence)
+  - `ingest_batman.py` — BATMAN-TCM predicted interactions with confidence score filtering
+  - `enrich_pubchem.py` — PubChem molecular enrichment via PubChemPy
+  - `drupal_client.py` — JSON:API client (search/create/update/upsert, rate limiting, dry-run mode)
+  - `field_mapper.py` — CSV column → Drupal field name translation
+  - `cron-update.sh` — monthly delta re-ingest cron script
+- **TypeScript interfaces** — TcmIngredientEntity, TcmTargetInteractionEntity, TcmClinicalEvidenceEntity, ImportLogEntity + type guards
+- **Algolia enrichment** — herb transform now includes latin_name, pinyin_name, tcm_taste, tcm_temperature, tcm_meridians; searchable attributes updated
+- **Knowledge Graph** (`/admin/knowledge-graph`) — admin page with react-force-graph-2d, herb selector, depth control, force-directed visualization of herb → ingredient → target → condition relationships, feature-flagged via `NEXT_PUBLIC_KNOWLEDGE_GRAPH=true`
+- **Tests**: All 96 existing tests still pass; TypeScript compiles clean
 
 ---
 

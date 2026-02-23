@@ -15,8 +15,8 @@ import {
 } from '@/components/ui/DesignSystem';
 import { selfTreatableMap, getFieldConfig } from '@/lib/decision-field-maps';
 
-// Use dynamic rendering to avoid build errors when backend is unavailable
-export const dynamic = 'force-dynamic';
+// ISR: revalidate every 5 minutes
+export const revalidate = 300;
 
 const SORT_OPTIONS = [
   { value: 'title', label: 'Name (A-Z)' },

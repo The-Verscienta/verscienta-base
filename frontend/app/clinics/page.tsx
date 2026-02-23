@@ -8,7 +8,8 @@ import { ClinicMap } from '@/components/clinic/ClinicMap';
 import type { ClinicEntity } from '@/types/drupal';
 import { PageWrapper, LeafPattern, Tag, BackLink } from '@/components/ui/DesignSystem';
 
-export const dynamic = 'force-dynamic';
+// ISR: revalidate every 5 minutes
+export const revalidate = 300;
 
 const SORT_OPTIONS = [
   { value: 'title', label: 'Name (A-Z)' },

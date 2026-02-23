@@ -11,6 +11,10 @@ interface ContentStats {
   modalities: number;
   practitioners: number;
   reviews: number;
+  tcm_ingredients: number;
+  tcm_interactions: number;
+  tcm_evidence: number;
+  import_logs: number;
 }
 
 function StatCard({ label, count, href, icon }: { label: string; count: number; href: string; icon: string }) {
@@ -48,13 +52,17 @@ function QuickAction({ label, href, description }: { label: string; href: string
 export default function AdminDashboard() {
   const [stats, setStats] = useState<ContentStats>({
     herbs: 0, formulas: 0, conditions: 0, modalities: 0, practitioners: 0, reviews: 0,
+    tcm_ingredients: 0, tcm_interactions: 0, tcm_evidence: 0, import_logs: 0,
   });
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     async function fetchStats() {
       const baseUrl = process.env.NEXT_PUBLIC_DRUPAL_BASE_URL || '';
-      const types = ['herb', 'formula', 'condition', 'modality', 'practitioner', 'review'] as const;
+      const types = [
+        'herb', 'formula', 'condition', 'modality', 'practitioner', 'review',
+        'tcm_ingredient', 'tcm_target_interaction', 'tcm_clinical_evidence', 'import_log',
+      ] as const;
       const counts: Record<string, number> = {};
 
       await Promise.all(
@@ -82,6 +90,10 @@ export default function AdminDashboard() {
         modalities: counts.modality || 0,
         practitioners: counts.practitioner || 0,
         reviews: counts.review || 0,
+        tcm_ingredients: counts.tcm_ingredient || 0,
+        tcm_interactions: counts.tcm_target_interaction || 0,
+        tcm_evidence: counts.tcm_clinical_evidence || 0,
+        import_logs: counts.import_log || 0,
       });
       setLoading(false);
     }
@@ -117,6 +129,23 @@ export default function AdminDashboard() {
         )}
       </Section>
 
+      <Section title="TCM Data Pipeline">
+        {loading ? (
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            {Array.from({ length: 4 }).map((_, i) => (
+              <div key={i} className="bg-earth-100 rounded-xl p-6 animate-pulse h-28" />
+            ))}
+          </div>
+        ) : (
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <StatCard label="TCM Ingredients" count={stats.tcm_ingredients} href="#" icon="🧪" />
+            <StatCard label="Target Interactions" count={stats.tcm_interactions} href="#" icon="🎯" />
+            <StatCard label="Clinical Evidence" count={stats.tcm_evidence} href="#" icon="📋" />
+            <StatCard label="Import Logs" count={stats.import_logs} href="#" icon="📊" />
+          </div>
+        )}
+      </Section>
+
       <Section title="Quick Actions">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <QuickAction
@@ -138,6 +167,11 @@ export default function AdminDashboard() {
             label="Taxonomy Management"
             href={`${drupalAdminUrl}/admin/structure/taxonomy`}
             description="Manage vocabulary terms and categories"
+          />
+          <QuickAction
+            label="Knowledge Graph"
+            href="/admin/knowledge-graph"
+            description="Explore herb-ingredient-target-condition relationships"
           />
           <QuickAction
             label="Search Index"

@@ -247,6 +247,73 @@ function SearchContent() {
                 }}
               />
 
+              {/* TCM Temperature Facet */}
+              <div className="mt-6 pt-6 border-t border-gray-100">
+                <h3 className="text-sm font-bold text-earth-700 uppercase tracking-wide mb-3">
+                  TCM Temperature
+                </h3>
+                <RefinementList
+                  attribute="tcm_temperature"
+                  classNames={{
+                    root: '',
+                    list: 'space-y-1',
+                    item: '',
+                    label: 'flex items-center gap-3 cursor-pointer hover:bg-sage-50 p-2 rounded-lg transition text-sm',
+                    checkbox: 'w-4 h-4 text-earth-600 border-gray-300 rounded focus:ring-earth-500',
+                    labelText: 'text-gray-700 capitalize flex-1',
+                    count: 'text-xs bg-gray-100 text-gray-600 px-2 py-0.5 rounded-full',
+                    selectedItem: 'bg-sage-50',
+                    noResults: 'hidden',
+                  }}
+                />
+              </div>
+
+              {/* TCM Taste Facet */}
+              <div className="mt-6 pt-6 border-t border-gray-100">
+                <h3 className="text-sm font-bold text-earth-700 uppercase tracking-wide mb-3">
+                  TCM Taste
+                </h3>
+                <RefinementList
+                  attribute="tcm_taste"
+                  classNames={{
+                    root: '',
+                    list: 'space-y-1',
+                    item: '',
+                    label: 'flex items-center gap-3 cursor-pointer hover:bg-sage-50 p-2 rounded-lg transition text-sm',
+                    checkbox: 'w-4 h-4 text-earth-600 border-gray-300 rounded focus:ring-earth-500',
+                    labelText: 'text-gray-700 capitalize flex-1',
+                    count: 'text-xs bg-gray-100 text-gray-600 px-2 py-0.5 rounded-full',
+                    selectedItem: 'bg-sage-50',
+                    noResults: 'hidden',
+                  }}
+                />
+              </div>
+
+              {/* TCM Meridians Facet */}
+              <div className="mt-6 pt-6 border-t border-gray-100">
+                <h3 className="text-sm font-bold text-earth-700 uppercase tracking-wide mb-3">
+                  TCM Meridians
+                </h3>
+                <RefinementList
+                  attribute="tcm_meridians"
+                  limit={8}
+                  showMore
+                  showMoreLimit={20}
+                  classNames={{
+                    root: '',
+                    list: 'space-y-1',
+                    item: '',
+                    label: 'flex items-center gap-3 cursor-pointer hover:bg-sage-50 p-2 rounded-lg transition text-sm',
+                    checkbox: 'w-4 h-4 text-earth-600 border-gray-300 rounded focus:ring-earth-500',
+                    labelText: 'text-gray-700 capitalize flex-1',
+                    count: 'text-xs bg-gray-100 text-gray-600 px-2 py-0.5 rounded-full',
+                    selectedItem: 'bg-sage-50',
+                    noResults: 'hidden',
+                    showMore: 'text-sm text-sage-600 hover:text-sage-800 font-medium mt-2 cursor-pointer',
+                  }}
+                />
+              </div>
+
               {/* Quick Links */}
               <div className="mt-6 pt-6 border-t border-gray-100">
                 <h4 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">

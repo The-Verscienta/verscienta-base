@@ -2,7 +2,11 @@ import { drupal } from '@/lib/drupal';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
+import type { Metadata } from 'next';
 import type { HerbEntity, DrupalTextField } from '@/types/drupal';
+
+// ISR: revalidate every 5 minutes
+export const revalidate = 300;
 import { Breadcrumbs } from '@/components/ui/Breadcrumbs';
 import { SafeHtml } from '@/components/ui/SafeHtml';
 import {
@@ -52,6 +56,25 @@ async function getHerb(id: string): Promise<HerbEntity | null> {
     console.error('Failed to fetch herb:', error);
     return null;
   }
+}
+
+export async function generateMetadata({ params }: HerbDetailProps): Promise<Metadata> {
+  const { id } = await params;
+  const herb = await getHerb(id);
+
+  if (!herb) {
+    return { title: 'Herb Not Found - Verscienta Health' };
+  }
+
+  const name = herb.title || 'Herb';
+  const scientific = herb.field_scientific_name ? ` (${herb.field_scientific_name})` : '';
+  const description = herb.body?.processed?.replace(/<[^>]*>/g, '').slice(0, 160)
+    || `Learn about ${name}${scientific} — uses, dosage, safety, and traditional properties.`;
+
+  return {
+    title: `${name}${scientific} - Medicinal Herb - Verscienta Health`,
+    description,
+  };
 }
 
 export default async function HerbDetailPage({ params }: HerbDetailProps) {

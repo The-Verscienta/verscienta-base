@@ -4,6 +4,9 @@ import Link from 'next/link';
 import Image from 'next/image';
 import type { Metadata } from 'next';
 import type { ClinicEntity } from '@/types/drupal';
+
+// ISR: revalidate every 5 minutes
+export const revalidate = 300;
 import { Breadcrumbs } from '@/components/ui/Breadcrumbs';
 import { SafeHtml } from '@/components/ui/SafeHtml';
 import { ClinicMap } from '@/components/clinic/ClinicMap';

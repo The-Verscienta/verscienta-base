@@ -2,7 +2,11 @@ import { drupal } from '@/lib/drupal';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
+import type { Metadata } from 'next';
 import type { PractitionerEntity } from '@/types/drupal';
+
+// ISR: revalidate every 5 minutes
+export const revalidate = 300;
 import { Breadcrumbs } from '@/components/ui/Breadcrumbs';
 import { SafeHtml } from '@/components/ui/SafeHtml';
 import { ClinicMap } from '@/components/clinic/ClinicMap';
@@ -38,6 +42,27 @@ async function getPractitioner(id: string): Promise<PractitionerEntity | null> {
     console.error('Failed to fetch practitioner:', error);
     return null;
   }
+}
+
+export async function generateMetadata({ params }: PractitionerDetailProps): Promise<Metadata> {
+  const { id } = await params;
+  const practitioner = await getPractitioner(id);
+
+  if (!practitioner) {
+    return { title: 'Practitioner Not Found - Verscienta Health' };
+  }
+
+  const name = practitioner.field_name || practitioner.title || 'Practitioner';
+  const credentials = practitioner.field_credentials ? `, ${practitioner.field_credentials}` : '';
+  const location = [practitioner.field_city, practitioner.field_state].filter(Boolean).join(', ');
+  const description = location
+    ? `${name}${credentials} in ${location} — holistic health practitioner. View specializations, contact info, and book an appointment.`
+    : `${name}${credentials} — holistic health practitioner. View specializations, contact info, and book an appointment.`;
+
+  return {
+    title: `${name}${credentials} - Holistic Practitioner - Verscienta Health`,
+    description,
+  };
 }
 
 export default async function PractitionerDetailPage({ params }: PractitionerDetailProps) {

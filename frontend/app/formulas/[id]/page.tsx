@@ -3,6 +3,7 @@ import dynamic from 'next/dynamic';
 import { drupal } from '@/lib/drupal';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
+import type { Metadata } from 'next';
 import type { FormulaEntity } from '@/types/drupal';
 import { Breadcrumbs } from '@/components/ui/Breadcrumbs';
 import { SafeHtml } from '@/components/ui/SafeHtml';
@@ -172,6 +173,28 @@ async function getFormula(id: string): Promise<FormulaEntity | null> {
     console.error('Failed to fetch formula:', error);
     return null;
   }
+}
+
+export async function generateMetadata({ params }: FormulaDetailProps): Promise<Metadata> {
+  const { id } = await params;
+  const formula = await getFormula(id);
+
+  if (!formula) {
+    return { title: 'Formula Not Found - Verscienta Health' };
+  }
+
+  const name = formula.title || 'Formula';
+  const descText = formula.field_formula_description;
+  const descStr = descText
+    ? (typeof descText === 'string' ? descText : descText.processed || descText.value || '').replace(/<[^>]*>/g, '').slice(0, 160)
+    : '';
+  const description = descStr
+    || `Learn about ${name} — ingredients, actions, indications, and traditional usage.`;
+
+  return {
+    title: `${name} - Herbal Formula - Verscienta Health`,
+    description,
+  };
 }
 
 export default async function FormulaDetailPage({ params }: FormulaDetailProps) {

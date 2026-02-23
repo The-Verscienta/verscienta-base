@@ -291,7 +291,14 @@ async function indexAll(): Promise<void> {
 
   const baseSettings = {
     searchableAttributes: ['title', 'name', 'description', 'scientific_name', 'common_names'],
-    attributesForFaceting: ['type', 'filterOnly(type)'],
+    attributesForFaceting: [
+      'type',
+      'filterOnly(type)',
+      'tcm_temperature',
+      'tcm_taste',
+      'tcm_meridians',
+      'source_dbs',
+    ],
     customRanking: ['desc(title)'],
   };
 

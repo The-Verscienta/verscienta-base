@@ -1,9 +1,13 @@
 import { drupal } from '@/lib/drupal';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
+import type { Metadata } from 'next';
 import { Breadcrumbs } from '@/components/ui/Breadcrumbs';
 import { SafeHtml } from '@/components/ui/SafeHtml';
 import { ModalityEntity } from '@/types';
+
+// ISR: revalidate every 5 minutes
+export const revalidate = 300;
 import {
   PageWrapper,
   LeafPattern,
@@ -51,6 +55,24 @@ function ModalityIcon() {
       </defs>
     </svg>
   );
+}
+
+export async function generateMetadata({ params }: ModalityDetailProps): Promise<Metadata> {
+  const { id } = await params;
+  const modality = await getModality(id);
+
+  if (!modality) {
+    return { title: 'Modality Not Found - Verscienta Health' };
+  }
+
+  const name = modality.title || 'Modality';
+  const description = modality.body?.processed?.replace(/<[^>]*>/g, '').slice(0, 160)
+    || `Learn about ${name} — a holistic healing modality. Benefits, evidence, and how it works.`;
+
+  return {
+    title: `${name} - Healing Modality - Verscienta Health`,
+    description,
+  };
 }
 
 export default async function ModalityDetailPage({ params }: ModalityDetailProps) {
