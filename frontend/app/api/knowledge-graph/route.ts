@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { checkRateLimit, getClientIdentifier, RATE_LIMITS, createRateLimitHeaders } from '@/lib/rate-limit';
 
 const DRUPAL_BASE_URL = process.env.NEXT_PUBLIC_DRUPAL_BASE_URL || '';
 const JSONAPI_HEADERS = { Accept: 'application/vnd.api+json' };
@@ -38,6 +39,22 @@ async function fetchJsonApi(path: string): Promise<any> {
 }
 
 export async function GET(request: NextRequest) {
+  // Apply rate limiting
+  const identifier = getClientIdentifier(request);
+  const rateLimitResult = checkRateLimit(`knowledge-graph:${identifier}`, RATE_LIMITS.api);
+  const rateLimitHeaders = createRateLimitHeaders(rateLimitResult);
+
+  if (!rateLimitResult.success) {
+    return NextResponse.json(
+      {
+        error: 'Too many requests',
+        message: `Please try again in ${rateLimitResult.retryAfter} seconds.`,
+        retryAfter: rateLimitResult.retryAfter,
+      },
+      { status: 429, headers: rateLimitHeaders }
+    );
+  }
+
   const { searchParams } = new URL(request.url);
   const herbId = searchParams.get('herb');
   const depth = Math.min(parseInt(searchParams.get('depth') || '2', 10), 3);
@@ -45,7 +62,7 @@ export async function GET(request: NextRequest) {
   if (!herbId) {
     return NextResponse.json(
       { error: 'Missing "herb" query parameter (Drupal node UUID)' },
-      { status: 400 }
+      { status: 400, headers: rateLimitHeaders }
     );
   }
 
@@ -57,7 +74,7 @@ export async function GET(request: NextRequest) {
     const herbData = await fetchJsonApi(`node/herb/${herbId}`);
     const herb = herbData.data;
     if (!herb) {
-      return NextResponse.json({ error: 'Herb not found' }, { status: 404 });
+      return NextResponse.json({ error: 'Herb not found' }, { status: 404, headers: rateLimitHeaders });
     }
 
     nodes.set(herb.id, {
@@ -132,12 +149,12 @@ export async function GET(request: NextRequest) {
       links,
     };
 
-    return NextResponse.json(graphData);
+    return NextResponse.json(graphData, { headers: rateLimitHeaders });
   } catch (error) {
     console.error('Knowledge graph error:', error);
     return NextResponse.json(
       { error: 'Failed to build knowledge graph' },
-      { status: 500 }
+      { status: 500, headers: rateLimitHeaders }
     );
   }
 }
