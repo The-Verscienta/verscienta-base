@@ -162,7 +162,7 @@ export default async function ConditionDetailPage({ params }: ConditionDetailPro
               </svg>
             }
           >
-            <div className="prose max-w-none text-earth-700">
+            <div className="prose max-w-none text-gray-700">
               <SafeHtml html={condition.body.value} />
             </div>
           </Section>
@@ -183,7 +183,7 @@ export default async function ConditionDetailPage({ params }: ConditionDetailPro
               {condition.field_symptoms.map((symptom, idx) => (
                 <li key={idx} className="flex items-start gap-2">
                   <span className="text-sage-600 mt-1">•</span>
-                  <span className="text-earth-700">{symptom}</span>
+                  <span className="text-gray-700">{symptom}</span>
                 </li>
               ))}
             </ul>
@@ -203,7 +203,7 @@ export default async function ConditionDetailPage({ params }: ConditionDetailPro
                 </svg>
             }
             >
-              <p className="text-earth-600 mb-4">
+              <p className="text-gray-600 mb-4">
                 These holistic health modalities may be beneficial for managing {name}:
               </p>
               <div className="grid md:grid-cols-2 gap-4">
@@ -219,7 +219,7 @@ export default async function ConditionDetailPage({ params }: ConditionDetailPro
                           {modality.title || 'Modality'}
                         </h3>
                         {modality.field_excels_at && modality.field_excels_at.length > 0 && (
-                          <p className="text-sm text-earth-600">
+                          <p className="text-sm text-gray-600">
                             Excels at: {modality.field_excels_at.slice(0, 2).join(', ')}
                           </p>
                         )}
@@ -248,7 +248,7 @@ export default async function ConditionDetailPage({ params }: ConditionDetailPro
                 </svg>
             }
             >
-              <p className="text-earth-600 mb-4">
+              <p className="text-gray-600 mb-4">
                 Traditional herbal formulas that may help with this condition:
               </p>
               <div className="grid md:grid-cols-2 gap-4">
@@ -267,7 +267,7 @@ export default async function ConditionDetailPage({ params }: ConditionDetailPro
                       </Tag>
                     </div>
                     {hasTextContent(formula.field_formula_description) && (
-                      <p className="text-sm text-earth-600 mb-3 line-clamp-2">
+                      <p className="text-sm text-gray-600 mb-3 line-clamp-2">
                         {getTextValue(formula.field_formula_description)}
                       </p>
                     )}
@@ -292,7 +292,7 @@ export default async function ConditionDetailPage({ params }: ConditionDetailPro
             </svg>
           }
         >
-          <div className="space-y-4 text-earth-700">
+          <div className="space-y-4 text-gray-700">
             <div>
               <h3 className="font-semibold text-earth-800 mb-2 flex items-center gap-2">
                 <span>🧘</span>

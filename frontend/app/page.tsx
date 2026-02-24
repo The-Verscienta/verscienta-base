@@ -2,18 +2,13 @@ import Link from 'next/link';
 import { HeroSearch } from '@/components/HeroSearch';
 import {
   PageWrapper,
-  BotanicalDivider,
   BotanicalSeparator,
   Section,
   Tag,
-  FeatureCard,
-  StatsBar,
   DisclaimerBox,
-  CardGrid,
   GlowCard,
   TestimonialCard,
   GradientText,
-  NumberedList,
   ScrollIndicator,
 } from '@/components/ui/DesignSystem';
 
@@ -21,7 +16,7 @@ export default function Home() {
   return (
     <PageWrapper>
       {/* Hero Section */}
-      <section className="relative overflow-hidden py-20 md:py-32 lg:py-40">
+      <section className="relative overflow-hidden py-16 md:py-24 lg:py-32">
         {/* Background decoration */}
         <div className="absolute inset-0 bg-gradient-to-br from-earth-100 via-sage-50 to-cream-100" />
 
@@ -35,28 +30,6 @@ export default function Home() {
         <div className="absolute -top-32 -right-32 w-96 h-96 bg-sage-200/30 rounded-full blur-3xl breathe" />
         <div className="absolute -bottom-32 -left-32 w-80 h-80 bg-earth-200/30 rounded-full blur-3xl breathe" style={{ animationDelay: '2s' }} />
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gold-100/20 rounded-full blur-3xl" />
-
-        {/* Floating botanical elements */}
-        <div className="absolute top-16 left-16 opacity-15 float" style={{ animationDelay: '0s' }}>
-          <svg viewBox="0 0 60 60" className="w-16 h-16 text-sage-600">
-            <path d="M30 5c-2 10-10 18-20 20 10 2 18 10 20 20 2-10 10-18 20-20-10-2-18-10-20-20z" fill="currentColor"/>
-          </svg>
-        </div>
-        <div className="absolute top-32 right-24 opacity-10 float" style={{ animationDelay: '1s' }}>
-          <svg viewBox="0 0 60 60" className="w-10 h-10 text-gold-500">
-            <path d="M30 5c-2 10-10 18-20 20 10 2 18 10 20 20 2-10 10-18 20-20-10-2-18-10-20-20z" fill="currentColor"/>
-          </svg>
-        </div>
-        <div className="absolute bottom-16 right-16 opacity-15 float" style={{ animationDelay: '2s' }}>
-          <svg viewBox="0 0 60 60" className="w-20 h-20 text-earth-600">
-            <path d="M30 5c-2 10-10 18-20 20 10 2 18 10 20 20 2-10 10-18 20-20-10-2-18-10-20-20z" fill="currentColor"/>
-          </svg>
-        </div>
-        <div className="absolute bottom-32 left-24 opacity-10 float" style={{ animationDelay: '3s' }}>
-          <svg viewBox="0 0 60 60" className="w-12 h-12 text-sage-500">
-            <path d="M30 5c-2 10-10 18-20 20 10 2 18 10 20 20 2-10 10-18 20-20-10-2-18-10-20-20z" fill="currentColor"/>
-          </svg>
-        </div>
 
         <div className="relative max-w-6xl mx-auto px-4 text-center">
           {/* Eyebrow with enhanced styling */}
@@ -75,7 +48,7 @@ export default function Home() {
             </span>
           </h1>
 
-          <p className="text-xl md:text-2xl text-earth-600 max-w-3xl mx-auto mb-10 leading-relaxed animate-slide-up" style={{ animationDelay: '100ms' }}>
+          <p className="text-xl md:text-2xl text-gray-600 max-w-3xl mx-auto mb-10 leading-relaxed animate-slide-up" style={{ animationDelay: '100ms' }}>
             Explore traditional herbal remedies, holistic healing modalities, and receive
             personalized wellness recommendations powered by AI.
           </p>
@@ -119,7 +92,7 @@ export default function Home() {
       </section>
 
       {/* Features Section - Enhanced with Glow Cards */}
-      <section className="py-20 md:py-28 relative">
+      <section className="py-16 md:py-24 relative">
         <div className="max-w-6xl mx-auto px-4">
           {/* Section header with decorative elements */}
           <div className="text-center mb-16">
@@ -131,7 +104,7 @@ export default function Home() {
             <h2 className="font-serif text-4xl md:text-5xl font-bold text-earth-900 mb-6">
               Comprehensive Health <GradientText variant="earth">Resources</GradientText>
             </h2>
-            <p className="text-xl text-earth-600 max-w-3xl mx-auto leading-relaxed">
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
               Explore our extensive database covering traditional Chinese medicine,
               Western herbalism, and various holistic healing modalities.
             </p>
@@ -150,7 +123,7 @@ export default function Home() {
                 <h3 className="font-serif text-xl font-bold text-earth-800 mb-3 group-hover:text-sage-700 transition-colors">
                   Materia Medica
                 </h3>
-                <p className="text-earth-600 text-sm leading-relaxed mb-4">
+                <p className="text-gray-600 text-sm leading-relaxed mb-4">
                   Comprehensive botanical information covering TCM properties, active constituents, therapeutic uses, dosages, and safety guidelines for hundreds of medicinal herbs.
                 </p>
                 <div className="flex flex-wrap gap-2 mb-4">
@@ -176,7 +149,7 @@ export default function Home() {
                 <h3 className="font-serif text-xl font-bold text-earth-800 mb-3 group-hover:text-sage-700 transition-colors">
                   Healing Modalities
                 </h3>
-                <p className="text-earth-600 text-sm leading-relaxed mb-4">
+                <p className="text-gray-600 text-sm leading-relaxed mb-4">
                   Explore diverse holistic health practices from acupuncture and yoga to Reiki and Ayurveda, with detailed information on benefits, techniques, and applications.
                 </p>
                 <div className="flex flex-wrap gap-2 mb-4">
@@ -211,7 +184,7 @@ export default function Home() {
                 <h3 className="font-serif text-xl font-bold text-earth-800 mb-3 group-hover:text-sage-700 transition-colors">
                   AI-Powered Analysis
                 </h3>
-                <p className="text-earth-600 text-sm leading-relaxed mb-4">
+                <p className="text-gray-600 text-sm leading-relaxed mb-4">
                   Get personalized wellness recommendations based on your symptoms using advanced AI technology that considers your unique health profile.
                 </p>
                 <div className="flex flex-wrap gap-2 mb-4">
@@ -232,7 +205,7 @@ export default function Home() {
       </section>
 
       {/* TCM Special Section */}
-      <section className="py-20 md:py-28 relative overflow-hidden">
+      <section className="py-16 md:py-24 relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-amber-50 via-orange-50/50 to-red-50/30" />
         <div className="absolute inset-0 opacity-[0.03]" style={{
           backgroundImage: `url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='20' cy='20' r='15' fill='none' stroke='%23c1272d' stroke-width='0.5'/%3E%3Cpath d='M20 5c0 7.5-7.5 15-7.5 22.5S20 35 20 35s7.5 0 7.5-7.5S20 12.5 20 5z' fill='%23c1272d' opacity='0.3'/%3E%3C/svg%3E")`,
@@ -290,83 +263,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* How It Works Section - Enhanced */}
-      <section className="py-20 md:py-28 relative overflow-hidden">
-        {/* Background decoration */}
-        <div className="absolute inset-0 bg-gradient-to-b from-white via-earth-50/30 to-white" />
-        <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-earth-200 to-transparent" />
-        <div className="absolute bottom-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-earth-200 to-transparent" />
-
-        <div className="relative max-w-6xl mx-auto px-4">
-          <div className="text-center mb-16">
-            <div className="inline-flex items-center gap-2 text-earth-500 text-sm font-semibold tracking-wider uppercase mb-4">
-              <span className="w-8 h-px bg-earth-300" />
-              Simple Process
-              <span className="w-8 h-px bg-earth-300" />
-            </div>
-            <h2 className="font-serif text-4xl md:text-5xl font-bold text-earth-900 mb-6">
-              How It Works
-            </h2>
-            <p className="text-xl text-earth-600 max-w-2xl mx-auto">
-              Four simple steps to personalized wellness recommendations.
-            </p>
-          </div>
-
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-4">
-            {[
-              { step: 1, title: 'Enter Symptoms', desc: 'Describe your health concerns or browse our comprehensive database', icon: '📝', color: 'from-sage-500 to-sage-600' },
-              { step: 2, title: 'AI Analysis', desc: 'Our AI analyzes your input and asks relevant follow-up questions', icon: '🧠', color: 'from-earth-500 to-earth-600' },
-              { step: 3, title: 'Get Recommendations', desc: 'Receive personalized modality and herb recommendations', icon: '🌿', color: 'from-sage-600 to-earth-600' },
-              { step: 4, title: 'Find Practitioners', desc: 'Connect with qualified practitioners in your area', icon: '👨‍⚕️', color: 'from-earth-600 to-sage-700' },
-            ].map(({ step, title, desc, icon, color }) => (
-              <div key={step} className="relative text-center group">
-                {/* Connector line - dashed with dots */}
-                {step < 4 && (
-                  <div className="hidden lg:flex absolute top-12 left-1/2 w-full items-center justify-center">
-                    <div className="flex-1 flex items-center">
-                      <div className="flex-1 border-t-2 border-dashed border-earth-200" />
-                      <div className="w-2 h-2 bg-sage-300 rounded-full mx-1" />
-                      <div className="flex-1 border-t-2 border-dashed border-earth-200" />
-                    </div>
-                  </div>
-                )}
-
-                <div className="relative">
-                  {/* Step number circle */}
-                  <div className={`relative w-24 h-24 bg-gradient-to-br ${color} text-white rounded-2xl flex flex-col items-center justify-center mx-auto mb-6 shadow-lg group-hover:shadow-xl group-hover:scale-105 transition-all duration-300`}>
-                    {/* Decorative ring */}
-                    <div className="absolute -inset-1 bg-gradient-to-br from-white/20 to-transparent rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity" />
-                    <span className="text-3xl mb-1 relative">{icon}</span>
-                    <span className="text-xs font-bold opacity-80 relative tracking-wider">STEP {step}</span>
-                  </div>
-
-                  <h4 className="text-xl font-serif font-bold text-earth-800 mb-3 group-hover:text-sage-700 transition-colors">
-                    {title}
-                  </h4>
-                  <p className="text-earth-600 leading-relaxed text-sm">
-                    {desc}
-                  </p>
-                </div>
-              </div>
-            ))}
-          </div>
-
-          {/* CTA below steps */}
-          <div className="text-center mt-12">
-            <Link
-              href="/symptom-checker"
-              className="btn-pill-primary"
-            >
-              Start Your Journey
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-              </svg>
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      {/* Stats Section - Enhanced */}
+      {/* Stats Section */}
       <section className="py-16 md:py-24 relative overflow-hidden">
         {/* Background */}
         <div className="absolute inset-0 bg-gradient-to-r from-earth-700 via-earth-800 to-sage-800" />
@@ -405,7 +302,7 @@ export default function Home() {
       </section>
 
       {/* Testimonials Section */}
-      <section className="py-20 md:py-28 relative overflow-hidden">
+      <section className="py-16 md:py-24 relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-b from-cream-50 to-white" />
 
         <div className="relative max-w-6xl mx-auto px-4">
@@ -418,7 +315,7 @@ export default function Home() {
             <h2 className="font-serif text-4xl md:text-5xl font-bold text-earth-900 mb-6">
               Stories of <GradientText variant="sage">Healing</GradientText>
             </h2>
-            <p className="text-xl text-earth-600 max-w-2xl mx-auto">
+            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
               Discover how holistic approaches have transformed lives
             </p>
           </div>
@@ -447,58 +344,8 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Additional Resources */}
-      <section className="py-20 md:py-28">
-        <div className="max-w-6xl mx-auto px-4">
-          <div className="text-center mb-16">
-            <h2 className="font-serif text-4xl md:text-5xl font-bold text-earth-900 mb-6">
-              Explore More
-            </h2>
-            <p className="text-xl text-earth-600 max-w-2xl mx-auto">
-              Dive deeper into our comprehensive health resources.
-            </p>
-          </div>
-
-          <CardGrid columns={4}>
-            <FeatureCard
-              icon="🏥"
-              title="Health Conditions"
-              description="Learn about various health conditions and discover natural approaches to support your wellbeing."
-              href="/conditions"
-              tags={['Symptoms', 'Treatments', 'Prevention']}
-            />
-
-            <FeatureCard
-              icon="🧪"
-              title="Herbal Formulas"
-              description="Explore classical and modern herbal formulas combining multiple herbs for synergistic effects."
-              href="/formulas"
-              tags={['Classical', 'TCM', 'Combinations']}
-            />
-
-            <FeatureCard
-              icon="🏥"
-              title="Find Clinics"
-              description="Discover holistic health clinics near you with maps, reviews, practitioner teams, and insurance info."
-              href="/clinics"
-              tags={['Locations', 'Reviews', 'Insurance']}
-            />
-
-            <FeatureCard
-              icon="🔍"
-              title="Search Everything"
-              description="Find herbs, conditions, practitioners, and more with our powerful search functionality."
-              href="/search"
-              tags={['Quick Find', 'Filters', 'Categories']}
-            />
-          </CardGrid>
-        </div>
-      </section>
-
-      <BotanicalDivider />
-
       {/* CTA Section */}
-      <section className="py-20 md:py-28">
+      <section className="py-16 md:py-24">
         <div className="max-w-4xl mx-auto px-4">
           <div className="relative overflow-hidden bg-gradient-to-br from-earth-800 via-earth-700 to-sage-800 text-white rounded-3xl p-12 md:p-16 text-center shadow-2xl">
             {/* Decorative elements */}

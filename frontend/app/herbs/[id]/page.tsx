@@ -192,7 +192,7 @@ export default async function HerbDetailPage({ params }: HerbDetailProps) {
 
                   {/* Family */}
                   {herb.field_family && (
-                    <p className="text-lg text-earth-600 mb-8">
+                    <p className="text-lg text-gray-600 mb-8">
                       <span className="font-medium">Family:</span>{' '}
                       <span className="font-serif italic">{herb.field_family}</span>
                     </p>
@@ -339,7 +339,7 @@ export default async function HerbDetailPage({ params }: HerbDetailProps) {
                       <span className="w-1.5 h-1.5 rounded-full bg-sage-500" />
                       Description
                     </h3>
-                    <div className="prose max-w-none text-earth-700">
+                    <div className="prose max-w-none text-gray-700">
                       <SafeHtml html={getTextValue(herb.field_botanical_description as DrupalTextField)!} />
                     </div>
                   </div>
@@ -357,7 +357,7 @@ export default async function HerbDetailPage({ params }: HerbDetailProps) {
                       </h3>
                       <ul className="space-y-1.5">
                         {herb.field_native_region.map((region, idx) => (
-                          <li key={idx} className="flex items-center gap-2 text-earth-700">
+                          <li key={idx} className="flex items-center gap-2 text-gray-700">
                             <span className="w-1 h-1 rounded-full bg-sage-400" />
                             {region}
                           </li>
@@ -374,7 +374,7 @@ export default async function HerbDetailPage({ params }: HerbDetailProps) {
                         </svg>
                         Habitat
                       </h3>
-                      <div className="prose prose-sm max-w-none text-earth-700">
+                      <div className="prose prose-sm max-w-none text-gray-700">
                         <SafeHtml html={getTextValue(herb.field_habitat as DrupalTextField)!} />
                       </div>
                     </div>
@@ -511,11 +511,11 @@ export default async function HerbDetailPage({ params }: HerbDetailProps) {
                       {herb.field_active_constituents.map((constituent, idx) => (
                         <tr key={idx} className="hover:bg-earth-50/50 transition-colors">
                           <td className="py-3 px-4 font-semibold text-earth-900">{constituent.field_compound_name}</td>
-                          <td className="py-3 px-4 text-earth-600">{constituent.field_compound_class || '—'}</td>
-                          <td className="py-3 px-4 text-right font-mono text-earth-600">
+                          <td className="py-3 px-4 text-gray-600">{constituent.field_compound_class || '—'}</td>
+                          <td className="py-3 px-4 text-right font-mono text-gray-600">
                             {constituent.field_compound_percentage ? `${constituent.field_compound_percentage}%` : '—'}
                           </td>
-                          <td className="py-3 px-4 text-earth-600 text-sm">{constituent.field_compound_effects || '—'}</td>
+                          <td className="py-3 px-4 text-gray-600 text-sm">{constituent.field_compound_effects || '—'}</td>
                         </tr>
                       ))}
                     </tbody>
@@ -538,7 +538,7 @@ export default async function HerbDetailPage({ params }: HerbDetailProps) {
                           </span>
                         )}
                       </div>
-                      <p className="text-earth-700 text-lg">
+                      <p className="text-gray-700 text-lg">
                         <span className="font-semibold">{dosage.field_dosage_amount}</span>
                         {dosage.field_dosage_frequency && (
                           <span className="text-earth-500"> — {dosage.field_dosage_frequency}</span>
@@ -741,7 +741,7 @@ export default async function HerbDetailPage({ params }: HerbDetailProps) {
                   {herb.field_preparation_methods.map((method, idx) => (
                     <div key={idx} className="bg-gradient-to-br from-sage-50 to-earth-50 rounded-xl p-5 border border-sage-200 hover:shadow-lg transition-all hover:-translate-y-1">
                       <h3 className="font-bold text-earth-800 text-lg mb-2">{method.field_method_type}</h3>
-                      <p className="text-earth-700 text-sm leading-relaxed">{method.field_method_instructions}</p>
+                      <p className="text-gray-700 text-sm leading-relaxed">{method.field_method_instructions}</p>
                       {method.field_method_time && (
                         <p className="text-sage-600 text-sm mt-3 font-medium flex items-center gap-2">
                           <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">

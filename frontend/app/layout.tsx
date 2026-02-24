@@ -1,12 +1,12 @@
 import type { Metadata } from 'next';
 import { headers } from 'next/headers';
-import { Inter, Crimson_Pro, JetBrains_Mono, Noto_Serif_SC } from 'next/font/google';
+import { Source_Sans_3, Crimson_Pro, JetBrains_Mono, Noto_Serif_SC } from 'next/font/google';
 import 'katex/dist/katex.min.css';
 import './globals.css';
 import { Header } from '@/components/layout/Header';
 import { ToastProvider } from '@/components/ui/Toast';
 
-const inter = Inter({
+const sourceSans = Source_Sans_3({
   subsets: ['latin'],
   variable: '--font-sans',
   display: 'swap',
@@ -55,7 +55,7 @@ export default async function RootLayout({
   await headers();
 
   return (
-    <html lang="en" className={`${inter.variable} ${crimsonPro.variable} ${jetbrainsMono.variable} ${notoSerifSC.variable}`}>
+    <html lang="en" className={`${sourceSans.variable} ${crimsonPro.variable} ${jetbrainsMono.variable} ${notoSerifSC.variable}`}>
       <body className="font-sans">
         <ToastProvider position="bottom-right">
           <div className="min-h-screen bg-gradient-to-b from-earth-50 to-sage-50">
@@ -114,17 +114,6 @@ export default async function RootLayout({
                     Bridging ancient healing wisdom with modern scientific understanding.
                     Your comprehensive guide to holistic wellness and natural remedies.
                   </p>
-                  {/* Social proof or trust indicators */}
-                  <div className="flex items-center gap-3">
-                    <div className="flex -space-x-2">
-                      {['bg-sage-500', 'bg-earth-500', 'bg-gold-500'].map((color, i) => (
-                        <div key={i} className={`w-8 h-8 ${color} rounded-full border-2 border-earth-900 flex items-center justify-center text-xs font-bold`}>
-                          {['🌿', '☯️', '🧪'][i]}
-                        </div>
-                      ))}
-                    </div>
-                    <span className="text-xs text-earth-400">500+ herbs documented</span>
-                  </div>
                 </div>
 
                 {/* Explore Column */}

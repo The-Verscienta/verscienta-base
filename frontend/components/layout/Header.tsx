@@ -96,7 +96,7 @@ export function Header() {
       }`}
     >
       {/* Decorative top border */}
-      <div className="h-1 bg-gradient-to-r from-sage-500 via-gold-500 to-sage-500" />
+      <div className="h-0.5 bg-sage-600" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16 md:h-20">
@@ -172,7 +172,7 @@ export function Header() {
                         key={link.href}
                         href={link.href}
                         role="menuitem"
-                        className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-earth-700 hover:bg-earth-50 hover:text-earth-900 transition-colors"
+                        className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-700 hover:bg-earth-50 hover:text-gray-900 transition-colors"
                       >
                         <span className="text-lg" aria-hidden="true">{link.icon}</span>
                         <span className="font-medium text-sm">{link.label}</span>

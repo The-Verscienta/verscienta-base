@@ -184,7 +184,7 @@ export default async function FormulasPage({ searchParams }: PageProps) {
                 Herbal Formulas
               </h1>
 
-              <p className="text-lg md:text-xl text-sage-700 leading-relaxed">
+              <p className="text-lg md:text-xl text-gray-600 leading-relaxed">
                 Discover traditional and modern herbal formulas combining multiple herbs
                 for synergistic therapeutic effects.
               </p>
@@ -263,7 +263,7 @@ export default async function FormulasPage({ searchParams }: PageProps) {
                           <span className="text-xs px-2 py-0.5 rounded-full font-semibold bg-amber-100 text-amber-800 border border-amber-200">&#9733; Pick</span>
                         </div>
                         {getTextValue(formula.field_formula_description) && (
-                          <p className="text-sm text-earth-600 line-clamp-2 mb-3">{getTextValue(formula.field_formula_description)}</p>
+                          <p className="text-sm text-gray-600 line-clamp-2 mb-3">{getTextValue(formula.field_formula_description)}</p>
                         )}
                         <div className="flex flex-wrap gap-1.5">
                           {formula.field_formula_category && (() => { const c = getFieldConfig(formulaCategoryMap, formula.field_formula_category); return c ? (
@@ -289,9 +289,6 @@ export default async function FormulasPage({ searchParams }: PageProps) {
                     href={`/formulas/${formula.id}`}
                     className="group relative bg-gradient-to-br from-cream-50 via-earth-50/50 to-sage-50/30 rounded-2xl p-8 border border-earth-200 hover:border-earth-300 hover:shadow-xl transition-all duration-300 overflow-hidden"
                   >
-                    {/* Decorative corner */}
-                    <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-earth-100/40 to-transparent rounded-bl-[4rem]" />
-
                     <div className="relative flex items-start gap-5">
                       <div className="w-16 h-16 bg-white rounded-xl shadow-md flex items-center justify-center group-hover:scale-110 group-hover:shadow-lg transition-all duration-300">
                         <FormulaIcon title={formula.title} useCases={formula.field_use_cases} />
@@ -309,7 +306,7 @@ export default async function FormulasPage({ searchParams }: PageProps) {
                         </div>
 
                         {getTextValue(formula.field_formula_description) && (
-                          <p className="text-earth-600 mb-4 line-clamp-2 leading-relaxed">
+                          <p className="text-gray-600 mb-4 line-clamp-2 leading-relaxed">
                             {getTextValue(formula.field_formula_description)}
                           </p>
                         )}
@@ -350,9 +347,6 @@ export default async function FormulasPage({ searchParams }: PageProps) {
                         href={`/formulas/${formula.id}`}
                         className="group relative bg-white rounded-2xl shadow-sm hover:shadow-xl border border-earth-100 hover:border-earth-300 transition-all duration-300 overflow-hidden"
                       >
-                        {/* Decorative corner accent */}
-                        <div className="absolute top-0 right-0 w-20 h-20 bg-gradient-to-br from-earth-100/50 to-transparent rounded-bl-[3rem] opacity-0 group-hover:opacity-100 transition-opacity" />
-
                         <div className="relative bg-gradient-to-br from-earth-50/50 via-cream-50/30 to-sage-50/20 p-5 border-b border-earth-100/50">
                           <div className="flex items-start justify-between">
                             <div className="w-12 h-12 bg-white rounded-xl shadow-md flex items-center justify-center group-hover:scale-110 transition-all duration-300">
@@ -372,7 +366,7 @@ export default async function FormulasPage({ searchParams }: PageProps) {
                           </h3>
 
                           {getTextValue(formula.field_formula_description) && (
-                            <p className="text-sm text-earth-600 mb-3 line-clamp-2 leading-relaxed">
+                            <p className="text-sm text-gray-600 mb-3 line-clamp-2 leading-relaxed">
                               {getTextValue(formula.field_formula_description)}
                             </p>
                           )}
@@ -456,7 +450,7 @@ export default async function FormulasPage({ searchParams }: PageProps) {
                       </div>
                       <div>
                         <h3 className="font-serif font-semibold text-earth-800">Chief Herbs</h3>
-                        <p className="text-sm text-earth-600 leading-relaxed">Target the primary condition with the main therapeutic action</p>
+                        <p className="text-sm text-gray-600 leading-relaxed">Target the primary condition with the main therapeutic action</p>
                       </div>
                     </div>
                     <div className="flex items-start gap-4">
@@ -467,7 +461,7 @@ export default async function FormulasPage({ searchParams }: PageProps) {
                       </div>
                       <div>
                         <h3 className="font-serif font-semibold text-earth-800">Deputy Herbs</h3>
-                        <p className="text-sm text-earth-600 leading-relaxed">Support and enhance the effects of the chief herbs</p>
+                        <p className="text-sm text-gray-600 leading-relaxed">Support and enhance the effects of the chief herbs</p>
                       </div>
                     </div>
                   </div>
@@ -480,7 +474,7 @@ export default async function FormulasPage({ searchParams }: PageProps) {
                       </div>
                       <div>
                         <h3 className="font-serif font-semibold text-earth-800">Assistant Herbs</h3>
-                        <p className="text-sm text-earth-600 leading-relaxed">Balance the formula and reduce potential side effects</p>
+                        <p className="text-sm text-gray-600 leading-relaxed">Balance the formula and reduce potential side effects</p>
                       </div>
                     </div>
                     <div className="flex items-start gap-4">
@@ -491,7 +485,7 @@ export default async function FormulasPage({ searchParams }: PageProps) {
                       </div>
                       <div>
                         <h3 className="font-serif font-semibold text-earth-800">Envoy Herbs</h3>
-                        <p className="text-sm text-earth-600 leading-relaxed">Guide the formula to specific areas of the body</p>
+                        <p className="text-sm text-gray-600 leading-relaxed">Guide the formula to specific areas of the body</p>
                       </div>
                     </div>
                   </div>

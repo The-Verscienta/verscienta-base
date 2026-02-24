@@ -150,7 +150,7 @@ export default async function ModalityDetailPage({ params }: ModalityDetailProps
               </svg>
             }
           >
-            <div className="prose max-w-none text-earth-700">
+            <div className="prose max-w-none text-gray-700">
               {typeof description === 'string' && description.startsWith('<') ? (
                 <SafeHtml html={description} />
               ) : (
@@ -194,9 +194,9 @@ export default async function ModalityDetailPage({ params }: ModalityDetailProps
           >
             <div className="prose max-w-none">
               {typeof modality.field_benefits === 'string' ? (
-                <p className="text-earth-700 whitespace-pre-wrap">{modality.field_benefits}</p>
+                <p className="text-gray-700 whitespace-pre-wrap">{modality.field_benefits}</p>
               ) : (
-                <p className="text-earth-700">{String(modality.field_benefits)}</p>
+                <p className="text-gray-700">{String(modality.field_benefits)}</p>
               )}
             </div>
           </Section>

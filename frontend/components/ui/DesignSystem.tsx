@@ -88,13 +88,6 @@ export function Section({
 
   return (
     <section id={id} className={`relative border rounded-2xl p-8 scroll-mt-24 ${variants[variant]} ${className}`}>
-      {/* Decorative corner */}
-      <div className="absolute top-0 right-0 w-24 h-24 opacity-10 pointer-events-none overflow-hidden rounded-tr-2xl">
-        <svg viewBox="0 0 100 100" className="w-full h-full text-earth-600">
-          <path d="M100 0v100H0C55 100 100 55 100 0z" fill="currentColor"/>
-        </svg>
-      </div>
-
       {(title || icon) && (
         <div className="mb-6">
           <h2 className={`font-serif text-2xl md:text-3xl font-bold flex items-center gap-3 ${titleColors[variant]}`}>
@@ -106,7 +99,7 @@ export function Section({
             {title}
           </h2>
           {subtitle && (
-            <p className="text-earth-600 mt-2 text-lg">{subtitle}</p>
+            <p className="text-gray-600 mt-2 text-lg">{subtitle}</p>
           )}
         </div>
       )}
@@ -176,21 +169,14 @@ export function FeatureCard({
   return (
     <Wrapper
       {...wrapperProps}
-      className={`group relative block bg-white rounded-2xl border border-earth-200 p-6 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 hover:border-sage-300 ${href ? 'cursor-pointer' : ''} ${variant === 'featured' ? 'md:p-8' : ''}`}
+      className={`group relative block bg-white rounded-2xl border border-earth-200 p-6 card-interactive hover:border-sage-300 ${href ? 'cursor-pointer' : ''} ${variant === 'featured' ? 'md:p-8' : ''}`}
     >
-      {/* Decorative corner */}
-      <div className="absolute top-0 right-0 w-16 h-16 opacity-0 group-hover:opacity-10 transition-opacity pointer-events-none overflow-hidden rounded-tr-2xl">
-        <svg viewBox="0 0 100 100" className="w-full h-full text-sage-600">
-          <path d="M100 0v100H0C55 100 100 55 100 0z" fill="currentColor"/>
-        </svg>
-      </div>
-
       <div className="text-4xl mb-4">{icon}</div>
       <h3 className={`font-serif font-bold text-earth-900 mb-2 group-hover:text-sage-700 transition-colors ${variant === 'featured' ? 'text-2xl' : 'text-xl'}`}>
         {title}
       </h3>
       {description && (
-        <p className="text-earth-600 text-sm leading-relaxed mb-4">{description}</p>
+        <p className="text-gray-600 text-sm leading-relaxed mb-4">{description}</p>
       )}
       {tags && tags.length > 0 && (
         <div className="flex flex-wrap gap-2">
@@ -247,7 +233,7 @@ export function HeroSection({
           {title}
         </h1>
         {subtitle && (
-          <p className="text-xl md:text-2xl text-earth-600 max-w-3xl mx-auto mb-8 leading-relaxed">
+          <p className="text-xl md:text-2xl text-gray-600 max-w-3xl mx-auto mb-8 leading-relaxed">
             {subtitle}
           </p>
         )}
@@ -265,7 +251,7 @@ export function StatsBar({ stats }: { stats: { label: string; value: string | nu
         <div key={idx} className="bg-white/80 backdrop-blur-sm rounded-xl border border-earth-200 p-4 text-center">
           {stat.icon && <span className="text-2xl mb-2 block">{stat.icon}</span>}
           <div className="text-3xl font-bold text-earth-800 font-serif">{stat.value}</div>
-          <div className="text-sm text-earth-600 mt-1">{stat.label}</div>
+          <div className="text-sm text-gray-600 mt-1">{stat.label}</div>
         </div>
       ))}
     </div>
@@ -293,7 +279,7 @@ export function EmptyState({
       </div>
       <h3 className="font-serif text-2xl font-bold text-earth-800 mb-2">{title}</h3>
       {description && (
-        <p className="text-earth-600 max-w-md mx-auto mb-6">{description}</p>
+        <p className="text-gray-600 max-w-md mx-auto mb-6">{description}</p>
       )}
       {action}
     </div>
@@ -518,7 +504,7 @@ export function TestimonialCard({
 
       <div className="relative">
         <p className={`text-lg leading-relaxed mb-6 ${
-          variant === 'featured' ? 'text-earth-100' : 'text-earth-700'
+          variant === 'featured' ? 'text-earth-100' : 'text-gray-700'
         }`}>
           {quote}
         </p>
@@ -743,7 +729,7 @@ export function Accordion({
               openIndex === index ? 'max-h-96' : 'max-h-0'
             }`}
           >
-            <div className="px-6 pb-4 text-earth-600 leading-relaxed border-t border-earth-100 pt-4">
+            <div className="px-6 pb-4 text-gray-600 leading-relaxed border-t border-earth-100 pt-4">
               {item.content}
             </div>
           </div>
@@ -898,7 +884,7 @@ export function NumberedList({
           </div>
           <div className="pt-1">
             <h4 className="font-serif font-bold text-earth-800 mb-1">{item.title}</h4>
-            <p className="text-earth-600 text-sm leading-relaxed">{item.description}</p>
+            <p className="text-gray-600 text-sm leading-relaxed">{item.description}</p>
           </div>
         </div>
       ))}

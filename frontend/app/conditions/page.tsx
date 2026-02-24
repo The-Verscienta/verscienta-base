@@ -175,7 +175,7 @@ export default async function ConditionsPage({ searchParams }: PageProps) {
                 Health Conditions
               </h1>
 
-              <p className="text-lg md:text-xl text-sage-700 leading-relaxed">
+              <p className="text-lg md:text-xl text-gray-600 leading-relaxed">
                 Explore health conditions and discover natural approaches for managing them
                 through holistic modalities and herbal remedies.
               </p>
@@ -257,7 +257,7 @@ export default async function ConditionsPage({ searchParams }: PageProps) {
                           <h3 className="font-serif text-lg font-bold text-earth-800 group-hover:text-earth-600 transition-colors">{condition.title}</h3>
                           <span className="text-xs px-2 py-0.5 rounded-full font-semibold bg-amber-100 text-amber-800 border border-amber-200">&#9733; Pick</span>
                         </div>
-                        {condition.field_quick_summary && <p className="text-sm text-earth-600 mb-3">{condition.field_quick_summary}</p>}
+                        {condition.field_quick_summary && <p className="text-sm text-gray-600 mb-3">{condition.field_quick_summary}</p>}
                         <div className="flex flex-wrap gap-1.5">
                           {condition.field_self_treatable && (() => { const c = getFieldConfig(selfTreatableMap, condition.field_self_treatable); return c ? (
                             <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${c.bg} ${c.text}`}>{c.label}</span>
@@ -281,8 +281,6 @@ export default async function ConditionsPage({ searchParams }: PageProps) {
                     href={`/conditions/${condition.id}`}
                     className="group relative bg-gradient-to-br from-cream-50 via-earth-50/50 to-sage-50/30 rounded-2xl p-8 border border-earth-200 hover:border-earth-300 hover:shadow-xl transition-all duration-300 overflow-hidden"
                   >
-                    {/* Decorative corner */}
-                    <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-earth-100/40 to-transparent rounded-bl-[4rem]" />
 
                     <div className="relative flex items-start gap-5">
                       <div className="w-16 h-16 bg-white rounded-xl shadow-md flex items-center justify-center group-hover:scale-110 group-hover:shadow-lg transition-all duration-300">
@@ -303,7 +301,7 @@ export default async function ConditionsPage({ searchParams }: PageProps) {
                           )}
                         </div>
                         {summary && (
-                          <p className="text-earth-600 mb-4 line-clamp-2 leading-relaxed">
+                          <p className="text-gray-600 mb-4 line-clamp-2 leading-relaxed">
                             {summary}...
                           </p>
                         )}
@@ -343,8 +341,6 @@ export default async function ConditionsPage({ searchParams }: PageProps) {
                         href={`/conditions/${condition.id}`}
                         className="group relative bg-white rounded-2xl shadow-sm hover:shadow-xl border border-earth-100 hover:border-earth-300 transition-all duration-300 overflow-hidden"
                       >
-                        {/* Decorative corner accent */}
-                        <div className="absolute top-0 right-0 w-20 h-20 bg-gradient-to-br from-earth-100/50 to-transparent rounded-bl-[3rem] opacity-0 group-hover:opacity-100 transition-opacity" />
 
                         <div className="relative bg-gradient-to-br from-earth-50/50 via-cream-50/30 to-sage-50/20 p-5 border-b border-earth-100/50">
                           <div className="flex items-start justify-between">
@@ -368,7 +364,7 @@ export default async function ConditionsPage({ searchParams }: PageProps) {
                           </h3>
 
                           {summary && (
-                            <p className="text-sm text-earth-600 mb-3 line-clamp-2 leading-relaxed">
+                            <p className="text-sm text-gray-600 mb-3 line-clamp-2 leading-relaxed">
                               {summary}...
                             </p>
                           )}

@@ -218,7 +218,7 @@ export default async function HerbsPage({ searchParams }: PageProps) {
                 Medicinal Herbs
               </h1>
 
-              <p className="text-lg md:text-xl text-sage-700 leading-relaxed">
+              <p className="text-lg md:text-xl text-gray-600 leading-relaxed">
                 Discover the healing wisdom of nature through our carefully curated
                 database of traditional and evidence-based herbal remedies.
               </p>
@@ -304,7 +304,7 @@ export default async function HerbsPage({ searchParams }: PageProps) {
                           </div>
                           <h3 className="font-serif text-lg font-bold text-earth-800 mb-1 group-hover:text-sage-700 transition-colors">{data.title}</h3>
                           {data.scientificName && <p className="text-sm italic text-sage-600 mb-2">{data.scientificName}</p>}
-                          {data.summary && <p className="text-sm text-earth-600 line-clamp-2">{data.summary}...</p>}
+                          {data.summary && <p className="text-sm text-gray-600 line-clamp-2">{data.summary}...</p>}
                           <div className="mt-3 flex flex-wrap gap-1.5">
                             {data.popularity && (() => { const c = getFieldConfig(popularityMap, data.popularity); return c ? (
                               <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${c.bg} ${c.text}`}>{c.label}</span>
@@ -328,11 +328,8 @@ export default async function HerbsPage({ searchParams }: PageProps) {
                   <Link
                     key={herb.id}
                     href={`/herbs/${herb.id}`}
-                    className="group relative bg-white rounded-2xl shadow-sm hover:shadow-xl border border-earth-100 hover:border-sage-300 transition-all duration-300 overflow-hidden"
+                    className="group relative bg-white rounded-2xl shadow-sm border border-earth-100 hover:border-sage-300 card-interactive overflow-hidden"
                   >
-                    {/* Decorative corner accent */}
-                    <div className="absolute top-0 right-0 w-20 h-20 bg-gradient-to-br from-sage-100/50 to-transparent rounded-bl-[3rem] opacity-0 group-hover:opacity-100 transition-opacity" />
-
                     {/* Card Header */}
                     <div className="relative bg-gradient-to-br from-cream-50 via-sage-50/30 to-earth-50/20 border-b border-earth-100/50">
                       {data.imageUrl ? (
@@ -405,7 +402,7 @@ export default async function HerbsPage({ searchParams }: PageProps) {
                       )}
 
                       {data.summary && (
-                        <p className="text-sm text-earth-600 line-clamp-2 mb-3 leading-relaxed">
+                        <p className="text-sm text-gray-600 line-clamp-2 mb-3 leading-relaxed">
                           {data.summary}...
                         </p>
                       )}

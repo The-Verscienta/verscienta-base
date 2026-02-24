@@ -179,7 +179,7 @@ export default async function ModalitiesPage({ searchParams }: PageProps) {
                 Holistic Modalities
               </h1>
 
-              <p className="text-lg md:text-xl text-sage-700 leading-relaxed">
+              <p className="text-lg md:text-xl text-gray-600 leading-relaxed">
                 Explore therapeutic practices and healing modalities that nurture mind, body, and spirit
                 through time-honored wisdom and modern understanding.
               </p>
@@ -259,7 +259,7 @@ export default async function ModalitiesPage({ searchParams }: PageProps) {
                             <h3 className="font-serif text-lg font-bold text-earth-800 group-hover:text-sage-700 transition-colors">{modality.title}</h3>
                             <span className="text-xs px-2 py-0.5 rounded-full font-semibold bg-amber-100 text-amber-800 border border-amber-200">&#9733; Pick</span>
                           </div>
-                          {summary && <p className="text-sm text-earth-600 line-clamp-2 mb-3">{summary}...</p>}
+                          {summary && <p className="text-sm text-gray-600 line-clamp-2 mb-3">{summary}...</p>}
                           <div className="flex flex-wrap gap-1.5">
                             {modality.field_self_practice && <span className="text-xs px-2 py-0.5 rounded-full font-medium bg-green-100 text-green-700">Self-Practice</span>}
                             {modality.field_session_cost_range && <span className="text-xs px-2 py-0.5 rounded-full font-medium bg-blue-100 text-blue-700">{modality.field_session_cost_range}</span>}
@@ -284,8 +284,6 @@ export default async function ModalitiesPage({ searchParams }: PageProps) {
                     href={`/modalities/${modality.id}`}
                     className="group relative bg-gradient-to-br from-cream-50 via-sage-50/50 to-earth-50/30 rounded-2xl p-8 border border-sage-200 hover:border-sage-300 hover:shadow-xl transition-all duration-300 overflow-hidden"
                   >
-                    {/* Decorative corner */}
-                    <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-sage-100/40 to-transparent rounded-bl-[4rem]" />
 
                     <div className="relative flex items-start gap-5">
                       <div className="w-16 h-16 bg-white rounded-xl shadow-md flex items-center justify-center group-hover:scale-110 group-hover:shadow-lg transition-all duration-300">
@@ -296,7 +294,7 @@ export default async function ModalitiesPage({ searchParams }: PageProps) {
                           {modality.title}
                         </h2>
                         {summary && (
-                          <p className="text-earth-600 mb-4 line-clamp-2 leading-relaxed">
+                          <p className="text-gray-600 mb-4 line-clamp-2 leading-relaxed">
                             {summary}...
                           </p>
                         )}
@@ -337,8 +335,6 @@ export default async function ModalitiesPage({ searchParams }: PageProps) {
                         href={`/modalities/${modality.id}`}
                         className="group relative bg-white rounded-2xl shadow-sm hover:shadow-xl border border-earth-100 hover:border-sage-300 transition-all duration-300 overflow-hidden"
                       >
-                        {/* Decorative corner accent */}
-                        <div className="absolute top-0 right-0 w-20 h-20 bg-gradient-to-br from-sage-100/50 to-transparent rounded-bl-[3rem] opacity-0 group-hover:opacity-100 transition-opacity" />
 
                         <div className="relative bg-gradient-to-br from-sage-50/50 via-cream-50/30 to-earth-50/20 p-6 border-b border-earth-100/50">
                           <div className="flex items-start justify-between">
@@ -359,7 +355,7 @@ export default async function ModalitiesPage({ searchParams }: PageProps) {
                           </h3>
 
                           {summary && (
-                            <p className="text-sm text-earth-600 mb-4 line-clamp-2 leading-relaxed">
+                            <p className="text-sm text-gray-600 mb-4 line-clamp-2 leading-relaxed">
                               {summary}...
                             </p>
                           )}
