@@ -62,27 +62,12 @@ if [ -n "$DRUPAL_DATABASE_HOST" ]; then
   done
   echo "Database is ready!"
 
-  # Apply any pending entity/field definition updates (e.g. Consumer entity)
+  # Apply any pending database/entity updates via drush
   cd /var/www/html
-  echo "Applying entity definition updates..."
-  php -d opcache.validate_timestamps=1 -r "
-    \$autoloader = require_once 'web/autoload.php';
-    use Drupal\Core\DrupalKernel;
-    use Symfony\Component\HttpFoundation\Request;
-    \$request = Request::createFromGlobals();
-    \$kernel = DrupalKernel::createFromRequest(\$request, \$autoloader, 'prod');
-    \$kernel->boot();
-    \$entity_definition_update_manager = \$kernel->getContainer()->get('entity.definition_update_manager');
-    if (\$entity_definition_update_manager->needsUpdates()) {
-      foreach (\$entity_definition_update_manager->getChangeSummary() as \$entity_type_id => \$changes) {
-        echo \"Updating: \$entity_type_id\n\";
-      }
-      \$entity_definition_update_manager->applyUpdates();
-      echo \"Entity updates applied.\n\";
-    } else {
-      echo \"No entity updates needed.\n\";
-    }
-  " 2>&1 || echo "Entity update check completed (non-fatal if failed)."
+  echo "Running database updates..."
+  ./vendor/bin/drush updatedb --no-interaction 2>&1 || echo "Database update check completed (non-fatal if failed)."
+  echo "Rebuilding cache..."
+  ./vendor/bin/drush cache:rebuild 2>&1 || echo "Cache rebuild completed (non-fatal if failed)."
 fi
 
 # Start Apache

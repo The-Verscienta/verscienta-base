@@ -5,6 +5,7 @@ FROM php:8.3-apache
 RUN apt-get update && apt-get install -y \
     git \
     curl \
+    wget \
     libpng-dev \
     libjpeg-dev \
     libfreetype6-dev \
