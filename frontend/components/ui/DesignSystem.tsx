@@ -77,13 +77,13 @@ export function Section({
   };
 
   const titleColors = {
-    default: 'text-earth-800',
+    default: 'text-gray-900',
     warning: 'text-red-800',
     tcm: 'text-amber-900',
-    cultural: 'text-earth-800',
-    feature: 'text-earth-900',
-    card: 'text-earth-800',
-    botanical: 'text-earth-800',
+    cultural: 'text-gray-900',
+    feature: 'text-gray-900',
+    card: 'text-gray-900',
+    botanical: 'text-gray-900',
   };
 
   return (

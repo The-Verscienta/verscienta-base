@@ -43,6 +43,17 @@ chown -R www-data:www-data /var/www/private
 # Ensure config sync directory exists
 mkdir -p /var/www/html/config/sync
 
+# When running with bind-mounted volumes (development), enable OPcache timestamp
+# validation so PHP detects changed files instead of serving stale cached bytecode.
+# This prevents "Cannot redeclare" errors from OPcache caching build-time files.
+if mount | grep -q '/var/www/html.*bind'; then
+  echo "Bind mount detected — enabling OPcache timestamp validation for development."
+  echo "opcache.validate_timestamps=1" > /usr/local/etc/php/conf.d/zz-dev-opcache.ini
+fi
+
+# Reset OPcache to clear any stale entries from the image build
+php -d opcache.enable_cli=1 -r "if (function_exists('opcache_reset')) { opcache_reset(); }" 2>/dev/null || true
+
 # Wait for database to be ready
 if [ -n "$DRUPAL_DATABASE_HOST" ]; then
   echo "Waiting for database..."
@@ -54,11 +65,10 @@ if [ -n "$DRUPAL_DATABASE_HOST" ]; then
   # Apply any pending entity/field definition updates (e.g. Consumer entity)
   cd /var/www/html
   echo "Applying entity definition updates..."
-  php -r "
+  php -d opcache.validate_timestamps=1 -r "
+    \$autoloader = require_once 'web/autoload.php';
     use Drupal\Core\DrupalKernel;
     use Symfony\Component\HttpFoundation\Request;
-    require_once 'web/core/includes/bootstrap.inc';
-    \$autoloader = require_once 'web/autoload.php';
     \$request = Request::createFromGlobals();
     \$kernel = DrupalKernel::createFromRequest(\$request, \$autoloader, 'prod');
     \$kernel->boot();

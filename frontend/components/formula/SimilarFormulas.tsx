@@ -153,7 +153,7 @@ export function SimilarFormulas({
   return (
     <div className="bg-white rounded-lg shadow-lg p-8 mb-6">
       <div className="flex items-center justify-between mb-4">
-        <h2 className="text-2xl font-bold text-earth-800">
+        <h2 className="text-2xl font-bold text-gray-900">
           Similar Formulas
         </h2>
         {!isLoading && totalCompared > 0 && (

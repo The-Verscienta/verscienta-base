@@ -397,15 +397,15 @@ export default async function FormulaDetailPage({ params }: FormulaDetailProps) 
                 />
               </div>
               <div className="bg-sage-50 rounded-xl p-4 border border-sage-200">
-                <h3 className="font-semibold text-earth-800 mb-3">Formula Summary</h3>
+                <h3 className="font-semibold text-gray-900 mb-3">Formula Summary</h3>
                 <div className="overflow-x-auto">
-                  <table className="w-full text-sm">
+                  <table className="w-full text-sm text-gray-800">
                     <thead>
                       <tr className="border-b border-sage-300">
-                        <th className="text-left py-2 px-2 font-semibold text-earth-700">Herb</th>
-                        <th className="text-left py-2 px-2 font-semibold text-earth-700">Role</th>
-                        <th className="text-right py-2 px-2 font-semibold text-earth-700">Quantity</th>
-                        <th className="text-right py-2 px-2 font-semibold text-earth-700">%</th>
+                        <th className="text-left py-2 px-2 font-semibold text-gray-900">Herb</th>
+                        <th className="text-left py-2 px-2 font-semibold text-gray-900">Role</th>
+                        <th className="text-right py-2 px-2 font-semibold text-gray-900">Quantity</th>
+                        <th className="text-right py-2 px-2 font-semibold text-gray-900">%</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -421,20 +421,20 @@ export default async function FormulaDetailPage({ params }: FormulaDetailProps) 
                         return (
                           <tr key={idx} className="border-b border-sage-200">
                             <td className="py-2 px-2">
-                              <Link href={`/herbs/${ingredient.id}`} className="text-earth-700 hover:text-earth-900 hover:underline">
+                              <Link href={`/herbs/${ingredient.id}`} className="text-earth-700 hover:text-earth-900 hover:underline font-medium">
                                 {ingredient.title || 'Herb'}
                               </Link>
                             </td>
                             <td className="py-2 px-2">
-                              {ingredient.field_role ? <HerbRoleBadge role={ingredient.field_role} size="sm" /> : <span className="text-earth-400">-</span>}
+                              {ingredient.field_role ? <HerbRoleBadge role={ingredient.field_role} size="sm" /> : <span className="text-gray-400">-</span>}
                             </td>
-                            <td className="py-2 px-2 text-right">{ingredient.field_quantity} {ingredient.field_unit}</td>
-                            <td className="py-2 px-2 text-right">{percentage > 0 ? `${percentage.toFixed(1)}%` : '-'}</td>
+                            <td className="py-2 px-2 text-right text-gray-700">{ingredient.field_quantity} {ingredient.field_unit}</td>
+                            <td className="py-2 px-2 text-right text-gray-700">{percentage > 0 ? `${percentage.toFixed(1)}%` : '-'}</td>
                           </tr>
                         );
                       })}
                       {totalWeight > 0 && (
-                        <tr className="font-bold bg-sage-100">
+                        <tr className="font-bold bg-sage-100 text-gray-900">
                           <td className="py-2 px-2">Total</td>
                           <td className="py-2 px-2"></td>
                           <td className="py-2 px-2 text-right">{totalWeight} {weightUnit}</td>
