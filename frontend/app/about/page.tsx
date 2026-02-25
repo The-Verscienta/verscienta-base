@@ -21,7 +21,7 @@ function FeatureCard({ icon, title, description }: { icon: React.ReactNode; titl
         {icon}
       </div>
       <h3 className="font-serif font-semibold text-earth-800 mb-2">{title}</h3>
-      <p className="text-earth-600 text-sm leading-relaxed">{description}</p>
+      <p className="text-gray-600 text-sm leading-relaxed">{description}</p>
     </div>
   );
 }
@@ -35,7 +35,7 @@ function ValueItem({ number, title, description }: { number: number; title: stri
       </div>
       <div>
         <h3 className="font-serif font-semibold text-earth-800">{title}</h3>
-        <p className="text-earth-600 text-sm leading-relaxed">
+        <p className="text-gray-600 text-sm leading-relaxed">
           {description}
         </p>
       </div>
@@ -66,7 +66,7 @@ export default function AboutPage() {
             About Verscienta Health
           </h1>
 
-          <p className="text-xl md:text-2xl text-sage-700 max-w-2xl mx-auto leading-relaxed">
+          <p className="text-xl md:text-2xl text-gray-600 max-w-2xl mx-auto leading-relaxed">
             Bridging ancient healing wisdom with modern scientific understanding
             to empower your wellness journey.
           </p>
@@ -86,13 +86,13 @@ export default function AboutPage() {
           variant="card"
           className="mb-8"
         >
-          <p className="text-earth-700 leading-relaxed mb-4">
+          <p className="text-gray-700 leading-relaxed mb-4">
             At Verscienta Health, we believe that true wellness comes from understanding
             both traditional healing practices and modern medical science. Our mission is
             to create a comprehensive, accessible resource that helps individuals make
             informed decisions about their health using the best of both worlds.
           </p>
-          <p className="text-earth-700 leading-relaxed">
+          <p className="text-gray-700 leading-relaxed">
             We are dedicated to preserving and sharing the knowledge of Traditional Chinese
             Medicine, Western herbalism, and various holistic healing modalities while
             maintaining rigorous standards for accuracy and safety.

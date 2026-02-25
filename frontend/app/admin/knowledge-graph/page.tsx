@@ -66,7 +66,7 @@ export default function KnowledgeGraphPage() {
         <h1 className="text-3xl md:text-4xl font-serif font-bold text-earth-800 mb-2">
           Knowledge Graph
         </h1>
-        <p className="text-earth-600">
+        <p className="text-gray-600">
           Explore herb-ingredient-target-condition relationships.
         </p>
       </div>
@@ -74,7 +74,7 @@ export default function KnowledgeGraphPage() {
       <Section title="Select Herb">
         <div className="flex gap-4 items-end">
           <div className="flex-1">
-            <label htmlFor="herb-select" className="block text-sm font-medium text-earth-700 mb-1">
+            <label htmlFor="herb-select" className="block text-sm font-medium text-gray-700 mb-1">
               Herb
             </label>
             {loading ? (
@@ -97,7 +97,7 @@ export default function KnowledgeGraphPage() {
           </div>
 
           <div className="w-32">
-            <label htmlFor="depth-select" className="block text-sm font-medium text-earth-700 mb-1">
+            <label htmlFor="depth-select" className="block text-sm font-medium text-gray-700 mb-1">
               Depth
             </label>
             <select

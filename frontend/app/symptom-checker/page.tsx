@@ -82,7 +82,7 @@ export default function SymptomCheckerPage() {
               Symptom Checker
             </h1>
 
-            <p className="text-lg md:text-xl text-sage-700 leading-relaxed">
+            <p className="text-lg md:text-xl text-gray-600 leading-relaxed">
               Describe your symptoms and get personalized holistic health recommendations
               powered by Grok AI.
             </p>
@@ -167,7 +167,7 @@ export default function SymptomCheckerPage() {
                   <h3 className="font-serif text-xl font-bold text-earth-800 mb-4">
                     AI Recommendations
                   </h3>
-                  <p className="text-earth-700 whitespace-pre-wrap leading-relaxed">
+                  <p className="text-gray-700 whitespace-pre-wrap leading-relaxed">
                     {results.analysis || 'No analysis available'}
                   </p>
                 </div>
@@ -190,7 +190,7 @@ export default function SymptomCheckerPage() {
                       ))}
                     </div>
                     {process.env.NEXT_PUBLIC_SYMBOLIC_FEATURE === 'true' && results.recommendations.herbs?.length > 0 && (
-                      <p className="mt-4 text-sm text-earth-600">
+                      <p className="mt-4 text-sm text-gray-600">
                         Want precise dosage math?{' '}
                         <a
                           href={`/herbs`}

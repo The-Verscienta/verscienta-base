@@ -62,14 +62,14 @@ export default function ContactPage() {
             <svg className="w-4 h-4 text-sage-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
             </svg>
-            <span className="text-sage-700 font-medium text-sm">Get in Touch</span>
+            <span className="text-gray-600 font-medium text-sm">Get in Touch</span>
           </div>
 
           <h1 className="font-serif text-4xl md:text-5xl lg:text-6xl font-bold text-earth-900 mb-6 leading-tight">
             Contact Us
           </h1>
 
-          <p className="text-xl md:text-2xl text-sage-700 max-w-2xl mx-auto leading-relaxed">
+          <p className="text-xl md:text-2xl text-gray-600 max-w-2xl mx-auto leading-relaxed">
             Have questions or feedback? We'd love to hear from you.
           </p>
         </div>
@@ -94,7 +94,7 @@ export default function ContactPage() {
                     <p className="text-xs text-sage-500 font-medium uppercase tracking-wide">Email</p>
                     <a
                       href="mailto:hello@verscienta.health"
-                      className="text-earth-700 hover:text-sage-600 font-medium transition-colors"
+                      className="text-gray-700 hover:text-sage-600 font-medium transition-colors"
                     >
                       hello@verscienta.health
                     </a>
@@ -109,7 +109,7 @@ export default function ContactPage() {
                   </div>
                   <div>
                     <p className="text-xs text-sage-500 font-medium uppercase tracking-wide">Response Time</p>
-                    <p className="text-earth-700 font-medium">Within 24-48 hours</p>
+                    <p className="text-gray-700 font-medium">Within 24-48 hours</p>
                   </div>
                 </div>
               </div>
@@ -169,7 +169,7 @@ export default function ContactPage() {
                   <h3 className="font-serif text-xl font-semibold text-earth-800 mb-2">
                     Message Sent Successfully!
                   </h3>
-                  <p className="text-sage-700 mb-6 leading-relaxed">
+                  <p className="text-gray-600 mb-6 leading-relaxed">
                     Thank you for reaching out. We'll get back to you within 24-48 hours.
                   </p>
                   <button
@@ -185,7 +185,7 @@ export default function ContactPage() {
                     <div>
                       <label
                         htmlFor="name"
-                        className="block text-sm font-medium text-earth-700 mb-2"
+                        className="block text-sm font-medium text-gray-700 mb-2"
                       >
                         Your Name *
                       </label>
@@ -207,7 +207,7 @@ export default function ContactPage() {
                     <div>
                       <label
                         htmlFor="email"
-                        className="block text-sm font-medium text-earth-700 mb-2"
+                        className="block text-sm font-medium text-gray-700 mb-2"
                       >
                         Email Address *
                       </label>
@@ -231,7 +231,7 @@ export default function ContactPage() {
                   <div>
                     <label
                       htmlFor="subject"
-                      className="block text-sm font-medium text-earth-700 mb-2"
+                      className="block text-sm font-medium text-gray-700 mb-2"
                     >
                       Subject *
                     </label>
@@ -260,7 +260,7 @@ export default function ContactPage() {
                   <div>
                     <label
                       htmlFor="message"
-                      className="block text-sm font-medium text-earth-700 mb-2"
+                      className="block text-sm font-medium text-gray-700 mb-2"
                     >
                       Message *
                     </label>

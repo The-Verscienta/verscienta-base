@@ -147,7 +147,7 @@ export default async function PractitionerDetailPage({ params }: PractitionerDet
             title="About"
             icon="👨‍⚕️"
           >
-            <div className="prose max-w-none text-earth-700">
+            <div className="prose max-w-none text-gray-700">
               <SafeHtml html={practitioner.field_bio} />
             </div>
           </Section>
@@ -174,7 +174,7 @@ export default async function PractitionerDetailPage({ params }: PractitionerDet
               {practitioner.field_years_experience !== undefined && (
                 <div>
                   <h3 className="text-lg font-semibold text-earth-700 mb-2">Experience</h3>
-                  <p className="text-earth-700">
+                  <p className="text-gray-700">
                     {practitioner.field_years_experience} years of experience
                   </p>
                 </div>

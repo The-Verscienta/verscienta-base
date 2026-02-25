@@ -121,7 +121,7 @@ export default async function ClinicsPage({ searchParams }: PageProps) {
             <h1 className="text-4xl md:text-5xl font-serif font-bold text-earth-900 mb-3">
               Find Clinics
             </h1>
-            <p className="text-xl text-sage-700 max-w-2xl mb-4">
+            <p className="text-xl text-gray-600 max-w-2xl mb-4">
               Discover holistic health clinics offering natural healing modalities and integrative care.
             </p>
             <div className="flex flex-wrap gap-2">
@@ -305,7 +305,7 @@ export default async function ClinicsPage({ searchParams }: PageProps) {
           <span className="text-2xl">💡</span>
           <div>
             <h3 className="font-semibold text-sage-800 mb-1">Finding the Right Clinic</h3>
-            <p className="text-sm text-sage-700">
+            <p className="text-sm text-gray-600">
               Browse clinic profiles to find facilities offering your preferred healing modalities.
               Check their services, insurance acceptance, operating hours, and practitioner team
               before scheduling a visit.

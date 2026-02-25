@@ -145,7 +145,7 @@ export default async function PractitionersPage({ searchParams }: PageProps) {
             <h1 className="text-4xl md:text-5xl font-serif font-bold text-earth-800 mb-3">
               Find Practitioners
             </h1>
-            <p className="text-xl text-sage-700 max-w-2xl">
+            <p className="text-xl text-gray-600 max-w-2xl">
               Connect with qualified holistic health practitioners who specialize in natural healing modalities.
             </p>
           </div>
@@ -495,7 +495,7 @@ export default async function PractitionersPage({ searchParams }: PageProps) {
           <span className="text-2xl">💡</span>
           <div>
             <h3 className="font-semibold text-sage-800 mb-1">Finding the Right Practitioner</h3>
-            <p className="text-sm text-sage-700">
+            <p className="text-sm text-gray-600">
               Browse practitioner profiles to find specialists in your preferred modalities.
               Check their qualifications, experience, and whether they're accepting new patients
               before reaching out to schedule a consultation.

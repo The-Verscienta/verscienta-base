@@ -16,12 +16,12 @@ export default function PrivacyPage() {
           <svg className="w-4 h-4 text-sage-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
           </svg>
-          <span className="text-sage-700 font-medium text-sm">Your Privacy Matters</span>
+          <span className="text-gray-600 font-medium text-sm">Your Privacy Matters</span>
         </div>
         <h1 className="text-4xl md:text-5xl font-serif font-bold text-earth-900 mb-2">
           Privacy Policy
         </h1>
-        <p className="text-sage-700">
+        <p className="text-gray-600">
           Last updated: January 2025
         </p>
       </div>
@@ -42,7 +42,7 @@ export default function PrivacyPage() {
           <section className="mb-8">
             <h2 className="text-2xl font-serif font-bold text-earth-800 mb-4">Information We Collect</h2>
 
-            <h3 className="text-lg font-semibold text-earth-700 mt-4 mb-2">Personal Information</h3>
+            <h3 className="text-lg font-semibold text-gray-700 mt-4 mb-2">Personal Information</h3>
             <p className="text-gray-700 leading-relaxed mb-3">
               We may collect personal information that you voluntarily provide when you:
             </p>
@@ -54,7 +54,7 @@ export default function PrivacyPage() {
               <li>Submit reviews or feedback</li>
             </ul>
 
-            <h3 className="text-lg font-semibold text-earth-700 mt-4 mb-2">Automatically Collected Information</h3>
+            <h3 className="text-lg font-semibold text-gray-700 mt-4 mb-2">Automatically Collected Information</h3>
             <p className="text-gray-700 leading-relaxed mb-3">
               When you visit our website, we may automatically collect:
             </p>
@@ -156,7 +156,7 @@ export default function PrivacyPage() {
             <div className="bg-earth-50 rounded-lg p-4 mt-4">
               <p className="text-earth-800">
                 <strong>Verscienta Health</strong><br />
-                Email: <a href="mailto:privacy@verscienta.health" className="text-earth-600 hover:text-earth-800">privacy@verscienta.health</a>
+                Email: <a href="mailto:privacy@verscienta.health" className="text-gray-600 hover:text-earth-800">privacy@verscienta.health</a>
               </p>
             </div>
           </section>

@@ -158,7 +158,7 @@ export default async function ClinicDetailPage({ params }: ClinicDetailProps) {
     <div className="max-w-6xl mx-auto px-4 py-8 space-y-8">
       {clinic.body && (
         <Section id="about" variant="default" title="About" icon="🏥">
-          <div className="prose max-w-none text-earth-700">
+          <div className="prose max-w-none text-gray-700">
             <SafeHtml html={clinic.body.processed || clinic.body.value} />
           </div>
         </Section>
@@ -246,7 +246,7 @@ export default async function ClinicDetailPage({ params }: ClinicDetailProps) {
 
       {clinic.field_hours && (
         <Section id="hours" variant="default" title="Operating Hours" icon="🕐">
-          <div className="prose max-w-none text-earth-700">
+          <div className="prose max-w-none text-gray-700">
             <SafeHtml html={clinic.field_hours} />
           </div>
         </Section>
@@ -344,7 +344,7 @@ export default async function ClinicDetailPage({ params }: ClinicDetailProps) {
             href={`https://search.google.com/local/reviews?placeid=${clinic.field_google_place_id}`}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-3 bg-white border-2 border-earth-200 hover:border-sage-400 px-6 py-3 rounded-xl font-semibold text-earth-700 hover:text-sage-700 transition-all shadow-sm hover:shadow-md"
+            className="inline-flex items-center gap-3 bg-white border-2 border-earth-200 hover:border-sage-400 px-6 py-3 rounded-xl font-semibold text-gray-700 hover:text-sage-700 transition-all shadow-sm hover:shadow-md"
           >
             <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none">
               <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FBBF24" stroke="#F59E0B" strokeWidth="1"/>

@@ -129,12 +129,12 @@ export default function FAQPage() {
           <svg className="w-4 h-4 text-sage-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
           </svg>
-          <span className="text-sage-700 font-medium text-sm">Help Center</span>
+          <span className="text-gray-600 font-medium text-sm">Help Center</span>
         </div>
         <h1 className="text-4xl md:text-5xl font-serif font-bold text-earth-900 mb-4">
           Frequently Asked Questions
         </h1>
-        <p className="text-xl text-sage-700 max-w-2xl mx-auto">
+        <p className="text-xl text-gray-600 max-w-2xl mx-auto">
           Find answers to common questions about Verscienta Health, our services, and holistic health information.
         </p>
       </div>
@@ -171,7 +171,7 @@ export default function FAQPage() {
             className={`px-4 py-2 rounded-full text-sm font-medium transition ${
               activeCategory === category
                 ? 'bg-earth-600 text-white'
-                : 'bg-earth-100 text-earth-700 hover:bg-earth-200'
+                : 'bg-earth-100 text-gray-700 hover:bg-earth-200'
             }`}
           >
             {category}

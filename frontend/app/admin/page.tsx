@@ -27,7 +27,7 @@ function StatCard({ label, count, href, icon }: { label: string; count: number; 
         <span className="text-3xl">{icon}</span>
         <span className="text-3xl font-bold text-earth-800">{count}</span>
       </div>
-      <p className="text-sm font-medium text-earth-600">{label}</p>
+      <p className="text-sm font-medium text-gray-600">{label}</p>
     </Link>
   );
 }
@@ -107,7 +107,7 @@ export default function AdminDashboard() {
     <PageWrapper>
       <div className="mb-8">
         <h1 className="text-3xl md:text-4xl font-serif font-bold text-earth-800 mb-2">Admin Dashboard</h1>
-        <p className="text-earth-600">Content overview and quick actions for Verscienta Health.</p>
+        <p className="text-gray-600">Content overview and quick actions for Verscienta Health.</p>
       </div>
 
       <Section title="Content Overview">

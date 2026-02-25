@@ -75,7 +75,7 @@ function Hit({ hit }: { hit: any }) {
             <div className="mb-3">
               <div className="flex flex-wrap gap-1">
                 {hit.common_names.slice(0, 2).map((name: string, idx: number) => (
-                  <span key={idx} className="text-xs bg-sage-100 text-sage-700 px-2 py-0.5 rounded">
+                  <span key={idx} className="text-xs bg-sage-100 text-gray-600 px-2 py-0.5 rounded">
                     {name}
                   </span>
                 ))}
@@ -185,7 +185,7 @@ function SearchContent() {
               Search
             </h1>
 
-            <p className="text-lg md:text-xl text-sage-700 leading-relaxed">
+            <p className="text-lg md:text-xl text-gray-600 leading-relaxed">
               Find herbs, modalities, conditions, practitioners, and formulas in our comprehensive database.
             </p>
           </div>
@@ -249,7 +249,7 @@ function SearchContent() {
 
               {/* TCM Temperature Facet */}
               <div className="mt-6 pt-6 border-t border-gray-100">
-                <h3 className="text-sm font-bold text-earth-700 uppercase tracking-wide mb-3">
+                <h3 className="text-sm font-bold text-gray-700 uppercase tracking-wide mb-3">
                   TCM Temperature
                 </h3>
                 <RefinementList
@@ -270,7 +270,7 @@ function SearchContent() {
 
               {/* TCM Taste Facet */}
               <div className="mt-6 pt-6 border-t border-gray-100">
-                <h3 className="text-sm font-bold text-earth-700 uppercase tracking-wide mb-3">
+                <h3 className="text-sm font-bold text-gray-700 uppercase tracking-wide mb-3">
                   TCM Taste
                 </h3>
                 <RefinementList
@@ -291,7 +291,7 @@ function SearchContent() {
 
               {/* TCM Meridians Facet */}
               <div className="mt-6 pt-6 border-t border-gray-100">
-                <h3 className="text-sm font-bold text-earth-700 uppercase tracking-wide mb-3">
+                <h3 className="text-sm font-bold text-gray-700 uppercase tracking-wide mb-3">
                   TCM Meridians
                 </h3>
                 <RefinementList
@@ -373,13 +373,13 @@ function SearchContent() {
                     <div className="flex flex-wrap justify-center gap-3">
                       <Link
                         href="/herbs"
-                        className="inline-flex items-center gap-2 bg-white text-earth-700 px-4 py-2 rounded-lg border border-earth-200 hover:bg-earth-50 transition"
+                        className="inline-flex items-center gap-2 bg-white text-gray-700 px-4 py-2 rounded-lg border border-earth-200 hover:bg-earth-50 transition"
                       >
                         🌿 Browse Herbs
                       </Link>
                       <Link
                         href="/conditions"
-                        className="inline-flex items-center gap-2 bg-white text-earth-700 px-4 py-2 rounded-lg border border-earth-200 hover:bg-earth-50 transition"
+                        className="inline-flex items-center gap-2 bg-white text-gray-700 px-4 py-2 rounded-lg border border-earth-200 hover:bg-earth-50 transition"
                       >
                         🩺 Browse Conditions
                       </Link>

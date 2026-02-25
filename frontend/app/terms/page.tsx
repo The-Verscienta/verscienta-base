@@ -16,12 +16,12 @@ export default function TermsPage() {
           <svg className="w-4 h-4 text-sage-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
           </svg>
-          <span className="text-sage-700 font-medium text-sm">Legal</span>
+          <span className="text-gray-600 font-medium text-sm">Legal</span>
         </div>
         <h1 className="text-4xl md:text-5xl font-serif font-bold text-earth-900 mb-2">
           Terms of Service
         </h1>
-        <p className="text-sage-700">
+        <p className="text-gray-600">
           Last updated: January 2025
         </p>
       </div>
@@ -56,7 +56,7 @@ export default function TermsPage() {
           <section className="mb-8">
             <h2 className="text-2xl font-serif font-bold text-earth-800 mb-4">Use of Service</h2>
 
-            <h3 className="text-lg font-semibold text-earth-700 mt-4 mb-2">Permitted Use</h3>
+            <h3 className="text-lg font-semibold text-gray-700 mt-4 mb-2">Permitted Use</h3>
             <p className="text-gray-700 leading-relaxed mb-3">
               You may use the Service for lawful purposes only. You agree to:
             </p>
@@ -67,7 +67,7 @@ export default function TermsPage() {
               <li>Respect the intellectual property rights of others</li>
             </ul>
 
-            <h3 className="text-lg font-semibold text-earth-700 mt-4 mb-2">Prohibited Activities</h3>
+            <h3 className="text-lg font-semibold text-gray-700 mt-4 mb-2">Prohibited Activities</h3>
             <p className="text-gray-700 leading-relaxed mb-3">
               You may not:
             </p>
@@ -182,7 +182,7 @@ export default function TermsPage() {
             <div className="bg-earth-50 rounded-lg p-4 mt-4">
               <p className="text-earth-800">
                 <strong>Verscienta Health</strong><br />
-                Email: <a href="mailto:legal@verscienta.health" className="text-earth-600 hover:text-earth-800">legal@verscienta.health</a>
+                Email: <a href="mailto:legal@verscienta.health" className="text-gray-600 hover:text-earth-800">legal@verscienta.health</a>
               </p>
             </div>
           </section>

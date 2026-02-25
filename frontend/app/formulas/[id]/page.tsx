@@ -297,7 +297,7 @@ export default async function FormulaDetailPage({ params }: FormulaDetailProps) 
               </svg>
             }
           >
-            <div className="prose max-w-none text-earth-700">
+            <div className="prose max-w-none text-gray-700">
               {formula.body?.value && <SafeHtml html={formula.body.value} />}
               {hasTextContent(formula.field_formula_description) && !formula.body?.value && (
                 <p>{getTextValue(formula.field_formula_description)}</p>
@@ -361,7 +361,7 @@ export default async function FormulaDetailPage({ params }: FormulaDetailProps) 
               {formula.field_commercial_forms && (
                 <div className="bg-white rounded-xl p-5 border border-earth-100 shadow-sm">
                   <h3 className="text-xs font-bold text-earth-500 uppercase tracking-wider mb-2">Commercial Forms</h3>
-                  <p className="text-earth-700">{formula.field_commercial_forms}</p>
+                  <p className="text-gray-700">{formula.field_commercial_forms}</p>
                 </div>
               )}
               {formula.field_evidence_strength && (() => { const c = getFieldConfig(evidenceStrengthMap, formula.field_evidence_strength); return c ? (
@@ -387,7 +387,7 @@ export default async function FormulaDetailPage({ params }: FormulaDetailProps) 
           }
         >
           {!formula.field_herb_ingredients || formula.field_herb_ingredients.length === 0 ? (
-            <p className="text-earth-600">No ingredients specified for this formula.</p>
+            <p className="text-gray-600">No ingredients specified for this formula.</p>
           ) : (
             <>
               <div className="mb-6">
@@ -477,19 +477,19 @@ export default async function FormulaDetailPage({ params }: FormulaDetailProps) 
                 <h3 className="text-lg font-semibold text-earth-700 mb-2 flex items-center gap-2">
                   <span>🔥</span> Preparation Instructions
                 </h3>
-                <p className="text-earth-700 bg-earth-50/50 p-4 rounded-xl border border-earth-100">
+                <p className="text-gray-700 bg-earth-50/50 p-4 rounded-xl border border-earth-100">
                   {getTextValue(formula.field_preparation_instructions)}
                 </p>
               </div>
             ) : (
-              <p className="text-earth-600">No preparation instructions provided.</p>
+              <p className="text-gray-600">No preparation instructions provided.</p>
             )}
             {hasTextContent(formula.field_dosage) && (
               <div>
                 <h3 className="text-lg font-semibold text-earth-700 mb-2 flex items-center gap-2">
                   <span>💊</span> Dosage
                 </h3>
-                <p className="text-earth-700 bg-earth-50/50 p-4 rounded-xl border border-earth-100">
+                <p className="text-gray-700 bg-earth-50/50 p-4 rounded-xl border border-earth-100">
                   {getTextValue(formula.field_dosage)}
                 </p>
               </div>
