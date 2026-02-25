@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useAuth } from '@/hooks/useAuth';
 import type { FormulaContribution } from '@/types/drupal';
 import { ContributionsList } from './ContributionCard';
@@ -18,7 +18,7 @@ export function ContributionsSection({ formulaId, formulaTitle }: ContributionsS
   const [error, setError] = useState<string | null>(null);
   const [showForm, setShowForm] = useState(false);
 
-  const fetchContributions = async () => {
+  const fetchContributions = useCallback(async () => {
     try {
       setIsLoading(true);
       setError(null);
@@ -36,11 +36,11 @@ export function ContributionsSection({ formulaId, formulaTitle }: ContributionsS
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [formulaId]);
 
   useEffect(() => {
     fetchContributions();
-  }, [formulaId]);
+  }, [fetchContributions]);
 
   const handleContributionSuccess = () => {
     // Optionally refresh contributions (though new ones will be pending)
