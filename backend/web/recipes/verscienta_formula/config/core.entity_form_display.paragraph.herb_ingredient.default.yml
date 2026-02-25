@@ -1,0 +1,69 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.herb_ingredient.field_herb_reference
+    - field.field.paragraph.herb_ingredient.field_quantity
+    - field.field.paragraph.herb_ingredient.field_unit
+    - field.field.paragraph.herb_ingredient.field_role
+    - field.field.paragraph.herb_ingredient.field_function
+    - field.field.paragraph.herb_ingredient.field_notes
+    - field.field.paragraph.herb_ingredient.field_percentage
+    - paragraphs.paragraphs_type.herb_ingredient
+  module:
+    - core
+    - options
+    - text
+id: paragraph.herb_ingredient.default
+targetEntityType: paragraph
+bundle: herb_ingredient
+mode: default
+content:
+  field_herb_reference:
+    weight: 0
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: 'Search for an herb...'
+    third_party_settings: {  }
+    type: entity_reference_autocomplete
+  field_quantity:
+    weight: 1
+    settings:
+      placeholder: '0.00'
+    third_party_settings: {  }
+    type: number
+  field_unit:
+    weight: 2
+    settings: {  }
+    third_party_settings: {  }
+    type: options_select
+  field_percentage:
+    weight: 3
+    settings:
+      placeholder: '0.00'
+    third_party_settings: {  }
+    type: number
+  field_role:
+    weight: 4
+    settings: {  }
+    third_party_settings: {  }
+    type: options_select
+  field_function:
+    weight: 5
+    settings:
+      rows: 3
+      placeholder: 'Describe the function of this herb in the formula...'
+    third_party_settings: {  }
+    type: text_textarea
+  field_notes:
+    weight: 6
+    settings:
+      rows: 3
+      placeholder: 'Additional notes...'
+    third_party_settings: {  }
+    type: text_textarea
+hidden:
+  created: true
+  uid: true

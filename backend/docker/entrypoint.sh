@@ -36,9 +36,9 @@ rm -f /var/www/html/web/robots.txt
 mkdir -p "${SETTINGS_DIR}/files"
 chown -R www-data:www-data "${SETTINGS_DIR}/files"
 
-# Ensure private files directory exists
-mkdir -p /var/www/private
-chown -R www-data:www-data /var/www/private
+# Ensure private files directory exists (inside project root for Package Manager)
+mkdir -p /var/www/html/private
+chown -R www-data:www-data /var/www/html/private
 
 # Ensure config sync directory exists
 mkdir -p /var/www/html/config/sync
@@ -66,6 +66,11 @@ if [ -n "$DRUPAL_DATABASE_HOST" ]; then
   cd /var/www/html
   echo "Running database updates..."
   ./vendor/bin/drush updatedb --no-interaction 2>&1 || echo "Database update check completed (non-fatal if failed)."
+
+  # Apply recipes to ensure form/view display configs exist
+  echo "Applying Verscienta recipes..."
+  ./vendor/bin/drush recipe web/recipes/verscienta_formula 2>&1 || echo "Recipe apply completed (non-fatal if already applied)."
+
   echo "Rebuilding cache..."
   ./vendor/bin/drush cache:rebuild 2>&1 || echo "Cache rebuild completed (non-fatal if failed)."
 fi

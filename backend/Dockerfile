@@ -84,10 +84,11 @@ RUN mkdir -p /var/www/html/web/sites/default/files \
     && chown -R www-data:www-data /var/www/html/web/sites/default/files \
     && chmod -R 775 /var/www/html/web/sites/default/files
 
-# Create private files directory
-RUN mkdir -p /var/www/private \
-    && chown -R www-data:www-data /var/www/private \
-    && chmod -R 775 /var/www/private
+# Create private files directory (must be inside project root for Package Manager)
+RUN mkdir -p /var/www/html/private \
+    && chown -R www-data:www-data /var/www/html/private \
+    && chmod -R 775 /var/www/html/private \
+    && echo -e 'Deny from all' > /var/www/html/private/.htaccess
 
 # Apache configuration
 RUN echo '<VirtualHost *:80>\n\
@@ -106,7 +107,7 @@ memory_limit = 512M\n\
 upload_max_filesize = 64M\n\
 post_max_size = 64M\n\
 max_execution_time = 300\n\
-max_input_vars = 5000\n\
+max_input_vars = 10000\n\
 realpath_cache_size = 4096K\n\
 realpath_cache_ttl = 600\n\
 opcache.enable=1\n\

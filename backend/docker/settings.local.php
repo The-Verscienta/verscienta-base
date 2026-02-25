@@ -7,7 +7,7 @@
  */
 
 // Private file path
-$settings['file_private_path'] = '/var/www/private';
+$settings['file_private_path'] = '/var/www/html/private';
 
 // Database configuration from environment variables
 if (getenv('DRUPAL_DATABASE_HOST')) {

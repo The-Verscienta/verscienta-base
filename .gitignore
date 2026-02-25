@@ -11,6 +11,7 @@ vendor/
 # Drupal
 backend/web/sites/*/files/
 backend/web/sites/*/private/
+backend/private/
 backend/web/sites/*/settings.local.php
 backend/web/sites/*/settings.php
 backend/web/.ht.router.php
