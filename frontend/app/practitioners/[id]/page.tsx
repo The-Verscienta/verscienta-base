@@ -117,7 +117,7 @@ export default async function PractitionerDetailPage({ params }: PractitionerDet
               <div className="absolute -right-12 -top-12 w-64 h-64 opacity-5 pointer-events-none text-8xl">👨‍⚕️</div>
             )}
             <div className="relative p-8 md:p-12">
-              <h1 className="font-serif text-5xl md:text-6xl font-bold text-earth-900 mb-2 tracking-tight">
+              <h1 className="font-serif text-5xl md:text-6xl font-bold text-gray-900 mb-2 tracking-tight">
                 {name}
               </h1>
               {practitioner.field_credentials && (
@@ -198,7 +198,7 @@ export default async function PractitionerDetailPage({ params }: PractitionerDet
               <span className="text-2xl">🏥</span>
             </div>
             <div className="flex-1 min-w-0">
-              <h3 className="font-semibold text-earth-800 group-hover:text-earth-600 transition-colors">
+              <h3 className="font-semibold text-gray-800 group-hover:text-earth-600 transition-colors">
                 {practitioner.field_clinic.title || 'View Clinic'}
               </h3>
               <p className="text-sm text-sage-600">View clinic details and other practitioners</p>
@@ -336,7 +336,7 @@ export default async function PractitionerDetailPage({ params }: PractitionerDet
           {practitioner.field_phone && (
             <a
               href={`tel:${practitioner.field_phone}`}
-              className="inline-block bg-white text-earth-800 px-8 py-3 rounded-lg font-semibold hover:bg-earth-50 transition shadow-lg"
+              className="inline-block bg-white text-gray-800 px-8 py-3 rounded-lg font-semibold hover:bg-earth-50 transition shadow-lg"
             >
               Call Now
             </a>

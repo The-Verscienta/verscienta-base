@@ -94,7 +94,7 @@ export function ContributionForm({
     return (
       <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
         <div className="bg-white rounded-xl shadow-xl max-w-md w-full p-6">
-          <h2 className="text-xl font-bold text-earth-800 mb-4">Login Required</h2>
+          <h2 className="text-xl font-bold text-gray-800 mb-4">Login Required</h2>
           <p className="text-gray-600 mb-6">
             You need to be logged in to submit contributions to formulas.
           </p>
@@ -123,7 +123,7 @@ export function ContributionForm({
         {/* Header */}
         <div className="flex items-center justify-between p-6 border-b border-gray-200">
           <div>
-            <h2 className="text-xl font-bold text-earth-800">Add Formula Contribution</h2>
+            <h2 className="text-xl font-bold text-gray-800">Add Formula Contribution</h2>
             <p className="text-sm text-gray-600 mt-1">{formulaTitle}</p>
           </div>
           <button
@@ -157,7 +157,7 @@ export function ContributionForm({
                   <div className="flex items-start gap-3">
                     <span className="text-2xl">📝</span>
                     <div>
-                      <h3 className="font-semibold text-earth-800">Clinical Note</h3>
+                      <h3 className="font-semibold text-gray-800">Clinical Note</h3>
                       <p className="text-sm text-gray-600">
                         Share your clinical experience with this formula
                       </p>
@@ -173,7 +173,7 @@ export function ContributionForm({
                   <div className="flex items-start gap-3">
                     <span className="text-2xl">✏️</span>
                     <div>
-                      <h3 className="font-semibold text-earth-800">Suggest Modification</h3>
+                      <h3 className="font-semibold text-gray-800">Suggest Modification</h3>
                       <p className="text-sm text-gray-600">
                         Propose herb changes for specific cases or conditions
                       </p>

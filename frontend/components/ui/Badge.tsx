@@ -11,7 +11,7 @@ export function Badge({
 
   const variantStyles = {
     default: 'bg-gray-100 text-gray-800',
-    primary: 'bg-earth-100 text-earth-800',
+    primary: 'bg-earth-100 text-gray-800',
     secondary: 'bg-sage-100 text-sage-800',
     success: 'bg-green-100 text-green-800',
     warning: 'bg-yellow-100 text-yellow-800',

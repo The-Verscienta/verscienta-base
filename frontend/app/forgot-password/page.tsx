@@ -44,7 +44,7 @@ export default function ForgotPasswordPage() {
         <div className="text-center mb-8">
           <Link href="/" className="inline-block">
             <span className="text-5xl">🌿</span>
-            <h1 className="text-2xl font-serif font-bold text-earth-800 mt-2">
+            <h1 className="text-2xl font-serif font-bold text-gray-800 mt-2">
               Verscienta Health
             </h1>
           </Link>
@@ -58,7 +58,7 @@ export default function ForgotPasswordPage() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                 </svg>
               </div>
-              <h2 className="text-2xl font-bold text-earth-800 mb-2">
+              <h2 className="text-2xl font-bold text-gray-800 mb-2">
                 Check Your Email
               </h2>
               <p className="text-gray-600 mb-6">
@@ -80,7 +80,7 @@ export default function ForgotPasswordPage() {
                 </button>
                 <Link
                   href="/login"
-                  className="block text-center text-earth-600 hover:text-earth-800 font-medium"
+                  className="block text-center text-earth-600 hover:text-gray-800 font-medium"
                 >
                   Back to Login
                 </Link>
@@ -94,7 +94,7 @@ export default function ForgotPasswordPage() {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z" />
                   </svg>
                 </div>
-                <h2 className="text-2xl font-bold text-earth-800 mb-2">
+                <h2 className="text-2xl font-bold text-gray-800 mb-2">
                   Forgot Password?
                 </h2>
                 <p className="text-gray-600">
@@ -151,7 +151,7 @@ export default function ForgotPasswordPage() {
               <div className="mt-6 pt-6 border-t border-gray-200">
                 <p className="text-center text-sm text-gray-600">
                   Remember your password?{' '}
-                  <Link href="/login" className="text-earth-600 hover:text-earth-800 font-semibold">
+                  <Link href="/login" className="text-earth-600 hover:text-gray-800 font-semibold">
                     Sign in
                   </Link>
                 </p>

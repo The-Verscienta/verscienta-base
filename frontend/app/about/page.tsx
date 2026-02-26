@@ -20,7 +20,7 @@ function FeatureCard({ icon, title, description }: { icon: React.ReactNode; titl
       <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-sage-100 to-earth-100 flex items-center justify-center mb-4">
         {icon}
       </div>
-      <h3 className="font-serif font-semibold text-earth-800 mb-2">{title}</h3>
+      <h3 className="font-serif font-semibold text-gray-800 mb-2">{title}</h3>
       <p className="text-gray-600 text-sm leading-relaxed">{description}</p>
     </div>
   );
@@ -34,7 +34,7 @@ function ValueItem({ number, title, description }: { number: number; title: stri
         <span className="text-earth-700 font-bold">{number}</span>
       </div>
       <div>
-        <h3 className="font-serif font-semibold text-earth-800">{title}</h3>
+        <h3 className="font-serif font-semibold text-gray-800">{title}</h3>
         <p className="text-gray-600 text-sm leading-relaxed">
           {description}
         </p>
@@ -62,7 +62,7 @@ export default function AboutPage() {
             <span className="text-sage-700 font-medium text-sm">Our Story</span>
           </div>
 
-          <h1 className="font-serif text-4xl md:text-5xl lg:text-6xl font-bold text-earth-900 mb-6 leading-tight">
+          <h1 className="font-serif text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 mb-6 leading-tight">
             About Verscienta Health
           </h1>
 
@@ -206,7 +206,7 @@ export default function AboutPage() {
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link
                 href="/herbs"
-                className="inline-flex items-center justify-center gap-2 bg-white text-earth-800 px-6 py-3 rounded-xl font-semibold hover:bg-cream-50 transition-all shadow-lg"
+                className="inline-flex items-center justify-center gap-2 bg-white text-gray-800 px-6 py-3 rounded-xl font-semibold hover:bg-cream-50 transition-all shadow-lg"
               >
                 Explore Herbs
                 <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">

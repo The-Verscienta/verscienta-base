@@ -233,7 +233,7 @@ export default async function FormulaDetailPage({ params }: FormulaDetailProps) 
           <div className="bg-white rounded-3xl shadow-xl border border-earth-200 relative overflow-hidden">
             <div className="absolute -right-12 -top-12 w-64 h-64 opacity-5 pointer-events-none text-8xl">🌿</div>
             <div className="relative p-8 md:p-12">
-              <h1 className="font-serif text-5xl md:text-6xl font-bold text-earth-900 mb-4 tracking-tight">
+              <h1 className="font-serif text-5xl md:text-6xl font-bold text-gray-900 mb-4 tracking-tight">
                 {name}
               </h1>
               {totalWeight > 0 && (
@@ -421,7 +421,7 @@ export default async function FormulaDetailPage({ params }: FormulaDetailProps) 
                         return (
                           <tr key={idx} className="border-b border-sage-200">
                             <td className="py-2 px-2">
-                              <Link href={`/herbs/${ingredient.id}`} className="text-earth-700 hover:text-earth-900 hover:underline font-medium">
+                              <Link href={`/herbs/${ingredient.id}`} className="text-earth-700 hover:text-gray-900 hover:underline font-medium">
                                 {ingredient.title || 'Herb'}
                               </Link>
                             </td>

@@ -94,7 +94,7 @@ function ResetPasswordForm() {
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
           </svg>
         </div>
-        <h2 className="text-2xl font-bold text-earth-800 mb-2">
+        <h2 className="text-2xl font-bold text-gray-800 mb-2">
           Invalid Reset Link
         </h2>
         <p className="text-gray-600 mb-6">
@@ -120,7 +120,7 @@ function ResetPasswordForm() {
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
           </svg>
         </div>
-        <h2 className="text-2xl font-bold text-earth-800 mb-2">
+        <h2 className="text-2xl font-bold text-gray-800 mb-2">
           Password Reset Successful!
         </h2>
         <p className="text-gray-600 mb-6">
@@ -145,7 +145,7 @@ function ResetPasswordForm() {
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
           </svg>
         </div>
-        <h2 className="text-2xl font-bold text-earth-800 mb-2">
+        <h2 className="text-2xl font-bold text-gray-800 mb-2">
           Create New Password
         </h2>
         <p className="text-gray-600">
@@ -266,7 +266,7 @@ function ResetPasswordForm() {
       <div className="mt-6 pt-6 border-t border-gray-200">
         <p className="text-center text-sm text-gray-600">
           Remember your password?{' '}
-          <Link href="/login" className="text-earth-600 hover:text-earth-800 font-semibold">
+          <Link href="/login" className="text-earth-600 hover:text-gray-800 font-semibold">
             Sign in
           </Link>
         </p>
@@ -284,7 +284,7 @@ export default function ResetPasswordPage() {
         <div className="text-center mb-8">
           <Link href="/" className="inline-block">
             <span className="text-5xl">🌿</span>
-            <h1 className="text-2xl font-serif font-bold text-earth-800 mt-2">
+            <h1 className="text-2xl font-serif font-bold text-gray-800 mt-2">
               Verscienta Health
             </h1>
           </Link>

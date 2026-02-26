@@ -84,7 +84,7 @@ export function BookingForm({
 
   return (
     <form onSubmit={handleSubmit} className={`bg-white rounded-xl border border-gray-100 p-6 ${className}`}>
-      <h3 className="font-semibold text-earth-800 mb-4">
+      <h3 className="font-semibold text-gray-800 mb-4">
         Request Appointment with {practitionerName}
       </h3>
 

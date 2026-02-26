@@ -180,7 +180,7 @@ export default async function FormulasPage({ searchParams }: PageProps) {
                 </span>
               </div>
 
-              <h1 className="font-serif text-4xl md:text-5xl lg:text-6xl font-bold text-earth-900 mb-4 leading-tight">
+              <h1 className="font-serif text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 mb-4 leading-tight">
                 Herbal Formulas
               </h1>
 
@@ -248,7 +248,7 @@ export default async function FormulasPage({ searchParams }: PageProps) {
               const picks = formulas.filter(f => f.field_editors_pick);
               return picks.length > 0 ? (
                 <div className="mb-12">
-                  <h2 className="font-serif text-2xl font-bold text-earth-800 mb-6 flex items-center gap-2">
+                  <h2 className="font-serif text-2xl font-bold text-gray-800 mb-6 flex items-center gap-2">
                     <span className="text-amber-500">&#9733;</span> Editor&apos;s Picks
                   </h2>
                   <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -259,7 +259,7 @@ export default async function FormulasPage({ searchParams }: PageProps) {
                         className="group bg-gradient-to-br from-amber-50 via-cream-50 to-sage-50 rounded-2xl p-6 border-2 border-amber-200 hover:border-amber-300 hover:shadow-xl transition-all duration-300"
                       >
                         <div className="flex items-start justify-between mb-2">
-                          <h3 className="font-serif text-lg font-bold text-earth-800 group-hover:text-earth-600 transition-colors">{formula.title}</h3>
+                          <h3 className="font-serif text-lg font-bold text-gray-800 group-hover:text-earth-600 transition-colors">{formula.title}</h3>
                           <span className="text-xs px-2 py-0.5 rounded-full font-semibold bg-amber-100 text-amber-800 border border-amber-200">&#9733; Pick</span>
                         </div>
                         {getTextValue(formula.field_formula_description) && (
@@ -295,7 +295,7 @@ export default async function FormulasPage({ searchParams }: PageProps) {
                       </div>
                       <div className="flex-1">
                         <div className="flex items-start justify-between gap-3 mb-2">
-                          <h2 className="font-serif text-2xl font-bold text-earth-800 group-hover:text-earth-600 transition-colors">
+                          <h2 className="font-serif text-2xl font-bold text-gray-800 group-hover:text-earth-600 transition-colors">
                             {formula.title}
                           </h2>
                           {ingredientCount > 0 && (
@@ -336,7 +336,7 @@ export default async function FormulasPage({ searchParams }: PageProps) {
             {/* All Formulas Grid */}
             {formulas.length > 2 && (
               <>
-                <h2 className="font-serif text-2xl font-bold text-earth-800 mb-6">All Formulas</h2>
+                <h2 className="font-serif text-2xl font-bold text-gray-800 mb-6">All Formulas</h2>
                 <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-12">
                   {formulas.slice(2).map((formula) => {
                     const ingredientCount = formula.field_herb_ingredients?.length || 0;
@@ -361,7 +361,7 @@ export default async function FormulasPage({ searchParams }: PageProps) {
                         </div>
 
                         <div className="p-5">
-                          <h3 className="font-serif text-lg font-bold text-earth-800 mb-2 group-hover:text-earth-600 transition-colors">
+                          <h3 className="font-serif text-lg font-bold text-gray-800 mb-2 group-hover:text-earth-600 transition-colors">
                             {formula.title}
                           </h3>
 
@@ -437,7 +437,7 @@ export default async function FormulasPage({ searchParams }: PageProps) {
             {/* Educational Section */}
             <div className="bg-gradient-to-r from-sage-50 to-earth-50 rounded-2xl p-8 border border-sage-200 mb-12">
               <div className="max-w-3xl mx-auto">
-                <h2 className="font-serif text-2xl font-bold text-earth-800 mb-6 text-center">
+                <h2 className="font-serif text-2xl font-bold text-gray-800 mb-6 text-center">
                   Understanding Herbal Formulas
                 </h2>
                 <div className="grid md:grid-cols-2 gap-6">
@@ -449,7 +449,7 @@ export default async function FormulasPage({ searchParams }: PageProps) {
                         </svg>
                       </div>
                       <div>
-                        <h3 className="font-serif font-semibold text-earth-800">Chief Herbs</h3>
+                        <h3 className="font-serif font-semibold text-gray-800">Chief Herbs</h3>
                         <p className="text-sm text-gray-600 leading-relaxed">Target the primary condition with the main therapeutic action</p>
                       </div>
                     </div>
@@ -460,7 +460,7 @@ export default async function FormulasPage({ searchParams }: PageProps) {
                         </svg>
                       </div>
                       <div>
-                        <h3 className="font-serif font-semibold text-earth-800">Deputy Herbs</h3>
+                        <h3 className="font-serif font-semibold text-gray-800">Deputy Herbs</h3>
                         <p className="text-sm text-gray-600 leading-relaxed">Support and enhance the effects of the chief herbs</p>
                       </div>
                     </div>
@@ -473,7 +473,7 @@ export default async function FormulasPage({ searchParams }: PageProps) {
                         </svg>
                       </div>
                       <div>
-                        <h3 className="font-serif font-semibold text-earth-800">Assistant Herbs</h3>
+                        <h3 className="font-serif font-semibold text-gray-800">Assistant Herbs</h3>
                         <p className="text-sm text-gray-600 leading-relaxed">Balance the formula and reduce potential side effects</p>
                       </div>
                     </div>
@@ -484,7 +484,7 @@ export default async function FormulasPage({ searchParams }: PageProps) {
                         </svg>
                       </div>
                       <div>
-                        <h3 className="font-serif font-semibold text-earth-800">Envoy Herbs</h3>
+                        <h3 className="font-serif font-semibold text-gray-800">Envoy Herbs</h3>
                         <p className="text-sm text-gray-600 leading-relaxed">Guide the formula to specific areas of the body</p>
                       </div>
                     </div>
@@ -507,7 +507,7 @@ export default async function FormulasPage({ searchParams }: PageProps) {
                 </p>
                 <Link
                   href="/herbs"
-                  className="inline-flex items-center gap-2 bg-white text-earth-800 px-8 py-3 rounded-xl font-semibold hover:bg-cream-50 transition-all shadow-lg hover:shadow-xl"
+                  className="inline-flex items-center gap-2 bg-white text-gray-800 px-8 py-3 rounded-xl font-semibold hover:bg-cream-50 transition-all shadow-lg hover:shadow-xl"
                 >
                   Browse Herbs Database
                   <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">

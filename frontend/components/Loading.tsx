@@ -29,7 +29,7 @@ export function LoadingPage() {
           </div>
         </div>
       </div>
-      <h2 className="text-xl font-serif font-semibold text-earth-800 mb-2">Loading</h2>
+      <h2 className="text-xl font-serif font-semibold text-gray-800 mb-2">Loading</h2>
       <p className="text-sage-600">Preparing your wellness journey...</p>
 
       {/* Animated dots */}

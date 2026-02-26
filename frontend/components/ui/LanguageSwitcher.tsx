@@ -68,7 +68,7 @@ export function LanguageSwitcher() {
               onClick={() => selectLang(lang.code)}
               className={`w-full flex items-center gap-3 px-4 py-2.5 text-sm text-left transition-colors ${
                 lang.code === currentLang
-                  ? 'bg-earth-50 text-earth-800 font-semibold'
+                  ? 'bg-earth-50 text-gray-800 font-semibold'
                   : 'text-earth-600 hover:bg-earth-50'
               }`}
             >

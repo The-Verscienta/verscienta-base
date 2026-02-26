@@ -109,7 +109,7 @@ export default async function ModalityDetailPage({ params }: ModalityDetailProps
               <ModalityIcon />
             </div>
             <div className="relative p-8 md:p-12">
-              <h1 className="font-serif text-5xl md:text-6xl font-bold text-earth-900 mb-4 tracking-tight">
+              <h1 className="font-serif text-5xl md:text-6xl font-bold text-gray-900 mb-4 tracking-tight">
                 {title}
               </h1>
 
@@ -174,7 +174,7 @@ export default async function ModalityDetailPage({ params }: ModalityDetailProps
                   className="flex items-center gap-3 bg-white/60 p-4 rounded-xl border border-sage-200"
                 >
                   <span className="text-sage-600 text-xl">✓</span>
-                  <span className="text-earth-800">{item}</span>
+                  <span className="text-gray-800">{item}</span>
                 </div>
               ))}
             </div>
@@ -217,7 +217,7 @@ export default async function ModalityDetailPage({ params }: ModalityDetailProps
                   className="flex items-center gap-3 bg-earth-50 hover:bg-earth-100 p-4 rounded-xl border border-earth-200 transition"
                 >
                   <span className="text-earth-600">🩺</span>
-                  <span className="text-earth-800 font-medium">{condition.title || 'View Condition'}</span>
+                  <span className="text-gray-800 font-medium">{condition.title || 'View Condition'}</span>
                   <svg className="w-5 h-5 text-earth-400 ml-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                   </svg>
@@ -243,7 +243,7 @@ export default async function ModalityDetailPage({ params }: ModalityDetailProps
               {modality.field_session_cost_range && (
                 <div className="bg-white rounded-xl p-5 border border-earth-100 shadow-sm">
                   <h3 className="text-xs font-bold text-earth-500 uppercase tracking-wider mb-2">Cost Range</h3>
-                  <p className="text-lg font-semibold text-earth-800">{modality.field_session_cost_range}</p>
+                  <p className="text-lg font-semibold text-gray-800">{modality.field_session_cost_range}</p>
                 </div>
               )}
               {modality.field_sessions_needed && (
@@ -292,7 +292,7 @@ export default async function ModalityDetailPage({ params }: ModalityDetailProps
             </p>
             <Link
               href={`/practitioners?modality=${modality.id}`}
-              className="inline-flex items-center gap-2 bg-white text-earth-800 px-8 py-3 rounded-xl font-semibold hover:bg-cream-50 transition shadow-lg hover:shadow-xl"
+              className="inline-flex items-center gap-2 bg-white text-gray-800 px-8 py-3 rounded-xl font-semibold hover:bg-cream-50 transition shadow-lg hover:shadow-xl"
             >
               Find Practitioners
               <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">

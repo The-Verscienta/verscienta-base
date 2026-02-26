@@ -109,7 +109,7 @@ export function NewsletterSignup({
               <button
                 type="submit"
                 disabled={status === 'loading'}
-                className="bg-white text-earth-800 px-4 py-2.5 rounded-lg font-medium text-sm hover:bg-earth-50 transition disabled:opacity-50"
+                className="bg-white text-gray-800 px-4 py-2.5 rounded-lg font-medium text-sm hover:bg-earth-50 transition disabled:opacity-50"
               >
                 {status === 'loading' ? (
                   <span className="w-4 h-4 border-2 border-earth-600/30 border-t-earth-600 rounded-full animate-spin inline-block" />
@@ -137,7 +137,7 @@ export function NewsletterSignup({
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
             </svg>
           </div>
-          <h3 className="text-xl font-bold text-earth-800 mb-2">
+          <h3 className="text-xl font-bold text-gray-800 mb-2">
             Join Our Wellness Newsletter
           </h3>
           <p className="text-gray-600 text-sm">

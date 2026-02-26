@@ -29,7 +29,7 @@ export function FormulaCard({
           </svg>
         </div>
         <div className="flex-1 min-w-0">
-          <h3 className="font-medium text-earth-800 truncate">{formula.title}</h3>
+          <h3 className="font-medium text-gray-800 truncate">{formula.title}</h3>
           <p className="text-xs text-gray-500">
             {ingredientCount} herb{ingredientCount !== 1 ? 's' : ''}
             {formula.field_total_weight && ` | ${formula.field_total_weight}${formula.field_total_weight_unit || 'g'}`}
@@ -62,7 +62,7 @@ export function FormulaCard({
             )}
           </div>
 
-          <h2 className="text-xl font-bold text-earth-800 mb-2">{formula.title}</h2>
+          <h2 className="text-xl font-bold text-gray-800 mb-2">{formula.title}</h2>
 
           {description && (
             <p className="text-sm text-gray-600 mb-4 line-clamp-2">{description}...</p>
@@ -147,7 +147,7 @@ export function FormulaCard({
         </span>
       </div>
 
-      <h2 className="text-lg font-bold text-earth-800 mb-2">{formula.title}</h2>
+      <h2 className="text-lg font-bold text-gray-800 mb-2">{formula.title}</h2>
 
       {description && (
         <p className="text-sm text-gray-600 mb-4 line-clamp-2">{description}...</p>
@@ -201,7 +201,7 @@ export function FormulaIngredientList({ ingredients, className = '' }: FormulaIn
   return (
     <div className={`bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden ${className}`}>
       <div className="p-4 bg-gray-50 border-b border-gray-100">
-        <h3 className="font-semibold text-earth-800">Formula Ingredients</h3>
+        <h3 className="font-semibold text-gray-800">Formula Ingredients</h3>
         <p className="text-sm text-gray-500">
           {ingredients.length} herbs | {totalWeight}g total
         </p>
@@ -218,7 +218,7 @@ export function FormulaIngredientList({ ingredients, className = '' }: FormulaIn
               <div className="flex-1">
                 <Link
                   href={`/herbs/${ingredient.id}`}
-                  className="font-medium text-earth-800 hover:text-earth-600 transition"
+                  className="font-medium text-gray-800 hover:text-earth-600 transition"
                 >
                   {ingredient.title}
                 </Link>

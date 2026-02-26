@@ -179,10 +179,10 @@ export default function ProfilePage() {
       <nav className="mb-6 text-sm">
         <Link href="/" className="text-sage-600 hover:text-sage-800">Home</Link>
         {' / '}
-        <span className="text-earth-800">My Profile</span>
+        <span className="text-gray-800">My Profile</span>
       </nav>
 
-      <h1 className="text-4xl font-bold text-earth-800 mb-8">My Profile</h1>
+      <h1 className="text-4xl font-bold text-gray-800 mb-8">My Profile</h1>
 
       <div className="grid md:grid-cols-3 gap-6">
         {/* Sidebar */}
@@ -192,7 +192,7 @@ export default function ProfilePage() {
               <div className="w-24 h-24 bg-earth-600 rounded-full flex items-center justify-center text-white text-3xl font-bold mx-auto mb-4">
                 {user?.name?.charAt(0).toUpperCase() || 'U'}
               </div>
-              <h2 className="text-xl font-bold text-earth-800 mb-1">
+              <h2 className="text-xl font-bold text-gray-800 mb-1">
                 {user?.name || 'User'}
               </h2>
               <p className="text-sm text-gray-600 mb-4">{user?.mail}</p>
@@ -214,7 +214,7 @@ export default function ProfilePage() {
             <div className="mt-6 pt-6 border-t border-gray-200 space-y-2">
               <Link
                 href="/profile"
-                className="block px-4 py-2 text-earth-800 bg-earth-50 rounded-lg font-medium"
+                className="block px-4 py-2 text-gray-800 bg-earth-50 rounded-lg font-medium"
               >
                 Profile Settings
               </Link>

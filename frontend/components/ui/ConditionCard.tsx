@@ -42,7 +42,7 @@ export function ConditionCard({
           </svg>
         </div>
         <div className="flex-1 min-w-0">
-          <h3 className="font-medium text-earth-800 truncate">{condition.title}</h3>
+          <h3 className="font-medium text-gray-800 truncate">{condition.title}</h3>
           {condition.field_symptoms && condition.field_symptoms.length > 0 && (
             <p className="text-xs text-gray-500 truncate">
               {condition.field_symptoms.slice(0, 2).join(', ')}
@@ -81,7 +81,7 @@ export function ConditionCard({
           </div>
         </div>
 
-        <h2 className="text-2xl font-bold text-earth-800 mb-2">{condition.title}</h2>
+        <h2 className="text-2xl font-bold text-gray-800 mb-2">{condition.title}</h2>
 
         {summary && (
           <p className="text-gray-600 mb-4 line-clamp-2">{summary}{!condition.field_quick_summary ? '...' : ''}</p>
@@ -135,7 +135,7 @@ export function ConditionCard({
         </div>
       </div>
 
-      <h2 className="text-xl font-bold text-earth-800 mb-2">{condition.title}</h2>
+      <h2 className="text-xl font-bold text-gray-800 mb-2">{condition.title}</h2>
 
       {summary && (
         <p className="text-sm text-gray-600 mb-4 line-clamp-2">{summary}{!condition.field_quick_summary ? '...' : ''}</p>

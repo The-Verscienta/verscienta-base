@@ -214,7 +214,7 @@ export default async function HerbsPage({ searchParams }: PageProps) {
                 </span>
               </div>
 
-              <h1 className="font-serif text-4xl md:text-5xl lg:text-6xl font-bold text-earth-900 mb-4 leading-tight">
+              <h1 className="font-serif text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 mb-4 leading-tight">
                 Medicinal Herbs
               </h1>
 
@@ -285,7 +285,7 @@ export default async function HerbsPage({ searchParams }: PageProps) {
               const picks = herbs.filter(h => getHerbData(h).editorsPick);
               return picks.length > 0 ? (
                 <div className="mb-12">
-                  <h2 className="font-serif text-2xl font-bold text-earth-800 mb-6 flex items-center gap-2">
+                  <h2 className="font-serif text-2xl font-bold text-gray-800 mb-6 flex items-center gap-2">
                     <span className="text-amber-500">&#9733;</span> Editor&apos;s Picks
                   </h2>
                   <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -302,7 +302,7 @@ export default async function HerbsPage({ searchParams }: PageProps) {
                               &#9733; Pick
                             </span>
                           </div>
-                          <h3 className="font-serif text-lg font-bold text-earth-800 mb-1 group-hover:text-sage-700 transition-colors">{data.title}</h3>
+                          <h3 className="font-serif text-lg font-bold text-gray-800 mb-1 group-hover:text-sage-700 transition-colors">{data.title}</h3>
                           {data.scientificName && <p className="text-sm italic text-sage-600 mb-2">{data.scientificName}</p>}
                           {data.summary && <p className="text-sm text-gray-600 line-clamp-2">{data.summary}...</p>}
                           <div className="mt-3 flex flex-wrap gap-1.5">
@@ -373,7 +373,7 @@ export default async function HerbsPage({ searchParams }: PageProps) {
 
                     {/* Card Body */}
                     <div className="p-5">
-                      <h2 className="font-serif text-lg font-bold text-earth-800 mb-1 group-hover:text-sage-700 transition-colors">
+                      <h2 className="font-serif text-lg font-bold text-gray-800 mb-1 group-hover:text-sage-700 transition-colors">
                         {data.title}
                       </h2>
 

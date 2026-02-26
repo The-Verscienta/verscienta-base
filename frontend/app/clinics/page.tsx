@@ -118,7 +118,7 @@ export default async function ClinicsPage({ searchParams }: PageProps) {
         />
         <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4">
           <div>
-            <h1 className="text-4xl md:text-5xl font-serif font-bold text-earth-900 mb-3">
+            <h1 className="text-4xl md:text-5xl font-serif font-bold text-gray-900 mb-3">
               Find Clinics
             </h1>
             <p className="text-xl text-gray-600 max-w-2xl mb-4">
@@ -155,7 +155,7 @@ export default async function ClinicsPage({ searchParams }: PageProps) {
       {clinics.length === 0 ? (
         <div className="bg-gradient-to-br from-sage-50 to-earth-50 rounded-2xl p-12 text-center border border-sage-200">
           <div className="text-7xl mb-6">🏥</div>
-          <h2 className="text-2xl font-bold text-earth-800 mb-3">
+          <h2 className="text-2xl font-bold text-gray-800 mb-3">
             No Clinics Found
           </h2>
           <p className="text-gray-600 mb-6 max-w-md mx-auto">
@@ -173,7 +173,7 @@ export default async function ClinicsPage({ searchParams }: PageProps) {
       ) : (
         <>
           {/* Clinic Grid */}
-          <h2 className="text-2xl font-bold text-earth-800 mb-6">All Clinics</h2>
+          <h2 className="text-2xl font-bold text-gray-800 mb-6">All Clinics</h2>
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-12">
             {clinics.map((clinic) => {
               const image = getClinicImage(clinic);
@@ -222,7 +222,7 @@ export default async function ClinicsPage({ searchParams }: PageProps) {
 
                   {/* Card Body */}
                   <div className="p-5">
-                    <h3 className="text-lg font-bold text-earth-800 mb-1 group-hover:text-earth-600 transition-colors">
+                    <h3 className="text-lg font-bold text-gray-800 mb-1 group-hover:text-earth-600 transition-colors">
                       {clinic.title}
                     </h3>
 
@@ -291,7 +291,7 @@ export default async function ClinicsPage({ searchParams }: PageProps) {
               href="https://backend.ddev.site/node/add/clinic"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-block bg-white text-earth-800 px-8 py-3 rounded-xl font-semibold hover:bg-earth-50 transition shadow-lg"
+              className="inline-block bg-white text-gray-800 px-8 py-3 rounded-xl font-semibold hover:bg-earth-50 transition shadow-lg"
             >
               Add Your Clinic
             </a>

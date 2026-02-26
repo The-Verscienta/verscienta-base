@@ -29,7 +29,7 @@ function SimilarFormulaCard({ result }: { result: FormulaSimilarityResult }) {
       <div className="flex items-start justify-between mb-2">
         <Link
           href={`/formulas/${result.formulaId}`}
-          className="text-lg font-semibold text-earth-700 hover:text-earth-900 hover:underline"
+          className="text-lg font-semibold text-earth-700 hover:text-gray-900 hover:underline"
         >
           {result.formulaTitle}
         </Link>
@@ -78,7 +78,7 @@ function SimilarFormulaCard({ result }: { result: FormulaSimilarityResult }) {
                   <td className="py-1.5">
                     <Link
                       href={`/herbs/${herb.herbId}`}
-                      className="text-earth-700 hover:text-earth-900 hover:underline"
+                      className="text-earth-700 hover:text-gray-900 hover:underline"
                     >
                       {herb.herbTitle}
                     </Link>

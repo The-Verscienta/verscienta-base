@@ -33,7 +33,7 @@ export function PractitionerCard({
           </svg>
         </div>
         <div className="flex-1 min-w-0">
-          <h3 className="font-semibold text-earth-800 truncate">{name}</h3>
+          <h3 className="font-semibold text-gray-800 truncate">{name}</h3>
           {location && (
             <p className="text-sm text-gray-500 truncate">{location}</p>
           )}
@@ -65,7 +65,7 @@ export function PractitionerCard({
         )}
       </div>
 
-      <h2 className="text-xl font-bold text-earth-800 mb-1">{name}</h2>
+      <h2 className="text-xl font-bold text-gray-800 mb-1">{name}</h2>
 
       {practitioner.field_practice_type && (
         <p className="text-sm text-sage-600 mb-3 capitalize">

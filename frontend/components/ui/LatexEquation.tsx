@@ -34,7 +34,7 @@ export function LatexEquation({ latex, displayMode = false, className = '' }: La
 
   if (rendered.error) {
     return (
-      <code className={`font-mono text-xs bg-earth-50 text-earth-800 rounded px-2 py-1 ${className}`}>
+      <code className={`font-mono text-xs bg-earth-50 text-gray-800 rounded px-2 py-1 ${className}`}>
         {latex}
       </code>
     );

@@ -78,7 +78,7 @@ export default function SymptomCheckerPage() {
               </span>
             </div>
 
-            <h1 className="font-serif text-4xl md:text-5xl lg:text-6xl font-bold text-earth-900 mb-4 leading-tight">
+            <h1 className="font-serif text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 mb-4 leading-tight">
               Symptom Checker
             </h1>
 
@@ -164,7 +164,7 @@ export default function SymptomCheckerPage() {
             >
               <div className="space-y-8">
                 <div className="relative bg-gradient-to-br from-sage-50 to-earth-50 border border-sage-200 rounded-2xl p-6">
-                  <h3 className="font-serif text-xl font-bold text-earth-800 mb-4">
+                  <h3 className="font-serif text-xl font-bold text-gray-800 mb-4">
                     AI Recommendations
                   </h3>
                   <p className="text-gray-700 whitespace-pre-wrap leading-relaxed">
@@ -174,7 +174,7 @@ export default function SymptomCheckerPage() {
 
                 {results.recommendations && (
                   <div>
-                    <h3 className="font-serif text-xl font-bold text-earth-800 mb-4">
+                    <h3 className="font-serif text-xl font-bold text-gray-800 mb-4">
                       Suggested Modalities & Herbs
                     </h3>
                     <div className="flex flex-wrap gap-3">

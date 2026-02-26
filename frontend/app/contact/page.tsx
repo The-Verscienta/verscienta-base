@@ -65,7 +65,7 @@ export default function ContactPage() {
             <span className="text-gray-600 font-medium text-sm">Get in Touch</span>
           </div>
 
-          <h1 className="font-serif text-4xl md:text-5xl lg:text-6xl font-bold text-earth-900 mb-6 leading-tight">
+          <h1 className="font-serif text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 mb-6 leading-tight">
             Contact Us
           </h1>
 
@@ -81,7 +81,7 @@ export default function ContactPage() {
           {/* Contact Info */}
           <div className="md:col-span-1 space-y-6">
             <div className="bg-white rounded-2xl shadow-sm border border-earth-200 p-6 hover:shadow-md transition-shadow">
-              <h2 className="font-serif text-lg font-semibold text-earth-800 mb-5">Get in Touch</h2>
+              <h2 className="font-serif text-lg font-semibold text-gray-800 mb-5">Get in Touch</h2>
 
               <div className="space-y-5">
                 <div className="flex items-start gap-4">
@@ -116,7 +116,7 @@ export default function ContactPage() {
             </div>
 
             <div className="bg-gradient-to-br from-sage-50/50 via-earth-50/50 to-cream-50 rounded-2xl p-6 border border-sage-200">
-              <h3 className="font-serif font-semibold text-earth-800 mb-4">Quick Links</h3>
+              <h3 className="font-serif font-semibold text-gray-800 mb-4">Quick Links</h3>
               <ul className="space-y-3">
                 <li>
                   <Link href="/about" className="text-sage-600 hover:text-earth-700 font-medium flex items-center gap-2 transition-colors">
@@ -157,7 +157,7 @@ export default function ContactPage() {
           {/* Contact Form */}
           <div className="md:col-span-2">
             <div className="bg-white rounded-2xl shadow-sm border border-earth-200 p-8">
-              <h2 className="font-serif text-xl font-semibold text-earth-800 mb-6">Send us a Message</h2>
+              <h2 className="font-serif text-xl font-semibold text-gray-800 mb-6">Send us a Message</h2>
 
               {status === 'success' ? (
                 <div className="bg-gradient-to-br from-sage-50 to-earth-50 border border-sage-200 rounded-xl p-8 text-center">
@@ -166,7 +166,7 @@ export default function ContactPage() {
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                     </svg>
                   </div>
-                  <h3 className="font-serif text-xl font-semibold text-earth-800 mb-2">
+                  <h3 className="font-serif text-xl font-semibold text-gray-800 mb-2">
                     Message Sent Successfully!
                   </h3>
                   <p className="text-gray-600 mb-6 leading-relaxed">

@@ -137,7 +137,7 @@ export default async function ClinicDetailPage({ params }: ClinicDetailProps) {
               <div className="absolute -right-12 -top-12 w-64 h-64 opacity-5 pointer-events-none text-8xl">🏥</div>
             )}
             <div className="relative p-8 md:p-12">
-              <h1 className="font-serif text-5xl md:text-6xl font-bold text-earth-900 mb-2 tracking-tight">
+              <h1 className="font-serif text-5xl md:text-6xl font-bold text-gray-900 mb-2 tracking-tight">
                 {name}
               </h1>
               {fullAddress && (
@@ -321,7 +321,7 @@ export default async function ClinicDetailPage({ params }: ClinicDetailProps) {
                     )}
                   </div>
                   <div className="flex-1 min-w-0">
-                    <h3 className="font-semibold text-earth-800 group-hover:text-earth-600 transition-colors truncate">
+                    <h3 className="font-semibold text-gray-800 group-hover:text-earth-600 transition-colors truncate">
                       {practitioner.title || practitioner.field_name || 'Practitioner'}
                     </h3>
                     {practitioner.field_credentials && (
@@ -366,7 +366,7 @@ export default async function ClinicDetailPage({ params }: ClinicDetailProps) {
           {clinic.field_phone && (
             <a
               href={`tel:${clinic.field_phone}`}
-              className="inline-block bg-white text-earth-800 px-8 py-3 rounded-lg font-semibold hover:bg-earth-50 transition shadow-lg"
+              className="inline-block bg-white text-gray-800 px-8 py-3 rounded-lg font-semibold hover:bg-earth-50 transition shadow-lg"
             >
               Call Now
             </a>

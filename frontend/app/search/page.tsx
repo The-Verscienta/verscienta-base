@@ -63,7 +63,7 @@ function Hit({ hit }: { hit: any }) {
 
         {/* Card Body */}
         <div className="p-5">
-          <h2 className="text-lg font-bold text-earth-800 mb-2 group-hover:text-earth-600 transition-colors line-clamp-1">
+          <h2 className="text-lg font-bold text-gray-800 mb-2 group-hover:text-earth-600 transition-colors line-clamp-1">
             {hit.title || hit.name}
           </h2>
 
@@ -181,7 +181,7 @@ function SearchContent() {
               </span>
             </div>
 
-            <h1 className="font-serif text-4xl md:text-5xl lg:text-6xl font-bold text-earth-900 mb-4 leading-tight">
+            <h1 className="font-serif text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 mb-4 leading-tight">
               Search
             </h1>
 
@@ -227,7 +227,7 @@ function SearchContent() {
           {/* Sidebar Filters */}
           <aside className="lg:col-span-1">
             <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 sticky top-24">
-              <h3 className="text-lg font-bold text-earth-800 mb-4 flex items-center gap-2">
+              <h3 className="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2">
                 <svg className="w-5 h-5 text-sage-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
                 </svg>
@@ -346,7 +346,7 @@ function SearchContent() {
               fallback={
                 <div className="bg-gradient-to-br from-sage-50 to-earth-50 rounded-2xl p-12 text-center border border-sage-200">
                   <div className="text-6xl mb-6">🔍</div>
-                  <h2 className="text-2xl font-bold text-earth-800 mb-3">
+                  <h2 className="text-2xl font-bold text-gray-800 mb-3">
                     Start Your Search
                   </h2>
                   <p className="text-gray-600 max-w-md mx-auto mb-6">
@@ -364,7 +364,7 @@ function SearchContent() {
                 fallback={
                   <div className="bg-gradient-to-br from-yellow-50 to-orange-50 rounded-2xl p-12 text-center border border-yellow-200">
                     <div className="text-6xl mb-6">🤔</div>
-                    <h2 className="text-2xl font-bold text-earth-800 mb-3">
+                    <h2 className="text-2xl font-bold text-gray-800 mb-3">
                       No Results Found
                     </h2>
                     <p className="text-gray-600 max-w-md mx-auto mb-6">

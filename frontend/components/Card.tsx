@@ -14,7 +14,7 @@ export function Card({ title, description, href, icon, tags, className = '' }: C
   const content = (
     <div className={`bg-white p-6 rounded-lg shadow-md hover:shadow-xl transition-all duration-200 ${className}`}>
       {icon && <div className="text-4xl mb-4">{icon}</div>}
-      <h3 className="text-xl font-semibold text-earth-800 mb-2">{title}</h3>
+      <h3 className="text-xl font-semibold text-gray-800 mb-2">{title}</h3>
       {description && <p className="text-sage-700 mb-4">{description}</p>}
       {tags && tags.length > 0 && (
         <div className="flex flex-wrap gap-2 mt-4">
@@ -29,7 +29,7 @@ export function Card({ title, description, href, icon, tags, className = '' }: C
         </div>
       )}
       {href && (
-        <div className="mt-4 text-earth-600 font-medium hover:text-earth-800">
+        <div className="mt-4 text-earth-600 font-medium hover:text-gray-800">
           Learn more →
         </div>
       )}

@@ -50,7 +50,7 @@ export function ContributionsSection({ formulaId, formulaTitle }: ContributionsS
   return (
     <div className="bg-white rounded-lg shadow-lg p-8 mb-6">
       <div className="flex items-center justify-between mb-6">
-        <h2 className="text-2xl font-bold text-earth-800">
+        <h2 className="text-2xl font-bold text-gray-800">
           Community Contributions
           {!isLoading && contributions.length > 0 && (
             <span className="ml-2 text-lg font-normal text-gray-500">

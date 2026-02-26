@@ -26,7 +26,7 @@ export default function NotFound() {
         </h1>
 
         {/* Fun message */}
-        <h2 className="text-2xl md:text-3xl font-serif font-bold text-earth-800 -mt-4 mb-4">
+        <h2 className="text-2xl md:text-3xl font-serif font-bold text-gray-800 -mt-4 mb-4">
           {randomPun}
         </h2>
 
@@ -37,7 +37,7 @@ export default function NotFound() {
 
         {/* Helpful suggestions */}
         <div className="bg-sage-50 rounded-xl p-6 mb-8 text-left">
-          <h3 className="font-semibold text-earth-800 mb-3 flex items-center gap-2">
+          <h3 className="font-semibold text-gray-800 mb-3 flex items-center gap-2">
             <span>🧭</span> Maybe you were looking for:
           </h3>
           <ul className="space-y-2">

@@ -142,7 +142,7 @@ export default async function PractitionersPage({ searchParams }: PageProps) {
       <div className="mb-10">
         <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-6">
           <div>
-            <h1 className="text-4xl md:text-5xl font-serif font-bold text-earth-800 mb-3">
+            <h1 className="text-4xl md:text-5xl font-serif font-bold text-gray-800 mb-3">
               Find Practitioners
             </h1>
             <p className="text-xl text-gray-600 max-w-2xl">
@@ -180,7 +180,7 @@ export default async function PractitionersPage({ searchParams }: PageProps) {
       {practitioners.length === 0 ? (
         <div className="bg-gradient-to-br from-sage-50 to-earth-50 rounded-2xl p-12 text-center border border-sage-200">
           <div className="text-7xl mb-6">👨‍⚕️</div>
-          <h2 className="text-2xl font-bold text-earth-800 mb-3">
+          <h2 className="text-2xl font-bold text-gray-800 mb-3">
             No Practitioners Found
           </h2>
           <p className="text-gray-600 mb-6 max-w-md mx-auto">
@@ -225,7 +225,7 @@ export default async function PractitionersPage({ searchParams }: PageProps) {
                     </div>
                     <div className="flex-1">
                       <div className="flex items-start justify-between gap-3 mb-2">
-                        <h2 className="text-2xl font-bold text-earth-800 group-hover:text-earth-600 transition-colors">
+                        <h2 className="text-2xl font-bold text-gray-800 group-hover:text-earth-600 transition-colors">
                           {practitioner.title || practitioner.field_name}
                         </h2>
                         {practitioner.field_accepting_new_patients && (
@@ -289,7 +289,7 @@ export default async function PractitionersPage({ searchParams }: PageProps) {
           </div>
 
           {/* All Practitioners Grid */}
-          <h2 className="text-2xl font-bold text-earth-800 mb-6">All Practitioners</h2>
+          <h2 className="text-2xl font-bold text-gray-800 mb-6">All Practitioners</h2>
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-12">
             {practitioners.slice(2).map((practitioner) => {
               const icon = practiceTypeIcons[practitioner.field_practice_type || 'default'] || practiceTypeIcons.default;
@@ -338,7 +338,7 @@ export default async function PractitionersPage({ searchParams }: PageProps) {
 
                   {/* Card Body */}
                   <div className="p-5">
-                    <h3 className="text-lg font-bold text-earth-800 mb-1 group-hover:text-earth-600 transition-colors">
+                    <h3 className="text-lg font-bold text-gray-800 mb-1 group-hover:text-earth-600 transition-colors">
                       {practitioner.title || practitioner.field_name}
                     </h3>
 
@@ -439,7 +439,7 @@ export default async function PractitionersPage({ searchParams }: PageProps) {
                         </span>
                       )}
                     </div>
-                    <h3 className="text-lg font-bold text-earth-800 mb-2">
+                    <h3 className="text-lg font-bold text-gray-800 mb-2">
                       {practitioner.title || practitioner.field_name}
                     </h3>
                     {practitioner.field_address && (
@@ -478,7 +478,7 @@ export default async function PractitionersPage({ searchParams }: PageProps) {
               href="https://backend.ddev.site/node/add/practitioner"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-block bg-white text-earth-800 px-8 py-3 rounded-xl font-semibold hover:bg-earth-50 transition shadow-lg"
+              className="inline-block bg-white text-gray-800 px-8 py-3 rounded-xl font-semibold hover:bg-earth-50 transition shadow-lg"
             >
               Create Your Profile
             </a>

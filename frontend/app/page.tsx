@@ -41,7 +41,7 @@ export default function Home() {
             <span className="text-sm font-medium text-earth-700 tracking-wide">Bridging Ancient Wisdom & Modern Science</span>
           </div>
 
-          <h1 className="font-serif text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold text-earth-900 mb-8 tracking-tight leading-[1.05] animate-slide-up">
+          <h1 className="font-serif text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold text-gray-900 mb-8 tracking-tight leading-[1.05] animate-slide-up">
             Your Guide to
             <span className="block mt-2">
               <GradientText variant="sage" className="text-shadow-sm">Holistic Wellness</GradientText>
@@ -101,7 +101,7 @@ export default function Home() {
               Our Platform
               <span className="w-8 h-px bg-sage-300" />
             </div>
-            <h2 className="font-serif text-4xl md:text-5xl font-bold text-earth-900 mb-6">
+            <h2 className="font-serif text-4xl md:text-5xl font-bold text-gray-900 mb-6">
               Comprehensive Health <GradientText variant="earth">Resources</GradientText>
             </h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
@@ -120,7 +120,7 @@ export default function Home() {
                 <div className="w-16 h-16 bg-gradient-to-br from-sage-100 to-earth-100 rounded-2xl flex items-center justify-center text-3xl mb-6 group-hover:scale-110 transition-transform shadow-sm">
                   🌿
                 </div>
-                <h3 className="font-serif text-xl font-bold text-earth-800 mb-3 group-hover:text-sage-700 transition-colors">
+                <h3 className="font-serif text-xl font-bold text-gray-800 mb-3 group-hover:text-sage-700 transition-colors">
                   Materia Medica
                 </h3>
                 <p className="text-gray-600 text-sm leading-relaxed mb-4">
@@ -146,7 +146,7 @@ export default function Home() {
                 <div className="w-16 h-16 bg-gradient-to-br from-earth-100 to-gold-100 rounded-2xl flex items-center justify-center text-3xl mb-6 group-hover:scale-110 transition-transform shadow-sm">
                   ☯️
                 </div>
-                <h3 className="font-serif text-xl font-bold text-earth-800 mb-3 group-hover:text-sage-700 transition-colors">
+                <h3 className="font-serif text-xl font-bold text-gray-800 mb-3 group-hover:text-sage-700 transition-colors">
                   Healing Modalities
                 </h3>
                 <p className="text-gray-600 text-sm leading-relaxed mb-4">
@@ -181,7 +181,7 @@ export default function Home() {
                 <div className="w-16 h-16 bg-gradient-to-br from-gold-100 to-amber-100 rounded-2xl flex items-center justify-center text-3xl mb-6 group-hover:scale-110 transition-transform shadow-sm">
                   🤖
                 </div>
-                <h3 className="font-serif text-xl font-bold text-earth-800 mb-3 group-hover:text-sage-700 transition-colors">
+                <h3 className="font-serif text-xl font-bold text-gray-800 mb-3 group-hover:text-sage-700 transition-colors">
                   AI-Powered Analysis
                 </h3>
                 <p className="text-gray-600 text-sm leading-relaxed mb-4">
@@ -312,7 +312,7 @@ export default function Home() {
               What People Say
               <span className="w-8 h-px bg-sage-300" />
             </div>
-            <h2 className="font-serif text-4xl md:text-5xl font-bold text-earth-900 mb-6">
+            <h2 className="font-serif text-4xl md:text-5xl font-bold text-gray-900 mb-6">
               Stories of <GradientText variant="sage">Healing</GradientText>
             </h2>
             <p className="text-xl text-gray-600 max-w-2xl mx-auto">
@@ -374,7 +374,7 @@ export default function Home() {
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Link
                   href="/symptom-checker"
-                  className="group inline-flex items-center justify-center gap-3 bg-white text-earth-800 px-8 py-4 rounded-xl font-semibold text-lg shadow-lg hover:bg-earth-50 transition-all hover:-translate-y-0.5"
+                  className="group inline-flex items-center justify-center gap-3 bg-white text-gray-800 px-8 py-4 rounded-xl font-semibold text-lg shadow-lg hover:bg-earth-50 transition-all hover:-translate-y-0.5"
                 >
                   Get Started Now
                   <svg className="w-5 h-5 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">

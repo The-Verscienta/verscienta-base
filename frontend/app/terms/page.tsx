@@ -18,7 +18,7 @@ export default function TermsPage() {
           </svg>
           <span className="text-gray-600 font-medium text-sm">Legal</span>
         </div>
-        <h1 className="text-4xl md:text-5xl font-serif font-bold text-earth-900 mb-2">
+        <h1 className="text-4xl md:text-5xl font-serif font-bold text-gray-900 mb-2">
           Terms of Service
         </h1>
         <p className="text-gray-600">
@@ -31,7 +31,7 @@ export default function TermsPage() {
       <div className="bg-white rounded-2xl shadow-lg border border-earth-200 p-8 md:p-12">
         <div className="prose prose-earth max-w-none">
           <section className="mb-8">
-            <h2 className="text-2xl font-serif font-bold text-earth-800 mb-4">Agreement to Terms</h2>
+            <h2 className="text-2xl font-serif font-bold text-gray-800 mb-4">Agreement to Terms</h2>
             <p className="text-gray-700 leading-relaxed">
               By accessing or using Verscienta Health ("the Service"), you agree to be bound
               by these Terms of Service. If you do not agree to these terms, please do not
@@ -54,7 +54,7 @@ export default function TermsPage() {
           </section>
 
           <section className="mb-8">
-            <h2 className="text-2xl font-serif font-bold text-earth-800 mb-4">Use of Service</h2>
+            <h2 className="text-2xl font-serif font-bold text-gray-800 mb-4">Use of Service</h2>
 
             <h3 className="text-lg font-semibold text-gray-700 mt-4 mb-2">Permitted Use</h3>
             <p className="text-gray-700 leading-relaxed mb-3">
@@ -83,7 +83,7 @@ export default function TermsPage() {
           </section>
 
           <section className="mb-8">
-            <h2 className="text-2xl font-serif font-bold text-earth-800 mb-4">Intellectual Property</h2>
+            <h2 className="text-2xl font-serif font-bold text-gray-800 mb-4">Intellectual Property</h2>
             <p className="text-gray-700 leading-relaxed mb-3">
               All content on Verscienta Health, including but not limited to text, graphics,
               logos, images, and software, is the property of Verscienta Health or its content
@@ -96,7 +96,7 @@ export default function TermsPage() {
           </section>
 
           <section className="mb-8">
-            <h2 className="text-2xl font-serif font-bold text-earth-800 mb-4">User Content</h2>
+            <h2 className="text-2xl font-serif font-bold text-gray-800 mb-4">User Content</h2>
             <p className="text-gray-700 leading-relaxed mb-3">
               By submitting content (reviews, comments, feedback) to our Service, you:
             </p>
@@ -109,7 +109,7 @@ export default function TermsPage() {
           </section>
 
           <section className="mb-8">
-            <h2 className="text-2xl font-serif font-bold text-earth-800 mb-4">Third-Party Links</h2>
+            <h2 className="text-2xl font-serif font-bold text-gray-800 mb-4">Third-Party Links</h2>
             <p className="text-gray-700 leading-relaxed">
               Our Service may contain links to third-party websites or services. We are not
               responsible for the content, privacy policies, or practices of any third-party
@@ -118,7 +118,7 @@ export default function TermsPage() {
           </section>
 
           <section className="mb-8">
-            <h2 className="text-2xl font-serif font-bold text-earth-800 mb-4">Limitation of Liability</h2>
+            <h2 className="text-2xl font-serif font-bold text-gray-800 mb-4">Limitation of Liability</h2>
             <p className="text-gray-700 leading-relaxed mb-3">
               To the fullest extent permitted by law, Verscienta Health shall not be liable for:
             </p>
@@ -132,7 +132,7 @@ export default function TermsPage() {
           </section>
 
           <section className="mb-8">
-            <h2 className="text-2xl font-serif font-bold text-earth-800 mb-4">Disclaimer of Warranties</h2>
+            <h2 className="text-2xl font-serif font-bold text-gray-800 mb-4">Disclaimer of Warranties</h2>
             <p className="text-gray-700 leading-relaxed">
               The Service is provided "as is" and "as available" without warranties of any kind,
               either express or implied, including but not limited to warranties of merchantability,
@@ -141,7 +141,7 @@ export default function TermsPage() {
           </section>
 
           <section className="mb-8">
-            <h2 className="text-2xl font-serif font-bold text-earth-800 mb-4">Indemnification</h2>
+            <h2 className="text-2xl font-serif font-bold text-gray-800 mb-4">Indemnification</h2>
             <p className="text-gray-700 leading-relaxed">
               You agree to indemnify and hold harmless Verscienta Health and its officers,
               directors, employees, and agents from any claims, damages, or expenses arising
@@ -150,7 +150,7 @@ export default function TermsPage() {
           </section>
 
           <section className="mb-8">
-            <h2 className="text-2xl font-serif font-bold text-earth-800 mb-4">Termination</h2>
+            <h2 className="text-2xl font-serif font-bold text-gray-800 mb-4">Termination</h2>
             <p className="text-gray-700 leading-relaxed">
               We reserve the right to terminate or suspend your access to the Service at any
               time, without notice, for any reason, including violation of these Terms.
@@ -158,7 +158,7 @@ export default function TermsPage() {
           </section>
 
           <section className="mb-8">
-            <h2 className="text-2xl font-serif font-bold text-earth-800 mb-4">Changes to Terms</h2>
+            <h2 className="text-2xl font-serif font-bold text-gray-800 mb-4">Changes to Terms</h2>
             <p className="text-gray-700 leading-relaxed">
               We may modify these Terms at any time. We will notify users of significant changes
               by posting a notice on our website. Your continued use of the Service after changes
@@ -167,7 +167,7 @@ export default function TermsPage() {
           </section>
 
           <section className="mb-8">
-            <h2 className="text-2xl font-serif font-bold text-earth-800 mb-4">Governing Law</h2>
+            <h2 className="text-2xl font-serif font-bold text-gray-800 mb-4">Governing Law</h2>
             <p className="text-gray-700 leading-relaxed">
               These Terms shall be governed by and construed in accordance with applicable laws,
               without regard to conflict of law principles.
@@ -175,14 +175,14 @@ export default function TermsPage() {
           </section>
 
           <section>
-            <h2 className="text-2xl font-serif font-bold text-earth-800 mb-4">Contact Us</h2>
+            <h2 className="text-2xl font-serif font-bold text-gray-800 mb-4">Contact Us</h2>
             <p className="text-gray-700 leading-relaxed">
               If you have questions about these Terms of Service, please contact us:
             </p>
             <div className="bg-earth-50 rounded-lg p-4 mt-4">
-              <p className="text-earth-800">
+              <p className="text-gray-800">
                 <strong>Verscienta Health</strong><br />
-                Email: <a href="mailto:legal@verscienta.health" className="text-gray-600 hover:text-earth-800">legal@verscienta.health</a>
+                Email: <a href="mailto:legal@verscienta.health" className="text-gray-600 hover:text-gray-800">legal@verscienta.health</a>
               </p>
             </div>
           </section>

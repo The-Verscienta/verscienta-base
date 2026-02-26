@@ -44,8 +44,8 @@ export function Navigation({ items = defaultItems, variant = 'horizontal', class
             aria-current={isActive(item.href) ? 'page' : undefined}
             className={`flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm font-medium transition-colors ${
               isActive(item.href)
-                ? 'bg-earth-100 text-earth-800 font-semibold'
-                : 'text-earth-600 hover:bg-earth-50 hover:text-earth-800'
+                ? 'bg-earth-100 text-gray-800 font-semibold'
+                : 'text-earth-600 hover:bg-earth-50 hover:text-gray-800'
             }`}
           >
             {item.icon && <span className="w-5 h-5 flex-shrink-0">{item.icon}</span>}
@@ -68,8 +68,8 @@ export function Navigation({ items = defaultItems, variant = 'horizontal', class
           aria-current={isActive(item.href) ? 'page' : undefined}
           className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
             isActive(item.href)
-              ? 'bg-earth-100 text-earth-800'
-              : 'text-earth-600 hover:bg-earth-50 hover:text-earth-800'
+              ? 'bg-earth-100 text-gray-800'
+              : 'text-earth-600 hover:bg-earth-50 hover:text-gray-800'
           }`}
         >
           {item.label}

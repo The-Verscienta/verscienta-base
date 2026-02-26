@@ -93,7 +93,7 @@ export function ReviewForm({
 
   return (
     <form onSubmit={handleSubmit} className={`bg-white rounded-xl border border-gray-100 p-6 ${className}`}>
-      <h3 className="font-semibold text-earth-800 mb-4">Review {entityTitle}</h3>
+      <h3 className="font-semibold text-gray-800 mb-4">Review {entityTitle}</h3>
 
       {/* Star Rating */}
       <div className="mb-4">

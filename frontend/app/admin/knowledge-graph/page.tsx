@@ -51,7 +51,7 @@ export default function KnowledgeGraphPage() {
     return (
       <PageWrapper>
         <div className="text-center py-20">
-          <h1 className="text-2xl font-serif text-earth-800 mb-4">Knowledge Graph</h1>
+          <h1 className="text-2xl font-serif text-gray-800 mb-4">Knowledge Graph</h1>
           <p className="text-earth-500">
             This feature is not enabled. Set <code className="bg-earth-100 px-2 py-1 rounded text-sm">NEXT_PUBLIC_KNOWLEDGE_GRAPH=true</code> to enable.
           </p>
@@ -63,7 +63,7 @@ export default function KnowledgeGraphPage() {
   return (
     <PageWrapper>
       <div className="mb-8">
-        <h1 className="text-3xl md:text-4xl font-serif font-bold text-earth-800 mb-2">
+        <h1 className="text-3xl md:text-4xl font-serif font-bold text-gray-800 mb-2">
           Knowledge Graph
         </h1>
         <p className="text-gray-600">
@@ -84,7 +84,7 @@ export default function KnowledgeGraphPage() {
                 id="herb-select"
                 value={selectedHerb}
                 onChange={(e) => setSelectedHerb(e.target.value)}
-                className="w-full px-3 py-2 border border-earth-300 rounded-lg text-earth-800 bg-white focus:ring-2 focus:ring-sage-300 focus:border-sage-400"
+                className="w-full px-3 py-2 border border-earth-300 rounded-lg text-gray-800 bg-white focus:ring-2 focus:ring-sage-300 focus:border-sage-400"
               >
                 <option value="">Choose an herb...</option>
                 {herbs.map((h) => (
@@ -104,7 +104,7 @@ export default function KnowledgeGraphPage() {
               id="depth-select"
               value={depth}
               onChange={(e) => setDepth(parseInt(e.target.value, 10))}
-              className="w-full px-3 py-2 border border-earth-300 rounded-lg text-earth-800 bg-white focus:ring-2 focus:ring-sage-300 focus:border-sage-400"
+              className="w-full px-3 py-2 border border-earth-300 rounded-lg text-gray-800 bg-white focus:ring-2 focus:ring-sage-300 focus:border-sage-400"
             >
               <option value={1}>1</option>
               <option value={2}>2</option>

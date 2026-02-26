@@ -131,7 +131,7 @@ export default function FAQPage() {
           </svg>
           <span className="text-gray-600 font-medium text-sm">Help Center</span>
         </div>
-        <h1 className="text-4xl md:text-5xl font-serif font-bold text-earth-900 mb-4">
+        <h1 className="text-4xl md:text-5xl font-serif font-bold text-gray-900 mb-4">
           Frequently Asked Questions
         </h1>
         <p className="text-xl text-gray-600 max-w-2xl mx-auto">
@@ -203,7 +203,7 @@ export default function FAQPage() {
                     <span className="text-xs font-medium text-sage-600 bg-sage-100 px-2 py-1 rounded mb-2 inline-block">
                       {faq.category}
                     </span>
-                    <h3 className="text-lg font-semibold text-earth-800">
+                    <h3 className="text-lg font-semibold text-gray-800">
                       {faq.question}
                     </h3>
                   </div>
@@ -241,7 +241,7 @@ export default function FAQPage() {
         </p>
         <Link
           href="/contact"
-          className="inline-block bg-white text-earth-800 px-8 py-3 rounded-lg font-semibold hover:bg-earth-50 transition shadow-lg"
+          className="inline-block bg-white text-gray-800 px-8 py-3 rounded-lg font-semibold hover:bg-earth-50 transition shadow-lg"
         >
           Contact Us
         </Link>

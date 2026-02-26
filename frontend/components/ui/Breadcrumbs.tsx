@@ -64,7 +64,7 @@ export function Breadcrumbs({ items, className = '' }: BreadcrumbsProps) {
                 </svg>
               )}
               {isLast || !item.href ? (
-                <span className="text-earth-800 font-medium">{item.label}</span>
+                <span className="text-gray-800 font-medium">{item.label}</span>
               ) : (
                 <Link
                   href={item.href}

@@ -150,7 +150,7 @@ export default function FavoritesPage() {
                       </svg>
                     </div>
                     <div className="flex-1 min-w-0">
-                      <h3 className="font-semibold text-earth-800 truncate">{fav.title}</h3>
+                      <h3 className="font-semibold text-gray-800 truncate">{fav.title}</h3>
                       <p className="text-xs text-gray-500">
                         {config.label} &middot; Saved {new Date(fav.savedAt).toLocaleDateString()}
                       </p>

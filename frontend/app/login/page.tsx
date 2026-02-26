@@ -121,7 +121,7 @@ export default function LoginPage() {
           <div className="text-center mb-8">
             <Link href="/" className="inline-block">
               <span className="text-4xl">🌿</span>
-              <h1 className="text-2xl font-serif font-bold text-earth-800 mt-2">
+              <h1 className="text-2xl font-serif font-bold text-gray-800 mt-2">
                 Verscienta Health
               </h1>
             </Link>
@@ -129,7 +129,7 @@ export default function LoginPage() {
 
           <div className="bg-white rounded-2xl shadow-xl border border-earth-200 p-8">
             <div className="text-center mb-8">
-              <h2 className="text-2xl font-bold text-earth-800 mb-2">
+              <h2 className="text-2xl font-bold text-gray-800 mb-2">
                 Sign In
               </h2>
               <p className="text-gray-600">
@@ -226,7 +226,7 @@ export default function LoginPage() {
                 </label>
                 <Link
                   href="/forgot-password"
-                  className="text-sm text-earth-600 hover:text-earth-800 font-medium"
+                  className="text-sm text-earth-600 hover:text-gray-800 font-medium"
                 >
                   Forgot password?
                 </Link>
@@ -286,7 +286,7 @@ export default function LoginPage() {
 
           <p className="text-center mt-8 text-gray-600">
             Don't have an account?{' '}
-            <Link href="/register" className="text-earth-600 hover:text-earth-800 font-semibold">
+            <Link href="/register" className="text-earth-600 hover:text-gray-800 font-semibold">
               Create one free
             </Link>
           </p>

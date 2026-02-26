@@ -164,7 +164,7 @@ export default function RegisterPage() {
           <div className="text-center mb-6">
             <Link href="/" className="inline-block">
               <span className="text-4xl">🌿</span>
-              <h1 className="text-2xl font-serif font-bold text-earth-800 mt-2">
+              <h1 className="text-2xl font-serif font-bold text-gray-800 mt-2">
                 Verscienta Health
               </h1>
             </Link>
@@ -172,7 +172,7 @@ export default function RegisterPage() {
 
           <div className="bg-white rounded-2xl shadow-xl border border-earth-200 p-8">
             <div className="text-center mb-6">
-              <h2 className="text-2xl font-bold text-earth-800 mb-2">
+              <h2 className="text-2xl font-bold text-gray-800 mb-2">
                 Create Your Account
               </h2>
               <p className="text-gray-600">
@@ -403,11 +403,11 @@ export default function RegisterPage() {
                     />
                     <span className="text-sm text-gray-600">
                       I agree to the{' '}
-                      <Link href="/terms" className="text-earth-600 hover:text-earth-800 font-medium">
+                      <Link href="/terms" className="text-earth-600 hover:text-gray-800 font-medium">
                         Terms of Service
                       </Link>{' '}
                       and{' '}
-                      <Link href="/privacy" className="text-earth-600 hover:text-earth-800 font-medium">
+                      <Link href="/privacy" className="text-earth-600 hover:text-gray-800 font-medium">
                         Privacy Policy
                       </Link>
                     </span>
@@ -443,7 +443,7 @@ export default function RegisterPage() {
 
           <p className="text-center mt-6 text-gray-600">
             Already have an account?{' '}
-            <Link href="/login" className="text-earth-600 hover:text-earth-800 font-semibold">
+            <Link href="/login" className="text-earth-600 hover:text-gray-800 font-semibold">
               Sign in
             </Link>
           </p>

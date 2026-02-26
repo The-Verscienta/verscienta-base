@@ -120,7 +120,7 @@ export default async function ConditionDetailPage({ params }: ConditionDetailPro
               <div className="text-8xl">🏥</div>
             </div>
             <div className="relative p-8 md:p-12">
-              <h1 className="font-serif text-5xl md:text-6xl font-bold text-earth-900 mb-4 tracking-tight">
+              <h1 className="font-serif text-5xl md:text-6xl font-bold text-gray-900 mb-4 tracking-tight">
                 {name}
               </h1>
 
@@ -215,7 +215,7 @@ export default async function ConditionDetailPage({ params }: ConditionDetailPro
                   >
                     <div className="flex items-start justify-between">
                       <div>
-                        <h3 className="font-bold text-earth-800 text-lg mb-1">
+                        <h3 className="font-bold text-gray-800 text-lg mb-1">
                           {modality.title || 'Modality'}
                         </h3>
                         {modality.field_excels_at && modality.field_excels_at.length > 0 && (
@@ -259,7 +259,7 @@ export default async function ConditionDetailPage({ params }: ConditionDetailPro
                     className="block border border-earth-200 rounded-xl p-4 hover:shadow-lg hover:border-sage-400 transition"
                   >
                     <div className="flex items-start justify-between mb-2">
-                      <h3 className="font-bold text-earth-800 text-lg">
+                      <h3 className="font-bold text-gray-800 text-lg">
                         {formula.title}
                       </h3>
                       <Tag variant="sage" size="sm">
@@ -294,7 +294,7 @@ export default async function ConditionDetailPage({ params }: ConditionDetailPro
         >
           <div className="space-y-4 text-gray-700">
             <div>
-              <h3 className="font-semibold text-earth-800 mb-2 flex items-center gap-2">
+              <h3 className="font-semibold text-gray-800 mb-2 flex items-center gap-2">
                 <span>🧘</span>
                 Mind-Body Practices
               </h3>
@@ -304,7 +304,7 @@ export default async function ConditionDetailPage({ params }: ConditionDetailPro
               </p>
             </div>
             <div>
-              <h3 className="font-semibold text-earth-800 mb-2 flex items-center gap-2">
+              <h3 className="font-semibold text-gray-800 mb-2 flex items-center gap-2">
                 <span>🥗</span>
                 Dietary Considerations
               </h3>
@@ -314,7 +314,7 @@ export default async function ConditionDetailPage({ params }: ConditionDetailPro
               </p>
             </div>
             <div>
-              <h3 className="font-semibold text-earth-800 mb-2 flex items-center gap-2">
+              <h3 className="font-semibold text-gray-800 mb-2 flex items-center gap-2">
                 <span>💚</span>
                 Lifestyle Modifications
               </h3>
@@ -325,7 +325,7 @@ export default async function ConditionDetailPage({ params }: ConditionDetailPro
             </div>
             {condition.field_complementary_approaches && (typeof condition.field_complementary_approaches === 'string' ? condition.field_complementary_approaches : condition.field_complementary_approaches?.value) && (
               <div>
-                <h3 className="font-semibold text-earth-800 mb-2 flex items-center gap-2">
+                <h3 className="font-semibold text-gray-800 mb-2 flex items-center gap-2">
                   <span>🌱</span>
                   Complementary Approaches
                 </h3>
@@ -348,7 +348,7 @@ export default async function ConditionDetailPage({ params }: ConditionDetailPro
           </p>
           <Link
             href="/practitioners"
-            className="inline-block bg-white text-earth-800 px-8 py-3 rounded-xl font-semibold hover:bg-earth-50 transition shadow-lg"
+            className="inline-block bg-white text-gray-800 px-8 py-3 rounded-xl font-semibold hover:bg-earth-50 transition shadow-lg"
           >
             Find a Practitioner
           </Link>

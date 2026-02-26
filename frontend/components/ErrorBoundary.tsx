@@ -58,7 +58,7 @@ export class ErrorBoundary extends Component<Props, State> {
               </button>
               <Link
                 href="/"
-                className="block text-earth-600 hover:text-earth-800 font-medium"
+                className="block text-earth-600 hover:text-gray-800 font-medium"
               >
                 Go to Home Page
               </Link>
@@ -119,7 +119,7 @@ export function ErrorFallback({
           )}
           <Link
             href="/"
-            className="block text-earth-600 hover:text-earth-800 font-medium"
+            className="block text-earth-600 hover:text-gray-800 font-medium"
           >
             Go to Home Page
           </Link>
@@ -181,7 +181,7 @@ export function NotFoundError({
     <div className="min-h-[60vh] flex items-center justify-center p-8">
       <div className="text-center max-w-md">
         <div className="text-8xl font-serif font-bold text-earth-200 mb-4">404</div>
-        <h1 className="text-2xl font-bold text-earth-800 mb-2">{title}</h1>
+        <h1 className="text-2xl font-bold text-gray-800 mb-2">{title}</h1>
         <p className="text-gray-600 mb-8">{description}</p>
         <div className="space-y-3">
           <Link
@@ -192,7 +192,7 @@ export function NotFoundError({
           </Link>
           <Link
             href="/search"
-            className="block text-earth-600 hover:text-earth-800 font-medium"
+            className="block text-earth-600 hover:text-gray-800 font-medium"
           >
             Search for content
           </Link>

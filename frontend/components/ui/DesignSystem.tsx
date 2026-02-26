@@ -120,7 +120,7 @@ export function Tag({
 }) {
   const variants = {
     sage: 'bg-sage-100 text-sage-800 border-sage-200',
-    earth: 'bg-earth-100 text-earth-800 border-earth-200',
+    earth: 'bg-earth-100 text-gray-800 border-earth-200',
     amber: 'bg-amber-100 text-amber-800 border-amber-200',
     blue: 'bg-blue-100 text-blue-800 border-blue-200',
     purple: 'bg-purple-100 text-purple-800 border-purple-200',
@@ -172,7 +172,7 @@ export function FeatureCard({
       className={`group relative block bg-white rounded-2xl border border-earth-200 p-6 card-interactive hover:border-sage-300 ${href ? 'cursor-pointer' : ''} ${variant === 'featured' ? 'md:p-8' : ''}`}
     >
       <div className="text-4xl mb-4">{icon}</div>
-      <h3 className={`font-serif font-bold text-earth-900 mb-2 group-hover:text-sage-700 transition-colors ${variant === 'featured' ? 'text-2xl' : 'text-xl'}`}>
+      <h3 className={`font-serif font-bold text-gray-900 mb-2 group-hover:text-sage-700 transition-colors ${variant === 'featured' ? 'text-2xl' : 'text-xl'}`}>
         {title}
       </h3>
       {description && (
@@ -229,7 +229,7 @@ export function HeroSection({
       <div className="absolute -bottom-20 -left-20 w-60 h-60 bg-earth-200/20 rounded-full blur-3xl" />
 
       <div className="relative max-w-6xl mx-auto px-4 text-center">
-        <h1 className="font-serif text-5xl md:text-6xl lg:text-7xl font-bold text-earth-900 mb-6 tracking-tight">
+        <h1 className="font-serif text-5xl md:text-6xl lg:text-7xl font-bold text-gray-900 mb-6 tracking-tight">
           {title}
         </h1>
         {subtitle && (
@@ -250,7 +250,7 @@ export function StatsBar({ stats }: { stats: { label: string; value: string | nu
       {stats.map((stat, idx) => (
         <div key={idx} className="bg-white/80 backdrop-blur-sm rounded-xl border border-earth-200 p-4 text-center">
           {stat.icon && <span className="text-2xl mb-2 block">{stat.icon}</span>}
-          <div className="text-3xl font-bold text-earth-800 font-serif">{stat.value}</div>
+          <div className="text-3xl font-bold text-gray-800 font-serif">{stat.value}</div>
           <div className="text-sm text-gray-600 mt-1">{stat.label}</div>
         </div>
       ))}
@@ -277,7 +277,7 @@ export function EmptyState({
       <div className="text-6xl mb-4 opacity-50">
         {typeof icon === 'string' ? icon : <div className="flex justify-center">{icon}</div>}
       </div>
-      <h3 className="font-serif text-2xl font-bold text-earth-800 mb-2">{title}</h3>
+      <h3 className="font-serif text-2xl font-bold text-gray-800 mb-2">{title}</h3>
       {description && (
         <p className="text-gray-600 max-w-md mx-auto mb-6">{description}</p>
       )}
@@ -362,7 +362,7 @@ export function BackLink({
     <div className={`text-center py-8 ${className}`}>
       <a
         href={href}
-        className="inline-flex items-center gap-3 text-earth-600 hover:text-earth-800 font-semibold text-lg transition-colors group"
+        className="inline-flex items-center gap-3 text-earth-600 hover:text-gray-800 font-semibold text-lg transition-colors group"
       >
         <svg className="w-5 h-5 transition-transform group-hover:-translate-x-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
           <path d="M19 12H5M12 19l-7-7 7-7"/>
@@ -396,7 +396,7 @@ export function TableOfContents({
           <li key={item.id}>
             <a
               href={`#${item.id}`}
-              className="block py-2 px-3 text-sm text-earth-600 hover:text-earth-900 hover:bg-earth-50 rounded-lg transition-colors font-medium"
+              className="block py-2 px-3 text-sm text-earth-600 hover:text-gray-900 hover:bg-earth-50 rounded-lg transition-colors font-medium"
             >
               {item.label}
             </a>
@@ -521,7 +521,7 @@ export function TestimonialCard({
           )}
           <div>
             <p className={`font-semibold ${
-              variant === 'featured' ? 'text-white' : 'text-earth-800'
+              variant === 'featured' ? 'text-white' : 'text-gray-800'
             }`}>
               {author}
             </p>
@@ -712,7 +712,7 @@ export function Accordion({
             onClick={() => setOpenIndex(openIndex === index ? null : index)}
             className="w-full flex items-center justify-between px-6 py-4 text-left hover:bg-earth-50/50 transition-colors"
           >
-            <span className="font-serif font-semibold text-earth-800">{item.title}</span>
+            <span className="font-serif font-semibold text-gray-800">{item.title}</span>
             <svg
               className={`w-5 h-5 text-sage-600 transition-transform duration-300 ${
                 openIndex === index ? 'rotate-180' : ''
@@ -812,8 +812,8 @@ export function PillNav({
           onClick={() => onChange(index)}
           className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 ${
             activeIndex === index
-              ? 'bg-white text-earth-800 shadow-sm'
-              : 'text-earth-600 hover:text-earth-800'
+              ? 'bg-white text-gray-800 shadow-sm'
+              : 'text-earth-600 hover:text-gray-800'
           }`}
         >
           {item.icon && <span>{item.icon}</span>}
@@ -883,7 +883,7 @@ export function NumberedList({
             {index + 1}
           </div>
           <div className="pt-1">
-            <h4 className="font-serif font-bold text-earth-800 mb-1">{item.title}</h4>
+            <h4 className="font-serif font-bold text-gray-800 mb-1">{item.title}</h4>
             <p className="text-gray-600 text-sm leading-relaxed">{item.description}</p>
           </div>
         </div>

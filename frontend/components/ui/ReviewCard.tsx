@@ -101,7 +101,7 @@ export function ReviewCard({
               </svg>
             </div>
             <div>
-              <p className="font-medium text-earth-800">{review.title || 'Anonymous User'}</p>
+              <p className="font-medium text-gray-800">{review.title || 'Anonymous User'}</p>
               <p className="text-sm text-gray-500">{createdDate}</p>
             </div>
           </div>
@@ -157,7 +157,7 @@ export function ReviewCard({
             </svg>
           </div>
           <div>
-            <p className="font-medium text-earth-800 text-sm">{review.title || 'Anonymous'}</p>
+            <p className="font-medium text-gray-800 text-sm">{review.title || 'Anonymous'}</p>
             <p className="text-xs text-gray-400">{createdDate}</p>
           </div>
         </div>
@@ -189,7 +189,7 @@ export function ReviewSummary({
     <div className={`bg-white rounded-xl shadow-sm border border-gray-100 p-6 ${className}`}>
       <div className="flex items-center gap-6">
         <div className="text-center">
-          <div className="text-4xl font-bold text-earth-800">{averageRating.toFixed(1)}</div>
+          <div className="text-4xl font-bold text-gray-800">{averageRating.toFixed(1)}</div>
           <StarRating rating={averageRating} />
           <p className="text-sm text-gray-500 mt-1">{totalReviews} review{totalReviews !== 1 ? 's' : ''}</p>
         </div>

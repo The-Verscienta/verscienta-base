@@ -242,7 +242,7 @@ function ToastItem({ toast }: { toast: ToastData }) {
                 toast.action?.onClick();
                 handleDismiss();
               }}
-              className="mt-2 text-sm font-medium text-earth-600 hover:text-earth-800 transition"
+              className="mt-2 text-sm font-medium text-earth-600 hover:text-gray-800 transition"
             >
               {toast.action.label}
             </button>

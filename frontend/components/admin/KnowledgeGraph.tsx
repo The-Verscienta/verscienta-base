@@ -181,7 +181,7 @@ export default function KnowledgeGraph({ herbId, depth = 2 }: KnowledgeGraphProp
       {selectedNode && (
         <div className="w-72 bg-white border border-earth-200 rounded-xl p-4">
           <div className="flex items-center justify-between mb-3">
-            <h3 className="font-semibold text-earth-800">{selectedNode.label}</h3>
+            <h3 className="font-semibold text-gray-800">{selectedNode.label}</h3>
             <button
               onClick={() => setSelectedNode(null)}
               className="text-earth-400 hover:text-earth-600"

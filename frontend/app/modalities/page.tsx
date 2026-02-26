@@ -175,7 +175,7 @@ export default async function ModalitiesPage({ searchParams }: PageProps) {
                 </span>
               </div>
 
-              <h1 className="font-serif text-4xl md:text-5xl lg:text-6xl font-bold text-earth-900 mb-4 leading-tight">
+              <h1 className="font-serif text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 mb-4 leading-tight">
                 Holistic Modalities
               </h1>
 
@@ -243,7 +243,7 @@ export default async function ModalitiesPage({ searchParams }: PageProps) {
               const picks = modalities.filter(m => m.field_editors_pick);
               return picks.length > 0 ? (
                 <div className="mb-12">
-                  <h2 className="font-serif text-2xl font-bold text-earth-800 mb-6 flex items-center gap-2">
+                  <h2 className="font-serif text-2xl font-bold text-gray-800 mb-6 flex items-center gap-2">
                     <span className="text-amber-500">&#9733;</span> Editor&apos;s Picks
                   </h2>
                   <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -256,7 +256,7 @@ export default async function ModalitiesPage({ searchParams }: PageProps) {
                           className="group bg-gradient-to-br from-amber-50 via-cream-50 to-sage-50 rounded-2xl p-6 border-2 border-amber-200 hover:border-amber-300 hover:shadow-xl transition-all duration-300"
                         >
                           <div className="flex items-start justify-between mb-2">
-                            <h3 className="font-serif text-lg font-bold text-earth-800 group-hover:text-sage-700 transition-colors">{modality.title}</h3>
+                            <h3 className="font-serif text-lg font-bold text-gray-800 group-hover:text-sage-700 transition-colors">{modality.title}</h3>
                             <span className="text-xs px-2 py-0.5 rounded-full font-semibold bg-amber-100 text-amber-800 border border-amber-200">&#9733; Pick</span>
                           </div>
                           {summary && <p className="text-sm text-gray-600 line-clamp-2 mb-3">{summary}...</p>}
@@ -290,7 +290,7 @@ export default async function ModalitiesPage({ searchParams }: PageProps) {
                         <ModalityIcon type={modality.title} />
                       </div>
                       <div className="flex-1">
-                        <h2 className="font-serif text-2xl font-bold text-earth-800 mb-2 group-hover:text-sage-700 transition-colors">
+                        <h2 className="font-serif text-2xl font-bold text-gray-800 mb-2 group-hover:text-sage-700 transition-colors">
                           {modality.title}
                         </h2>
                         {summary && (
@@ -323,7 +323,7 @@ export default async function ModalitiesPage({ searchParams }: PageProps) {
             {/* All Modalities Grid */}
             {modalities.length > 2 && (
               <>
-                <h2 className="font-serif text-2xl font-bold text-earth-800 mb-6">All Modalities</h2>
+                <h2 className="font-serif text-2xl font-bold text-gray-800 mb-6">All Modalities</h2>
                 <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-12">
                   {modalities.slice(2).map((modality) => {
                     const summary = modality.body?.summary ||
@@ -350,7 +350,7 @@ export default async function ModalitiesPage({ searchParams }: PageProps) {
                         </div>
 
                         <div className="p-5">
-                          <h3 className="font-serif text-lg font-bold text-earth-800 mb-2 group-hover:text-sage-700 transition-colors">
+                          <h3 className="font-serif text-lg font-bold text-gray-800 mb-2 group-hover:text-sage-700 transition-colors">
                             {modality.title}
                           </h3>
 
@@ -422,7 +422,7 @@ export default async function ModalitiesPage({ searchParams }: PageProps) {
                 </p>
                 <Link
                   href="/practitioners"
-                  className="inline-flex items-center gap-2 bg-white text-earth-800 px-8 py-3 rounded-xl font-semibold hover:bg-cream-50 transition-all shadow-lg hover:shadow-xl"
+                  className="inline-flex items-center gap-2 bg-white text-gray-800 px-8 py-3 rounded-xl font-semibold hover:bg-cream-50 transition-all shadow-lg hover:shadow-xl"
                 >
                   Browse Practitioners
                   <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">

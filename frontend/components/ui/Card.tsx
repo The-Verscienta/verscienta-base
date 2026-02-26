@@ -28,7 +28,7 @@ export function Card({
       {(title || subtitle) && (
         <div className="px-6 pt-6 pb-4 border-b border-gray-100">
           {title && (
-            <h3 className="text-xl font-bold text-earth-800 mb-1">{title}</h3>
+            <h3 className="text-xl font-bold text-gray-800 mb-1">{title}</h3>
           )}
           {subtitle && (
             <p className="text-sm text-gray-600">{subtitle}</p>

@@ -25,7 +25,7 @@ function StatCard({ label, count, href, icon }: { label: string; count: number; 
     >
       <div className="flex items-center justify-between mb-3">
         <span className="text-3xl">{icon}</span>
-        <span className="text-3xl font-bold text-earth-800">{count}</span>
+        <span className="text-3xl font-bold text-gray-800">{count}</span>
       </div>
       <p className="text-sm font-medium text-gray-600">{label}</p>
     </Link>
@@ -39,7 +39,7 @@ function QuickAction({ label, href, description }: { label: string; href: string
       className="flex items-center gap-4 p-4 bg-white border border-earth-200 rounded-xl hover:bg-earth-50 hover:border-sage-300 transition-all"
     >
       <div className="flex-1">
-        <p className="font-semibold text-earth-800">{label}</p>
+        <p className="font-semibold text-gray-800">{label}</p>
         <p className="text-sm text-earth-500">{description}</p>
       </div>
       <svg className="w-5 h-5 text-earth-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -106,7 +106,7 @@ export default function AdminDashboard() {
   return (
     <PageWrapper>
       <div className="mb-8">
-        <h1 className="text-3xl md:text-4xl font-serif font-bold text-earth-800 mb-2">Admin Dashboard</h1>
+        <h1 className="text-3xl md:text-4xl font-serif font-bold text-gray-800 mb-2">Admin Dashboard</h1>
         <p className="text-gray-600">Content overview and quick actions for Verscienta Health.</p>
       </div>
 
@@ -191,19 +191,19 @@ export default function AdminDashboard() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
             <div>
               <span className="text-earth-500">Backend URL:</span>
-              <span className="ml-2 font-mono text-earth-800">{drupalAdminUrl}</span>
+              <span className="ml-2 font-mono text-gray-800">{drupalAdminUrl}</span>
             </div>
             <div>
               <span className="text-earth-500">Frontend:</span>
-              <span className="ml-2 font-mono text-earth-800">Next.js 15 + React 19</span>
+              <span className="ml-2 font-mono text-gray-800">Next.js 15 + React 19</span>
             </div>
             <div>
               <span className="text-earth-500">Backend:</span>
-              <span className="ml-2 font-mono text-earth-800">Drupal 11 + JSON:API</span>
+              <span className="ml-2 font-mono text-gray-800">Drupal 11 + JSON:API</span>
             </div>
             <div>
               <span className="text-earth-500">Search:</span>
-              <span className="ml-2 font-mono text-earth-800">Algolia</span>
+              <span className="ml-2 font-mono text-gray-800">Algolia</span>
             </div>
           </div>
         </div>

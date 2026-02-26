@@ -27,7 +27,7 @@ export function FormulaIngredientCard({ ingredient, totalWeight = 0 }: FormulaIn
       <div className="flex items-start justify-between mb-3">
         <Link
           href={`/herbs/${ingredient.id}`}
-          className="text-lg font-semibold text-earth-700 hover:text-earth-900 hover:underline"
+          className="text-lg font-semibold text-earth-700 hover:text-gray-900 hover:underline"
         >
           {ingredient.title || 'Herb'}
         </Link>
