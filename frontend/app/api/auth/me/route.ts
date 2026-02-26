@@ -29,8 +29,8 @@ export async function GET(request: NextRequest) {
 
     if (!accessToken) {
       return NextResponse.json(
-        { error: 'Not authenticated' },
-        { status: 401 }
+        { user: null },
+        { status: 200, headers: rateLimitHeaders }
       );
     }
 
