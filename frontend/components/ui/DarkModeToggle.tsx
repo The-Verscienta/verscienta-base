@@ -5,7 +5,7 @@ import { useState, useEffect } from 'react';
 type Theme = 'light' | 'dark' | 'system';
 
 export function DarkModeToggle() {
-  const [theme, setTheme] = useState<Theme>('system');
+  const [theme, setTheme] = useState<Theme>('light');
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
