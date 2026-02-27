@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import type { FormulaEntity } from '@/types/drupal';
-import { getTextValue } from '@/lib/drupal-helpers';
+import { getTextValue, herbDisplayName } from '@/lib/drupal-helpers';
 import { formulaCategoryMap, getFieldConfig } from '@/lib/decision-field-maps';
 
 interface FormulaCardProps {
@@ -79,7 +79,7 @@ export function FormulaCard({
                     key={idx}
                     className="text-xs bg-earth-50 dark:bg-earth-950 text-earth-700 dark:text-earth-300 px-2.5 py-1 rounded-full border border-earth-100 dark:border-earth-700"
                   >
-                    {ingredient.title}
+                    {herbDisplayName(ingredient.title, ingredient.field_herb_pinyin_name)}
                     {ingredient.field_quantity && (
                       <span className="text-earth-500 ml-1">
                         {ingredient.field_quantity}{ingredient.field_unit || 'g'}

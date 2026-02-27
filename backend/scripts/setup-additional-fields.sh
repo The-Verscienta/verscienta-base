@@ -213,6 +213,14 @@ create_text_field \
     "Optimal time to harvest this herb" \
     "string"
 
+# Pinyin Name (TCM pronunciation used by practitioners)
+create_text_field \
+    "field_herb_pinyin_name" \
+    "herb" \
+    "Pinyin Name" \
+    "Chinese pinyin pronunciation for TCM practitioners (e.g., Ren Shen)" \
+    "string"
+
 # Flavor Profile (TCM taste)
 create_list_field \
     "field_flavor_profile" \

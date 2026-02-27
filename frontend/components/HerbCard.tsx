@@ -47,7 +47,7 @@ export function HerbCard({
 
   return (
     <div className={`herb-card ${className}`}>
-      <h3 className="text-xl font-bold">{herb.title}</h3>
+      <h3 className="text-xl font-bold">{herb.field_herb_pinyin_name ? `${herb.title} (${herb.field_herb_pinyin_name})` : herb.title}</h3>
       
       {herb.field_scientific_name && (
         <p className="italic text-gray-600 dark:text-earth-300">{herb.field_scientific_name}</p>

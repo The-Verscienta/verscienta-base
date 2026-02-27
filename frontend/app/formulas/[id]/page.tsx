@@ -10,7 +10,7 @@ import { SafeHtml } from '@/components/ui/SafeHtml';
 import { GroupedIngredientsList } from '@/components/formula';
 import { HerbRoleBadge } from '@/components/formula/HerbRoleBadge';
 import { SimilarFormulasSkeleton, ContributionsSkeleton } from '@/components/formula/LoadingSkeletons';
-import { getTextValue, hasTextContent } from '@/lib/drupal-helpers';
+import { getTextValue, hasTextContent, herbDisplayName } from '@/lib/drupal-helpers';
 import {
   PageWrapper,
   LeafPattern,
@@ -117,6 +117,7 @@ async function getFormula(id: string): Promise<FormulaEntity | null> {
           id: herbData?.id || ref.id,
           type: herbData?.type || 'node--herb',
           title: herbData?.attributes?.title || paragraph.attributes?.field_herb_name || 'Herb',
+          field_herb_pinyin_name: herbData?.attributes?.field_herb_pinyin_name || undefined,
           field_quantity: parseFloat(paragraph.attributes?.field_quantity) || 0,
           field_unit: paragraph.attributes?.field_unit || 'g',
           field_percentage: paragraph.attributes?.field_percentage
@@ -431,7 +432,7 @@ export default async function FormulaDetailPage({ params }: FormulaDetailProps) 
                           <tr key={idx} className="border-b border-sage-200 dark:border-earth-700">
                             <td className="py-2 px-2">
                               <Link href={`/herbs/${ingredient.id}`} className="text-earth-700 dark:text-earth-400 hover:text-gray-900 dark:hover:text-earth-200 hover:underline font-medium">
-                                {ingredient.title || 'Herb'}
+                                {herbDisplayName(ingredient.title || 'Herb', ingredient.field_herb_pinyin_name)}
                               </Link>
                             </td>
                             <td className="py-2 px-2">

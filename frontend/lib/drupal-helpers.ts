@@ -25,6 +25,15 @@ export function getProcessedValue(field: DrupalTextField): string {
 }
 
 /**
+ * Format herb display name with optional pinyin in parentheses
+ * e.g. herbDisplayName('Asian Ginseng', 'Ren Shen') → 'Asian Ginseng (Ren Shen)'
+ */
+export function herbDisplayName(title: string, pinyinName?: string | null): string {
+  if (pinyinName) return `${title} (${pinyinName})`;
+  return title;
+}
+
+/**
  * Check if a Drupal text field has content
  */
 export function hasTextContent(field: DrupalTextField): boolean {

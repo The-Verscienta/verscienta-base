@@ -4,6 +4,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import type { Metadata } from 'next';
 import type { HerbEntity, DrupalTextField } from '@/types/drupal';
+import { herbDisplayName } from '@/lib/drupal-helpers';
 
 // ISR: revalidate every 5 minutes
 export const revalidate = 300;
@@ -180,7 +181,7 @@ export default async function HerbDetailPage({ params }: HerbDetailProps) {
                 <div className="relative p-8 md:p-12">
                   {/* Common name */}
                   <h1 className="font-serif text-5xl md:text-6xl lg:text-7xl font-bold text-gray-900 dark:text-earth-100 mb-4 tracking-tight">
-                    {name}
+                    {herbDisplayName(name, herb.field_herb_pinyin_name)}
                   </h1>
 
                   {/* Scientific name */}

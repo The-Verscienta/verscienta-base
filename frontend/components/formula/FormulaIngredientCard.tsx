@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import type { HerbIngredient } from '@/types/drupal';
 import { HerbRoleLabel } from './HerbRoleBadge';
-import { getTextValue, hasTextContent } from '@/lib/drupal-helpers';
+import { getTextValue, hasTextContent, herbDisplayName } from '@/lib/drupal-helpers';
 
 interface FormulaIngredientCardProps {
   ingredient: HerbIngredient;
@@ -29,7 +29,7 @@ export function FormulaIngredientCard({ ingredient, totalWeight = 0 }: FormulaIn
           href={`/herbs/${ingredient.id}`}
           className="text-lg font-semibold text-earth-700 hover:text-gray-900 hover:underline"
         >
-          {ingredient.title || 'Herb'}
+          {herbDisplayName(ingredient.title || 'Herb', ingredient.field_herb_pinyin_name)}
         </Link>
         <div className="text-right">
           <p className="text-xl font-bold text-sage-700">

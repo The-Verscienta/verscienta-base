@@ -366,6 +366,7 @@ export interface HerbIngredient {
   id: string;
   type: string;
   title: string;
+  field_herb_pinyin_name?: string;
   field_quantity: number;
   field_unit: string;
   field_percentage?: number;
