@@ -6,7 +6,7 @@ interface SkeletonProps {
 export function Skeleton({ className = '' }: SkeletonProps) {
   return (
     <div
-      className={`animate-pulse bg-gradient-to-r from-gray-200 via-gray-100 to-gray-200 bg-[length:200%_100%] rounded ${className}`}
+      className={`animate-pulse bg-gradient-to-r from-gray-200 via-gray-100 to-gray-200 dark:from-earth-800 dark:via-earth-700 dark:to-earth-800 bg-[length:200%_100%] rounded ${className}`}
     />
   );
 }
@@ -40,7 +40,7 @@ export function SkeletonAvatar({ size = 'md' }: { size?: 'sm' | 'md' | 'lg' }) {
 export function SkeletonCard({ variant = 'default' }: { variant?: 'default' | 'horizontal' }) {
   if (variant === 'horizontal') {
     return (
-      <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4 flex gap-4">
+      <div className="bg-white dark:bg-earth-900 rounded-xl shadow-sm border border-gray-100 dark:border-earth-700 p-4 flex gap-4">
         <Skeleton className="w-24 h-24 rounded-lg flex-shrink-0" />
         <div className="flex-1 space-y-3">
           <Skeleton className="h-5 w-3/4" />
@@ -55,7 +55,7 @@ export function SkeletonCard({ variant = 'default' }: { variant?: 'default' | 'h
   }
 
   return (
-    <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+    <div className="bg-white dark:bg-earth-900 rounded-xl shadow-sm border border-gray-100 dark:border-earth-700 p-6">
       <div className="flex items-start justify-between mb-4">
         <Skeleton className="w-12 h-12 rounded-lg" />
         <Skeleton className="h-6 w-20 rounded-full" />
@@ -68,7 +68,7 @@ export function SkeletonCard({ variant = 'default' }: { variant?: 'default' | 'h
         <Skeleton className="h-6 w-16 rounded-full" />
         <Skeleton className="h-6 w-16 rounded-full" />
       </div>
-      <div className="pt-4 border-t border-gray-100">
+      <div className="pt-4 border-t border-gray-100 dark:border-earth-700">
         <Skeleton className="h-4 w-24" />
       </div>
     </div>
@@ -78,7 +78,7 @@ export function SkeletonCard({ variant = 'default' }: { variant?: 'default' | 'h
 // Herb card skeleton
 export function SkeletonHerbCard() {
   return (
-    <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+    <div className="bg-white dark:bg-earth-900 rounded-xl shadow-sm border border-gray-100 dark:border-earth-700 overflow-hidden">
       <Skeleton className="h-48 w-full rounded-none" />
       <div className="p-5">
         <Skeleton className="h-6 w-3/4 mb-2" />
@@ -97,7 +97,7 @@ export function SkeletonHerbCard() {
 // Practitioner card skeleton
 export function SkeletonPractitionerCard() {
   return (
-    <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+    <div className="bg-white dark:bg-earth-900 rounded-xl shadow-sm border border-gray-100 dark:border-earth-700 p-6">
       <div className="flex items-start justify-between mb-4">
         <Skeleton className="w-14 h-14 rounded-full" />
         <Skeleton className="h-6 w-28 rounded-full" />
@@ -112,7 +112,7 @@ export function SkeletonPractitionerCard() {
         <Skeleton className="h-6 w-20 rounded-full" />
         <Skeleton className="h-6 w-24 rounded-full" />
       </div>
-      <div className="pt-4 border-t border-gray-100">
+      <div className="pt-4 border-t border-gray-100 dark:border-earth-700">
         <Skeleton className="h-4 w-24" />
       </div>
     </div>
@@ -122,9 +122,9 @@ export function SkeletonPractitionerCard() {
 // Table skeleton
 export function SkeletonTable({ rows = 5, columns = 4 }: { rows?: number; columns?: number }) {
   return (
-    <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+    <div className="bg-white dark:bg-earth-900 rounded-xl shadow-sm border border-gray-100 dark:border-earth-700 overflow-hidden">
       {/* Header */}
-      <div className="bg-gray-50 px-4 py-3 border-b border-gray-100 flex gap-4">
+      <div className="bg-gray-50 dark:bg-earth-950 px-4 py-3 border-b border-gray-100 dark:border-earth-700 flex gap-4">
         {Array.from({ length: columns }).map((_, i) => (
           <Skeleton key={i} className="h-4 flex-1" />
         ))}
@@ -133,7 +133,7 @@ export function SkeletonTable({ rows = 5, columns = 4 }: { rows?: number; column
       {Array.from({ length: rows }).map((_, rowIndex) => (
         <div
           key={rowIndex}
-          className="px-4 py-3 border-b border-gray-100 last:border-0 flex gap-4"
+          className="px-4 py-3 border-b border-gray-100 dark:border-earth-700 last:border-0 flex gap-4"
         >
           {Array.from({ length: columns }).map((_, colIndex) => (
             <Skeleton key={colIndex} className="h-4 flex-1" />
@@ -158,7 +158,7 @@ export function SkeletonDetailPage() {
       </div>
 
       {/* Header Card */}
-      <div className="bg-white rounded-xl shadow-lg p-8 mb-6">
+      <div className="bg-white dark:bg-earth-900 rounded-xl shadow-lg p-8 mb-6">
         <div className="flex items-start justify-between mb-6">
           <div>
             <Skeleton className="w-16 h-16 rounded-lg mb-4" />
@@ -175,7 +175,7 @@ export function SkeletonDetailPage() {
       </div>
 
       {/* Content Section */}
-      <div className="bg-white rounded-xl shadow-lg p-8 mb-6">
+      <div className="bg-white dark:bg-earth-900 rounded-xl shadow-lg p-8 mb-6">
         <Skeleton className="h-6 w-48 mb-4" />
         <div className="grid md:grid-cols-2 gap-4">
           <Skeleton className="h-24 rounded-lg" />

@@ -50,7 +50,7 @@ export function HerbCard({
       <h3 className="text-xl font-bold">{herb.title}</h3>
       
       {herb.field_scientific_name && (
-        <p className="italic text-gray-600">{herb.field_scientific_name}</p>
+        <p className="italic text-gray-600 dark:text-earth-300">{herb.field_scientific_name}</p>
       )}
       
       {variant === 'detailed' && (
@@ -81,7 +81,7 @@ export function HerbCard({
           {herb.field_therapeutic_uses && (
             <div className="mt-3">
               <strong>Therapeutic Uses:</strong>
-              <p className="mt-1">{herb.field_therapeutic_uses}</p>
+              <p className="mt-1 dark:text-earth-200">{herb.field_therapeutic_uses}</p>
             </div>
           )}
 

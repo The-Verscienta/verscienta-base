@@ -21,10 +21,10 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
   ) => {
     const inputId = id || name || `input-${Math.random().toString(36).substr(2, 9)}`;
 
-    const baseInputStyles = 'w-full px-4 py-2 border rounded-lg transition focus:outline-none focus:ring-2 focus:ring-offset-1';
-    const normalStyles = 'border-gray-300 focus:border-earth-600 focus:ring-earth-500';
+    const baseInputStyles = 'w-full px-4 py-2 border rounded-lg transition focus:outline-none focus:ring-2 focus:ring-offset-1 dark:bg-earth-800 dark:text-earth-100 dark:placeholder-earth-500';
+    const normalStyles = 'border-gray-300 focus:border-earth-600 focus:ring-earth-500 dark:border-earth-600';
     const errorStyles = 'border-red-500 focus:border-red-600 focus:ring-red-500';
-    const disabledStyles = 'bg-gray-100 cursor-not-allowed';
+    const disabledStyles = 'bg-gray-100 cursor-not-allowed dark:bg-earth-900';
 
     const inputStyles = `${baseInputStyles} ${error ? errorStyles : normalStyles} ${disabled ? disabledStyles : ''} ${className}`;
 
@@ -33,7 +33,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
         {label && (
           <label
             htmlFor={inputId}
-            className="block text-sm font-medium text-gray-700 mb-1"
+            className="block text-sm font-medium text-gray-700 dark:text-earth-200 mb-1"
           >
             {label}
             {required && <span className="text-red-500 ml-1">*</span>}
@@ -64,7 +64,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
         )}
 
         {helperText && !error && (
-          <p id={`${inputId}-helper`} className="mt-1 text-sm text-gray-500">
+          <p id={`${inputId}-helper`} className="mt-1 text-sm text-gray-500 dark:text-earth-400">
             {helperText}
           </p>
         )}

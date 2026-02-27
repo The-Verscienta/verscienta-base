@@ -23,7 +23,7 @@ export function Alert({
 
   const typeStyles = {
     info: {
-      container: 'bg-blue-50 border-blue-500 text-blue-900',
+      container: 'bg-blue-50 dark:bg-blue-950 border-blue-500 text-blue-900 dark:text-blue-100',
       icon: (
         <svg className="w-5 h-5 text-blue-500" fill="currentColor" viewBox="0 0 20 20">
           <path
@@ -35,7 +35,7 @@ export function Alert({
       ),
     },
     success: {
-      container: 'bg-green-50 border-green-500 text-green-900',
+      container: 'bg-green-50 dark:bg-green-950 border-green-500 text-green-900 dark:text-green-100',
       icon: (
         <svg className="w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 20 20">
           <path
@@ -47,7 +47,7 @@ export function Alert({
       ),
     },
     warning: {
-      container: 'bg-yellow-50 border-yellow-500 text-yellow-900',
+      container: 'bg-yellow-50 dark:bg-yellow-950 border-yellow-500 text-yellow-900 dark:text-yellow-100',
       icon: (
         <svg className="w-5 h-5 text-yellow-500" fill="currentColor" viewBox="0 0 20 20">
           <path
@@ -59,7 +59,7 @@ export function Alert({
       ),
     },
     error: {
-      container: 'bg-red-50 border-red-500 text-red-900',
+      container: 'bg-red-50 dark:bg-red-950 border-red-500 text-red-900 dark:text-red-100',
       icon: (
         <svg className="w-5 h-5 text-red-500" fill="currentColor" viewBox="0 0 20 20">
           <path

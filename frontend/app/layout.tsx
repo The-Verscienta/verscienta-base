@@ -55,10 +55,17 @@ export default async function RootLayout({
   await headers();
 
   return (
-    <html lang="en" className={`${sourceSans.variable} ${crimsonPro.variable} ${jetbrainsMono.variable} ${notoSerifSC.variable}`}>
+    <html lang="en" className={`${sourceSans.variable} ${crimsonPro.variable} ${jetbrainsMono.variable} ${notoSerifSC.variable}`} suppressHydrationWarning>
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){try{var t=localStorage.getItem('verscienta_theme');var d=t==='dark'||(t!=='light'&&window.matchMedia('(prefers-color-scheme: dark)').matches);if(d)document.documentElement.classList.add('dark')}catch(e){}})()`,
+          }}
+        />
+      </head>
       <body className="font-sans">
         <ToastProvider position="bottom-right">
-          <div className="min-h-screen bg-gradient-to-b from-earth-50 to-sage-50">
+          <div className="min-h-screen bg-gradient-to-b from-earth-50 to-sage-50 dark:from-earth-950 dark:to-sage-950">
             {/* Skip to content link for keyboard/screen reader users */}
             <a
               href="#main-content"

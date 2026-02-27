@@ -10,8 +10,8 @@ export function Badge({
   const baseStyles = 'inline-flex items-center font-medium rounded-full';
 
   const variantStyles = {
-    default: 'bg-gray-100 text-gray-800',
-    primary: 'bg-earth-100 text-gray-800',
+    default: 'bg-gray-100 dark:bg-earth-800 text-gray-800 dark:text-earth-100',
+    primary: 'bg-earth-100 dark:bg-earth-800 text-gray-800 dark:text-earth-100',
     secondary: 'bg-sage-100 text-sage-800',
     success: 'bg-green-100 text-green-800',
     warning: 'bg-yellow-100 text-yellow-800',

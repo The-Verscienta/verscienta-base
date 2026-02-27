@@ -29,8 +29,8 @@ export function ReviewForm({
 
   if (!isAuthenticated) {
     return (
-      <div className={`bg-gray-50 rounded-xl p-6 text-center ${className}`}>
-        <p className="text-gray-600 mb-2">Please log in to leave a review.</p>
+      <div className={`bg-gray-50 dark:bg-earth-950 rounded-xl p-6 text-center ${className}`}>
+        <p className="text-gray-600 dark:text-earth-300 mb-2">Please log in to leave a review.</p>
         <a href="/login" className="text-sage-600 font-medium hover:underline">Log in</a>
       </div>
     );
@@ -92,12 +92,12 @@ export function ReviewForm({
   };
 
   return (
-    <form onSubmit={handleSubmit} className={`bg-white rounded-xl border border-gray-100 p-6 ${className}`}>
-      <h3 className="font-semibold text-gray-800 mb-4">Review {entityTitle}</h3>
+    <form onSubmit={handleSubmit} className={`bg-white dark:bg-earth-900 rounded-xl border border-gray-100 dark:border-earth-700 p-6 ${className}`}>
+      <h3 className="font-semibold text-gray-800 dark:text-earth-100 mb-4">Review {entityTitle}</h3>
 
       {/* Star Rating */}
       <div className="mb-4">
-        <label className="block text-sm font-medium text-gray-700 mb-2">Rating</label>
+        <label className="block text-sm font-medium text-gray-700 dark:text-earth-200 mb-2">Rating</label>
         <div className="flex gap-1">
           {[1, 2, 3, 4, 5].map((star) => (
             <button
@@ -113,7 +113,7 @@ export function ReviewForm({
                 className={`w-8 h-8 transition-colors ${
                   star <= (hoverRating || rating)
                     ? 'text-amber-400'
-                    : 'text-gray-300'
+                    : 'text-gray-300 dark:text-earth-600'
                 }`}
                 fill="currentColor"
                 viewBox="0 0 20 20"
@@ -127,7 +127,7 @@ export function ReviewForm({
 
       {/* Comment */}
       <div className="mb-4">
-        <label htmlFor="review-comment" className="block text-sm font-medium text-gray-700 mb-2">
+        <label htmlFor="review-comment" className="block text-sm font-medium text-gray-700 dark:text-earth-200 mb-2">
           Your Review
         </label>
         <textarea
@@ -137,9 +137,9 @@ export function ReviewForm({
           placeholder="Share your experience..."
           rows={4}
           maxLength={1000}
-          className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-sage-500 focus:border-sage-500 outline-none transition resize-none"
+          className="w-full px-4 py-3 border border-gray-200 dark:border-earth-600 dark:bg-earth-800 dark:text-earth-100 dark:placeholder-earth-500 rounded-lg focus:ring-2 focus:ring-sage-500 focus:border-sage-500 outline-none transition resize-none"
         />
-        <p className="text-xs text-gray-400 mt-1">{comment.length}/1000 characters</p>
+        <p className="text-xs text-gray-400 dark:text-earth-500 mt-1">{comment.length}/1000 characters</p>
       </div>
 
       {error && (

@@ -78,7 +78,7 @@ export function Loading({
     <div className="flex flex-col items-center justify-center gap-3">
       {variants[variant]}
       {text && (
-        <p className={`${textSizeStyles[size]} text-gray-700 font-medium`}>
+        <p className={`${textSizeStyles[size]} text-gray-700 dark:text-earth-300 font-medium`}>
           {text}
         </p>
       )}
@@ -87,7 +87,7 @@ export function Loading({
 
   if (fullScreen) {
     return (
-      <div className="fixed inset-0 z-50 flex items-center justify-center bg-white bg-opacity-90">
+      <div className="fixed inset-0 z-50 flex items-center justify-center bg-white bg-opacity-90 dark:bg-earth-900 dark:bg-opacity-90">
         {content}
       </div>
     );

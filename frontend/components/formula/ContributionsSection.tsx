@@ -48,12 +48,12 @@ export function ContributionsSection({ formulaId, formulaTitle }: ContributionsS
   };
 
   return (
-    <div className="bg-white rounded-lg shadow-lg p-8 mb-6">
+    <div className="bg-white dark:bg-earth-900 rounded-lg shadow-lg p-8 mb-6">
       <div className="flex items-center justify-between mb-6">
-        <h2 className="text-2xl font-bold text-gray-800">
+        <h2 className="text-2xl font-bold text-gray-800 dark:text-earth-100">
           Community Contributions
           {!isLoading && contributions.length > 0 && (
-            <span className="ml-2 text-lg font-normal text-gray-500">
+            <span className="ml-2 text-lg font-normal text-gray-500 dark:text-earth-400">
               ({contributions.length} approved)
             </span>
           )}

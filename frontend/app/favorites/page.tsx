@@ -59,7 +59,7 @@ export default function FavoritesPage() {
   }, {} as Record<FavoriteEntityType, number>);
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-cream-50 to-white">
+    <div className="min-h-screen bg-gradient-to-b from-cream-50 to-white dark:from-earth-950 dark:to-earth-900">
       {/* Hero */}
       <div className="relative bg-gradient-to-br from-earth-800 to-earth-900 text-white overflow-hidden">
         <div className="absolute inset-0 opacity-10">
@@ -90,7 +90,7 @@ export default function FavoritesPage() {
             className={`px-4 py-2 rounded-full text-sm font-medium transition ${
               activeFilter === 'all'
                 ? 'bg-earth-800 text-white'
-                : 'bg-white text-gray-600 border border-gray-200 hover:border-earth-300'
+                : 'bg-white dark:bg-earth-900 text-gray-600 dark:text-earth-300 border border-gray-200 dark:border-earth-700 hover:border-earth-300 dark:hover:border-earth-600'
             }`}
           >
             All ({count})
@@ -101,8 +101,8 @@ export default function FavoritesPage() {
               onClick={() => setActiveFilter(type)}
               className={`px-4 py-2 rounded-full text-sm font-medium transition ${
                 activeFilter === type
-                  ? 'bg-earth-800 text-white'
-                  : 'bg-white text-gray-600 border border-gray-200 hover:border-earth-300'
+                  ? 'bg-earth-800 text-white dark:bg-earth-700'
+                  : 'bg-white dark:bg-earth-900 text-gray-600 dark:text-earth-300 border border-gray-200 dark:border-earth-700 hover:border-earth-300 dark:hover:border-earth-600'
               }`}
             >
               {typeConfig[type].plural} ({typeCounts[type]})
@@ -114,16 +114,16 @@ export default function FavoritesPage() {
         {!loaded ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {[1, 2, 3].map((i) => (
-              <div key={i} className="h-24 bg-gray-100 rounded-xl animate-pulse" />
+              <div key={i} className="h-24 bg-gray-100 dark:bg-earth-800 rounded-xl animate-pulse" />
             ))}
           </div>
         ) : displayedFavorites.length === 0 ? (
           <div className="text-center py-16">
-            <svg className="w-16 h-16 text-gray-300 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className="w-16 h-16 text-gray-300 dark:text-earth-700 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
             </svg>
-            <h3 className="text-lg font-semibold text-gray-600 mb-2">No favorites yet</h3>
-            <p className="text-gray-500 mb-6">
+            <h3 className="text-lg font-semibold text-gray-600 dark:text-earth-300 mb-2">No favorites yet</h3>
+            <p className="text-gray-500 dark:text-earth-400 mb-6">
               {activeFilter === 'all'
                 ? 'Browse herbs, formulas, and more to start building your collection.'
                 : `You haven't saved any ${typeConfig[activeFilter as FavoriteEntityType].plural.toLowerCase()} yet.`}
@@ -141,7 +141,7 @@ export default function FavoritesPage() {
               return (
                 <div
                   key={fav.id}
-                  className="bg-white rounded-xl border border-gray-100 hover:border-earth-200 hover:shadow-md transition-all p-4 flex items-center gap-4"
+                  className="bg-white dark:bg-earth-900 rounded-xl border border-gray-100 dark:border-earth-700 hover:border-earth-200 dark:hover:border-earth-600 hover:shadow-md transition-all p-4 flex items-center gap-4"
                 >
                   <Link href={config.href(fav.id)} className="flex items-center gap-4 flex-1 min-w-0">
                     <div className={`w-12 h-12 rounded-lg flex items-center justify-center flex-shrink-0 ${config.color}`}>
@@ -150,8 +150,8 @@ export default function FavoritesPage() {
                       </svg>
                     </div>
                     <div className="flex-1 min-w-0">
-                      <h3 className="font-semibold text-gray-800 truncate">{fav.title}</h3>
-                      <p className="text-xs text-gray-500">
+                      <h3 className="font-semibold text-gray-800 dark:text-earth-100 truncate">{fav.title}</h3>
+                      <p className="text-xs text-gray-500 dark:text-earth-400">
                         {config.label} &middot; Saved {new Date(fav.savedAt).toLocaleDateString()}
                       </p>
                     </div>

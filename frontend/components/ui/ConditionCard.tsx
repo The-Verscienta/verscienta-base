@@ -34,7 +34,7 @@ export function ConditionCard({
     return (
       <Link
         href={`/conditions/${condition.id}`}
-        className={`flex items-center gap-3 p-3 bg-white rounded-lg border border-gray-200 hover:border-earth-300 hover:shadow-sm transition ${className}`}
+        className={`flex items-center gap-3 p-3 bg-white dark:bg-earth-900 rounded-lg border border-gray-200 dark:border-earth-700 hover:border-earth-300 hover:shadow-sm transition ${className}`}
       >
         <div className="w-10 h-10 bg-coral-100 rounded-lg flex items-center justify-center flex-shrink-0">
           <svg className="w-5 h-5 text-coral-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -42,9 +42,9 @@ export function ConditionCard({
           </svg>
         </div>
         <div className="flex-1 min-w-0">
-          <h3 className="font-medium text-gray-800 truncate">{condition.title}</h3>
+          <h3 className="font-medium text-gray-800 dark:text-earth-100 truncate">{condition.title}</h3>
           {condition.field_symptoms && condition.field_symptoms.length > 0 && (
-            <p className="text-xs text-gray-500 truncate">
+            <p className="text-xs text-gray-500 dark:text-earth-400 truncate">
               {condition.field_symptoms.slice(0, 2).join(', ')}
             </p>
           )}
@@ -63,7 +63,7 @@ export function ConditionCard({
         className={`block bg-gradient-to-br from-coral-50 to-earth-50 rounded-xl shadow-sm hover:shadow-lg border border-coral-100 hover:border-coral-200 transition-all p-8 ${className}`}
       >
         <div className="flex items-start justify-between mb-4">
-          <div className="w-16 h-16 bg-white rounded-xl shadow-sm flex items-center justify-center">
+          <div className="w-16 h-16 bg-white dark:bg-earth-800 rounded-xl shadow-sm flex items-center justify-center">
             <svg className="w-8 h-8 text-coral-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
             </svg>
@@ -81,18 +81,18 @@ export function ConditionCard({
           </div>
         </div>
 
-        <h2 className="text-2xl font-bold text-gray-800 mb-2">{condition.title}</h2>
+        <h2 className="text-2xl font-bold text-gray-800 dark:text-earth-100 mb-2">{condition.title}</h2>
 
         {summary && (
-          <p className="text-gray-600 mb-4 line-clamp-2">{summary}{!condition.field_quick_summary ? '...' : ''}</p>
+          <p className="text-gray-600 dark:text-earth-300 mb-4 line-clamp-2">{summary}{!condition.field_quick_summary ? '...' : ''}</p>
         )}
 
         {condition.field_symptoms && condition.field_symptoms.length > 0 && (
           <div className="mb-4">
-            <p className="text-sm font-medium text-gray-700 mb-2">Common Symptoms:</p>
+            <p className="text-sm font-medium text-gray-700 dark:text-earth-200 mb-2">Common Symptoms:</p>
             <div className="flex flex-wrap gap-2">
               {condition.field_symptoms.slice(0, 4).map((symptom, idx) => (
-                <span key={idx} className="text-sm bg-white/70 text-gray-700 px-3 py-1 rounded-full">
+                <span key={idx} className="text-sm bg-white/70 dark:bg-earth-800/70 text-gray-700 dark:text-earth-200 px-3 py-1 rounded-full">
                   {symptom}
                 </span>
               ))}
@@ -114,7 +114,7 @@ export function ConditionCard({
   return (
     <Link
       href={`/conditions/${condition.id}`}
-      className={`block bg-white rounded-xl shadow-sm hover:shadow-lg border border-gray-100 hover:border-coral-200 transition-all p-6 ${className}`}
+      className={`block bg-white dark:bg-earth-900 rounded-xl shadow-sm hover:shadow-lg border border-gray-100 dark:border-earth-700 hover:border-coral-200 transition-all p-6 ${className}`}
     >
       <div className="flex items-start justify-between mb-3">
         <div className="w-12 h-12 bg-coral-100 rounded-lg flex items-center justify-center">
@@ -135,23 +135,23 @@ export function ConditionCard({
         </div>
       </div>
 
-      <h2 className="text-xl font-bold text-gray-800 mb-2">{condition.title}</h2>
+      <h2 className="text-xl font-bold text-gray-800 dark:text-earth-100 mb-2">{condition.title}</h2>
 
       {summary && (
-        <p className="text-sm text-gray-600 mb-4 line-clamp-2">{summary}{!condition.field_quick_summary ? '...' : ''}</p>
+        <p className="text-sm text-gray-600 dark:text-earth-300 mb-4 line-clamp-2">{summary}{!condition.field_quick_summary ? '...' : ''}</p>
       )}
 
       {condition.field_symptoms && condition.field_symptoms.length > 0 && (
         <div className="mb-4">
-          <p className="text-xs font-medium text-gray-500 mb-1.5">Symptoms:</p>
+          <p className="text-xs font-medium text-gray-500 dark:text-earth-400 mb-1.5">Symptoms:</p>
           <div className="flex flex-wrap gap-1">
             {condition.field_symptoms.slice(0, 3).map((symptom, idx) => (
-              <span key={idx} className="text-xs bg-gray-100 text-gray-700 px-2 py-1 rounded">
+              <span key={idx} className="text-xs bg-gray-100 dark:bg-earth-800 text-gray-700 dark:text-earth-200 px-2 py-1 rounded">
                 {symptom}
               </span>
             ))}
             {condition.field_symptoms.length > 3 && (
-              <span className="text-xs text-gray-400">
+              <span className="text-xs text-gray-400 dark:text-earth-500">
                 +{condition.field_symptoms.length - 3} more
               </span>
             )}
@@ -171,7 +171,7 @@ export function ConditionCard({
         </div>
       )}
 
-      <div className="pt-3 border-t border-gray-100">
+      <div className="pt-3 border-t border-gray-100 dark:border-earth-700">
         <span className="text-coral-600 font-medium text-sm flex items-center gap-1">
           View Details
           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">

@@ -151,19 +151,19 @@ export function SimilarFormulas({
   );
 
   return (
-    <div className="bg-white rounded-lg shadow-lg p-8 mb-6">
+    <div className="bg-white dark:bg-earth-900 rounded-lg shadow-lg p-8 mb-6">
       <div className="flex items-center justify-between mb-4">
-        <h2 className="text-2xl font-bold text-gray-900">
+        <h2 className="text-2xl font-bold text-gray-900 dark:text-earth-100">
           Similar Formulas
         </h2>
         {!isLoading && totalCompared > 0 && (
-          <span className="text-sm text-gray-500">
+          <span className="text-sm text-gray-500 dark:text-earth-400">
             Compared with {totalCompared} formulas
           </span>
         )}
       </div>
 
-      <p className="text-gray-600 mb-6">
+      <p className="text-gray-600 dark:text-earth-300 mb-6">
         Formulas that share similar herbs and proportions. Similarity is calculated based on
         shared ingredients and their relative quantities.
       </p>

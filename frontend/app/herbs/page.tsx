@@ -184,12 +184,12 @@ export default async function HerbsPage({ searchParams }: PageProps) {
   return (
     <PageWrapper>
       {/* Hero Section with Botanical Background */}
-      <div className="relative overflow-hidden bg-gradient-to-br from-earth-50 via-sage-50/50 to-cream-100 border-b border-earth-200/50">
+      <div className="relative overflow-hidden bg-gradient-to-br from-earth-50 via-sage-50/50 to-cream-100 dark:from-earth-950 dark:via-sage-950 dark:to-earth-900 border-b border-earth-200/50 dark:border-earth-700/50">
         <LeafPattern opacity={0.04} />
 
         {/* Decorative blurred circles */}
-        <div className="absolute top-20 left-10 w-64 h-64 bg-sage-300/20 rounded-full blur-3xl" />
-        <div className="absolute bottom-10 right-20 w-48 h-48 bg-earth-300/15 rounded-full blur-3xl" />
+        <div className="absolute top-20 left-10 w-64 h-64 bg-sage-300/20 dark:bg-sage-800/15 rounded-full blur-3xl" />
+        <div className="absolute bottom-10 right-20 w-48 h-48 bg-earth-300/15 dark:bg-earth-800/15 rounded-full blur-3xl" />
 
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
           {/* Breadcrumbs */}
@@ -209,16 +209,16 @@ export default async function HerbsPage({ searchParams }: PageProps) {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
                   </svg>
                 </div>
-                <span className="text-sage-600 font-medium tracking-wide uppercase text-sm">
+                <span className="text-sage-600 dark:text-sage-400 font-medium tracking-wide uppercase text-sm">
                   Botanical Collection
                 </span>
               </div>
 
-              <h1 className="font-serif text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 mb-4 leading-tight">
+              <h1 className="font-serif text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 dark:text-earth-100 mb-4 leading-tight">
                 Medicinal Herbs
               </h1>
 
-              <p className="text-lg md:text-xl text-gray-600 leading-relaxed">
+              <p className="text-lg md:text-xl text-gray-600 dark:text-earth-300 leading-relaxed">
                 Discover the healing wisdom of nature through our carefully curated
                 database of traditional and evidence-based herbal remedies.
               </p>
@@ -226,7 +226,7 @@ export default async function HerbsPage({ searchParams }: PageProps) {
               {/* TCM Temperature Legend */}
               {Object.keys(temperatureCounts).length > 0 && (
                 <div className="mt-6 flex flex-wrap items-center gap-2">
-                  <span className="text-sm text-sage-600 font-medium mr-1">TCM Energy:</span>
+                  <span className="text-sm text-sage-600 dark:text-sage-400 font-medium mr-1">TCM Energy:</span>
                   {Object.entries(temperatureCounts).map(([temp, count]) => {
                     const style = temperatureStyles[temp.toLowerCase()] || { variant: 'muted' as const, label: temp };
                     return (
@@ -240,7 +240,7 @@ export default async function HerbsPage({ searchParams }: PageProps) {
             </div>
 
             {/* Sort & Pagination Controls */}
-            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 bg-white/60 backdrop-blur-sm rounded-xl p-4 border border-earth-200/50 shadow-sm">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 bg-white/60 dark:bg-earth-900/60 backdrop-blur-sm rounded-xl p-4 border border-earth-200/50 dark:border-earth-700/50 shadow-sm">
               <SortDropdown options={SORT_OPTIONS} defaultValue="title" />
               <div className="hidden sm:block w-px h-8 bg-earth-200" />
               <PaginationInfo
@@ -285,7 +285,7 @@ export default async function HerbsPage({ searchParams }: PageProps) {
               const picks = herbs.filter(h => getHerbData(h).editorsPick);
               return picks.length > 0 ? (
                 <div className="mb-12">
-                  <h2 className="font-serif text-2xl font-bold text-gray-800 mb-6 flex items-center gap-2">
+                  <h2 className="font-serif text-2xl font-bold text-gray-800 dark:text-earth-100 mb-6 flex items-center gap-2">
                     <span className="text-amber-500">&#9733;</span> Editor&apos;s Picks
                   </h2>
                   <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -295,21 +295,21 @@ export default async function HerbsPage({ searchParams }: PageProps) {
                         <Link
                           key={herb.id}
                           href={`/herbs/${herb.id}`}
-                          className="group relative bg-gradient-to-br from-amber-50 via-cream-50 to-sage-50 rounded-2xl shadow-sm hover:shadow-xl border-2 border-amber-200 hover:border-amber-300 transition-all duration-300 overflow-hidden p-6"
+                          className="group relative bg-gradient-to-br from-amber-50 via-cream-50 to-sage-50 dark:from-amber-950/20 dark:via-earth-900 dark:to-sage-950 rounded-2xl shadow-sm hover:shadow-xl border-2 border-amber-200 hover:border-amber-300 dark:border-amber-800 dark:hover:border-amber-700 transition-all duration-300 overflow-hidden p-6"
                         >
                           <div className="absolute top-3 right-3">
-                            <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold bg-amber-100 text-amber-800 border border-amber-200">
+                            <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-200 border border-amber-200">
                               &#9733; Pick
                             </span>
                           </div>
-                          <h3 className="font-serif text-lg font-bold text-gray-800 mb-1 group-hover:text-sage-700 transition-colors">{data.title}</h3>
-                          {data.scientificName && <p className="text-sm italic text-sage-600 mb-2">{data.scientificName}</p>}
-                          {data.summary && <p className="text-sm text-gray-600 line-clamp-2">{data.summary}...</p>}
+                          <h3 className="font-serif text-lg font-bold text-gray-800 dark:text-earth-100 mb-1 group-hover:text-sage-700 transition-colors">{data.title}</h3>
+                          {data.scientificName && <p className="text-sm italic text-sage-600 dark:text-sage-400 mb-2">{data.scientificName}</p>}
+                          {data.summary && <p className="text-sm text-gray-600 dark:text-earth-300 line-clamp-2">{data.summary}...</p>}
                           <div className="mt-3 flex flex-wrap gap-1.5">
                             {data.popularity && (() => { const c = getFieldConfig(popularityMap, data.popularity); return c ? (
                               <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${c.bg} ${c.text}`}>{c.label}</span>
                             ) : null; })()}
-                            {data.beginnerFriendly && <span className="text-xs px-2 py-0.5 rounded-full font-medium bg-green-100 text-green-700">Beginner Friendly</span>}
+                            {data.beginnerFriendly && <span className="text-xs px-2 py-0.5 rounded-full font-medium bg-green-100 text-green-700 dark:bg-green-900/40 dark:text-green-300">Beginner Friendly</span>}
                           </div>
                         </Link>
                       );
@@ -328,10 +328,10 @@ export default async function HerbsPage({ searchParams }: PageProps) {
                   <Link
                     key={herb.id}
                     href={`/herbs/${herb.id}`}
-                    className="group relative bg-white rounded-2xl shadow-sm border border-earth-100 hover:border-sage-300 card-interactive overflow-hidden"
+                    className="group relative bg-white dark:bg-earth-900 rounded-2xl shadow-sm border border-earth-100 dark:border-earth-700 hover:border-sage-300 dark:hover:border-sage-700 card-interactive overflow-hidden"
                   >
                     {/* Card Header */}
-                    <div className="relative bg-gradient-to-br from-cream-50 via-sage-50/30 to-earth-50/20 border-b border-earth-100/50">
+                    <div className="relative bg-gradient-to-br from-cream-50 via-sage-50/30 to-earth-50/20 dark:from-earth-950 dark:via-sage-950/30 dark:to-earth-950/20 border-b border-earth-100/50 dark:border-earth-700/50">
                       {data.imageUrl ? (
                         <div className="relative w-full h-48 overflow-hidden">
                           <Image
@@ -355,7 +355,7 @@ export default async function HerbsPage({ searchParams }: PageProps) {
                       ) : (
                         <div className="p-6">
                           <div className="flex items-start justify-between">
-                            <div className="w-14 h-14 rounded-xl bg-white shadow-md flex items-center justify-center group-hover:scale-110 group-hover:shadow-lg transition-all duration-300">
+                            <div className="w-14 h-14 rounded-xl bg-white dark:bg-earth-800 shadow-md flex items-center justify-center group-hover:scale-110 group-hover:shadow-lg transition-all duration-300">
                               <HerbIcon />
                             </div>
                             {data.tcmTemperature && (
@@ -373,12 +373,12 @@ export default async function HerbsPage({ searchParams }: PageProps) {
 
                     {/* Card Body */}
                     <div className="p-5">
-                      <h2 className="font-serif text-lg font-bold text-gray-800 mb-1 group-hover:text-sage-700 transition-colors">
+                      <h2 className="font-serif text-lg font-bold text-gray-800 dark:text-earth-100 mb-1 group-hover:text-sage-700 transition-colors">
                         {data.title}
                       </h2>
 
                       {data.scientificName && (
-                        <p className="text-sm italic text-sage-600 mb-3 font-light">
+                        <p className="text-sm italic text-sage-600 dark:text-sage-400 mb-3 font-light">
                           {data.scientificName}
                         </p>
                       )}
@@ -388,13 +388,13 @@ export default async function HerbsPage({ searchParams }: PageProps) {
                           {data.commonNames.slice(0, 2).map((name, idx) => (
                             <span
                               key={idx}
-                              className="text-xs bg-sage-50 text-sage-700 px-2 py-1 rounded-md border border-sage-100"
+                              className="text-xs bg-sage-50 text-sage-700 dark:bg-sage-900/30 dark:text-sage-300 dark:border-sage-800 px-2 py-1 rounded-md border border-sage-100"
                             >
                               {name}
                             </span>
                           ))}
                           {data.commonNames.length > 2 && (
-                            <span className="text-xs text-sage-400 py-1">
+                            <span className="text-xs text-sage-400 dark:text-earth-500 py-1">
                               +{data.commonNames.length - 2} more
                             </span>
                           )}
@@ -402,7 +402,7 @@ export default async function HerbsPage({ searchParams }: PageProps) {
                       )}
 
                       {data.summary && (
-                        <p className="text-sm text-gray-600 line-clamp-2 mb-3 leading-relaxed">
+                        <p className="text-sm text-gray-600 dark:text-earth-300 line-clamp-2 mb-3 leading-relaxed">
                           {data.summary}...
                         </p>
                       )}
@@ -425,16 +425,16 @@ export default async function HerbsPage({ searchParams }: PageProps) {
                       {/* Decision indicators */}
                       {(data.popularity || data.beginnerFriendly || data.editorsPick) && (
                         <div className="flex flex-wrap gap-1.5 mb-3">
-                          {data.editorsPick && <span className="text-xs px-2 py-0.5 rounded-full font-semibold bg-amber-100 text-amber-800">&#9733; Pick</span>}
+                          {data.editorsPick && <span className="text-xs px-2 py-0.5 rounded-full font-semibold bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-200">&#9733; Pick</span>}
                           {data.popularity && (() => { const c = getFieldConfig(popularityMap, data.popularity); return c ? (
                             <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${c.bg} ${c.text}`}>{c.label}</span>
                           ) : null; })()}
-                          {data.beginnerFriendly && <span className="text-xs px-2 py-0.5 rounded-full font-medium bg-green-100 text-green-700">Beginner</span>}
+                          {data.beginnerFriendly && <span className="text-xs px-2 py-0.5 rounded-full font-medium bg-green-100 text-green-700 dark:bg-green-900/40 dark:text-green-300">Beginner</span>}
                         </div>
                       )}
 
-                      <div className="mt-4 pt-4 border-t border-earth-100">
-                        <span className="text-sage-600 font-medium text-sm flex items-center gap-1.5 group-hover:gap-3 transition-all">
+                      <div className="mt-4 pt-4 border-t border-earth-100 dark:border-earth-700">
+                        <span className="text-sage-600 dark:text-sage-400 font-medium text-sm flex items-center gap-1.5 group-hover:gap-3 transition-all">
                           Explore Details
                           <svg className="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />

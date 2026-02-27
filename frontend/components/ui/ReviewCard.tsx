@@ -18,7 +18,7 @@ function StarRating({ rating, max = 5 }: { rating: number; max?: number }) {
         return (
           <svg
             key={idx}
-            className={`w-4 h-4 ${filled || half ? 'text-yellow-400' : 'text-gray-300'}`}
+            className={`w-4 h-4 ${filled || half ? 'text-yellow-400' : 'text-gray-300 dark:text-earth-600'}`}
             fill={filled ? 'currentColor' : half ? 'url(#half)' : 'none'}
             stroke="currentColor"
             viewBox="0 0 24 24"
@@ -71,7 +71,7 @@ export function ReviewCard({
 
   if (variant === 'compact') {
     return (
-      <div className={`flex items-start gap-3 p-3 bg-gray-50 rounded-lg ${className}`}>
+      <div className={`flex items-start gap-3 p-3 bg-gray-50 dark:bg-earth-950 rounded-lg ${className}`}>
         <div className="w-8 h-8 bg-earth-100 rounded-full flex items-center justify-center flex-shrink-0">
           <svg className="w-4 h-4 text-earth-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
@@ -80,10 +80,10 @@ export function ReviewCard({
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2 mb-1">
             <StarRating rating={rating} />
-            <span className="text-xs text-gray-400">{createdDate}</span>
+            <span className="text-xs text-gray-400 dark:text-earth-500">{createdDate}</span>
           </div>
           {comment && (
-            <p className="text-sm text-gray-700 line-clamp-2">{comment}</p>
+            <p className="text-sm text-gray-700 dark:text-earth-200 line-clamp-2">{comment}</p>
           )}
         </div>
       </div>
@@ -92,7 +92,7 @@ export function ReviewCard({
 
   if (variant === 'detailed') {
     return (
-      <div className={`bg-white rounded-xl shadow-sm border border-gray-100 p-6 ${className}`}>
+      <div className={`bg-white dark:bg-earth-900 rounded-xl shadow-sm border border-gray-100 dark:border-earth-700 p-6 ${className}`}>
         <div className="flex items-start justify-between mb-4">
           <div className="flex items-center gap-3">
             <div className="w-12 h-12 bg-gradient-to-br from-earth-100 to-sage-100 rounded-full flex items-center justify-center">
@@ -101,8 +101,8 @@ export function ReviewCard({
               </svg>
             </div>
             <div>
-              <p className="font-medium text-gray-800">{review.title || 'Anonymous User'}</p>
-              <p className="text-sm text-gray-500">{createdDate}</p>
+              <p className="font-medium text-gray-800 dark:text-earth-100">{review.title || 'Anonymous User'}</p>
+              <p className="text-sm text-gray-500 dark:text-earth-400">{createdDate}</p>
             </div>
           </div>
           <div className="flex items-center gap-2">
@@ -148,7 +148,7 @@ export function ReviewCard({
 
   // Default variant
   return (
-    <div className={`bg-white rounded-lg shadow-sm border border-gray-100 p-5 ${className}`}>
+    <div className={`bg-white dark:bg-earth-900 rounded-lg shadow-sm border border-gray-100 dark:border-earth-700 p-5 ${className}`}>
       <div className="flex items-start justify-between mb-3">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 bg-earth-100 rounded-full flex items-center justify-center">
@@ -157,8 +157,8 @@ export function ReviewCard({
             </svg>
           </div>
           <div>
-            <p className="font-medium text-gray-800 text-sm">{review.title || 'Anonymous'}</p>
-            <p className="text-xs text-gray-400">{createdDate}</p>
+            <p className="font-medium text-gray-800 dark:text-earth-100 text-sm">{review.title || 'Anonymous'}</p>
+            <p className="text-xs text-gray-400 dark:text-earth-500">{createdDate}</p>
           </div>
         </div>
         <StarRating rating={rating} />
@@ -186,10 +186,10 @@ export function ReviewSummary({
   className = '',
 }: ReviewSummaryProps) {
   return (
-    <div className={`bg-white rounded-xl shadow-sm border border-gray-100 p-6 ${className}`}>
+    <div className={`bg-white dark:bg-earth-900 rounded-xl shadow-sm border border-gray-100 dark:border-earth-700 p-6 ${className}`}>
       <div className="flex items-center gap-6">
         <div className="text-center">
-          <div className="text-4xl font-bold text-gray-800">{averageRating.toFixed(1)}</div>
+          <div className="text-4xl font-bold text-gray-800 dark:text-earth-100">{averageRating.toFixed(1)}</div>
           <StarRating rating={averageRating} />
           <p className="text-sm text-gray-500 mt-1">{totalReviews} review{totalReviews !== 1 ? 's' : ''}</p>
         </div>
@@ -202,7 +202,7 @@ export function ReviewSummary({
 
               return (
                 <div key={star} className="flex items-center gap-2">
-                  <span className="text-sm text-gray-600 w-8">{star}</span>
+                  <span className="text-sm text-gray-600 dark:text-earth-300 w-8">{star}</span>
                   <svg className="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 24 24">
                     <path d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
                   </svg>

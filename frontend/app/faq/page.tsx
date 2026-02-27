@@ -120,21 +120,21 @@ export default function FAQPage() {
 
   return (
     <PageWrapper>
-    <div className="relative overflow-hidden bg-gradient-to-br from-earth-50 via-sage-50/50 to-cream-100 border-b border-sage-200/50">
+    <div className="relative overflow-hidden bg-gradient-to-br from-earth-50 via-sage-50/50 to-cream-100 dark:from-earth-950 dark:via-earth-900 dark:to-earth-950 border-b border-sage-200/50 dark:border-earth-700">
       <LeafPattern opacity={0.04} />
       <div className="absolute top-20 right-20 w-64 h-64 bg-sage-300/20 rounded-full blur-3xl" />
       <div className="absolute bottom-10 left-10 w-48 h-48 bg-earth-300/15 rounded-full blur-3xl" />
       <div className="relative max-w-4xl mx-auto px-4 py-12 md:py-16 text-center">
-        <div className="inline-flex items-center gap-2 bg-white/60 backdrop-blur-sm rounded-full px-4 py-2 border border-earth-200/50 mb-6">
+        <div className="inline-flex items-center gap-2 bg-white/60 dark:bg-earth-900/60 backdrop-blur-sm rounded-full px-4 py-2 border border-earth-200/50 dark:border-earth-700 mb-6">
           <svg className="w-4 h-4 text-sage-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
           </svg>
-          <span className="text-gray-600 font-medium text-sm">Help Center</span>
+          <span className="text-gray-600 dark:text-earth-300 font-medium text-sm">Help Center</span>
         </div>
-        <h1 className="text-4xl md:text-5xl font-serif font-bold text-gray-900 mb-4">
+        <h1 className="text-4xl md:text-5xl font-serif font-bold text-gray-900 dark:text-earth-100 mb-4">
           Frequently Asked Questions
         </h1>
-        <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+        <p className="text-xl text-gray-600 dark:text-earth-300 max-w-2xl mx-auto">
           Find answers to common questions about Verscienta Health, our services, and holistic health information.
         </p>
       </div>
@@ -149,10 +149,10 @@ export default function FAQPage() {
             placeholder="Search questions..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full px-5 py-4 pl-12 border border-earth-200 rounded-xl focus:ring-2 focus:ring-earth-500 focus:border-earth-500 transition"
+            className="w-full px-5 py-4 pl-12 border border-earth-200 dark:border-earth-700 rounded-xl focus:ring-2 focus:ring-earth-500 focus:border-earth-500 transition bg-white dark:bg-earth-800 text-gray-900 dark:text-earth-100 placeholder:text-gray-400 dark:placeholder:text-earth-500"
           />
           <svg
-            className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400"
+            className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 dark:text-earth-500"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
@@ -171,7 +171,7 @@ export default function FAQPage() {
             className={`px-4 py-2 rounded-full text-sm font-medium transition ${
               activeCategory === category
                 ? 'bg-earth-600 text-white'
-                : 'bg-earth-100 text-gray-700 hover:bg-earth-200'
+                : 'bg-earth-100 dark:bg-earth-800 text-gray-700 dark:text-earth-200 hover:bg-earth-200 dark:hover:bg-earth-700'
             }`}
           >
             {category}
@@ -182,8 +182,8 @@ export default function FAQPage() {
       {/* FAQ List */}
       <div className="space-y-4">
         {filteredFaqs.length === 0 ? (
-          <div className="text-center py-12 bg-earth-50/50 rounded-xl">
-            <p className="text-gray-600">No questions found matching your search.</p>
+          <div className="text-center py-12 bg-earth-50/50 dark:bg-earth-950 rounded-xl">
+            <p className="text-gray-600 dark:text-earth-300">No questions found matching your search.</p>
           </div>
         ) : (
           filteredFaqs.map((faq, index) => {
@@ -193,7 +193,7 @@ export default function FAQPage() {
             return (
               <div
                 key={originalIndex}
-                className="bg-white rounded-xl shadow-sm border border-earth-200 overflow-hidden"
+                className="bg-white dark:bg-earth-900 rounded-xl shadow-sm border border-earth-200 dark:border-earth-700 overflow-hidden"
               >
                 <button
                   onClick={() => toggleItem(originalIndex)}
@@ -203,7 +203,7 @@ export default function FAQPage() {
                     <span className="text-xs font-medium text-sage-600 bg-sage-100 px-2 py-1 rounded mb-2 inline-block">
                       {faq.category}
                     </span>
-                    <h3 className="text-lg font-semibold text-gray-800">
+                    <h3 className="text-lg font-semibold text-gray-800 dark:text-earth-100">
                       {faq.question}
                     </h3>
                   </div>
@@ -241,7 +241,7 @@ export default function FAQPage() {
         </p>
         <Link
           href="/contact"
-          className="inline-block bg-white text-gray-800 px-8 py-3 rounded-lg font-semibold hover:bg-earth-50 transition shadow-lg"
+          className="inline-block bg-white dark:bg-earth-900 text-gray-800 dark:text-earth-100 px-8 py-3 rounded-lg font-semibold hover:bg-earth-50 dark:hover:bg-earth-800 transition shadow-lg"
         >
           Contact Us
         </Link>

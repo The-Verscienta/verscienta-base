@@ -100,10 +100,10 @@ export default async function ConditionDetailPage({ params }: ConditionDetailPro
   return (
     <PageWrapper>
       {/* Hero Section */}
-      <div className="relative overflow-hidden bg-gradient-to-br from-earth-50 via-sage-50/50 to-cream-100 border-b border-sage-200/50">
+      <div className="relative overflow-hidden bg-gradient-to-br from-earth-50 via-sage-50/50 to-cream-100 dark:from-earth-950 dark:via-sage-950 dark:to-earth-900 border-b border-sage-200/50 dark:border-earth-700/50">
         <LeafPattern opacity={0.04} />
-        <div className="absolute top-20 left-10 w-64 h-64 bg-sage-300/20 rounded-full blur-3xl" />
-        <div className="absolute bottom-10 right-20 w-48 h-48 bg-earth-300/15 rounded-full blur-3xl" />
+        <div className="absolute top-20 left-10 w-64 h-64 bg-sage-300/20 dark:bg-sage-800/15 rounded-full blur-3xl" />
+        <div className="absolute bottom-10 right-20 w-48 h-48 bg-earth-300/15 dark:bg-earth-800/10 rounded-full blur-3xl" />
 
         <div className="relative max-w-6xl mx-auto px-4 py-8">
           <Breadcrumbs
@@ -115,12 +115,12 @@ export default async function ConditionDetailPage({ params }: ConditionDetailPro
             className="mb-8"
           />
 
-          <div className="bg-white rounded-3xl shadow-xl border border-earth-200 relative overflow-hidden">
+          <div className="bg-white dark:bg-earth-900 rounded-3xl shadow-xl border border-earth-200 dark:border-earth-700 relative overflow-hidden">
             <div className="absolute -right-12 -top-12 w-64 h-64 opacity-5 pointer-events-none">
               <div className="text-8xl">🏥</div>
             </div>
             <div className="relative p-8 md:p-12">
-              <h1 className="font-serif text-5xl md:text-6xl font-bold text-gray-900 mb-4 tracking-tight">
+              <h1 className="font-serif text-5xl md:text-6xl font-bold text-gray-900 dark:text-earth-100 mb-4 tracking-tight">
                 {name}
               </h1>
 
@@ -132,7 +132,7 @@ export default async function ConditionDetailPage({ params }: ConditionDetailPro
                     </Tag>
                   )}
                   {condition.field_editors_pick && (
-                    <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-semibold bg-amber-100 text-amber-800 border border-amber-200">
+                    <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-semibold bg-amber-100 dark:bg-amber-900/40 text-amber-800 dark:text-amber-200 border border-amber-200 dark:border-amber-700/50">
                       &#9733; Editor&apos;s Pick
                     </span>
                   )}
@@ -162,7 +162,7 @@ export default async function ConditionDetailPage({ params }: ConditionDetailPro
               </svg>
             }
           >
-            <div className="prose max-w-none text-gray-700">
+            <div className="prose max-w-none text-gray-700 dark:text-earth-300">
               <SafeHtml html={condition.body.value} />
             </div>
           </Section>
@@ -182,8 +182,8 @@ export default async function ConditionDetailPage({ params }: ConditionDetailPro
             <ul className="grid md:grid-cols-2 gap-2">
               {condition.field_symptoms.map((symptom, idx) => (
                 <li key={idx} className="flex items-start gap-2">
-                  <span className="text-sage-600 mt-1">•</span>
-                  <span className="text-gray-700">{symptom}</span>
+                  <span className="text-sage-600 dark:text-sage-400 mt-1">•</span>
+                  <span className="text-gray-700 dark:text-earth-300">{symptom}</span>
                 </li>
               ))}
             </ul>
@@ -203,7 +203,7 @@ export default async function ConditionDetailPage({ params }: ConditionDetailPro
                 </svg>
             }
             >
-              <p className="text-gray-600 mb-4">
+              <p className="text-gray-600 dark:text-earth-400 mb-4">
                 These holistic health modalities may be beneficial for managing {name}:
               </p>
               <div className="grid md:grid-cols-2 gap-4">
@@ -211,20 +211,20 @@ export default async function ConditionDetailPage({ params }: ConditionDetailPro
                   <Link
                     key={modality.id}
                     href={`/modalities/${modality.id}`}
-                    className="block border border-earth-200 rounded-xl p-4 hover:shadow-lg hover:border-sage-400 transition"
+                    className="block border border-earth-200 dark:border-earth-700 rounded-xl p-4 hover:shadow-lg hover:border-sage-400 dark:hover:border-sage-600 transition dark:bg-earth-800/50"
                   >
                     <div className="flex items-start justify-between">
                       <div>
-                        <h3 className="font-bold text-gray-800 text-lg mb-1">
+                        <h3 className="font-bold text-gray-800 dark:text-earth-100 text-lg mb-1">
                           {modality.title || 'Modality'}
                         </h3>
                         {modality.field_excels_at && modality.field_excels_at.length > 0 && (
-                          <p className="text-sm text-gray-600">
+                          <p className="text-sm text-gray-600 dark:text-earth-400">
                             Excels at: {modality.field_excels_at.slice(0, 2).join(', ')}
                           </p>
                         )}
                       </div>
-                      <span className="text-sage-600 text-sm font-medium">
+                      <span className="text-sage-600 dark:text-sage-400 text-sm font-medium">
                         Learn More →
                       </span>
                     </div>
@@ -248,7 +248,7 @@ export default async function ConditionDetailPage({ params }: ConditionDetailPro
                 </svg>
             }
             >
-              <p className="text-gray-600 mb-4">
+              <p className="text-gray-600 dark:text-earth-400 mb-4">
                 Traditional herbal formulas that may help with this condition:
               </p>
               <div className="grid md:grid-cols-2 gap-4">
@@ -256,10 +256,10 @@ export default async function ConditionDetailPage({ params }: ConditionDetailPro
                   <Link
                     key={formula.id}
                     href={`/formulas/${formula.id}`}
-                    className="block border border-earth-200 rounded-xl p-4 hover:shadow-lg hover:border-sage-400 transition"
+                    className="block border border-earth-200 dark:border-earth-700 rounded-xl p-4 hover:shadow-lg hover:border-sage-400 dark:hover:border-sage-600 transition dark:bg-earth-800/50"
                   >
                     <div className="flex items-start justify-between mb-2">
-                      <h3 className="font-bold text-gray-800 text-lg">
+                      <h3 className="font-bold text-gray-800 dark:text-earth-100 text-lg">
                         {formula.title}
                       </h3>
                       <Tag variant="sage" size="sm">
@@ -267,11 +267,11 @@ export default async function ConditionDetailPage({ params }: ConditionDetailPro
                       </Tag>
                     </div>
                     {hasTextContent(formula.field_formula_description) && (
-                      <p className="text-sm text-gray-600 mb-3 line-clamp-2">
+                      <p className="text-sm text-gray-600 dark:text-earth-400 mb-3 line-clamp-2">
                         {getTextValue(formula.field_formula_description)}
                       </p>
                     )}
-                    <div className="text-sage-600 text-sm font-medium">
+                    <div className="text-sage-600 dark:text-sage-400 text-sm font-medium">
                       View Formula →
                     </div>
                   </Link>
@@ -292,9 +292,9 @@ export default async function ConditionDetailPage({ params }: ConditionDetailPro
             </svg>
           }
         >
-          <div className="space-y-4 text-gray-700">
+          <div className="space-y-4 text-gray-700 dark:text-earth-300">
             <div>
-              <h3 className="font-semibold text-gray-800 mb-2 flex items-center gap-2">
+              <h3 className="font-semibold text-gray-800 dark:text-earth-200 mb-2 flex items-center gap-2">
                 <span>🧘</span>
                 Mind-Body Practices
               </h3>
@@ -304,7 +304,7 @@ export default async function ConditionDetailPage({ params }: ConditionDetailPro
               </p>
             </div>
             <div>
-              <h3 className="font-semibold text-gray-800 mb-2 flex items-center gap-2">
+              <h3 className="font-semibold text-gray-800 dark:text-earth-200 mb-2 flex items-center gap-2">
                 <span>🥗</span>
                 Dietary Considerations
               </h3>
@@ -314,7 +314,7 @@ export default async function ConditionDetailPage({ params }: ConditionDetailPro
               </p>
             </div>
             <div>
-              <h3 className="font-semibold text-gray-800 mb-2 flex items-center gap-2">
+              <h3 className="font-semibold text-gray-800 dark:text-earth-200 mb-2 flex items-center gap-2">
                 <span>💚</span>
                 Lifestyle Modifications
               </h3>
@@ -325,11 +325,11 @@ export default async function ConditionDetailPage({ params }: ConditionDetailPro
             </div>
             {condition.field_complementary_approaches && (typeof condition.field_complementary_approaches === 'string' ? condition.field_complementary_approaches : condition.field_complementary_approaches?.value) && (
               <div>
-                <h3 className="font-semibold text-gray-800 mb-2 flex items-center gap-2">
+                <h3 className="font-semibold text-gray-800 dark:text-earth-200 mb-2 flex items-center gap-2">
                   <span>🌱</span>
                   Complementary Approaches
                 </h3>
-                <div className="prose prose-sm max-w-none text-earth-700">
+                <div className="prose prose-sm max-w-none text-earth-700 dark:text-earth-400">
                   <SafeHtml html={typeof condition.field_complementary_approaches === 'string' ? condition.field_complementary_approaches : (condition.field_complementary_approaches?.value || '')} />
                 </div>
               </div>
@@ -348,7 +348,7 @@ export default async function ConditionDetailPage({ params }: ConditionDetailPro
           </p>
           <Link
             href="/practitioners"
-            className="inline-block bg-white text-gray-800 px-8 py-3 rounded-xl font-semibold hover:bg-earth-50 transition shadow-lg"
+            className="inline-block bg-white text-gray-800 dark:text-gray-900 px-8 py-3 rounded-xl font-semibold hover:bg-earth-50 transition shadow-lg"
           >
             Find a Practitioner
           </Link>

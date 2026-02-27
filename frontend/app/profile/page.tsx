@@ -156,7 +156,7 @@ export default function ProfilePage() {
   if (loading) {
     return (
       <PageWrapper>
-        <div className="min-h-screen flex items-center justify-center bg-earth-50/30">
+        <div className="min-h-screen flex items-center justify-center bg-earth-50/30 dark:bg-earth-950">
           <Loading text="Loading profile..." />
         </div>
       </PageWrapper>
@@ -165,7 +165,7 @@ export default function ProfilePage() {
 
   return (
     <PageWrapper>
-    <div className="max-w-4xl mx-auto px-4 py-8 bg-earth-50/30 min-h-screen">
+    <div className="max-w-4xl mx-auto px-4 py-8 bg-earth-50/30 dark:bg-earth-950 min-h-screen">
       {toast && (
         <Toast
           message={toast.message}
@@ -177,12 +177,12 @@ export default function ProfilePage() {
 
       {/* Breadcrumbs */}
       <nav className="mb-6 text-sm">
-        <Link href="/" className="text-sage-600 hover:text-sage-800">Home</Link>
+        <Link href="/" className="text-sage-600 dark:text-sage-400 hover:text-sage-800 dark:hover:text-sage-300">Home</Link>
         {' / '}
-        <span className="text-gray-800">My Profile</span>
+        <span className="text-gray-800 dark:text-earth-200">My Profile</span>
       </nav>
 
-      <h1 className="text-4xl font-bold text-gray-800 mb-8">My Profile</h1>
+      <h1 className="text-4xl font-bold text-gray-800 dark:text-earth-100 mb-8">My Profile</h1>
 
       <div className="grid md:grid-cols-3 gap-6">
         {/* Sidebar */}
@@ -192,17 +192,17 @@ export default function ProfilePage() {
               <div className="w-24 h-24 bg-earth-600 rounded-full flex items-center justify-center text-white text-3xl font-bold mx-auto mb-4">
                 {user?.name?.charAt(0).toUpperCase() || 'U'}
               </div>
-              <h2 className="text-xl font-bold text-gray-800 mb-1">
+              <h2 className="text-xl font-bold text-gray-800 dark:text-earth-100 mb-1">
                 {user?.name || 'User'}
               </h2>
-              <p className="text-sm text-gray-600 mb-4">{user?.mail}</p>
+              <p className="text-sm text-gray-600 dark:text-earth-300 mb-4">{user?.mail}</p>
 
               {user?.roles && user.roles.length > 0 && (
                 <div className="space-y-1">
                   {user.roles.map((role: string, idx: number) => (
                     <span
                       key={idx}
-                      className="inline-block bg-sage-100 text-sage-700 text-xs px-2 py-1 rounded mr-1"
+                      className="inline-block bg-sage-100 text-sage-700 dark:bg-sage-900/40 dark:text-sage-300 text-xs px-2 py-1 rounded mr-1"
                     >
                       {role}
                     </span>
@@ -211,10 +211,10 @@ export default function ProfilePage() {
               )}
             </div>
 
-            <div className="mt-6 pt-6 border-t border-gray-200 space-y-2">
+            <div className="mt-6 pt-6 border-t border-gray-200 dark:border-earth-700 space-y-2">
               <Link
                 href="/profile"
-                className="block px-4 py-2 text-gray-800 bg-earth-50 rounded-lg font-medium"
+                className="block px-4 py-2 text-gray-800 dark:text-earth-100 bg-earth-50 dark:bg-earth-800 rounded-lg font-medium"
               >
                 Profile Settings
               </Link>
@@ -223,7 +223,7 @@ export default function ProfilePage() {
                   href="https://backend.ddev.site/admin"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="block px-4 py-2 text-gray-700 hover:bg-gray-50 rounded-lg"
+                  className="block px-4 py-2 text-gray-700 dark:text-earth-300 hover:bg-gray-50 dark:hover:bg-earth-800 rounded-lg"
                 >
                   Admin Panel
                 </a>
@@ -320,21 +320,21 @@ export default function ProfilePage() {
             <div className="space-y-3 text-sm">
               <div className="flex justify-between">
                 <span className="text-gray-600">Username:</span>
-                <span className="font-medium text-gray-900">{user?.name}</span>
+                <span className="font-medium text-gray-900 dark:text-earth-100">{user?.name}</span>
               </div>
               <div className="flex justify-between">
                 <span className="text-gray-600">User ID:</span>
-                <span className="font-medium text-gray-900">{user?.uid}</span>
+                <span className="font-medium text-gray-900 dark:text-earth-100">{user?.uid}</span>
               </div>
               <div className="flex justify-between">
                 <span className="text-gray-600">Account Created:</span>
-                <span className="font-medium text-gray-900">
+                <span className="font-medium text-gray-900 dark:text-earth-100">
                   {user?.created ? new Date(parseInt(user.created) * 1000).toLocaleDateString() : 'N/A'}
                 </span>
               </div>
               <div className="flex justify-between">
                 <span className="text-gray-600">Last Login:</span>
-                <span className="font-medium text-gray-900">
+                <span className="font-medium text-gray-900 dark:text-earth-100">
                   {user?.access ? new Date(parseInt(user.access) * 1000).toLocaleDateString() : 'N/A'}
                 </span>
               </div>

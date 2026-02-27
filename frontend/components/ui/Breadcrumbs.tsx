@@ -50,7 +50,7 @@ export function Breadcrumbs({ items, className = '' }: BreadcrumbsProps) {
             <li key={index} className="flex items-center gap-2">
               {index > 0 && (
                 <svg
-                  className="w-4 h-4 text-gray-400"
+                  className="w-4 h-4 text-gray-400 dark:text-earth-500"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -64,7 +64,7 @@ export function Breadcrumbs({ items, className = '' }: BreadcrumbsProps) {
                 </svg>
               )}
               {isLast || !item.href ? (
-                <span className="text-gray-800 font-medium">{item.label}</span>
+                <span className="text-gray-800 dark:text-earth-100 font-medium">{item.label}</span>
               ) : (
                 <Link
                   href={item.href}

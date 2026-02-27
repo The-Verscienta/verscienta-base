@@ -225,21 +225,21 @@ export function SymbolicVerifyButton({
           <div className="space-y-5">
             {/* Stat cards grid */}
             <div className="grid grid-cols-3 gap-3">
-              <div className="rounded-lg bg-earth-50 p-3 text-center">
-                <p className="text-xs text-earth-600 mb-1">Daily Dose</p>
-                <p className="text-lg font-semibold text-gray-800">
+              <div className="rounded-lg bg-earth-50 dark:bg-earth-800 p-3 text-center">
+                <p className="text-xs text-earth-600 dark:text-earth-400 mb-1">Daily Dose</p>
+                <p className="text-lg font-semibold text-gray-800 dark:text-earth-100">
                   {result.daily_dose_mg.toFixed(1)}<span className="text-xs font-normal ml-0.5">mg</span>
                 </p>
               </div>
-              <div className="rounded-lg bg-earth-50 p-3 text-center">
-                <p className="text-xs text-earth-600 mb-1">Per Dose</p>
-                <p className="text-lg font-semibold text-gray-800">
+              <div className="rounded-lg bg-earth-50 dark:bg-earth-800 p-3 text-center">
+                <p className="text-xs text-earth-600 dark:text-earth-400 mb-1">Per Dose</p>
+                <p className="text-lg font-semibold text-gray-800 dark:text-earth-100">
                   {result.per_dose_mg.toFixed(1)}<span className="text-xs font-normal ml-0.5">mg</span>
                 </p>
               </div>
-              <div className="rounded-lg bg-earth-50 p-3 text-center">
-                <p className="text-xs text-earth-600 mb-1">Doses/Day</p>
-                <p className="text-lg font-semibold text-gray-800">{result.doses_per_day}</p>
+              <div className="rounded-lg bg-earth-50 dark:bg-earth-800 p-3 text-center">
+                <p className="text-xs text-earth-600 dark:text-earth-400 mb-1">Doses/Day</p>
+                <p className="text-lg font-semibold text-gray-800 dark:text-earth-100">{result.doses_per_day}</p>
               </div>
             </div>
 
@@ -267,7 +267,7 @@ export function SymbolicVerifyButton({
               <div className="overflow-x-auto">
                 <table className="w-full text-sm">
                   <thead>
-                    <tr className="border-b border-gray-200 text-left text-xs text-earth-600">
+                    <tr className="border-b border-gray-200 dark:border-earth-700 text-left text-xs text-earth-600 dark:text-earth-400">
                       <th className="pb-2 pr-4">Constraint</th>
                       <th className="pb-2 pr-4">Limit</th>
                       <th className="pb-2 pr-4">Actual</th>
@@ -276,8 +276,8 @@ export function SymbolicVerifyButton({
                   </thead>
                   <tbody>
                     {result.constraint_details.map((c, i) => (
-                      <tr key={i} className="border-b border-gray-100">
-                        <td className="py-2 pr-4 text-gray-800">{c.constraint}</td>
+                      <tr key={i} className="border-b border-gray-100 dark:border-earth-800">
+                        <td className="py-2 pr-4 text-gray-800 dark:text-earth-200">{c.constraint}</td>
                         <td className="py-2 pr-4">{c.limit}</td>
                         <td className="py-2 pr-4">{c.actual}</td>
                         <td className="py-2">
@@ -296,8 +296,8 @@ export function SymbolicVerifyButton({
 
             {/* LaTeX formula rendered with KaTeX */}
             {result.latex && (
-              <div className="bg-earth-50 rounded-lg p-3 overflow-x-auto">
-                <LatexEquation latex={result.latex} displayMode className="text-gray-800" />
+              <div className="bg-earth-50 dark:bg-earth-800 rounded-lg p-3 overflow-x-auto">
+                <LatexEquation latex={result.latex} displayMode className="text-gray-800 dark:text-earth-100" />
               </div>
             )}
 

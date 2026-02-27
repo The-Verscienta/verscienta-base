@@ -30,10 +30,10 @@ export function HeroSearch() {
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder="Search herbs, modalities, conditions..."
-            className="w-full px-6 py-4 pl-14 text-lg bg-white/95 backdrop-blur-sm border-2 border-earth-200 rounded-2xl shadow-lg focus:border-earth-500 focus:ring-4 focus:ring-earth-500/20 transition-all outline-none text-gray-800 placeholder-gray-400"
+            className="w-full px-6 py-4 pl-14 text-lg bg-white/95 backdrop-blur-sm border-2 border-earth-200 rounded-2xl shadow-lg focus:border-earth-500 focus:ring-4 focus:ring-earth-500/20 transition-all outline-none text-gray-800 placeholder-gray-400 dark:bg-earth-800 dark:border-earth-600 dark:text-earth-100 dark:placeholder-earth-500"
           />
           <svg
-            className="absolute left-5 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400"
+            className="absolute left-5 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 dark:text-earth-500"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
@@ -56,12 +56,12 @@ export function HeroSearch() {
 
       {/* Quick Search Tags */}
       <div className="flex flex-wrap justify-center gap-2 mt-4">
-        <span className="text-sm text-gray-500">Popular:</span>
+        <span className="text-sm text-gray-500 dark:text-earth-400">Popular:</span>
         {quickSearches.map((item) => (
           <button
             key={item.label}
             onClick={() => router.push(`/search?q=${encodeURIComponent(item.query)}`)}
-            className="text-sm px-3 py-1 bg-white/60 hover:bg-white/80 text-earth-700 rounded-full transition-colors border border-earth-200"
+            className="text-sm px-3 py-1 bg-white/60 hover:bg-white/80 text-earth-700 rounded-full transition-colors border border-earth-200 dark:bg-earth-800/60 dark:hover:bg-earth-800 dark:border-earth-700 dark:text-earth-300"
           >
             {item.label}
           </button>

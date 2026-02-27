@@ -18,7 +18,7 @@ export default function Home() {
       {/* Hero Section */}
       <section className="relative overflow-hidden py-16 md:py-24 lg:py-32">
         {/* Background decoration */}
-        <div className="absolute inset-0 bg-gradient-to-br from-earth-100 via-sage-50 to-cream-100" />
+        <div className="absolute inset-0 bg-gradient-to-br from-earth-100 via-sage-50 to-cream-100 dark:from-earth-950 dark:via-sage-950 dark:to-earth-900" />
 
         {/* Botanical pattern overlay with grain effect */}
         <div className="absolute inset-0 grain-overlay opacity-[0.04]" style={{
@@ -27,28 +27,28 @@ export default function Home() {
         }} />
 
         {/* Decorative blurred circles - enhanced with animation */}
-        <div className="absolute -top-32 -right-32 w-96 h-96 bg-sage-200/30 rounded-full blur-3xl breathe" />
-        <div className="absolute -bottom-32 -left-32 w-80 h-80 bg-earth-200/30 rounded-full blur-3xl breathe" style={{ animationDelay: '2s' }} />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gold-100/20 rounded-full blur-3xl" />
+        <div className="absolute -top-32 -right-32 w-96 h-96 bg-sage-200/30 dark:bg-sage-800/15 rounded-full blur-3xl breathe" />
+        <div className="absolute -bottom-32 -left-32 w-80 h-80 bg-earth-200/30 dark:bg-earth-800/15 rounded-full blur-3xl breathe" style={{ animationDelay: '2s' }} />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gold-100/20 dark:bg-gold-800/15 rounded-full blur-3xl" />
 
         <div className="relative max-w-6xl mx-auto px-4 text-center">
           {/* Eyebrow with enhanced styling */}
-          <div className="inline-flex items-center gap-2 bg-white/70 backdrop-blur-sm px-5 py-2.5 rounded-full border border-earth-200/50 shadow-sm mb-8 animate-fade-in">
+          <div className="inline-flex items-center gap-2 bg-white/70 dark:bg-earth-900/70 backdrop-blur-sm px-5 py-2.5 rounded-full border border-earth-200/50 dark:border-earth-700/50 shadow-sm mb-8 animate-fade-in">
             <span className="relative w-2 h-2">
               <span className="absolute inset-0 bg-sage-500 rounded-full animate-ping opacity-75" />
               <span className="relative block w-2 h-2 bg-sage-500 rounded-full" />
             </span>
-            <span className="text-sm font-medium text-earth-700 tracking-wide">Bridging Ancient Wisdom & Modern Science</span>
+            <span className="text-sm font-medium text-earth-700 dark:text-earth-300 tracking-wide">Bridging Ancient Wisdom & Modern Science</span>
           </div>
 
-          <h1 className="font-serif text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold text-gray-900 mb-8 tracking-tight leading-[1.05] animate-slide-up">
+          <h1 className="font-serif text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold text-gray-900 dark:text-earth-100 mb-8 tracking-tight leading-[1.05] animate-slide-up">
             Your Guide to
             <span className="block mt-2">
               <GradientText variant="sage" className="text-shadow-sm">Holistic Wellness</GradientText>
             </span>
           </h1>
 
-          <p className="text-xl md:text-2xl text-gray-600 max-w-3xl mx-auto mb-10 leading-relaxed animate-slide-up" style={{ animationDelay: '100ms' }}>
+          <p className="text-xl md:text-2xl text-gray-600 dark:text-earth-300 max-w-3xl mx-auto mb-10 leading-relaxed animate-slide-up" style={{ animationDelay: '100ms' }}>
             Explore traditional herbal remedies, holistic healing modalities, and receive
             personalized wellness recommendations powered by AI.
           </p>
@@ -75,7 +75,7 @@ export default function Home() {
             </Link>
             <Link
               href="/practitioners"
-              className="group inline-flex items-center justify-center gap-3 bg-white/80 backdrop-blur-sm hover:bg-white text-earth-700 px-8 py-4 rounded-xl font-semibold text-lg border-2 border-earth-200 hover:border-sage-400 transition-all hover:-translate-y-0.5 shadow-sm hover:shadow-md"
+              className="group inline-flex items-center justify-center gap-3 bg-white/80 dark:bg-earth-900/80 backdrop-blur-sm hover:bg-white dark:hover:bg-earth-900 text-earth-700 dark:text-earth-200 px-8 py-4 rounded-xl font-semibold text-lg border-2 border-earth-200 dark:border-earth-700 hover:border-sage-400 transition-all hover:-translate-y-0.5 shadow-sm hover:shadow-md"
             >
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -96,15 +96,15 @@ export default function Home() {
         <div className="max-w-6xl mx-auto px-4">
           {/* Section header with decorative elements */}
           <div className="text-center mb-16">
-            <div className="inline-flex items-center gap-2 text-sage-600 text-sm font-semibold tracking-wider uppercase mb-4">
-              <span className="w-8 h-px bg-sage-300" />
+            <div className="inline-flex items-center gap-2 text-sage-600 dark:text-sage-400 text-sm font-semibold tracking-wider uppercase mb-4">
+              <span className="w-8 h-px bg-sage-300 dark:bg-sage-700" />
               Our Platform
-              <span className="w-8 h-px bg-sage-300" />
+              <span className="w-8 h-px bg-sage-300 dark:bg-sage-700" />
             </div>
-            <h2 className="font-serif text-4xl md:text-5xl font-bold text-gray-900 mb-6">
+            <h2 className="font-serif text-4xl md:text-5xl font-bold text-gray-900 dark:text-earth-100 mb-6">
               Comprehensive Health <GradientText variant="earth">Resources</GradientText>
             </h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
+            <p className="text-xl text-gray-600 dark:text-earth-300 max-w-3xl mx-auto leading-relaxed">
               Explore our extensive database covering traditional Chinese medicine,
               Western herbalism, and various holistic healing modalities.
             </p>
@@ -117,13 +117,13 @@ export default function Home() {
             {/* Materia Medica Card */}
             <GlowCard glowColor="sage" className="h-full">
               <Link href="/herbs" className="block p-8 h-full group">
-                <div className="w-16 h-16 bg-gradient-to-br from-sage-100 to-earth-100 rounded-2xl flex items-center justify-center text-3xl mb-6 group-hover:scale-110 transition-transform shadow-sm">
+                <div className="w-16 h-16 bg-gradient-to-br from-sage-100 to-earth-100 dark:from-sage-900/50 dark:to-earth-900/50 rounded-2xl flex items-center justify-center text-3xl mb-6 group-hover:scale-110 transition-transform shadow-sm">
                   🌿
                 </div>
-                <h3 className="font-serif text-xl font-bold text-gray-800 mb-3 group-hover:text-sage-700 transition-colors">
+                <h3 className="font-serif text-xl font-bold text-gray-800 dark:text-earth-100 mb-3 group-hover:text-sage-700 transition-colors">
                   Materia Medica
                 </h3>
-                <p className="text-gray-600 text-sm leading-relaxed mb-4">
+                <p className="text-gray-600 dark:text-earth-300 text-sm leading-relaxed mb-4">
                   Comprehensive botanical information covering TCM properties, active constituents, therapeutic uses, dosages, and safety guidelines for hundreds of medicinal herbs.
                 </p>
                 <div className="flex flex-wrap gap-2 mb-4">
@@ -131,7 +131,7 @@ export default function Home() {
                     <Tag key={tag} variant="sage" size="sm">{tag}</Tag>
                   ))}
                 </div>
-                <span className="inline-flex items-center gap-2 text-sage-600 font-medium text-sm group-hover:gap-3 transition-all">
+                <span className="inline-flex items-center gap-2 text-sage-600 dark:text-sage-400 font-medium text-sm group-hover:gap-3 transition-all">
                   Explore Herbs
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
@@ -143,13 +143,13 @@ export default function Home() {
             {/* Healing Modalities Card */}
             <GlowCard glowColor="earth" className="h-full">
               <Link href="/modalities" className="block p-8 h-full group">
-                <div className="w-16 h-16 bg-gradient-to-br from-earth-100 to-gold-100 rounded-2xl flex items-center justify-center text-3xl mb-6 group-hover:scale-110 transition-transform shadow-sm">
+                <div className="w-16 h-16 bg-gradient-to-br from-earth-100 to-gold-100 dark:from-earth-900/50 dark:to-gold-900/30 rounded-2xl flex items-center justify-center text-3xl mb-6 group-hover:scale-110 transition-transform shadow-sm">
                   ☯️
                 </div>
-                <h3 className="font-serif text-xl font-bold text-gray-800 mb-3 group-hover:text-sage-700 transition-colors">
+                <h3 className="font-serif text-xl font-bold text-gray-800 dark:text-earth-100 mb-3 group-hover:text-sage-700 transition-colors">
                   Healing Modalities
                 </h3>
-                <p className="text-gray-600 text-sm leading-relaxed mb-4">
+                <p className="text-gray-600 dark:text-earth-300 text-sm leading-relaxed mb-4">
                   Explore diverse holistic health practices from acupuncture and yoga to Reiki and Ayurveda, with detailed information on benefits, techniques, and applications.
                 </p>
                 <div className="flex flex-wrap gap-2 mb-4">
@@ -157,7 +157,7 @@ export default function Home() {
                     <Tag key={tag} variant="earth" size="sm">{tag}</Tag>
                   ))}
                 </div>
-                <span className="inline-flex items-center gap-2 text-sage-600 font-medium text-sm group-hover:gap-3 transition-all">
+                <span className="inline-flex items-center gap-2 text-sage-600 dark:text-sage-400 font-medium text-sm group-hover:gap-3 transition-all">
                   Explore Modalities
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
@@ -178,13 +178,13 @@ export default function Home() {
                     AI Powered
                   </span>
                 </div>
-                <div className="w-16 h-16 bg-gradient-to-br from-gold-100 to-amber-100 rounded-2xl flex items-center justify-center text-3xl mb-6 group-hover:scale-110 transition-transform shadow-sm">
+                <div className="w-16 h-16 bg-gradient-to-br from-gold-100 to-amber-100 dark:from-gold-900/30 dark:to-amber-900/30 rounded-2xl flex items-center justify-center text-3xl mb-6 group-hover:scale-110 transition-transform shadow-sm">
                   🤖
                 </div>
-                <h3 className="font-serif text-xl font-bold text-gray-800 mb-3 group-hover:text-sage-700 transition-colors">
+                <h3 className="font-serif text-xl font-bold text-gray-800 dark:text-earth-100 mb-3 group-hover:text-sage-700 transition-colors">
                   AI-Powered Analysis
                 </h3>
-                <p className="text-gray-600 text-sm leading-relaxed mb-4">
+                <p className="text-gray-600 dark:text-earth-300 text-sm leading-relaxed mb-4">
                   Get personalized wellness recommendations based on your symptoms using advanced AI technology that considers your unique health profile.
                 </p>
                 <div className="flex flex-wrap gap-2 mb-4">
@@ -206,7 +206,7 @@ export default function Home() {
 
       {/* TCM Special Section */}
       <section className="py-16 md:py-24 relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-amber-50 via-orange-50/50 to-red-50/30" />
+        <div className="absolute inset-0 bg-gradient-to-br from-amber-50 via-orange-50/50 to-red-50/30 dark:from-amber-950/30 dark:via-orange-950/20 dark:to-red-950/20" />
         <div className="absolute inset-0 opacity-[0.03]" style={{
           backgroundImage: `url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='20' cy='20' r='15' fill='none' stroke='%23c1272d' stroke-width='0.5'/%3E%3Cpath d='M20 5c0 7.5-7.5 15-7.5 22.5S20 35 20 35s7.5 0 7.5-7.5S20 12.5 20 5z' fill='%23c1272d' opacity='0.3'/%3E%3C/svg%3E")`,
           backgroundSize: '40px 40px'
@@ -217,23 +217,23 @@ export default function Home() {
             <div className="inline-flex items-center gap-3 mb-6">
               <span className="text-5xl">☯️</span>
             </div>
-            <h2 className="font-serif text-4xl md:text-5xl font-bold text-amber-900 mb-6">
+            <h2 className="font-serif text-4xl md:text-5xl font-bold text-amber-900 dark:text-amber-200 mb-6">
               Traditional Chinese Medicine
             </h2>
-            <p className="text-xl text-amber-800 max-w-3xl mx-auto">
+            <p className="text-xl text-amber-800 dark:text-amber-300 max-w-3xl mx-auto">
               Honoring thousands of years of healing wisdom with modern scientific understanding.
             </p>
           </div>
 
           <div className="grid md:grid-cols-2 gap-8">
             <Section title="TCM Herb Database" icon="🏮" variant="tcm" className="h-full">
-              <p className="text-amber-800 mb-6">
+              <p className="text-amber-800 dark:text-amber-300 mb-6">
                 Complete information on traditional Chinese herbs including taste properties,
                 temperature qualities, meridian affinities, and classical formulas.
               </p>
               <ul className="space-y-3">
                 {['Five Tastes & Temperatures (味 Wèi / 性 Xìng)', 'Meridian Channel Associations (經絡 Jīngluò)', 'Classical Formula Combinations'].map((item, idx) => (
-                  <li key={idx} className="flex items-start gap-3 text-amber-900">
+                  <li key={idx} className="flex items-start gap-3 text-amber-900 dark:text-amber-200">
                     <svg className="w-5 h-5 text-tcm-600 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                       <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                     </svg>
@@ -244,13 +244,13 @@ export default function Home() {
             </Section>
 
             <Section title="Modern Scientific Research" icon="🔬" variant="tcm" className="h-full">
-              <p className="text-amber-800 mb-6">
+              <p className="text-amber-800 dark:text-amber-300 mb-6">
                 Bridging traditional knowledge with contemporary pharmacological research and
                 clinical studies to validate efficacy and safety.
               </p>
               <ul className="space-y-3">
                 {['Active Constituent Analysis', 'Clinical Trial Data', 'Safety & Interaction Studies'].map((item, idx) => (
-                  <li key={idx} className="flex items-start gap-3 text-amber-900">
+                  <li key={idx} className="flex items-start gap-3 text-amber-900 dark:text-amber-200">
                     <svg className="w-5 h-5 text-earth-600 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                       <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                     </svg>
@@ -303,19 +303,19 @@ export default function Home() {
 
       {/* Testimonials Section */}
       <section className="py-16 md:py-24 relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-b from-cream-50 to-white" />
+        <div className="absolute inset-0 bg-gradient-to-b from-cream-50 to-white dark:from-earth-950 dark:to-earth-900" />
 
         <div className="relative max-w-6xl mx-auto px-4">
           <div className="text-center mb-16">
-            <div className="inline-flex items-center gap-2 text-sage-600 text-sm font-semibold tracking-wider uppercase mb-4">
-              <span className="w-8 h-px bg-sage-300" />
+            <div className="inline-flex items-center gap-2 text-sage-600 dark:text-sage-400 text-sm font-semibold tracking-wider uppercase mb-4">
+              <span className="w-8 h-px bg-sage-300 dark:bg-sage-700" />
               What People Say
-              <span className="w-8 h-px bg-sage-300" />
+              <span className="w-8 h-px bg-sage-300 dark:bg-sage-700" />
             </div>
-            <h2 className="font-serif text-4xl md:text-5xl font-bold text-gray-900 mb-6">
+            <h2 className="font-serif text-4xl md:text-5xl font-bold text-gray-900 dark:text-earth-100 mb-6">
               Stories of <GradientText variant="sage">Healing</GradientText>
             </h2>
-            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+            <p className="text-xl text-gray-600 dark:text-earth-300 max-w-2xl mx-auto">
               Discover how holistic approaches have transformed lives
             </p>
           </div>

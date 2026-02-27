@@ -83,14 +83,14 @@ export function BookingForm({
   const minDate = tomorrow.toISOString().split('T')[0];
 
   return (
-    <form onSubmit={handleSubmit} className={`bg-white rounded-xl border border-gray-100 p-6 ${className}`}>
-      <h3 className="font-semibold text-gray-800 mb-4">
+    <form onSubmit={handleSubmit} className={`bg-white dark:bg-earth-900 rounded-xl border border-gray-100 dark:border-earth-700 p-6 ${className}`}>
+      <h3 className="font-semibold text-gray-800 dark:text-earth-100 mb-4">
         Request Appointment with {practitionerName}
       </h3>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
         <div>
-          <label htmlFor="booking-name" className="block text-sm font-medium text-gray-700 mb-1">
+          <label htmlFor="booking-name" className="block text-sm font-medium text-gray-700 dark:text-earth-200 mb-1">
             Full Name *
           </label>
           <input
@@ -99,11 +99,11 @@ export function BookingForm({
             required
             value={form.name}
             onChange={(e) => updateField('name', e.target.value)}
-            className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-sage-500 focus:border-sage-500 outline-none transition"
+            className="w-full px-3 py-2 border border-gray-200 dark:border-earth-600 dark:bg-earth-800 dark:text-earth-100 rounded-lg focus:ring-2 focus:ring-sage-500 focus:border-sage-500 outline-none transition"
           />
         </div>
         <div>
-          <label htmlFor="booking-email" className="block text-sm font-medium text-gray-700 mb-1">
+          <label htmlFor="booking-email" className="block text-sm font-medium text-gray-700 dark:text-earth-200 mb-1">
             Email *
           </label>
           <input
@@ -112,11 +112,11 @@ export function BookingForm({
             required
             value={form.email}
             onChange={(e) => updateField('email', e.target.value)}
-            className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-sage-500 focus:border-sage-500 outline-none transition"
+            className="w-full px-3 py-2 border border-gray-200 dark:border-earth-600 dark:bg-earth-800 dark:text-earth-100 rounded-lg focus:ring-2 focus:ring-sage-500 focus:border-sage-500 outline-none transition"
           />
         </div>
         <div>
-          <label htmlFor="booking-phone" className="block text-sm font-medium text-gray-700 mb-1">
+          <label htmlFor="booking-phone" className="block text-sm font-medium text-gray-700 dark:text-earth-200 mb-1">
             Phone (optional)
           </label>
           <input
@@ -124,11 +124,11 @@ export function BookingForm({
             type="tel"
             value={form.phone}
             onChange={(e) => updateField('phone', e.target.value)}
-            className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-sage-500 focus:border-sage-500 outline-none transition"
+            className="w-full px-3 py-2 border border-gray-200 dark:border-earth-600 dark:bg-earth-800 dark:text-earth-100 rounded-lg focus:ring-2 focus:ring-sage-500 focus:border-sage-500 outline-none transition"
           />
         </div>
         <div>
-          <label htmlFor="booking-date" className="block text-sm font-medium text-gray-700 mb-1">
+          <label htmlFor="booking-date" className="block text-sm font-medium text-gray-700 dark:text-earth-200 mb-1">
             Preferred Date *
           </label>
           <input
@@ -138,18 +138,18 @@ export function BookingForm({
             min={minDate}
             value={form.preferredDate}
             onChange={(e) => updateField('preferredDate', e.target.value)}
-            className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-sage-500 focus:border-sage-500 outline-none transition"
+            className="w-full px-3 py-2 border border-gray-200 dark:border-earth-600 dark:bg-earth-800 dark:text-earth-100 rounded-lg focus:ring-2 focus:ring-sage-500 focus:border-sage-500 outline-none transition"
           />
         </div>
         <div>
-          <label htmlFor="booking-time" className="block text-sm font-medium text-gray-700 mb-1">
+          <label htmlFor="booking-time" className="block text-sm font-medium text-gray-700 dark:text-earth-200 mb-1">
             Preferred Time
           </label>
           <select
             id="booking-time"
             value={form.preferredTime}
             onChange={(e) => updateField('preferredTime', e.target.value)}
-            className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-sage-500 focus:border-sage-500 outline-none transition"
+            className="w-full px-3 py-2 border border-gray-200 dark:border-earth-600 dark:bg-earth-800 dark:text-earth-100 rounded-lg focus:ring-2 focus:ring-sage-500 focus:border-sage-500 outline-none transition"
           >
             <option value="flexible">Flexible</option>
             <option value="morning">Morning (9AM-12PM)</option>
@@ -158,14 +158,14 @@ export function BookingForm({
           </select>
         </div>
         <div>
-          <label htmlFor="booking-type" className="block text-sm font-medium text-gray-700 mb-1">
+          <label htmlFor="booking-type" className="block text-sm font-medium text-gray-700 dark:text-earth-200 mb-1">
             Visit Type
           </label>
           <select
             id="booking-type"
             value={form.visitType}
             onChange={(e) => updateField('visitType', e.target.value)}
-            className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-sage-500 focus:border-sage-500 outline-none transition"
+            className="w-full px-3 py-2 border border-gray-200 dark:border-earth-600 dark:bg-earth-800 dark:text-earth-100 rounded-lg focus:ring-2 focus:ring-sage-500 focus:border-sage-500 outline-none transition"
           >
             <option value="initial_consultation">Initial Consultation</option>
             <option value="follow_up">Follow-up Visit</option>
@@ -175,7 +175,7 @@ export function BookingForm({
       </div>
 
       <div className="mb-4">
-        <label htmlFor="booking-message" className="block text-sm font-medium text-gray-700 mb-1">
+        <label htmlFor="booking-message" className="block text-sm font-medium text-gray-700 dark:text-earth-200 mb-1">
           Additional Notes (optional)
         </label>
         <textarea
@@ -185,7 +185,7 @@ export function BookingForm({
           placeholder="Describe your health concerns or reason for visit..."
           rows={3}
           maxLength={500}
-          className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-sage-500 focus:border-sage-500 outline-none transition resize-none"
+          className="w-full px-3 py-2 border border-gray-200 dark:border-earth-600 dark:bg-earth-800 dark:text-earth-100 dark:placeholder-earth-500 rounded-lg focus:ring-2 focus:ring-sage-500 focus:border-sage-500 outline-none transition resize-none"
         />
       </div>
 
@@ -203,7 +203,7 @@ export function BookingForm({
         {submitting ? 'Submitting...' : 'Request Appointment'}
       </button>
 
-      <p className="text-xs text-gray-400 mt-3 text-center">
+      <p className="text-xs text-gray-400 dark:text-earth-500 mt-3 text-center">
         This is a request only. The practitioner will confirm availability.
       </p>
     </form>

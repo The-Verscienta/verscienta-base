@@ -38,19 +38,19 @@ export default function ForgotPasswordPage() {
 
   return (
     <PageWrapper>
-    <div className="min-h-[80vh] flex items-center justify-center p-4 bg-earth-50/50">
+    <div className="min-h-[80vh] flex items-center justify-center p-4 bg-earth-50/50 dark:bg-earth-950/50">
       <div className="w-full max-w-md">
         {/* Logo/Brand */}
         <div className="text-center mb-8">
           <Link href="/" className="inline-block">
             <span className="text-5xl">🌿</span>
-            <h1 className="text-2xl font-serif font-bold text-gray-800 mt-2">
+            <h1 className="text-2xl font-serif font-bold text-gray-800 dark:text-earth-100 mt-2">
               Verscienta Health
             </h1>
           </Link>
         </div>
 
-        <div className="bg-white rounded-2xl shadow-xl border border-earth-200 p-8">
+        <div className="bg-white dark:bg-earth-900 rounded-2xl shadow-xl border border-earth-200 dark:border-earth-700 p-8">
           {status === 'success' ? (
             <div className="text-center">
               <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
@@ -58,14 +58,14 @@ export default function ForgotPasswordPage() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                 </svg>
               </div>
-              <h2 className="text-2xl font-bold text-gray-800 mb-2">
+              <h2 className="text-2xl font-bold text-gray-800 dark:text-earth-100 mb-2">
                 Check Your Email
               </h2>
-              <p className="text-gray-600 mb-6">
+              <p className="text-gray-600 dark:text-earth-300 mb-6">
                 We've sent a password reset link to <strong>{email}</strong>.
                 Please check your inbox and follow the instructions.
               </p>
-              <p className="text-sm text-gray-500 mb-6">
+              <p className="text-sm text-gray-500 dark:text-earth-400 mb-6">
                 Didn't receive the email? Check your spam folder or try again.
               </p>
               <div className="space-y-3">
@@ -80,7 +80,7 @@ export default function ForgotPasswordPage() {
                 </button>
                 <Link
                   href="/login"
-                  className="block text-center text-earth-600 hover:text-gray-800 font-medium"
+                  className="block text-center text-earth-600 dark:text-sage-400 hover:text-gray-800 dark:hover:text-sage-300 font-medium"
                 >
                   Back to Login
                 </Link>
@@ -94,10 +94,10 @@ export default function ForgotPasswordPage() {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z" />
                   </svg>
                 </div>
-                <h2 className="text-2xl font-bold text-gray-800 mb-2">
+                <h2 className="text-2xl font-bold text-gray-800 dark:text-earth-100 mb-2">
                   Forgot Password?
                 </h2>
-                <p className="text-gray-600">
+                <p className="text-gray-600 dark:text-earth-300">
                   No worries! Enter your email address and we'll send you a link to reset your password.
                 </p>
               </div>
@@ -113,7 +113,7 @@ export default function ForgotPasswordPage() {
 
               <form onSubmit={handleSubmit} className="space-y-6">
                 <div>
-                  <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
+                  <label htmlFor="email" className="block text-sm font-medium text-gray-700 dark:text-earth-200 mb-2">
                     Email Address
                   </label>
                   <div className="relative">
@@ -123,7 +123,7 @@ export default function ForgotPasswordPage() {
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       required
-                      className="w-full pl-11 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-earth-500 focus:border-earth-500 transition"
+                      className="w-full pl-11 pr-4 py-3 border border-gray-300 dark:border-earth-600 dark:bg-earth-800 dark:text-earth-100 rounded-xl focus:ring-2 focus:ring-earth-500 focus:border-earth-500 transition"
                       placeholder="you@example.com"
                     />
                     <svg className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -148,10 +148,10 @@ export default function ForgotPasswordPage() {
                 </button>
               </form>
 
-              <div className="mt-6 pt-6 border-t border-gray-200">
-                <p className="text-center text-sm text-gray-600">
+              <div className="mt-6 pt-6 border-t border-gray-200 dark:border-earth-700">
+                <p className="text-center text-sm text-gray-600 dark:text-earth-300">
                   Remember your password?{' '}
-                  <Link href="/login" className="text-earth-600 hover:text-gray-800 font-semibold">
+                  <Link href="/login" className="text-earth-600 dark:text-sage-400 hover:text-gray-800 dark:hover:text-sage-300 font-semibold">
                     Sign in
                   </Link>
                 </p>

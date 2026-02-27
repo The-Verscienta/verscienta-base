@@ -10,7 +10,7 @@ export function UserMenu() {
 
   if (loading) {
     return (
-      <div className="w-8 h-8 rounded-full bg-gray-200 animate-pulse"></div>
+      <div className="w-8 h-8 rounded-full bg-gray-200 animate-pulse dark:bg-earth-700"></div>
     );
   }
 
@@ -25,7 +25,7 @@ export function UserMenu() {
         </Link>
         <Link
           href="/register"
-          className="bg-white text-earth-700 px-4 py-2 rounded-lg hover:bg-earth-50 transition font-medium"
+          className="bg-white text-earth-700 px-4 py-2 rounded-lg hover:bg-earth-50 transition font-medium dark:bg-earth-800 dark:text-earth-200 dark:hover:bg-earth-700"
         >
           Sign Up
         </Link>
@@ -59,17 +59,17 @@ export function UserMenu() {
             className="fixed inset-0 z-10"
             onClick={() => setIsOpen(false)}
           />
-          <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg py-2 z-20">
+          <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg py-2 z-20 dark:bg-earth-900 dark:border dark:border-earth-700">
             <Link
               href="/profile"
-              className="block px-4 py-2 text-gray-800 hover:bg-gray-100 transition"
+              className="block px-4 py-2 text-gray-800 hover:bg-gray-100 transition dark:text-earth-100 dark:hover:bg-earth-800"
               onClick={() => setIsOpen(false)}
             >
               My Profile
             </Link>
             <Link
               href="/profile/favorites"
-              className="block px-4 py-2 text-gray-800 hover:bg-gray-100 transition"
+              className="block px-4 py-2 text-gray-800 hover:bg-gray-100 transition dark:text-earth-100 dark:hover:bg-earth-800"
               onClick={() => setIsOpen(false)}
             >
               Favorites
@@ -79,7 +79,7 @@ export function UserMenu() {
                 href="https://backend.ddev.site/admin"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="block px-4 py-2 text-gray-800 hover:bg-gray-100 transition"
+                className="block px-4 py-2 text-gray-800 hover:bg-gray-100 transition dark:text-earth-100 dark:hover:bg-earth-800"
               >
                 Admin Panel
               </a>

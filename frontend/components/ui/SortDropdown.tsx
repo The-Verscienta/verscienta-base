@@ -43,14 +43,14 @@ export function SortDropdown({
 
   return (
     <div className={`flex items-center gap-2 ${className}`}>
-      <label htmlFor="sort-select" className="text-sm text-gray-600 whitespace-nowrap">
+      <label htmlFor="sort-select" className="text-sm text-gray-600 dark:text-earth-300 whitespace-nowrap">
         Sort by:
       </label>
       <select
         id="sort-select"
         value={currentValue}
         onChange={handleChange}
-        className="text-sm border border-gray-200 rounded-lg px-3 py-1.5 bg-white text-gray-700 focus:outline-none focus:ring-2 focus:ring-sage-500 focus:border-sage-500 cursor-pointer hover:border-gray-300 transition"
+        className="text-sm border border-gray-200 dark:border-earth-700 rounded-lg px-3 py-1.5 bg-white dark:bg-earth-900 text-gray-700 dark:text-earth-200 focus:outline-none focus:ring-2 focus:ring-sage-500 focus:border-sage-500 cursor-pointer hover:border-gray-300 dark:hover:border-earth-600 transition"
       >
         {options.map((option) => (
           <option key={option.value} value={option.value}>

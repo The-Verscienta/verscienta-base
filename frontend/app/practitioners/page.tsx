@@ -142,10 +142,10 @@ export default async function PractitionersPage({ searchParams }: PageProps) {
       <div className="mb-10">
         <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-6">
           <div>
-            <h1 className="text-4xl md:text-5xl font-serif font-bold text-gray-800 mb-3">
+            <h1 className="text-4xl md:text-5xl font-serif font-bold text-gray-800 dark:text-earth-100 mb-3">
               Find Practitioners
             </h1>
-            <p className="text-xl text-gray-600 max-w-2xl">
+            <p className="text-xl text-gray-600 dark:text-earth-300 max-w-2xl">
               Connect with qualified holistic health practitioners who specialize in natural healing modalities.
             </p>
           </div>
@@ -178,12 +178,12 @@ export default async function PractitionersPage({ searchParams }: PageProps) {
       </div>
 
       {practitioners.length === 0 ? (
-        <div className="bg-gradient-to-br from-sage-50 to-earth-50 rounded-2xl p-12 text-center border border-sage-200">
+        <div className="bg-gradient-to-br from-sage-50 to-earth-50 dark:from-earth-900 dark:to-earth-950 rounded-2xl p-12 text-center border border-sage-200 dark:border-earth-700">
           <div className="text-7xl mb-6">👨‍⚕️</div>
-          <h2 className="text-2xl font-bold text-gray-800 mb-3">
+          <h2 className="text-2xl font-bold text-gray-800 dark:text-earth-100 mb-3">
             No Practitioners Found
           </h2>
-          <p className="text-gray-600 mb-6 max-w-md mx-auto">
+          <p className="text-gray-600 dark:text-earth-300 mb-6 max-w-md mx-auto">
             Our practitioner directory is being built. Check back soon to find qualified holistic health professionals.
           </p>
           <a
@@ -207,10 +207,10 @@ export default async function PractitionersPage({ searchParams }: PageProps) {
                 <Link
                   key={practitioner.id}
                   href={`/practitioners/${practitioner.id}`}
-                  className="group bg-gradient-to-br from-sage-50 to-earth-50 rounded-2xl p-8 border border-sage-200 hover:border-sage-300 hover:shadow-lg transition-all"
+                  className="group bg-gradient-to-br from-sage-50 to-earth-50 dark:from-earth-900 dark:to-earth-950 rounded-2xl p-8 border border-sage-200 dark:border-earth-700 hover:border-sage-300 dark:hover:border-earth-600 hover:shadow-lg transition-all"
                 >
                   <div className="flex items-start gap-5">
-                    <div className="relative w-20 h-20 bg-white rounded-full shadow-sm flex items-center justify-center group-hover:scale-105 transition-transform overflow-hidden flex-shrink-0">
+                    <div className="relative w-20 h-20 bg-white dark:bg-earth-800 rounded-full shadow-sm flex items-center justify-center group-hover:scale-105 transition-transform overflow-hidden flex-shrink-0">
                       {image ? (
                         <Image
                           src={image.url}
@@ -225,7 +225,7 @@ export default async function PractitionersPage({ searchParams }: PageProps) {
                     </div>
                     <div className="flex-1">
                       <div className="flex items-start justify-between gap-3 mb-2">
-                        <h2 className="text-2xl font-bold text-gray-800 group-hover:text-earth-600 transition-colors">
+                        <h2 className="text-2xl font-bold text-gray-800 dark:text-earth-100 group-hover:text-earth-600 dark:group-hover:text-earth-400 transition-colors">
                           {practitioner.title || practitioner.field_name}
                         </h2>
                         {practitioner.field_accepting_new_patients && (
@@ -242,8 +242,8 @@ export default async function PractitionersPage({ searchParams }: PageProps) {
                       )}
 
                       {practitioner.field_address && (
-                        <p className="text-gray-600 mb-2 flex items-center gap-2">
-                          <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <p className="text-gray-600 dark:text-earth-300 mb-2 flex items-center gap-2">
+                          <svg className="w-4 h-4 text-gray-400 dark:text-earth-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                           </svg>
@@ -266,7 +266,7 @@ export default async function PractitionersPage({ searchParams }: PageProps) {
                             return (
                               <span
                                 key={idx}
-                                className="text-xs bg-white/70 text-sage-700 px-3 py-1 rounded-full flex items-center gap-1"
+                                className="text-xs bg-white/70 dark:bg-earth-800/70 text-sage-700 dark:text-sage-300 px-3 py-1 rounded-full flex items-center gap-1"
                               >
                                 <span>{modalityIcon}</span>
                                 {modalityName}
@@ -289,7 +289,7 @@ export default async function PractitionersPage({ searchParams }: PageProps) {
           </div>
 
           {/* All Practitioners Grid */}
-          <h2 className="text-2xl font-bold text-gray-800 mb-6">All Practitioners</h2>
+          <h2 className="text-2xl font-bold text-gray-800 dark:text-earth-100 mb-6">All Practitioners</h2>
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-12">
             {practitioners.slice(2).map((practitioner) => {
               const icon = practiceTypeIcons[practitioner.field_practice_type || 'default'] || practiceTypeIcons.default;
@@ -299,10 +299,10 @@ export default async function PractitionersPage({ searchParams }: PageProps) {
                 <Link
                   key={practitioner.id}
                   href={`/practitioners/${practitioner.id}`}
-                  className="group bg-white rounded-xl shadow-sm hover:shadow-xl border border-gray-100 hover:border-sage-200 transition-all overflow-hidden"
+                  className="group bg-white dark:bg-earth-900 rounded-xl shadow-sm hover:shadow-xl border border-gray-100 dark:border-earth-700 hover:border-sage-200 dark:hover:border-earth-600 transition-all overflow-hidden"
                 >
                   {/* Card Header */}
-                  <div className="bg-gradient-to-br from-sage-50 to-earth-50 border-b border-gray-100">
+                  <div className="bg-gradient-to-br from-sage-50 to-earth-50 dark:from-earth-900 dark:to-earth-950 border-b border-gray-100 dark:border-earth-700">
                     {image ? (
                       <div className="relative w-full h-40 overflow-hidden">
                         <Image
@@ -323,7 +323,7 @@ export default async function PractitionersPage({ searchParams }: PageProps) {
                     ) : (
                       <div className="p-5">
                         <div className="flex items-start justify-between">
-                          <div className="w-14 h-14 bg-white rounded-full shadow-sm flex items-center justify-center group-hover:scale-110 transition-transform">
+                          <div className="w-14 h-14 bg-white dark:bg-earth-800 rounded-full shadow-sm flex items-center justify-center group-hover:scale-110 transition-transform">
                             <span className="text-2xl">{icon}</span>
                           </div>
                           {practitioner.field_accepting_new_patients && (
@@ -338,7 +338,7 @@ export default async function PractitionersPage({ searchParams }: PageProps) {
 
                   {/* Card Body */}
                   <div className="p-5">
-                    <h3 className="text-lg font-bold text-gray-800 mb-1 group-hover:text-earth-600 transition-colors">
+                    <h3 className="text-lg font-bold text-gray-800 dark:text-earth-100 mb-1 group-hover:text-earth-600 dark:group-hover:text-earth-400 transition-colors">
                       {practitioner.title || practitioner.field_name}
                     </h3>
 
@@ -349,8 +349,8 @@ export default async function PractitionersPage({ searchParams }: PageProps) {
                     )}
 
                     {practitioner.field_address && (
-                      <p className="text-sm text-gray-600 mb-2 flex items-start gap-2">
-                        <svg className="w-4 h-4 text-gray-400 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <p className="text-sm text-gray-600 dark:text-earth-300 mb-2 flex items-start gap-2">
+                        <svg className="w-4 h-4 text-gray-400 dark:text-earth-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                         </svg>
@@ -367,18 +367,18 @@ export default async function PractitionersPage({ searchParams }: PageProps) {
 
                     {practitioner.field_modalities && practitioner.field_modalities.length > 0 && (
                       <div className="mb-3">
-                        <p className="text-xs font-medium text-gray-500 mb-1">Specialties:</p>
+                        <p className="text-xs font-medium text-gray-500 dark:text-earth-400 mb-1">Specialties:</p>
                         <div className="flex flex-wrap gap-1">
                           {practitioner.field_modalities.slice(0, 2).map((modality: any, idx: number) => (
                             <span
                               key={idx}
-                              className="text-xs bg-sage-100 text-sage-700 px-2 py-0.5 rounded"
+                              className="text-xs bg-sage-100 dark:bg-earth-800 text-sage-700 dark:text-sage-300 px-2 py-0.5 rounded"
                             >
                               {modality.title || 'Modality'}
                             </span>
                           ))}
                           {practitioner.field_modalities.length > 2 && (
-                            <span className="text-xs text-gray-400">
+                            <span className="text-xs text-gray-400 dark:text-earth-500">
                               +{practitioner.field_modalities.length - 2}
                             </span>
                           )}
@@ -387,12 +387,12 @@ export default async function PractitionersPage({ searchParams }: PageProps) {
                     )}
 
                     {practitioner.field_years_experience && (
-                      <p className="text-xs text-gray-500 mb-3">
+                      <p className="text-xs text-gray-500 dark:text-earth-400 mb-3">
                         {practitioner.field_years_experience} years experience
                       </p>
                     )}
 
-                    <div className="pt-3 border-t border-gray-100">
+                    <div className="pt-3 border-t border-gray-100 dark:border-earth-700">
                       <span className="text-sage-600 font-medium text-sm flex items-center gap-1 group-hover:gap-2 transition-all">
                         View Profile
                         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -417,10 +417,10 @@ export default async function PractitionersPage({ searchParams }: PageProps) {
                   <Link
                     key={practitioner.id}
                     href={`/practitioners/${practitioner.id}`}
-                    className="group bg-white rounded-xl shadow-sm hover:shadow-xl border border-gray-100 hover:border-sage-200 transition-all p-6"
+                    className="group bg-white dark:bg-earth-900 rounded-xl shadow-sm hover:shadow-xl border border-gray-100 dark:border-earth-700 hover:border-sage-200 dark:hover:border-earth-600 transition-all p-6"
                   >
                     <div className="flex items-start justify-between mb-4">
-                      <div className="relative w-14 h-14 bg-sage-100 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform overflow-hidden">
+                      <div className="relative w-14 h-14 bg-sage-100 dark:bg-earth-800 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform overflow-hidden">
                         {image ? (
                           <Image
                             src={image.url}
@@ -439,11 +439,11 @@ export default async function PractitionersPage({ searchParams }: PageProps) {
                         </span>
                       )}
                     </div>
-                    <h3 className="text-lg font-bold text-gray-800 mb-2">
+                    <h3 className="text-lg font-bold text-gray-800 dark:text-earth-100 mb-2">
                       {practitioner.title || practitioner.field_name}
                     </h3>
                     {practitioner.field_address && (
-                      <p className="text-sm text-gray-600 mb-4 line-clamp-2">
+                      <p className="text-sm text-gray-600 dark:text-earth-300 mb-4 line-clamp-2">
                         {practitioner.field_address}
                       </p>
                     )}

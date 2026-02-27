@@ -48,9 +48,9 @@ export default function ContactPage() {
 
   return (
     <PageWrapper>
-    <div className="min-h-screen bg-gradient-to-b from-cream-50 to-white">
+    <div className="min-h-screen bg-gradient-to-b from-cream-50 to-white dark:from-earth-950 dark:to-earth-900">
       {/* Hero Section */}
-      <div className="relative overflow-hidden bg-gradient-to-br from-earth-50 via-sage-50/50 to-cream-100 border-b border-earth-200/50">
+      <div className="relative overflow-hidden bg-gradient-to-br from-earth-50 via-sage-50/50 to-cream-100 dark:from-earth-950 dark:via-earth-900 dark:to-earth-950 border-b border-earth-200/50 dark:border-earth-700">
         <LeafPattern opacity={0.04} />
 
         {/* Decorative blurred circles */}
@@ -58,18 +58,18 @@ export default function ContactPage() {
         <div className="absolute bottom-10 left-10 w-48 h-48 bg-earth-300/15 rounded-full blur-3xl" />
 
         <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-20 text-center">
-          <div className="inline-flex items-center gap-2 bg-white/60 backdrop-blur-sm rounded-full px-4 py-2 border border-earth-200/50 mb-6">
+          <div className="inline-flex items-center gap-2 bg-white/60 dark:bg-earth-900/60 backdrop-blur-sm rounded-full px-4 py-2 border border-earth-200/50 dark:border-earth-700 mb-6">
             <svg className="w-4 h-4 text-sage-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
             </svg>
-            <span className="text-gray-600 font-medium text-sm">Get in Touch</span>
+            <span className="text-gray-600 dark:text-earth-300 font-medium text-sm">Get in Touch</span>
           </div>
 
-          <h1 className="font-serif text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 mb-6 leading-tight">
+          <h1 className="font-serif text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 dark:text-earth-100 mb-6 leading-tight">
             Contact Us
           </h1>
 
-          <p className="text-xl md:text-2xl text-gray-600 max-w-2xl mx-auto leading-relaxed">
+          <p className="text-xl md:text-2xl text-gray-600 dark:text-earth-300 max-w-2xl mx-auto leading-relaxed">
             Have questions or feedback? We'd love to hear from you.
           </p>
         </div>
@@ -80,8 +80,8 @@ export default function ContactPage() {
         <div className="grid md:grid-cols-3 gap-8">
           {/* Contact Info */}
           <div className="md:col-span-1 space-y-6">
-            <div className="bg-white rounded-2xl shadow-sm border border-earth-200 p-6 hover:shadow-md transition-shadow">
-              <h2 className="font-serif text-lg font-semibold text-gray-800 mb-5">Get in Touch</h2>
+            <div className="bg-white dark:bg-earth-900 rounded-2xl shadow-sm border border-earth-200 dark:border-earth-700 p-6 hover:shadow-md transition-shadow">
+              <h2 className="font-serif text-lg font-semibold text-gray-800 dark:text-earth-100 mb-5">Get in Touch</h2>
 
               <div className="space-y-5">
                 <div className="flex items-start gap-4">
@@ -94,7 +94,7 @@ export default function ContactPage() {
                     <p className="text-xs text-sage-500 font-medium uppercase tracking-wide">Email</p>
                     <a
                       href="mailto:hello@verscienta.health"
-                      className="text-gray-700 hover:text-sage-600 font-medium transition-colors"
+                      className="text-gray-700 dark:text-earth-200 hover:text-sage-600 font-medium transition-colors"
                     >
                       hello@verscienta.health
                     </a>
@@ -109,14 +109,14 @@ export default function ContactPage() {
                   </div>
                   <div>
                     <p className="text-xs text-sage-500 font-medium uppercase tracking-wide">Response Time</p>
-                    <p className="text-gray-700 font-medium">Within 24-48 hours</p>
+                    <p className="text-gray-700 dark:text-earth-200 font-medium">Within 24-48 hours</p>
                   </div>
                 </div>
               </div>
             </div>
 
-            <div className="bg-gradient-to-br from-sage-50/50 via-earth-50/50 to-cream-50 rounded-2xl p-6 border border-sage-200">
-              <h3 className="font-serif font-semibold text-gray-800 mb-4">Quick Links</h3>
+            <div className="bg-gradient-to-br from-sage-50/50 via-earth-50/50 to-cream-50 dark:from-earth-950 dark:via-earth-900 dark:to-earth-950 rounded-2xl p-6 border border-sage-200 dark:border-earth-700">
+              <h3 className="font-serif font-semibold text-gray-800 dark:text-earth-100 mb-4">Quick Links</h3>
               <ul className="space-y-3">
                 <li>
                   <Link href="/about" className="text-sage-600 hover:text-earth-700 font-medium flex items-center gap-2 transition-colors">
@@ -156,8 +156,8 @@ export default function ContactPage() {
 
           {/* Contact Form */}
           <div className="md:col-span-2">
-            <div className="bg-white rounded-2xl shadow-sm border border-earth-200 p-8">
-              <h2 className="font-serif text-xl font-semibold text-gray-800 mb-6">Send us a Message</h2>
+            <div className="bg-white dark:bg-earth-900 rounded-2xl shadow-sm border border-earth-200 dark:border-earth-700 p-8">
+              <h2 className="font-serif text-xl font-semibold text-gray-800 dark:text-earth-100 mb-6">Send us a Message</h2>
 
               {status === 'success' ? (
                 <div className="bg-gradient-to-br from-sage-50 to-earth-50 border border-sage-200 rounded-xl p-8 text-center">
@@ -166,10 +166,10 @@ export default function ContactPage() {
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                     </svg>
                   </div>
-                  <h3 className="font-serif text-xl font-semibold text-gray-800 mb-2">
+                  <h3 className="font-serif text-xl font-semibold text-gray-800 dark:text-earth-100 mb-2">
                     Message Sent Successfully!
                   </h3>
-                  <p className="text-gray-600 mb-6 leading-relaxed">
+                  <p className="text-gray-600 dark:text-earth-300 mb-6 leading-relaxed">
                     Thank you for reaching out. We'll get back to you within 24-48 hours.
                   </p>
                   <button
@@ -185,7 +185,7 @@ export default function ContactPage() {
                     <div>
                       <label
                         htmlFor="name"
-                        className="block text-sm font-medium text-gray-700 mb-2"
+                        className="block text-sm font-medium text-gray-700 dark:text-earth-200 mb-2"
                       >
                         Your Name *
                       </label>
@@ -195,8 +195,8 @@ export default function ContactPage() {
                         name="name"
                         value={formData.name}
                         onChange={handleChange}
-                        className={`w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-sage-500 focus:border-sage-500 transition bg-cream-50/50 ${
-                          fieldErrors.name ? 'border-red-300 bg-red-50' : 'border-earth-200'
+                        className={`w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-sage-500 focus:border-sage-500 transition bg-cream-50/50 dark:bg-earth-800 dark:text-earth-100 dark:placeholder-earth-400 ${
+                          fieldErrors.name ? 'border-red-300 bg-red-50' : 'border-earth-200 dark:border-earth-700'
                         }`}
                         placeholder="John Doe"
                       />
@@ -207,7 +207,7 @@ export default function ContactPage() {
                     <div>
                       <label
                         htmlFor="email"
-                        className="block text-sm font-medium text-gray-700 mb-2"
+                        className="block text-sm font-medium text-gray-700 dark:text-earth-200 mb-2"
                       >
                         Email Address *
                       </label>
@@ -217,8 +217,8 @@ export default function ContactPage() {
                         name="email"
                         value={formData.email}
                         onChange={handleChange}
-                        className={`w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-sage-500 focus:border-sage-500 transition bg-cream-50/50 ${
-                          fieldErrors.email ? 'border-red-300 bg-red-50' : 'border-earth-200'
+                        className={`w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-sage-500 focus:border-sage-500 transition bg-cream-50/50 dark:bg-earth-800 dark:text-earth-100 dark:placeholder-earth-400 ${
+                          fieldErrors.email ? 'border-red-300 bg-red-50' : 'border-earth-200 dark:border-earth-700'
                         }`}
                         placeholder="john@example.com"
                       />
@@ -240,8 +240,8 @@ export default function ContactPage() {
                       name="subject"
                       value={formData.subject}
                       onChange={handleChange}
-                      className={`w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-sage-500 focus:border-sage-500 transition bg-cream-50/50 ${
-                        fieldErrors.subject ? 'border-red-300 bg-red-50' : 'border-earth-200'
+                      className={`w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-sage-500 focus:border-sage-500 transition bg-cream-50/50 dark:bg-earth-800 dark:text-earth-100 ${
+                        fieldErrors.subject ? 'border-red-300 bg-red-50' : 'border-earth-200 dark:border-earth-700'
                       }`}
                     >
                       <option value="">Select a subject</option>
@@ -270,8 +270,8 @@ export default function ContactPage() {
                       rows={5}
                       value={formData.message}
                       onChange={handleChange}
-                      className={`w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-sage-500 focus:border-sage-500 transition resize-none bg-cream-50/50 ${
-                        fieldErrors.message ? 'border-red-300 bg-red-50' : 'border-earth-200'
+                      className={`w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-sage-500 focus:border-sage-500 transition resize-none bg-cream-50/50 dark:bg-earth-800 dark:text-earth-100 dark:placeholder-earth-400 ${
+                        fieldErrors.message ? 'border-red-300 bg-red-50' : 'border-earth-200 dark:border-earth-700'
                       }`}
                       placeholder="How can we help you?"
                     />

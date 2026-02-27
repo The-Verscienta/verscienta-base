@@ -59,23 +59,23 @@ export function Modal({
       onClick={handleOverlayClick}
     >
       <div
-        className={`bg-white rounded-lg shadow-xl ${sizeStyles[size]} w-full max-h-[90vh] flex flex-col`}
+        className={`bg-white dark:bg-earth-900 rounded-lg shadow-xl ${sizeStyles[size]} w-full max-h-[90vh] flex flex-col`}
         role="dialog"
         aria-modal="true"
         aria-labelledby={title ? 'modal-title' : undefined}
       >
         {/* Header */}
         {(title || showCloseButton) && (
-          <div className="flex items-center justify-between px-6 py-4 border-b border-gray-200">
+          <div className="flex items-center justify-between px-6 py-4 border-b border-gray-200 dark:border-earth-700">
             {title && (
-              <h2 id="modal-title" className="text-2xl font-bold text-gray-800">
+              <h2 id="modal-title" className="text-2xl font-bold text-gray-800 dark:text-earth-100">
                 {title}
               </h2>
             )}
             {showCloseButton && (
               <button
                 onClick={onClose}
-                className="ml-auto text-gray-400 hover:text-gray-600 transition p-1"
+                className="ml-auto text-gray-400 hover:text-gray-600 dark:text-earth-500 dark:hover:text-earth-300 transition p-1"
                 aria-label="Close modal"
               >
                 <svg
@@ -101,7 +101,7 @@ export function Modal({
 
         {/* Footer */}
         {footer && (
-          <div className="px-6 py-4 border-t border-gray-200 bg-gray-50">
+          <div className="px-6 py-4 border-t border-gray-200 dark:border-earth-700 bg-gray-50 dark:bg-earth-950">
             {footer}
           </div>
         )}

@@ -58,7 +58,7 @@ export function LanguageSwitcher() {
         <div
           role="listbox"
           aria-label="Select language"
-          className="absolute top-full right-0 mt-2 w-44 bg-white rounded-xl shadow-xl border border-earth-100 overflow-hidden z-50"
+          className="absolute top-full right-0 mt-2 w-44 bg-white rounded-xl shadow-xl border border-earth-100 overflow-hidden z-50 dark:bg-earth-900 dark:border-earth-700"
         >
           {LANGUAGES.map((lang) => (
             <button
@@ -68,11 +68,11 @@ export function LanguageSwitcher() {
               onClick={() => selectLang(lang.code)}
               className={`w-full flex items-center gap-3 px-4 py-2.5 text-sm text-left transition-colors ${
                 lang.code === currentLang
-                  ? 'bg-earth-50 text-gray-800 font-semibold'
-                  : 'text-earth-600 hover:bg-earth-50'
+                  ? 'bg-earth-50 text-gray-800 font-semibold dark:bg-earth-800 dark:text-earth-100'
+                  : 'text-earth-600 hover:bg-earth-50 dark:text-earth-300 dark:hover:bg-earth-800'
               }`}
             >
-              <span className="font-mono text-xs bg-earth-100 rounded px-1.5 py-0.5">{lang.flag}</span>
+              <span className="font-mono text-xs bg-earth-100 rounded px-1.5 py-0.5 dark:bg-earth-700 dark:text-earth-200">{lang.flag}</span>
               <span>{lang.label}</span>
               {lang.code === currentLang && (
                 <svg className="w-4 h-4 ml-auto text-sage-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>

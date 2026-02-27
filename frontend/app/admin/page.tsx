@@ -21,13 +21,13 @@ function StatCard({ label, count, href, icon }: { label: string; count: number; 
   return (
     <Link
       href={href}
-      className="bg-white border border-earth-200 rounded-xl p-6 hover:shadow-lg hover:border-sage-300 hover:-translate-y-0.5 transition-all"
+      className="bg-white dark:bg-earth-900 border border-earth-200 dark:border-earth-700 rounded-xl p-6 hover:shadow-lg hover:border-sage-300 dark:hover:border-sage-700 hover:-translate-y-0.5 transition-all"
     >
       <div className="flex items-center justify-between mb-3">
         <span className="text-3xl">{icon}</span>
-        <span className="text-3xl font-bold text-gray-800">{count}</span>
+        <span className="text-3xl font-bold text-gray-800 dark:text-earth-100">{count}</span>
       </div>
-      <p className="text-sm font-medium text-gray-600">{label}</p>
+      <p className="text-sm font-medium text-gray-600 dark:text-earth-300">{label}</p>
     </Link>
   );
 }
@@ -36,11 +36,11 @@ function QuickAction({ label, href, description }: { label: string; href: string
   return (
     <Link
       href={href}
-      className="flex items-center gap-4 p-4 bg-white border border-earth-200 rounded-xl hover:bg-earth-50 hover:border-sage-300 transition-all"
+      className="flex items-center gap-4 p-4 bg-white dark:bg-earth-900 border border-earth-200 dark:border-earth-700 rounded-xl hover:bg-earth-50 dark:hover:bg-earth-800 hover:border-sage-300 dark:hover:border-sage-700 transition-all"
     >
       <div className="flex-1">
-        <p className="font-semibold text-gray-800">{label}</p>
-        <p className="text-sm text-earth-500">{description}</p>
+        <p className="font-semibold text-gray-800 dark:text-earth-100">{label}</p>
+        <p className="text-sm text-earth-500 dark:text-earth-400">{description}</p>
       </div>
       <svg className="w-5 h-5 text-earth-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
@@ -106,15 +106,15 @@ export default function AdminDashboard() {
   return (
     <PageWrapper>
       <div className="mb-8">
-        <h1 className="text-3xl md:text-4xl font-serif font-bold text-gray-800 mb-2">Admin Dashboard</h1>
-        <p className="text-gray-600">Content overview and quick actions for Verscienta Health.</p>
+        <h1 className="text-3xl md:text-4xl font-serif font-bold text-gray-800 dark:text-earth-100 mb-2">Admin Dashboard</h1>
+        <p className="text-gray-600 dark:text-earth-300">Content overview and quick actions for Verscienta Health.</p>
       </div>
 
       <Section title="Content Overview">
         {loading ? (
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
             {Array.from({ length: 6 }).map((_, i) => (
-              <div key={i} className="bg-earth-100 rounded-xl p-6 animate-pulse h-28" />
+              <div key={i} className="bg-earth-100 dark:bg-earth-800 rounded-xl p-6 animate-pulse h-28" />
             ))}
           </div>
         ) : (
@@ -133,7 +133,7 @@ export default function AdminDashboard() {
         {loading ? (
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {Array.from({ length: 4 }).map((_, i) => (
-              <div key={i} className="bg-earth-100 rounded-xl p-6 animate-pulse h-28" />
+              <div key={i} className="bg-earth-100 dark:bg-earth-800 rounded-xl p-6 animate-pulse h-28" />
             ))}
           </div>
         ) : (
@@ -187,23 +187,23 @@ export default function AdminDashboard() {
       </Section>
 
       <Section title="System Info">
-        <div className="bg-white border border-earth-200 rounded-xl p-6">
+        <div className="bg-white dark:bg-earth-900 border border-earth-200 dark:border-earth-700 rounded-xl p-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
             <div>
-              <span className="text-earth-500">Backend URL:</span>
-              <span className="ml-2 font-mono text-gray-800">{drupalAdminUrl}</span>
+              <span className="text-earth-500 dark:text-earth-400">Backend URL:</span>
+              <span className="ml-2 font-mono text-gray-800 dark:text-earth-200">{drupalAdminUrl}</span>
             </div>
             <div>
-              <span className="text-earth-500">Frontend:</span>
-              <span className="ml-2 font-mono text-gray-800">Next.js 15 + React 19</span>
+              <span className="text-earth-500 dark:text-earth-400">Frontend:</span>
+              <span className="ml-2 font-mono text-gray-800 dark:text-earth-200">Next.js 15 + React 19</span>
             </div>
             <div>
-              <span className="text-earth-500">Backend:</span>
-              <span className="ml-2 font-mono text-gray-800">Drupal 11 + JSON:API</span>
+              <span className="text-earth-500 dark:text-earth-400">Backend:</span>
+              <span className="ml-2 font-mono text-gray-800 dark:text-earth-200">Drupal 11 + JSON:API</span>
             </div>
             <div>
-              <span className="text-earth-500">Search:</span>
-              <span className="ml-2 font-mono text-gray-800">Algolia</span>
+              <span className="text-earth-500 dark:text-earth-400">Search:</span>
+              <span className="ml-2 font-mono text-gray-800 dark:text-earth-200">Algolia</span>
             </div>
           </div>
         </div>

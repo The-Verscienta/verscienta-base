@@ -50,7 +50,7 @@ export default function SymptomCheckerPage() {
   return (
     <PageWrapper>
       {/* Hero Section */}
-      <div className="relative overflow-hidden bg-gradient-to-br from-earth-50 via-sage-50/50 to-cream-100 border-b border-sage-200/50">
+      <div className="relative overflow-hidden bg-gradient-to-br from-earth-50 via-sage-50/50 to-cream-100 dark:from-earth-950 dark:via-earth-900/50 dark:to-earth-950 border-b border-sage-200/50 dark:border-earth-700">
         <LeafPattern opacity={0.04} />
 
         {/* Decorative blur circles */}
@@ -78,11 +78,11 @@ export default function SymptomCheckerPage() {
               </span>
             </div>
 
-            <h1 className="font-serif text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 mb-4 leading-tight">
+            <h1 className="font-serif text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 dark:text-earth-100 mb-4 leading-tight">
               Symptom Checker
             </h1>
 
-            <p className="text-lg md:text-xl text-gray-600 leading-relaxed">
+            <p className="text-lg md:text-xl text-gray-600 dark:text-earth-300 leading-relaxed">
               Describe your symptoms and get personalized holistic health recommendations
               powered by Grok AI.
             </p>
@@ -116,7 +116,7 @@ export default function SymptomCheckerPage() {
                   onChange={(e) => setSymptoms(e.target.value)}
                   required
                   rows={6}
-                  className="w-full px-4 py-3 border-2 border-earth-200 rounded-xl focus:ring-2 focus:ring-earth-500/20 focus:border-earth-500 transition bg-white shadow-sm"
+                  className="w-full px-4 py-3 border-2 border-earth-200 dark:border-earth-600 rounded-xl focus:ring-2 focus:ring-earth-500/20 focus:border-earth-500 transition bg-white dark:bg-earth-800 dark:text-earth-100 dark:placeholder-earth-500 shadow-sm"
                   placeholder="Example: I've been experiencing headaches, fatigue, and trouble sleeping for the past week..."
                 />
               </div>
@@ -163,18 +163,18 @@ export default function SymptomCheckerPage() {
               }
             >
               <div className="space-y-8">
-                <div className="relative bg-gradient-to-br from-sage-50 to-earth-50 border border-sage-200 rounded-2xl p-6">
-                  <h3 className="font-serif text-xl font-bold text-gray-800 mb-4">
+                <div className="relative bg-gradient-to-br from-sage-50 to-earth-50 dark:from-earth-900 dark:to-earth-950 border border-sage-200 dark:border-earth-700 rounded-2xl p-6">
+                  <h3 className="font-serif text-xl font-bold text-gray-800 dark:text-earth-100 mb-4">
                     AI Recommendations
                   </h3>
-                  <p className="text-gray-700 whitespace-pre-wrap leading-relaxed">
+                  <p className="text-gray-700 dark:text-earth-200 whitespace-pre-wrap leading-relaxed">
                     {results.analysis || 'No analysis available'}
                   </p>
                 </div>
 
                 {results.recommendations && (
                   <div>
-                    <h3 className="font-serif text-xl font-bold text-gray-800 mb-4">
+                    <h3 className="font-serif text-xl font-bold text-gray-800 dark:text-earth-100 mb-4">
                       Suggested Modalities & Herbs
                     </h3>
                     <div className="flex flex-wrap gap-3">
@@ -190,7 +190,7 @@ export default function SymptomCheckerPage() {
                       ))}
                     </div>
                     {process.env.NEXT_PUBLIC_SYMBOLIC_FEATURE === 'true' && results.recommendations.herbs?.length > 0 && (
-                      <p className="mt-4 text-sm text-gray-600">
+                      <p className="mt-4 text-sm text-gray-600 dark:text-earth-300">
                         Want precise dosage math?{' '}
                         <a
                           href={`/herbs`}

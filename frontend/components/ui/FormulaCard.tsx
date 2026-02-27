@@ -21,7 +21,7 @@ export function FormulaCard({
     return (
       <Link
         href={`/formulas/${formula.id}`}
-        className={`flex items-center gap-3 p-3 bg-white rounded-lg border border-gray-200 hover:border-sage-300 hover:shadow-sm transition ${className}`}
+        className={`flex items-center gap-3 p-3 bg-white dark:bg-earth-900 rounded-lg border border-gray-200 dark:border-earth-700 hover:border-sage-300 hover:shadow-sm transition ${className}`}
       >
         <div className="w-10 h-10 bg-sage-100 rounded-lg flex items-center justify-center flex-shrink-0">
           <svg className="w-5 h-5 text-sage-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -29,8 +29,8 @@ export function FormulaCard({
           </svg>
         </div>
         <div className="flex-1 min-w-0">
-          <h3 className="font-medium text-gray-800 truncate">{formula.title}</h3>
-          <p className="text-xs text-gray-500">
+          <h3 className="font-medium text-gray-800 dark:text-earth-100 truncate">{formula.title}</h3>
+          <p className="text-xs text-gray-500 dark:text-earth-400">
             {ingredientCount} herb{ingredientCount !== 1 ? 's' : ''}
             {formula.field_total_weight && ` | ${formula.field_total_weight}${formula.field_total_weight_unit || 'g'}`}
           </p>
@@ -46,7 +46,7 @@ export function FormulaCard({
     return (
       <Link
         href={`/formulas/${formula.id}`}
-        className={`block bg-white rounded-xl shadow-sm hover:shadow-lg border border-gray-100 hover:border-sage-200 transition-all ${className}`}
+        className={`block bg-white dark:bg-earth-900 rounded-xl shadow-sm hover:shadow-lg border border-gray-100 dark:border-earth-700 hover:border-sage-200 transition-all ${className}`}
       >
         <div className="p-6">
           <div className="flex items-start justify-between mb-4">
@@ -62,22 +62,22 @@ export function FormulaCard({
             )}
           </div>
 
-          <h2 className="text-xl font-bold text-gray-800 mb-2">{formula.title}</h2>
+          <h2 className="text-xl font-bold text-gray-800 dark:text-earth-100 mb-2">{formula.title}</h2>
 
           {description && (
-            <p className="text-sm text-gray-600 mb-4 line-clamp-2">{description}...</p>
+            <p className="text-sm text-gray-600 dark:text-earth-300 mb-4 line-clamp-2">{description}...</p>
           )}
 
           {formula.field_herb_ingredients && formula.field_herb_ingredients.length > 0 && (
             <div className="mb-4">
-              <p className="text-xs font-medium text-gray-500 mb-2">
+              <p className="text-xs font-medium text-gray-500 dark:text-earth-400 mb-2">
                 Ingredients ({ingredientCount})
               </p>
               <div className="flex flex-wrap gap-1.5">
                 {formula.field_herb_ingredients.slice(0, 5).map((ingredient, idx) => (
                   <span
                     key={idx}
-                    className="text-xs bg-earth-50 text-earth-700 px-2.5 py-1 rounded-full border border-earth-100"
+                    className="text-xs bg-earth-50 dark:bg-earth-950 text-earth-700 dark:text-earth-300 px-2.5 py-1 rounded-full border border-earth-100 dark:border-earth-700"
                   >
                     {ingredient.title}
                     {ingredient.field_quantity && (
@@ -88,7 +88,7 @@ export function FormulaCard({
                   </span>
                 ))}
                 {formula.field_herb_ingredients.length > 5 && (
-                  <span className="text-xs text-gray-500 px-2 py-1">
+                  <span className="text-xs text-gray-500 dark:text-earth-400 px-2 py-1">
                     +{formula.field_herb_ingredients.length - 5} more
                   </span>
                 )}
@@ -98,8 +98,8 @@ export function FormulaCard({
 
           {formula.field_use_cases && formula.field_use_cases.length > 0 && (
             <div className="mb-4">
-              <p className="text-xs font-medium text-gray-500 mb-1">Use Cases</p>
-              <p className="text-sm text-gray-600">
+              <p className="text-xs font-medium text-gray-500 dark:text-earth-400 mb-1">Use Cases</p>
+              <p className="text-sm text-gray-600 dark:text-earth-300">
                 {formula.field_use_cases.slice(0, 2).join(', ')}
                 {formula.field_use_cases.length > 2 && `, +${formula.field_use_cases.length - 2} more`}
               </p>
@@ -118,7 +118,7 @@ export function FormulaCard({
           )}
         </div>
 
-        <div className="px-6 py-4 bg-gray-50 border-t border-gray-100 rounded-b-xl">
+        <div className="px-6 py-4 bg-gray-50 dark:bg-earth-950 border-t border-gray-100 dark:border-earth-700 rounded-b-xl">
           <span className="text-sage-600 font-medium text-sm flex items-center gap-1">
             View Full Formula
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -134,7 +134,7 @@ export function FormulaCard({
   return (
     <Link
       href={`/formulas/${formula.id}`}
-      className={`block bg-white rounded-xl shadow-sm hover:shadow-lg border border-gray-100 hover:border-sage-200 transition-all p-6 ${className}`}
+      className={`block bg-white dark:bg-earth-900 rounded-xl shadow-sm hover:shadow-lg border border-gray-100 dark:border-earth-700 hover:border-sage-200 transition-all p-6 ${className}`}
     >
       <div className="flex items-start justify-between mb-3">
         <div className="w-12 h-12 bg-sage-100 rounded-lg flex items-center justify-center">
@@ -147,10 +147,10 @@ export function FormulaCard({
         </span>
       </div>
 
-      <h2 className="text-lg font-bold text-gray-800 mb-2">{formula.title}</h2>
+      <h2 className="text-lg font-bold text-gray-800 dark:text-earth-100 mb-2">{formula.title}</h2>
 
       {description && (
-        <p className="text-sm text-gray-600 mb-4 line-clamp-2">{description}...</p>
+        <p className="text-sm text-gray-600 dark:text-earth-300 mb-4 line-clamp-2">{description}...</p>
       )}
 
       {formula.field_herb_ingredients && formula.field_herb_ingredients.length > 0 && (
@@ -159,13 +159,13 @@ export function FormulaCard({
             {formula.field_herb_ingredients.slice(0, 4).map((ingredient, idx) => (
               <span
                 key={idx}
-                className="text-xs bg-gray-100 text-gray-700 px-2 py-1 rounded"
+                className="text-xs bg-gray-100 dark:bg-earth-800 text-gray-700 dark:text-earth-200 px-2 py-1 rounded"
               >
                 {ingredient.title}
               </span>
             ))}
             {formula.field_herb_ingredients.length > 4 && (
-              <span className="text-xs text-gray-400 px-2 py-1">
+              <span className="text-xs text-gray-400 dark:text-earth-500 px-2 py-1">
                 +{formula.field_herb_ingredients.length - 4}
               </span>
             )}
@@ -173,7 +173,7 @@ export function FormulaCard({
         </div>
       )}
 
-      <div className="pt-3 border-t border-gray-100">
+      <div className="pt-3 border-t border-gray-100 dark:border-earth-700">
         <span className="text-sage-600 font-medium text-sm flex items-center gap-1">
           View Details
           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -199,14 +199,14 @@ export function FormulaIngredientList({ ingredients, className = '' }: FormulaIn
   const totalWeight = ingredients.reduce((sum, ing) => sum + (ing.field_quantity || 0), 0);
 
   return (
-    <div className={`bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden ${className}`}>
-      <div className="p-4 bg-gray-50 border-b border-gray-100">
-        <h3 className="font-semibold text-gray-800">Formula Ingredients</h3>
-        <p className="text-sm text-gray-500">
+    <div className={`bg-white dark:bg-earth-900 rounded-xl shadow-sm border border-gray-100 dark:border-earth-700 overflow-hidden ${className}`}>
+      <div className="p-4 bg-gray-50 dark:bg-earth-950 border-b border-gray-100 dark:border-earth-700">
+        <h3 className="font-semibold text-gray-800 dark:text-earth-100">Formula Ingredients</h3>
+        <p className="text-sm text-gray-500 dark:text-earth-400">
           {ingredients.length} herbs | {totalWeight}g total
         </p>
       </div>
-      <div className="divide-y divide-gray-100">
+      <div className="divide-y divide-gray-100 dark:divide-earth-700">
         {ingredients.map((ingredient, idx) => {
           const percentage = ingredient.field_percentage || (totalWeight > 0 ? (ingredient.field_quantity / totalWeight) * 100 : 0);
 
@@ -218,17 +218,17 @@ export function FormulaIngredientList({ ingredients, className = '' }: FormulaIn
               <div className="flex-1">
                 <Link
                   href={`/herbs/${ingredient.id}`}
-                  className="font-medium text-gray-800 hover:text-earth-600 transition"
+                  className="font-medium text-gray-800 dark:text-earth-100 hover:text-earth-600 transition"
                 >
                   {ingredient.title}
                 </Link>
-                <p className="text-sm text-gray-500">
+                <p className="text-sm text-gray-500 dark:text-earth-400">
                   {ingredient.field_quantity}{ingredient.field_unit || 'g'}
                   {percentage > 0 && ` (${percentage.toFixed(1)}%)`}
                 </p>
               </div>
               <div className="w-24">
-                <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
+                <div className="h-2 bg-gray-200 dark:bg-earth-700 rounded-full overflow-hidden">
                   <div
                     className="h-full bg-sage-500 rounded-full"
                     style={{ width: `${Math.min(percentage, 100)}%` }}

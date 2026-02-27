@@ -89,10 +89,10 @@ export default async function ModalityDetailPage({ params }: ModalityDetailProps
   return (
     <PageWrapper>
       {/* Hero Section */}
-      <div className="relative overflow-hidden bg-gradient-to-br from-earth-50 via-sage-50/50 to-cream-100 border-b border-sage-200/50">
+      <div className="relative overflow-hidden bg-gradient-to-br from-earth-50 via-sage-50/50 to-cream-100 dark:from-earth-950 dark:via-sage-950 dark:to-earth-900 border-b border-sage-200/50 dark:border-earth-700/50">
         <LeafPattern opacity={0.04} />
-        <div className="absolute top-20 left-10 w-64 h-64 bg-sage-300/20 rounded-full blur-3xl" />
-        <div className="absolute bottom-10 right-20 w-48 h-48 bg-earth-300/15 rounded-full blur-3xl" />
+        <div className="absolute top-20 left-10 w-64 h-64 bg-sage-300/20 dark:bg-sage-800/15 rounded-full blur-3xl" />
+        <div className="absolute bottom-10 right-20 w-48 h-48 bg-earth-300/15 dark:bg-earth-800/10 rounded-full blur-3xl" />
 
         <div className="relative max-w-6xl mx-auto px-4 py-8">
           <Breadcrumbs
@@ -104,24 +104,24 @@ export default async function ModalityDetailPage({ params }: ModalityDetailProps
             className="mb-8"
           />
 
-          <div className="bg-white rounded-3xl shadow-xl border border-earth-200 relative overflow-hidden">
+          <div className="bg-white dark:bg-earth-900 rounded-3xl shadow-xl border border-earth-200 dark:border-earth-700 relative overflow-hidden">
             <div className="absolute -right-12 -top-12 w-64 h-64 opacity-5 pointer-events-none">
               <ModalityIcon />
             </div>
             <div className="relative p-8 md:p-12">
-              <h1 className="font-serif text-5xl md:text-6xl font-bold text-gray-900 mb-4 tracking-tight">
+              <h1 className="font-serif text-5xl md:text-6xl font-bold text-gray-900 dark:text-earth-100 mb-4 tracking-tight">
                 {title}
               </h1>
 
               {(modality.field_excels_at?.length || modality.field_editors_pick || modality.field_self_practice) && (
                 <div className="flex flex-wrap gap-2 mt-4">
                   {modality.field_editors_pick && (
-                    <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-semibold bg-amber-100 text-amber-800 border border-amber-200">
+                    <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-semibold bg-amber-100 dark:bg-amber-900/40 text-amber-800 dark:text-amber-200 border border-amber-200 dark:border-amber-700/50">
                       &#9733; Editor&apos;s Pick
                     </span>
                   )}
                   {modality.field_self_practice && (
-                    <span className="inline-flex items-center px-3 py-1.5 rounded-full text-sm font-medium bg-green-100 text-green-700">
+                    <span className="inline-flex items-center px-3 py-1.5 rounded-full text-sm font-medium bg-green-100 dark:bg-green-900/40 text-green-700 dark:text-green-300">
                       Can Self-Practice
                     </span>
                   )}
@@ -150,7 +150,7 @@ export default async function ModalityDetailPage({ params }: ModalityDetailProps
               </svg>
             }
           >
-            <div className="prose max-w-none text-gray-700">
+            <div className="prose max-w-none text-gray-700 dark:text-earth-300">
               {typeof description === 'string' && description.startsWith('<') ? (
                 <SafeHtml html={description} />
               ) : (
@@ -171,10 +171,10 @@ export default async function ModalityDetailPage({ params }: ModalityDetailProps
               {modality.field_excels_at.map((item: string, idx: number) => (
                 <div
                   key={idx}
-                  className="flex items-center gap-3 bg-white/60 p-4 rounded-xl border border-sage-200"
+                  className="flex items-center gap-3 bg-white/60 dark:bg-earth-900/60 p-4 rounded-xl border border-sage-200 dark:border-earth-700"
                 >
-                  <span className="text-sage-600 text-xl">✓</span>
-                  <span className="text-gray-800">{item}</span>
+                  <span className="text-sage-600 dark:text-sage-400 text-xl">✓</span>
+                  <span className="text-gray-800 dark:text-earth-200">{item}</span>
                 </div>
               ))}
             </div>
@@ -194,9 +194,9 @@ export default async function ModalityDetailPage({ params }: ModalityDetailProps
           >
             <div className="prose max-w-none">
               {typeof modality.field_benefits === 'string' ? (
-                <p className="text-gray-700 whitespace-pre-wrap">{modality.field_benefits}</p>
+                <p className="text-gray-700 dark:text-earth-300 whitespace-pre-wrap">{modality.field_benefits}</p>
               ) : (
-                <p className="text-gray-700">{String(modality.field_benefits)}</p>
+                <p className="text-gray-700 dark:text-earth-300">{String(modality.field_benefits)}</p>
               )}
             </div>
           </Section>
@@ -214,11 +214,11 @@ export default async function ModalityDetailPage({ params }: ModalityDetailProps
                 <Link
                   key={condition.id}
                   href={`/conditions/${condition.id}`}
-                  className="flex items-center gap-3 bg-earth-50 hover:bg-earth-100 p-4 rounded-xl border border-earth-200 transition"
+                  className="flex items-center gap-3 bg-earth-50 dark:bg-earth-800 hover:bg-earth-100 dark:hover:bg-earth-700 p-4 rounded-xl border border-earth-200 dark:border-earth-700 transition"
                 >
                   <span className="text-earth-600">🩺</span>
-                  <span className="text-gray-800 font-medium">{condition.title || 'View Condition'}</span>
-                  <svg className="w-5 h-5 text-earth-400 ml-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <span className="text-gray-800 dark:text-earth-200 font-medium">{condition.title || 'View Condition'}</span>
+                  <svg className="w-5 h-5 text-earth-400 dark:text-earth-500 ml-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                   </svg>
                 </Link>
@@ -241,26 +241,26 @@ export default async function ModalityDetailPage({ params }: ModalityDetailProps
           >
             <div className="grid md:grid-cols-2 gap-4">
               {modality.field_session_cost_range && (
-                <div className="bg-white rounded-xl p-5 border border-earth-100 shadow-sm">
-                  <h3 className="text-xs font-bold text-earth-500 uppercase tracking-wider mb-2">Cost Range</h3>
-                  <p className="text-lg font-semibold text-gray-800">{modality.field_session_cost_range}</p>
+                <div className="bg-white dark:bg-earth-800 rounded-xl p-5 border border-earth-100 dark:border-earth-700 shadow-sm">
+                  <h3 className="text-xs font-bold text-earth-500 dark:text-earth-400 uppercase tracking-wider mb-2">Cost Range</h3>
+                  <p className="text-lg font-semibold text-gray-800 dark:text-earth-100">{modality.field_session_cost_range}</p>
                 </div>
               )}
               {modality.field_sessions_needed && (
-                <div className="bg-white rounded-xl p-5 border border-earth-100 shadow-sm">
-                  <h3 className="text-xs font-bold text-earth-500 uppercase tracking-wider mb-2">Sessions Needed</h3>
-                  <p className="text-earth-700">{modality.field_sessions_needed}</p>
+                <div className="bg-white dark:bg-earth-800 rounded-xl p-5 border border-earth-100 dark:border-earth-700 shadow-sm">
+                  <h3 className="text-xs font-bold text-earth-500 dark:text-earth-400 uppercase tracking-wider mb-2">Sessions Needed</h3>
+                  <p className="text-earth-700 dark:text-earth-300">{modality.field_sessions_needed}</p>
                 </div>
               )}
               {modality.field_pairs_well_with && modality.field_pairs_well_with.length > 0 && (
-                <div className="bg-white rounded-xl p-5 border border-earth-100 shadow-sm md:col-span-2">
-                  <h3 className="text-xs font-bold text-earth-500 uppercase tracking-wider mb-3">Pairs Well With</h3>
+                <div className="bg-white dark:bg-earth-800 rounded-xl p-5 border border-earth-100 dark:border-earth-700 shadow-sm md:col-span-2">
+                  <h3 className="text-xs font-bold text-earth-500 dark:text-earth-400 uppercase tracking-wider mb-3">Pairs Well With</h3>
                   <div className="flex flex-wrap gap-2">
                     {modality.field_pairs_well_with.map((paired) => (
                       <Link
                         key={paired.id}
                         href={`/modalities/${paired.id}`}
-                        className="inline-flex items-center gap-2 bg-sage-50 hover:bg-sage-100 text-sage-800 px-4 py-2 rounded-full text-sm font-medium transition border border-sage-200"
+                        className="inline-flex items-center gap-2 bg-sage-50 dark:bg-earth-700 hover:bg-sage-100 dark:hover:bg-earth-600 text-sage-800 dark:text-sage-300 px-4 py-2 rounded-full text-sm font-medium transition border border-sage-200 dark:border-earth-600"
                       >
                         {paired.title || 'View Modality'}
                         <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -292,7 +292,7 @@ export default async function ModalityDetailPage({ params }: ModalityDetailProps
             </p>
             <Link
               href={`/practitioners?modality=${modality.id}`}
-              className="inline-flex items-center gap-2 bg-white text-gray-800 px-8 py-3 rounded-xl font-semibold hover:bg-cream-50 transition shadow-lg hover:shadow-xl"
+              className="inline-flex items-center gap-2 bg-white text-gray-800 dark:text-gray-900 px-8 py-3 rounded-xl font-semibold hover:bg-cream-50 transition shadow-lg hover:shadow-xl"
             >
               Find Practitioners
               <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">

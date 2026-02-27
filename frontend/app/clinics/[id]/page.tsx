@@ -108,10 +108,10 @@ export default async function ClinicDetailPage({ params }: ClinicDetailProps) {
 
   return (
     <PageWrapper>
-      <div className="relative overflow-hidden bg-gradient-to-br from-earth-50 via-sage-50/50 to-cream-100 border-b border-sage-200/50">
+      <div className="relative overflow-hidden bg-gradient-to-br from-earth-50 via-sage-50/50 to-cream-100 dark:from-earth-950 dark:via-sage-950 dark:to-earth-900 border-b border-sage-200/50 dark:border-earth-700/50">
         <LeafPattern opacity={0.04} />
-        <div className="absolute top-20 left-10 w-64 h-64 bg-sage-300/20 rounded-full blur-3xl" />
-        <div className="absolute bottom-10 right-20 w-48 h-48 bg-earth-300/15 rounded-full blur-3xl" />
+        <div className="absolute top-20 left-10 w-64 h-64 bg-sage-300/20 dark:bg-sage-800/15 rounded-full blur-3xl" />
+        <div className="absolute bottom-10 right-20 w-48 h-48 bg-earth-300/15 dark:bg-earth-800/10 rounded-full blur-3xl" />
         <div className="relative max-w-6xl mx-auto px-4 py-8">
           <Breadcrumbs
             items={[
@@ -121,7 +121,7 @@ export default async function ClinicDetailPage({ params }: ClinicDetailProps) {
             ]}
             className="mb-8"
           />
-          <div className="bg-white rounded-3xl shadow-xl border border-earth-200 relative overflow-hidden">
+          <div className="bg-white dark:bg-earth-900 rounded-3xl shadow-xl border border-earth-200 dark:border-earth-700 relative overflow-hidden">
             {clinic.field_images?.[0] && (clinic.field_images[0].uri?.url || clinic.field_images[0].url) ? (
               <div className="relative w-full h-56 md:h-72">
                 <Image
@@ -137,11 +137,11 @@ export default async function ClinicDetailPage({ params }: ClinicDetailProps) {
               <div className="absolute -right-12 -top-12 w-64 h-64 opacity-5 pointer-events-none text-8xl">🏥</div>
             )}
             <div className="relative p-8 md:p-12">
-              <h1 className="font-serif text-5xl md:text-6xl font-bold text-gray-900 mb-2 tracking-tight">
+              <h1 className="font-serif text-5xl md:text-6xl font-bold text-gray-900 dark:text-earth-100 mb-2 tracking-tight">
                 {name}
               </h1>
               {fullAddress && (
-                <p className="text-lg text-sage-600 mb-4">{fullAddress}</p>
+                <p className="text-lg text-sage-600 dark:text-sage-400 mb-4">{fullAddress}</p>
               )}
               <div className="flex flex-wrap gap-2">
                 {clinic.field_accepting_new_patients ? (
@@ -158,7 +158,7 @@ export default async function ClinicDetailPage({ params }: ClinicDetailProps) {
     <div className="max-w-6xl mx-auto px-4 py-8 space-y-8">
       {clinic.body && (
         <Section id="about" variant="default" title="About" icon="🏥">
-          <div className="prose max-w-none text-gray-700">
+          <div className="prose max-w-none text-gray-700 dark:text-earth-300">
             <SafeHtml html={clinic.body.processed || clinic.body.value} />
           </div>
         </Section>
@@ -172,7 +172,7 @@ export default async function ClinicDetailPage({ params }: ClinicDetailProps) {
               const imgUrl = image.uri?.url || image.url;
               if (!imgUrl) return null;
               return (
-                <div key={image.id || idx} className="relative aspect-square rounded-xl overflow-hidden border border-earth-200 shadow-sm">
+                <div key={image.id || idx} className="relative aspect-square rounded-xl overflow-hidden border border-earth-200 dark:border-earth-700 shadow-sm">
                   <Image
                     src={imgUrl}
                     alt={image.meta?.alt || `${name} photo ${idx + 2}`}
@@ -191,21 +191,21 @@ export default async function ClinicDetailPage({ params }: ClinicDetailProps) {
         <div className="grid md:grid-cols-2 gap-6">
           {fullAddress && (
             <div>
-              <h3 className="text-lg font-semibold text-earth-700 mb-2 flex items-center gap-2">
+              <h3 className="text-lg font-semibold text-earth-700 dark:text-earth-300 mb-2 flex items-center gap-2">
                 <span>📍</span> Address
               </h3>
-              <p className="text-gray-700">{fullAddress}</p>
+              <p className="text-gray-700 dark:text-earth-300">{fullAddress}</p>
             </div>
           )}
 
           {clinic.field_phone && (
             <div>
-              <h3 className="text-lg font-semibold text-earth-700 mb-2 flex items-center gap-2">
+              <h3 className="text-lg font-semibold text-earth-700 dark:text-earth-300 mb-2 flex items-center gap-2">
                 <span>📞</span> Phone
               </h3>
               <a
                 href={`tel:${clinic.field_phone}`}
-                className="text-sage-600 hover:text-sage-800"
+                className="text-sage-600 dark:text-sage-400 hover:text-sage-800 dark:hover:text-sage-300"
               >
                 {clinic.field_phone}
               </a>
@@ -214,12 +214,12 @@ export default async function ClinicDetailPage({ params }: ClinicDetailProps) {
 
           {clinic.field_email && (
             <div>
-              <h3 className="text-lg font-semibold text-earth-700 mb-2 flex items-center gap-2">
+              <h3 className="text-lg font-semibold text-earth-700 dark:text-earth-300 mb-2 flex items-center gap-2">
                 <span>✉️</span> Email
               </h3>
               <a
                 href={`mailto:${clinic.field_email}`}
-                className="text-sage-600 hover:text-sage-800"
+                className="text-sage-600 dark:text-sage-400 hover:text-sage-800 dark:hover:text-sage-300"
               >
                 {clinic.field_email}
               </a>
@@ -228,14 +228,14 @@ export default async function ClinicDetailPage({ params }: ClinicDetailProps) {
 
           {clinic.field_website && (
             <div>
-              <h3 className="text-lg font-semibold text-earth-700 mb-2 flex items-center gap-2">
+              <h3 className="text-lg font-semibold text-earth-700 dark:text-earth-300 mb-2 flex items-center gap-2">
                 <span>🌐</span> Website
               </h3>
               <a
                 href={clinic.field_website}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-sage-600 hover:text-sage-800"
+                className="text-sage-600 dark:text-sage-400 hover:text-sage-800 dark:hover:text-sage-300"
               >
                 Visit Website
               </a>
@@ -246,7 +246,7 @@ export default async function ClinicDetailPage({ params }: ClinicDetailProps) {
 
       {clinic.field_hours && (
         <Section id="hours" variant="default" title="Operating Hours" icon="🕐">
-          <div className="prose max-w-none text-gray-700">
+          <div className="prose max-w-none text-gray-700 dark:text-earth-300">
             <SafeHtml html={clinic.field_hours} />
           </div>
         </Section>
@@ -282,10 +282,10 @@ export default async function ClinicDetailPage({ params }: ClinicDetailProps) {
               <Link
                 key={modality.id}
                 href={`/modalities/${modality.id}`}
-                className="flex items-center bg-sage-50 p-4 rounded-lg hover:bg-sage-100 transition border border-sage-200"
+                className="flex items-center bg-sage-50 dark:bg-earth-800 p-4 rounded-lg hover:bg-sage-100 dark:hover:bg-earth-700 transition border border-sage-200 dark:border-earth-700"
               >
-                <span className="text-sage-600 mr-3 text-2xl">🧘</span>
-                <span className="text-gray-800 font-medium">
+                <span className="text-sage-600 dark:text-sage-400 mr-3 text-2xl">🧘</span>
+                <span className="text-gray-800 dark:text-earth-200 font-medium">
                   {modality.title || 'View Modality'}
                 </span>
               </Link>
@@ -305,9 +305,9 @@ export default async function ClinicDetailPage({ params }: ClinicDetailProps) {
                 <Link
                   key={practitioner.id}
                   href={`/practitioners/${practitioner.id}`}
-                  className="group flex items-center gap-4 p-4 rounded-lg border border-gray-200 hover:border-sage-300 hover:shadow-md transition-all"
+                  className="group flex items-center gap-4 p-4 rounded-lg border border-gray-200 dark:border-earth-700 hover:border-sage-300 dark:hover:border-sage-600 hover:shadow-md transition-all"
                 >
-                  <div className="relative w-16 h-16 rounded-full overflow-hidden bg-sage-100 flex-shrink-0 flex items-center justify-center">
+                  <div className="relative w-16 h-16 rounded-full overflow-hidden bg-sage-100 dark:bg-sage-900/40 flex-shrink-0 flex items-center justify-center">
                     {practImgUrl ? (
                       <Image
                         src={practImgUrl}
@@ -321,14 +321,14 @@ export default async function ClinicDetailPage({ params }: ClinicDetailProps) {
                     )}
                   </div>
                   <div className="flex-1 min-w-0">
-                    <h3 className="font-semibold text-gray-800 group-hover:text-earth-600 transition-colors truncate">
+                    <h3 className="font-semibold text-gray-800 dark:text-earth-200 group-hover:text-earth-600 dark:group-hover:text-earth-300 transition-colors truncate">
                       {practitioner.title || practitioner.field_name || 'Practitioner'}
                     </h3>
                     {practitioner.field_credentials && (
-                      <p className="text-sm text-sage-600 truncate">{practitioner.field_credentials}</p>
+                      <p className="text-sm text-sage-600 dark:text-sage-400 truncate">{practitioner.field_credentials}</p>
                     )}
                   </div>
-                  <svg className="w-5 h-5 text-gray-400 group-hover:text-sage-600 transition-colors flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className="w-5 h-5 text-gray-400 dark:text-earth-500 group-hover:text-sage-600 dark:group-hover:text-sage-400 transition-colors flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                   </svg>
                 </Link>
@@ -344,7 +344,7 @@ export default async function ClinicDetailPage({ params }: ClinicDetailProps) {
             href={`https://search.google.com/local/reviews?placeid=${clinic.field_google_place_id}`}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-3 bg-white border-2 border-earth-200 hover:border-sage-400 px-6 py-3 rounded-xl font-semibold text-gray-700 hover:text-sage-700 transition-all shadow-sm hover:shadow-md"
+            className="inline-flex items-center gap-3 bg-white dark:bg-earth-800 border-2 border-earth-200 dark:border-earth-700 hover:border-sage-400 dark:hover:border-sage-500 px-6 py-3 rounded-xl font-semibold text-gray-700 dark:text-earth-200 hover:text-sage-700 dark:hover:text-sage-300 transition-all shadow-sm hover:shadow-md"
           >
             <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none">
               <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FBBF24" stroke="#F59E0B" strokeWidth="1"/>
@@ -366,7 +366,7 @@ export default async function ClinicDetailPage({ params }: ClinicDetailProps) {
           {clinic.field_phone && (
             <a
               href={`tel:${clinic.field_phone}`}
-              className="inline-block bg-white text-gray-800 px-8 py-3 rounded-lg font-semibold hover:bg-earth-50 transition shadow-lg"
+              className="inline-block bg-white text-gray-800 dark:text-gray-900 px-8 py-3 rounded-lg font-semibold hover:bg-earth-50 transition shadow-lg"
             >
               Call Now
             </a>

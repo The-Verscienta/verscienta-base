@@ -18,10 +18,10 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(
   ) => {
     const selectId = `select-${Math.random().toString(36).substr(2, 9)}`;
 
-    const baseSelectStyles = 'w-full px-4 py-2 border rounded-lg transition focus:outline-none focus:ring-2 focus:ring-offset-1 appearance-none';
-    const normalStyles = 'border-gray-300 focus:border-earth-600 focus:ring-earth-500';
+    const baseSelectStyles = 'w-full px-4 py-2 border rounded-lg transition focus:outline-none focus:ring-2 focus:ring-offset-1 appearance-none dark:bg-earth-800 dark:text-earth-100';
+    const normalStyles = 'border-gray-300 focus:border-earth-600 focus:ring-earth-500 dark:border-earth-600';
     const errorStyles = 'border-red-500 focus:border-red-600 focus:ring-red-500';
-    const disabledStyles = 'bg-gray-100 cursor-not-allowed';
+    const disabledStyles = 'bg-gray-100 cursor-not-allowed dark:bg-earth-900';
 
     const selectStyles = `${baseSelectStyles} ${error ? errorStyles : normalStyles} ${disabled ? disabledStyles : ''} ${className}`;
 
@@ -41,7 +41,7 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(
         {label && (
           <label
             htmlFor={selectId}
-            className="block text-sm font-medium text-gray-700 mb-1"
+            className="block text-sm font-medium text-gray-700 dark:text-earth-200 mb-1"
           >
             {label}
           </label>
@@ -76,7 +76,7 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(
           </select>
 
           {!multiple && (
-            <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-gray-700">
+            <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-gray-700 dark:text-earth-300">
               <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
                 <path
                   fillRule="evenodd"

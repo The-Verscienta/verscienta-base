@@ -94,10 +94,10 @@ function ResetPasswordForm() {
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
           </svg>
         </div>
-        <h2 className="text-2xl font-bold text-gray-800 mb-2">
+        <h2 className="text-2xl font-bold text-gray-800 dark:text-earth-100 mb-2">
           Invalid Reset Link
         </h2>
-        <p className="text-gray-600 mb-6">
+        <p className="text-gray-600 dark:text-earth-300 mb-6">
           This password reset link is invalid or has expired.
           Please request a new password reset link.
         </p>
@@ -120,10 +120,10 @@ function ResetPasswordForm() {
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
           </svg>
         </div>
-        <h2 className="text-2xl font-bold text-gray-800 mb-2">
+        <h2 className="text-2xl font-bold text-gray-800 dark:text-earth-100 mb-2">
           Password Reset Successful!
         </h2>
-        <p className="text-gray-600 mb-6">
+        <p className="text-gray-600 dark:text-earth-300 mb-6">
           Your password has been reset successfully.
           You can now sign in with your new password.
         </p>
@@ -145,10 +145,10 @@ function ResetPasswordForm() {
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
           </svg>
         </div>
-        <h2 className="text-2xl font-bold text-gray-800 mb-2">
+        <h2 className="text-2xl font-bold text-gray-800 dark:text-earth-100 mb-2">
           Create New Password
         </h2>
-        <p className="text-gray-600">
+        <p className="text-gray-600 dark:text-earth-300">
           Enter your new password below. Make sure it's strong and secure.
         </p>
       </div>
@@ -164,7 +164,7 @@ function ResetPasswordForm() {
 
       <form onSubmit={handleSubmit} className="space-y-5">
         <div>
-          <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">
+          <label htmlFor="password" className="block text-sm font-medium text-gray-700 dark:text-earth-200 mb-2">
             New Password
           </label>
           <div className="relative">
@@ -176,16 +176,16 @@ function ResetPasswordForm() {
               onChange={handleChange}
               required
               minLength={8}
-              className="w-full pl-11 pr-12 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-earth-500 focus:border-earth-500 transition"
+              className="w-full pl-11 pr-12 py-3 border border-gray-300 dark:border-earth-600 dark:bg-earth-800 dark:text-earth-100 rounded-xl focus:ring-2 focus:ring-earth-500 focus:border-earth-500 transition"
               placeholder="Enter new password"
             />
-            <svg className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 dark:text-earth-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
             </svg>
             <button
               type="button"
               onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+              className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:text-earth-500 dark:hover:text-earth-300"
             >
               {showPassword ? (
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -207,12 +207,12 @@ function ResetPasswordForm() {
                   <div
                     key={i}
                     className={`h-1 flex-1 rounded ${
-                      i < passwordStrength ? strengthColors[passwordStrength - 1] : 'bg-gray-200'
+                      i < passwordStrength ? strengthColors[passwordStrength - 1] : 'bg-gray-200 dark:bg-earth-700'
                     }`}
                   />
                 ))}
               </div>
-              <p className="text-xs text-gray-500">
+              <p className="text-xs text-gray-500 dark:text-earth-400">
                 Password strength: {passwordStrength > 0 ? strengthLabels[passwordStrength - 1] : 'Too weak'}
               </p>
             </div>
@@ -220,7 +220,7 @@ function ResetPasswordForm() {
         </div>
 
         <div>
-          <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700 mb-2">
+          <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700 dark:text-earth-300 mb-2">
             Confirm New Password
           </label>
           <div className="relative">
@@ -231,14 +231,14 @@ function ResetPasswordForm() {
               value={formData.confirmPassword}
               onChange={handleChange}
               required
-              className={`w-full pl-11 pr-4 py-3 border rounded-xl focus:ring-2 focus:ring-earth-500 focus:border-earth-500 transition ${
+              className={`w-full pl-11 pr-4 py-3 border rounded-xl focus:ring-2 focus:ring-earth-500 focus:border-earth-500 transition dark:bg-earth-800 dark:text-earth-100 ${
                 formData.confirmPassword && formData.password !== formData.confirmPassword
-                  ? 'border-red-300'
-                  : 'border-gray-300'
+                  ? 'border-red-300 dark:border-red-600'
+                  : 'border-gray-300 dark:border-earth-600'
               }`}
               placeholder="Confirm new password"
             />
-            <svg className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 dark:text-earth-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
             </svg>
           </div>
@@ -263,10 +263,10 @@ function ResetPasswordForm() {
         </button>
       </form>
 
-      <div className="mt-6 pt-6 border-t border-gray-200">
-        <p className="text-center text-sm text-gray-600">
+      <div className="mt-6 pt-6 border-t border-gray-200 dark:border-earth-700">
+        <p className="text-center text-sm text-gray-600 dark:text-earth-300">
           Remember your password?{' '}
-          <Link href="/login" className="text-earth-600 hover:text-gray-800 font-semibold">
+          <Link href="/login" className="text-earth-600 dark:text-sage-400 hover:text-gray-800 dark:hover:text-sage-300 font-semibold">
             Sign in
           </Link>
         </p>
@@ -278,23 +278,23 @@ function ResetPasswordForm() {
 export default function ResetPasswordPage() {
   return (
     <PageWrapper>
-    <div className="min-h-[80vh] flex items-center justify-center p-4 bg-earth-50/50">
+    <div className="min-h-[80vh] flex items-center justify-center p-4 bg-earth-50/50 dark:bg-earth-950">
       <div className="w-full max-w-md">
         {/* Logo/Brand */}
         <div className="text-center mb-8">
           <Link href="/" className="inline-block">
             <span className="text-5xl">🌿</span>
-            <h1 className="text-2xl font-serif font-bold text-gray-800 mt-2">
+            <h1 className="text-2xl font-serif font-bold text-gray-800 dark:text-earth-100 mt-2">
               Verscienta Health
             </h1>
           </Link>
         </div>
 
-        <div className="bg-white rounded-2xl shadow-xl border border-earth-200 p-8">
+        <div className="bg-white dark:bg-earth-900 rounded-2xl shadow-xl border border-earth-200 dark:border-earth-700 p-8">
           <Suspense fallback={
             <div className="text-center py-8">
               <div className="w-8 h-8 border-2 border-earth-600 border-t-transparent rounded-full animate-spin mx-auto" />
-              <p className="text-gray-500 mt-2">Loading...</p>
+              <p className="text-gray-500 dark:text-earth-400 mt-2">Loading...</p>
             </div>
           }>
             <ResetPasswordForm />

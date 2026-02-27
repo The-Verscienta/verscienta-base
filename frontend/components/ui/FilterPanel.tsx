@@ -67,9 +67,9 @@ export function FilterPanel({
   }).length;
 
   return (
-    <div className={`bg-white rounded-xl shadow-sm border border-gray-200 ${className}`}>
-      <div className="p-4 border-b border-gray-200 flex items-center justify-between">
-        <h3 className="font-semibold text-gray-800 flex items-center gap-2">
+    <div className={`bg-white dark:bg-earth-900 rounded-xl shadow-sm border border-gray-200 dark:border-earth-700 ${className}`}>
+      <div className="p-4 border-b border-gray-200 dark:border-earth-700 flex items-center justify-between">
+        <h3 className="font-semibold text-gray-800 dark:text-earth-100 flex items-center gap-2">
           <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
           </svg>
@@ -90,7 +90,7 @@ export function FilterPanel({
         )}
       </div>
 
-      <div className="divide-y divide-gray-100">
+      <div className="divide-y divide-gray-100 dark:divide-earth-700">
         {groups.map((group) => (
           <div key={group.id} className="p-4">
             <button
@@ -100,10 +100,10 @@ export function FilterPanel({
               }`}
               disabled={!collapsible}
             >
-              <span className="font-medium text-gray-900">{group.label}</span>
+              <span className="font-medium text-gray-900 dark:text-earth-100">{group.label}</span>
               {collapsible && (
                 <svg
-                  className={`w-5 h-5 text-gray-500 transition-transform ${
+                  className={`w-5 h-5 text-gray-500 dark:text-earth-400 transition-transform ${
                     expandedGroups.has(group.id) ? 'rotate-180' : ''
                   }`}
                   fill="none"
@@ -128,11 +128,11 @@ export function FilterPanel({
                       onChange={() => handleCheckboxChange(group.id, option.value)}
                       className="w-4 h-4 rounded border-gray-300 text-earth-600 focus:ring-earth-500"
                     />
-                    <span className="text-sm text-gray-700 group-hover:text-gray-900 flex-1">
+                    <span className="text-sm text-gray-700 dark:text-earth-300 group-hover:text-gray-900 dark:group-hover:text-earth-100 flex-1">
                       {option.label}
                     </span>
                     {option.count !== undefined && (
-                      <span className="text-xs text-gray-400">{option.count}</span>
+                      <span className="text-xs text-gray-400 dark:text-earth-500">{option.count}</span>
                     )}
                   </label>
                 ))}
@@ -149,11 +149,11 @@ export function FilterPanel({
                       onChange={() => handleRadioChange(group.id, option.value)}
                       className="w-4 h-4 border-gray-300 text-earth-600 focus:ring-earth-500"
                     />
-                    <span className="text-sm text-gray-700 group-hover:text-gray-900 flex-1">
+                    <span className="text-sm text-gray-700 dark:text-earth-300 group-hover:text-gray-900 dark:group-hover:text-earth-100 flex-1">
                       {option.label}
                     </span>
                     {option.count !== undefined && (
-                      <span className="text-xs text-gray-400">{option.count}</span>
+                      <span className="text-xs text-gray-400 dark:text-earth-500">{option.count}</span>
                     )}
                   </label>
                 ))}
@@ -235,12 +235,12 @@ export function MobileFilterDrawer({
         className="absolute inset-0 bg-black/50"
         onClick={onClose}
       />
-      <div className="absolute inset-y-0 right-0 w-full max-w-sm bg-white shadow-xl">
-        <div className="flex items-center justify-between p-4 border-b border-gray-200">
-          <h2 className="text-lg font-semibold text-gray-800">Filters</h2>
+      <div className="absolute inset-y-0 right-0 w-full max-w-sm bg-white dark:bg-earth-900 shadow-xl">
+        <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-earth-700">
+          <h2 className="text-lg font-semibold text-gray-800 dark:text-earth-100">Filters</h2>
           <button
             onClick={onClose}
-            className="p-2 rounded-lg hover:bg-gray-100 transition"
+            className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-earth-800 transition"
           >
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -250,7 +250,7 @@ export function MobileFilterDrawer({
         <div className="overflow-y-auto h-[calc(100%-140px)]">
           <FilterPanel {...filterProps} collapsible={true} className="border-0 shadow-none rounded-none" />
         </div>
-        <div className="absolute bottom-0 left-0 right-0 p-4 bg-white border-t border-gray-200">
+        <div className="absolute bottom-0 left-0 right-0 p-4 bg-white dark:bg-earth-900 border-t border-gray-200 dark:border-earth-700">
           <button
             onClick={onClose}
             className="w-full bg-earth-600 hover:bg-earth-700 text-white py-3 rounded-lg font-semibold transition"

@@ -104,10 +104,10 @@ export default async function ClinicsPage({ searchParams }: PageProps) {
 
   return (
     <PageWrapper>
-    <div className="relative overflow-hidden bg-gradient-to-br from-earth-50 via-sage-50/50 to-cream-100 border-b border-sage-200/50">
+    <div className="relative overflow-hidden bg-gradient-to-br from-earth-50 via-sage-50/50 to-cream-100 dark:from-earth-950 dark:via-sage-950 dark:to-earth-900 border-b border-sage-200/50 dark:border-earth-700/50">
       <LeafPattern opacity={0.04} />
-      <div className="absolute top-20 left-10 w-64 h-64 bg-sage-300/20 rounded-full blur-3xl" />
-      <div className="absolute bottom-10 right-20 w-48 h-48 bg-earth-300/15 rounded-full blur-3xl" />
+      <div className="absolute top-20 left-10 w-64 h-64 bg-sage-300/20 dark:bg-sage-800/15 rounded-full blur-3xl" />
+      <div className="absolute bottom-10 right-20 w-48 h-48 bg-earth-300/15 dark:bg-earth-800/15 rounded-full blur-3xl" />
       <div className="relative max-w-7xl mx-auto px-4 py-8">
         <Breadcrumbs
           items={[
@@ -118,10 +118,10 @@ export default async function ClinicsPage({ searchParams }: PageProps) {
         />
         <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4">
           <div>
-            <h1 className="text-4xl md:text-5xl font-serif font-bold text-gray-900 mb-3">
+            <h1 className="text-4xl md:text-5xl font-serif font-bold text-gray-900 dark:text-earth-100 mb-3">
               Find Clinics
             </h1>
-            <p className="text-xl text-gray-600 max-w-2xl mb-4">
+            <p className="text-xl text-gray-600 dark:text-earth-300 max-w-2xl mb-4">
               Discover holistic health clinics offering natural healing modalities and integrative care.
             </p>
             <div className="flex flex-wrap gap-2">
@@ -153,12 +153,12 @@ export default async function ClinicsPage({ searchParams }: PageProps) {
       )}
 
       {clinics.length === 0 ? (
-        <div className="bg-gradient-to-br from-sage-50 to-earth-50 rounded-2xl p-12 text-center border border-sage-200">
+        <div className="bg-gradient-to-br from-sage-50 to-earth-50 dark:from-earth-900 dark:to-sage-900 rounded-2xl p-12 text-center border border-sage-200 dark:border-earth-700">
           <div className="text-7xl mb-6">🏥</div>
-          <h2 className="text-2xl font-bold text-gray-800 mb-3">
+          <h2 className="text-2xl font-bold text-gray-800 dark:text-earth-100 mb-3">
             No Clinics Found
           </h2>
-          <p className="text-gray-600 mb-6 max-w-md mx-auto">
+          <p className="text-gray-600 dark:text-earth-300 mb-6 max-w-md mx-auto">
             Our clinic directory is being built. Check back soon to find holistic health clinics near you.
           </p>
           <a
@@ -173,7 +173,7 @@ export default async function ClinicsPage({ searchParams }: PageProps) {
       ) : (
         <>
           {/* Clinic Grid */}
-          <h2 className="text-2xl font-bold text-gray-800 mb-6">All Clinics</h2>
+          <h2 className="text-2xl font-bold text-gray-800 dark:text-earth-100 mb-6">All Clinics</h2>
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-12">
             {clinics.map((clinic) => {
               const image = getClinicImage(clinic);
@@ -183,10 +183,10 @@ export default async function ClinicsPage({ searchParams }: PageProps) {
                 <Link
                   key={clinic.id}
                   href={`/clinics/${clinic.id}`}
-                  className="group bg-white rounded-xl shadow-sm hover:shadow-xl border border-earth-200 hover:border-sage-200 transition-all overflow-hidden"
+                  className="group bg-white dark:bg-earth-900 rounded-xl shadow-sm hover:shadow-xl border border-earth-200 hover:border-sage-200 dark:border-earth-700 dark:hover:border-sage-700 transition-all overflow-hidden"
                 >
                   {/* Card Header */}
-                  <div className="bg-gradient-to-br from-sage-50 to-earth-50 border-b border-gray-100">
+                  <div className="bg-gradient-to-br from-sage-50 to-earth-50 dark:from-earth-900 dark:to-sage-900 border-b border-gray-100 dark:border-earth-700">
                     {image ? (
                       <div className="relative w-full h-40 overflow-hidden">
                         <Image
@@ -207,7 +207,7 @@ export default async function ClinicsPage({ searchParams }: PageProps) {
                     ) : (
                       <div className="p-5">
                         <div className="flex items-start justify-between">
-                          <div className="w-14 h-14 bg-white rounded-full shadow-sm flex items-center justify-center group-hover:scale-110 transition-transform">
+                          <div className="w-14 h-14 bg-white dark:bg-earth-800 rounded-full shadow-sm flex items-center justify-center group-hover:scale-110 transition-transform">
                             <span className="text-2xl">🏥</span>
                           </div>
                           {clinic.field_accepting_new_patients && (
@@ -222,13 +222,13 @@ export default async function ClinicsPage({ searchParams }: PageProps) {
 
                   {/* Card Body */}
                   <div className="p-5">
-                    <h3 className="text-lg font-bold text-gray-800 mb-1 group-hover:text-earth-600 transition-colors">
+                    <h3 className="text-lg font-bold text-gray-800 dark:text-earth-100 mb-1 group-hover:text-earth-600 transition-colors">
                       {clinic.title}
                     </h3>
 
                     {location && (
-                      <p className="text-sm text-gray-600 mb-3 flex items-start gap-2">
-                        <svg className="w-4 h-4 text-gray-400 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <p className="text-sm text-gray-600 dark:text-earth-300 mb-3 flex items-start gap-2">
+                        <svg className="w-4 h-4 text-gray-400 dark:text-earth-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                         </svg>
@@ -242,13 +242,13 @@ export default async function ClinicsPage({ searchParams }: PageProps) {
                           {clinic.field_modalities.slice(0, 3).map((modality, idx) => (
                             <span
                               key={idx}
-                              className="text-xs bg-sage-100 text-sage-700 px-2 py-0.5 rounded"
+                              className="text-xs bg-sage-100 text-sage-700 dark:bg-sage-900/40 dark:text-sage-300 px-2 py-0.5 rounded"
                             >
                               {modality.title || 'Modality'}
                             </span>
                           ))}
                           {clinic.field_modalities.length > 3 && (
-                            <span className="text-xs text-gray-400">
+                            <span className="text-xs text-gray-400 dark:text-earth-500">
                               +{clinic.field_modalities.length - 3}
                             </span>
                           )}
@@ -256,7 +256,7 @@ export default async function ClinicsPage({ searchParams }: PageProps) {
                       </div>
                     )}
 
-                    <div className="pt-3 border-t border-gray-100">
+                    <div className="pt-3 border-t border-gray-100 dark:border-earth-700">
                       <span className="text-sage-600 font-medium text-sm flex items-center gap-1 group-hover:gap-2 transition-all">
                         View Clinic
                         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">

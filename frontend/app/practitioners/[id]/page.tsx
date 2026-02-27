@@ -86,10 +86,10 @@ export default async function PractitionerDetailPage({ params }: PractitionerDet
   return (
     <PageWrapper>
       {/* Hero Section */}
-      <div className="relative overflow-hidden bg-gradient-to-br from-earth-50 via-sage-50/50 to-cream-100 border-b border-sage-200/50">
+      <div className="relative overflow-hidden bg-gradient-to-br from-earth-50 via-sage-50/50 to-cream-100 dark:from-earth-950 dark:via-sage-950 dark:to-earth-900 border-b border-sage-200/50 dark:border-earth-700/50">
         <LeafPattern opacity={0.04} />
-        <div className="absolute top-20 left-10 w-64 h-64 bg-sage-300/20 rounded-full blur-3xl" />
-        <div className="absolute bottom-10 right-20 w-48 h-48 bg-earth-300/15 rounded-full blur-3xl" />
+        <div className="absolute top-20 left-10 w-64 h-64 bg-sage-300/20 dark:bg-sage-800/15 rounded-full blur-3xl" />
+        <div className="absolute bottom-10 right-20 w-48 h-48 bg-earth-300/15 dark:bg-earth-800/15 rounded-full blur-3xl" />
 
         <div className="relative max-w-6xl mx-auto px-4 py-8">
           <Breadcrumbs
@@ -101,7 +101,7 @@ export default async function PractitionerDetailPage({ params }: PractitionerDet
             className="mb-8"
           />
 
-          <div className="bg-white rounded-3xl shadow-xl border border-earth-200 relative overflow-hidden">
+          <div className="bg-white dark:bg-earth-900 rounded-3xl shadow-xl border border-earth-200 dark:border-earth-700 relative overflow-hidden">
             {practitioner.field_images?.[0] && (practitioner.field_images[0].uri?.url || practitioner.field_images[0].url) ? (
               <div className="relative w-full h-56 md:h-72">
                 <Image
@@ -117,7 +117,7 @@ export default async function PractitionerDetailPage({ params }: PractitionerDet
               <div className="absolute -right-12 -top-12 w-64 h-64 opacity-5 pointer-events-none text-8xl">👨‍⚕️</div>
             )}
             <div className="relative p-8 md:p-12">
-              <h1 className="font-serif text-5xl md:text-6xl font-bold text-gray-900 mb-2 tracking-tight">
+              <h1 className="font-serif text-5xl md:text-6xl font-bold text-gray-900 dark:text-earth-100 mb-2 tracking-tight">
                 {name}
               </h1>
               {practitioner.field_credentials && (
@@ -147,7 +147,7 @@ export default async function PractitionerDetailPage({ params }: PractitionerDet
             title="About"
             icon="👨‍⚕️"
           >
-            <div className="prose max-w-none text-gray-700">
+            <div className="prose max-w-none text-gray-700 dark:text-earth-300">
               <SafeHtml html={practitioner.field_bio} />
             </div>
           </Section>
@@ -167,14 +167,14 @@ export default async function PractitionerDetailPage({ params }: PractitionerDet
             <div className="grid md:grid-cols-2 gap-6">
               {practitioner.field_practice_type && (
                 <div>
-                  <h3 className="text-lg font-semibold text-earth-700 mb-2">Practice Type</h3>
+                  <h3 className="text-lg font-semibold text-earth-700 dark:text-earth-300 mb-2">Practice Type</h3>
                   <Tag variant="sage">{practitioner.field_practice_type}</Tag>
                 </div>
               )}
               {practitioner.field_years_experience !== undefined && (
                 <div>
-                  <h3 className="text-lg font-semibold text-earth-700 mb-2">Experience</h3>
-                  <p className="text-gray-700">
+                  <h3 className="text-lg font-semibold text-earth-700 dark:text-earth-300 mb-2">Experience</h3>
+                  <p className="text-gray-700 dark:text-earth-300">
                     {practitioner.field_years_experience} years of experience
                   </p>
                 </div>
@@ -192,18 +192,18 @@ export default async function PractitionerDetailPage({ params }: PractitionerDet
         >
           <Link
             href={`/clinics/${practitioner.field_clinic.id}`}
-            className="group flex items-center gap-4 p-4 rounded-lg border border-sage-200 hover:border-sage-400 hover:shadow-md transition-all bg-sage-50"
+            className="group flex items-center gap-4 p-4 rounded-lg border border-sage-200 hover:border-sage-400 dark:border-sage-800 dark:hover:border-sage-600 hover:shadow-md transition-all bg-sage-50 dark:bg-sage-900/20"
           >
-            <div className="w-12 h-12 bg-white rounded-full shadow-sm flex items-center justify-center flex-shrink-0">
+            <div className="w-12 h-12 bg-white dark:bg-earth-800 rounded-full shadow-sm flex items-center justify-center flex-shrink-0">
               <span className="text-2xl">🏥</span>
             </div>
             <div className="flex-1 min-w-0">
-              <h3 className="font-semibold text-gray-800 group-hover:text-earth-600 transition-colors">
+              <h3 className="font-semibold text-gray-800 dark:text-earth-100 group-hover:text-earth-600 transition-colors">
                 {practitioner.field_clinic.title || 'View Clinic'}
               </h3>
-              <p className="text-sm text-sage-600">View clinic details and other practitioners</p>
+              <p className="text-sm text-sage-600 dark:text-sage-400">View clinic details and other practitioners</p>
             </div>
-            <svg className="w-5 h-5 text-gray-400 group-hover:text-sage-600 transition-colors flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className="w-5 h-5 text-gray-400 dark:text-earth-500 group-hover:text-sage-600 transition-colors flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
             </svg>
           </Link>
@@ -238,21 +238,21 @@ export default async function PractitionerDetailPage({ params }: PractitionerDet
         <div className="grid md:grid-cols-2 gap-6">
           {fullAddress && (
             <div>
-              <h3 className="text-lg font-semibold text-earth-700 mb-2 flex items-center gap-2">
+              <h3 className="text-lg font-semibold text-earth-700 dark:text-earth-300 mb-2 flex items-center gap-2">
                 <span>📍</span> Address
               </h3>
-              <p className="text-gray-700">{fullAddress}</p>
+              <p className="text-gray-700 dark:text-earth-300">{fullAddress}</p>
             </div>
           )}
 
           {practitioner.field_phone && (
             <div>
-              <h3 className="text-lg font-semibold text-earth-700 mb-2 flex items-center gap-2">
+              <h3 className="text-lg font-semibold text-earth-700 dark:text-earth-300 mb-2 flex items-center gap-2">
                 <span>📞</span> Phone
               </h3>
               <a
                 href={`tel:${practitioner.field_phone}`}
-                className="text-sage-600 hover:text-sage-800"
+                className="text-sage-600 dark:text-sage-400 hover:text-sage-800 dark:hover:text-sage-300"
               >
                 {practitioner.field_phone}
               </a>
@@ -261,12 +261,12 @@ export default async function PractitionerDetailPage({ params }: PractitionerDet
 
           {practitioner.field_email && (
             <div>
-              <h3 className="text-lg font-semibold text-earth-700 mb-2 flex items-center gap-2">
+              <h3 className="text-lg font-semibold text-earth-700 dark:text-earth-300 mb-2 flex items-center gap-2">
                 <span>✉️</span> Email
               </h3>
               <a
                 href={`mailto:${practitioner.field_email}`}
-                className="text-sage-600 hover:text-sage-800"
+                className="text-sage-600 dark:text-sage-400 hover:text-sage-800 dark:hover:text-sage-300"
               >
                 {practitioner.field_email}
               </a>
@@ -275,14 +275,14 @@ export default async function PractitionerDetailPage({ params }: PractitionerDet
 
           {practitioner.field_website && (
             <div>
-              <h3 className="text-lg font-semibold text-earth-700 mb-2 flex items-center gap-2">
+              <h3 className="text-lg font-semibold text-earth-700 dark:text-earth-300 mb-2 flex items-center gap-2">
                 <span>🌐</span> Website
               </h3>
               <a
                 href={practitioner.field_website}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-sage-600 hover:text-sage-800"
+                className="text-sage-600 dark:text-sage-400 hover:text-sage-800 dark:hover:text-sage-300"
               >
                 Visit Website
               </a>
@@ -298,10 +298,10 @@ export default async function PractitionerDetailPage({ params }: PractitionerDet
               <Link
                 key={modality.id}
                 href={`/modalities/${modality.id}`}
-                className="flex items-center bg-sage-50 p-4 rounded-lg hover:bg-sage-100 transition border border-sage-200"
+                className="flex items-center bg-sage-50 dark:bg-sage-900/20 p-4 rounded-lg hover:bg-sage-100 dark:hover:bg-sage-900/40 transition border border-sage-200 dark:border-sage-800"
               >
                 <span className="text-sage-600 mr-3 text-2xl">🧘</span>
-                <span className="text-gray-800 font-medium">
+                <span className="text-gray-800 dark:text-earth-100 font-medium">
                   {modality.title || 'View Modality'}
                 </span>
               </Link>

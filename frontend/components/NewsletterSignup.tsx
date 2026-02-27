@@ -62,7 +62,7 @@ export function NewsletterSignup({
               onChange={(e) => setEmail(e.target.value)}
               required
               placeholder="Enter your email"
-              className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-earth-500 focus:border-earth-500 text-sm"
+              className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-earth-500 focus:border-earth-500 text-sm dark:bg-earth-800 dark:border-earth-600 dark:text-earth-100 dark:placeholder-earth-500"
             />
             <button
               type="submit"
@@ -130,17 +130,17 @@ export function NewsletterSignup({
   // Card variant - standalone card
   if (variant === 'card') {
     return (
-      <div className={`bg-gradient-to-br from-earth-50 to-sage-50 rounded-2xl p-8 border border-earth-200 ${className}`}>
+      <div className={`bg-gradient-to-br from-earth-50 to-sage-50 rounded-2xl p-8 border border-earth-200 dark:from-earth-950 dark:to-earth-900 dark:border-earth-700 ${className}`}>
         <div className="text-center mb-6">
-          <div className="w-14 h-14 bg-earth-100 rounded-full flex items-center justify-center mx-auto mb-4">
+          <div className="w-14 h-14 bg-earth-100 rounded-full flex items-center justify-center mx-auto mb-4 dark:bg-earth-800">
             <svg className="w-7 h-7 text-earth-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
             </svg>
           </div>
-          <h3 className="text-xl font-bold text-gray-800 mb-2">
+          <h3 className="text-xl font-bold text-gray-800 mb-2 dark:text-earth-100">
             Join Our Wellness Newsletter
           </h3>
-          <p className="text-gray-600 text-sm">
+          <p className="text-gray-600 text-sm dark:text-earth-300">
             Receive weekly insights on herbs, holistic health tips, and exclusive content.
           </p>
         </div>
@@ -162,7 +162,7 @@ export function NewsletterSignup({
                 onChange={(e) => setEmail(e.target.value)}
                 required
                 placeholder="Enter your email address"
-                className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-earth-500 focus:border-earth-500"
+                className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-earth-500 focus:border-earth-500 dark:bg-earth-800 dark:border-earth-600 dark:text-earth-100 dark:placeholder-earth-500"
               />
             </div>
             {status === 'error' && (
@@ -182,7 +182,7 @@ export function NewsletterSignup({
                 'Subscribe Now'
               )}
             </button>
-            <p className="text-xs text-gray-500 text-center">
+            <p className="text-xs text-gray-500 text-center dark:text-earth-400">
               No spam, ever. Unsubscribe anytime.
             </p>
           </form>

@@ -91,8 +91,8 @@ export function Header() {
     <header
       className={`sticky top-0 z-50 transition-all duration-300 ${
         scrolled
-          ? 'bg-earth-800/95 backdrop-blur-md shadow-lg shadow-earth-900/20'
-          : 'bg-gradient-to-r from-earth-800 via-earth-700 to-sage-800'
+          ? 'bg-earth-800/95 backdrop-blur-md shadow-lg shadow-earth-900/20 dark:bg-earth-950/95'
+          : 'bg-gradient-to-r from-earth-800 via-earth-700 to-sage-800 dark:from-earth-900 dark:via-earth-850 dark:to-sage-900'
       }`}
     >
       {/* Decorative top border */}
@@ -164,7 +164,7 @@ export function Header() {
               {resourcesOpen && (
                 <div
                   role="menu"
-                  className="absolute top-full right-0 mt-2 w-56 bg-white rounded-xl shadow-xl shadow-earth-900/20 border border-earth-100 overflow-hidden animate-fade-in"
+                  className="absolute top-full right-0 mt-2 w-56 bg-white dark:bg-earth-900 rounded-xl shadow-xl shadow-earth-900/20 border border-earth-100 dark:border-earth-700 overflow-hidden animate-fade-in"
                 >
                   <div className="p-2">
                     {resourceLinks.map((link) => (
@@ -172,15 +172,15 @@ export function Header() {
                         key={link.href}
                         href={link.href}
                         role="menuitem"
-                        className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-700 hover:bg-earth-50 hover:text-gray-900 transition-colors"
+                        className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-700 dark:text-earth-200 hover:bg-earth-50 dark:hover:bg-earth-800 hover:text-gray-900 dark:hover:text-white transition-colors"
                       >
                         <span className="text-lg" aria-hidden="true">{link.icon}</span>
                         <span className="font-medium text-sm">{link.label}</span>
                       </Link>
                     ))}
                   </div>
-                  <div className="border-t border-earth-100 bg-earth-50/50 px-4 py-3">
-                    <p className="text-xs text-earth-500">
+                  <div className="border-t border-earth-100 dark:border-earth-700 bg-earth-50/50 dark:bg-earth-950/50 px-4 py-3">
+                    <p className="text-xs text-earth-500 dark:text-earth-400">
                       Explore our complete wellness database
                     </p>
                   </div>

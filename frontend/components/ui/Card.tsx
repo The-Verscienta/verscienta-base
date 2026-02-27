@@ -12,9 +12,9 @@ export function Card({
   const baseStyles = 'rounded-lg transition';
 
   const variantStyles = {
-    default: 'bg-white shadow-md border border-gray-100',
-    outlined: 'bg-white border-2 border-gray-300',
-    elevated: 'bg-white shadow-lg',
+    default: 'bg-white dark:bg-earth-900 shadow-md border border-gray-100 dark:border-earth-700',
+    outlined: 'bg-white dark:bg-earth-900 border-2 border-gray-300 dark:border-earth-700',
+    elevated: 'bg-white dark:bg-earth-900 shadow-lg',
   };
 
   const interactiveStyles = onClick
@@ -26,12 +26,12 @@ export function Card({
   const CardContent = (
     <>
       {(title || subtitle) && (
-        <div className="px-6 pt-6 pb-4 border-b border-gray-100">
+        <div className="px-6 pt-6 pb-4 border-b border-gray-100 dark:border-earth-700">
           {title && (
-            <h3 className="text-xl font-bold text-gray-800 mb-1">{title}</h3>
+            <h3 className="text-xl font-bold text-gray-800 dark:text-earth-100 mb-1">{title}</h3>
           )}
           {subtitle && (
-            <p className="text-sm text-gray-600">{subtitle}</p>
+            <p className="text-sm text-gray-600 dark:text-earth-300">{subtitle}</p>
           )}
         </div>
       )}
@@ -39,7 +39,7 @@ export function Card({
       <div className="p-6">{children}</div>
 
       {footer && (
-        <div className="px-6 pb-6 pt-4 border-t border-gray-100">
+        <div className="px-6 pb-6 pt-4 border-t border-gray-100 dark:border-earth-700">
           {footer}
         </div>
       )}

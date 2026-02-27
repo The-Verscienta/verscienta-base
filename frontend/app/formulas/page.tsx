@@ -151,7 +151,7 @@ export default async function FormulasPage({ searchParams }: PageProps) {
   return (
     <PageWrapper>
       {/* Hero Section */}
-      <div className="relative overflow-hidden bg-gradient-to-br from-earth-50 via-sage-50/50 to-cream-100 border-b border-earth-200/50">
+      <div className="relative overflow-hidden bg-gradient-to-br from-earth-50 via-sage-50/50 to-cream-100 dark:from-earth-950 dark:via-earth-900/80 dark:to-earth-900 border-b border-earth-200/50 dark:border-earth-700/50">
         <LeafPattern opacity={0.04} />
 
         {/* Decorative elements */}
@@ -180,11 +180,11 @@ export default async function FormulasPage({ searchParams }: PageProps) {
                 </span>
               </div>
 
-              <h1 className="font-serif text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 mb-4 leading-tight">
+              <h1 className="font-serif text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 dark:text-earth-100 mb-4 leading-tight">
                 Herbal Formulas
               </h1>
 
-              <p className="text-lg md:text-xl text-gray-600 leading-relaxed">
+              <p className="text-lg md:text-xl text-gray-600 dark:text-earth-300 leading-relaxed">
                 Discover traditional and modern herbal formulas combining multiple herbs
                 for synergistic therapeutic effects.
               </p>
@@ -203,7 +203,7 @@ export default async function FormulasPage({ searchParams }: PageProps) {
             </div>
 
             {/* Controls */}
-            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 bg-white/60 backdrop-blur-sm rounded-xl p-4 border border-earth-200/50 shadow-sm">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 bg-white/60 dark:bg-earth-900/80 backdrop-blur-sm rounded-xl p-4 border border-earth-200/50 dark:border-earth-700/50 shadow-sm">
               <SortDropdown options={SORT_OPTIONS} defaultValue="title" />
               <div className="hidden sm:block w-px h-8 bg-earth-200" />
               <PaginationInfo
@@ -248,7 +248,7 @@ export default async function FormulasPage({ searchParams }: PageProps) {
               const picks = formulas.filter(f => f.field_editors_pick);
               return picks.length > 0 ? (
                 <div className="mb-12">
-                  <h2 className="font-serif text-2xl font-bold text-gray-800 mb-6 flex items-center gap-2">
+                  <h2 className="font-serif text-2xl font-bold text-gray-800 dark:text-earth-100 mb-6 flex items-center gap-2">
                     <span className="text-amber-500">&#9733;</span> Editor&apos;s Picks
                   </h2>
                   <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -256,20 +256,20 @@ export default async function FormulasPage({ searchParams }: PageProps) {
                       <Link
                         key={formula.id}
                         href={`/formulas/${formula.id}`}
-                        className="group bg-gradient-to-br from-amber-50 via-cream-50 to-sage-50 rounded-2xl p-6 border-2 border-amber-200 hover:border-amber-300 hover:shadow-xl transition-all duration-300"
+                        className="group bg-gradient-to-br from-amber-50 via-cream-50 to-sage-50 dark:from-earth-900 dark:via-earth-800 dark:to-earth-900 rounded-2xl p-6 border-2 border-amber-200 dark:border-earth-700 hover:border-amber-300 dark:hover:border-earth-600 hover:shadow-xl transition-all duration-300"
                       >
                         <div className="flex items-start justify-between mb-2">
-                          <h3 className="font-serif text-lg font-bold text-gray-800 group-hover:text-earth-600 transition-colors">{formula.title}</h3>
-                          <span className="text-xs px-2 py-0.5 rounded-full font-semibold bg-amber-100 text-amber-800 border border-amber-200">&#9733; Pick</span>
+                          <h3 className="font-serif text-lg font-bold text-gray-800 dark:text-earth-100 group-hover:text-earth-600 dark:group-hover:text-earth-300 transition-colors">{formula.title}</h3>
+                          <span className="text-xs px-2 py-0.5 rounded-full font-semibold bg-amber-100 dark:bg-amber-900/40 text-amber-800 dark:text-amber-300 border border-amber-200 dark:border-amber-700">&#9733; Pick</span>
                         </div>
                         {getTextValue(formula.field_formula_description) && (
-                          <p className="text-sm text-gray-600 line-clamp-2 mb-3">{getTextValue(formula.field_formula_description)}</p>
+                          <p className="text-sm text-gray-600 dark:text-earth-300 line-clamp-2 mb-3">{getTextValue(formula.field_formula_description)}</p>
                         )}
                         <div className="flex flex-wrap gap-1.5">
                           {formula.field_formula_category && (() => { const c = getFieldConfig(formulaCategoryMap, formula.field_formula_category); return c ? (
                             <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${c.bg} ${c.text}`}>{c.label}</span>
                           ) : null; })()}
-                          {formula.field_available_premade && <span className="text-xs px-2 py-0.5 rounded-full font-medium bg-green-100 text-green-700">Pre-made</span>}
+                          {formula.field_available_premade && <span className="text-xs px-2 py-0.5 rounded-full font-medium bg-green-100 dark:bg-green-900/40 text-green-700 dark:text-green-300">Pre-made</span>}
                         </div>
                       </Link>
                     ))}
@@ -287,15 +287,15 @@ export default async function FormulasPage({ searchParams }: PageProps) {
                   <Link
                     key={formula.id}
                     href={`/formulas/${formula.id}`}
-                    className="group relative bg-gradient-to-br from-cream-50 via-earth-50/50 to-sage-50/30 rounded-2xl p-8 border border-earth-200 hover:border-earth-300 hover:shadow-xl transition-all duration-300 overflow-hidden"
+                    className="group relative bg-gradient-to-br from-cream-50 via-earth-50/50 to-sage-50/30 dark:from-earth-900 dark:via-earth-800/50 dark:to-earth-900/30 rounded-2xl p-8 border border-earth-200 dark:border-earth-700 hover:border-earth-300 dark:hover:border-earth-600 hover:shadow-xl transition-all duration-300 overflow-hidden"
                   >
                     <div className="relative flex items-start gap-5">
-                      <div className="w-16 h-16 bg-white rounded-xl shadow-md flex items-center justify-center group-hover:scale-110 group-hover:shadow-lg transition-all duration-300">
+                      <div className="w-16 h-16 bg-white dark:bg-earth-800 rounded-xl shadow-md flex items-center justify-center group-hover:scale-110 group-hover:shadow-lg transition-all duration-300">
                         <FormulaIcon title={formula.title} useCases={formula.field_use_cases} />
                       </div>
                       <div className="flex-1">
                         <div className="flex items-start justify-between gap-3 mb-2">
-                          <h2 className="font-serif text-2xl font-bold text-gray-800 group-hover:text-earth-600 transition-colors">
+                          <h2 className="font-serif text-2xl font-bold text-gray-800 dark:text-earth-100 group-hover:text-earth-600 dark:group-hover:text-earth-300 transition-colors">
                             {formula.title}
                           </h2>
                           {ingredientCount > 0 && (
@@ -306,7 +306,7 @@ export default async function FormulasPage({ searchParams }: PageProps) {
                         </div>
 
                         {getTextValue(formula.field_formula_description) && (
-                          <p className="text-gray-600 mb-4 line-clamp-2 leading-relaxed">
+                          <p className="text-gray-600 dark:text-earth-300 mb-4 line-clamp-2 leading-relaxed">
                             {getTextValue(formula.field_formula_description)}
                           </p>
                         )}
@@ -336,7 +336,7 @@ export default async function FormulasPage({ searchParams }: PageProps) {
             {/* All Formulas Grid */}
             {formulas.length > 2 && (
               <>
-                <h2 className="font-serif text-2xl font-bold text-gray-800 mb-6">All Formulas</h2>
+                <h2 className="font-serif text-2xl font-bold text-gray-800 dark:text-earth-100 mb-6">All Formulas</h2>
                 <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-12">
                   {formulas.slice(2).map((formula) => {
                     const ingredientCount = formula.field_herb_ingredients?.length || 0;
@@ -345,11 +345,11 @@ export default async function FormulasPage({ searchParams }: PageProps) {
                       <Link
                         key={formula.id}
                         href={`/formulas/${formula.id}`}
-                        className="group relative bg-white rounded-2xl shadow-sm hover:shadow-xl border border-earth-100 hover:border-earth-300 transition-all duration-300 overflow-hidden"
+                        className="group relative bg-white dark:bg-earth-900 rounded-2xl shadow-sm hover:shadow-xl border border-earth-100 dark:border-earth-700 hover:border-earth-300 dark:hover:border-earth-600 transition-all duration-300 overflow-hidden"
                       >
-                        <div className="relative bg-gradient-to-br from-earth-50/50 via-cream-50/30 to-sage-50/20 p-5 border-b border-earth-100/50">
+                        <div className="relative bg-gradient-to-br from-earth-50/50 via-cream-50/30 to-sage-50/20 dark:from-earth-800/50 dark:via-earth-800/30 dark:to-earth-800/20 p-5 border-b border-earth-100/50 dark:border-earth-700/50">
                           <div className="flex items-start justify-between">
-                            <div className="w-12 h-12 bg-white rounded-xl shadow-md flex items-center justify-center group-hover:scale-110 transition-all duration-300">
+                            <div className="w-12 h-12 bg-white dark:bg-earth-800 rounded-xl shadow-md flex items-center justify-center group-hover:scale-110 transition-all duration-300">
                               <FormulaIcon title={formula.title} useCases={formula.field_use_cases} />
                             </div>
                             {ingredientCount > 0 && (
@@ -361,12 +361,12 @@ export default async function FormulasPage({ searchParams }: PageProps) {
                         </div>
 
                         <div className="p-5">
-                          <h3 className="font-serif text-lg font-bold text-gray-800 mb-2 group-hover:text-earth-600 transition-colors">
+                          <h3 className="font-serif text-lg font-bold text-gray-800 dark:text-earth-100 mb-2 group-hover:text-earth-600 dark:group-hover:text-earth-300 transition-colors">
                             {formula.title}
                           </h3>
 
                           {getTextValue(formula.field_formula_description) && (
-                            <p className="text-sm text-gray-600 mb-3 line-clamp-2 leading-relaxed">
+                            <p className="text-sm text-gray-600 dark:text-earth-300 mb-3 line-clamp-2 leading-relaxed">
                               {getTextValue(formula.field_formula_description)}
                             </p>
                           )}
@@ -398,15 +398,15 @@ export default async function FormulasPage({ searchParams }: PageProps) {
                           {/* Decision indicators */}
                           {(formula.field_editors_pick || formula.field_formula_category || formula.field_available_premade) && (
                             <div className="flex flex-wrap gap-1.5 mb-3">
-                              {formula.field_editors_pick && <span className="text-xs px-2 py-0.5 rounded-full font-semibold bg-amber-100 text-amber-800">&#9733; Pick</span>}
+                              {formula.field_editors_pick && <span className="text-xs px-2 py-0.5 rounded-full font-semibold bg-amber-100 dark:bg-amber-900/40 text-amber-800 dark:text-amber-300">&#9733; Pick</span>}
                               {formula.field_formula_category && (() => { const c = getFieldConfig(formulaCategoryMap, formula.field_formula_category); return c ? (
                                 <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${c.bg} ${c.text}`}>{c.label}</span>
                               ) : null; })()}
-                              {formula.field_available_premade && <span className="text-xs px-2 py-0.5 rounded-full font-medium bg-green-100 text-green-700">Pre-made</span>}
+                              {formula.field_available_premade && <span className="text-xs px-2 py-0.5 rounded-full font-medium bg-green-100 dark:bg-green-900/40 text-green-700 dark:text-green-300">Pre-made</span>}
                             </div>
                           )}
 
-                          <div className="pt-4 border-t border-earth-100">
+                          <div className="pt-4 border-t border-earth-100 dark:border-earth-700">
                             <span className="text-earth-600 font-medium text-sm flex items-center gap-1.5 group-hover:gap-3 transition-all">
                               View Formula
                               <svg className="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -435,57 +435,57 @@ export default async function FormulasPage({ searchParams }: PageProps) {
             <BotanicalDivider className="mb-12" />
 
             {/* Educational Section */}
-            <div className="bg-gradient-to-r from-sage-50 to-earth-50 rounded-2xl p-8 border border-sage-200 mb-12">
+            <div className="bg-gradient-to-r from-sage-50 to-earth-50 dark:from-earth-900 dark:to-earth-900 rounded-2xl p-8 border border-sage-200 dark:border-earth-700 mb-12">
               <div className="max-w-3xl mx-auto">
-                <h2 className="font-serif text-2xl font-bold text-gray-800 mb-6 text-center">
+                <h2 className="font-serif text-2xl font-bold text-gray-800 dark:text-earth-100 mb-6 text-center">
                   Understanding Herbal Formulas
                 </h2>
                 <div className="grid md:grid-cols-2 gap-6">
                   <div className="space-y-4">
                     <div className="flex items-start gap-4">
-                      <div className="w-10 h-10 rounded-full bg-gradient-to-br from-gold-100 to-gold-200 flex items-center justify-center flex-shrink-0 border border-gold-300">
+                      <div className="w-10 h-10 rounded-full bg-gradient-to-br from-gold-100 to-gold-200 dark:from-earth-800 dark:to-earth-700 flex items-center justify-center flex-shrink-0 border border-gold-300 dark:border-earth-600">
                         <svg className="w-5 h-5 text-gold-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
                         </svg>
                       </div>
                       <div>
-                        <h3 className="font-serif font-semibold text-gray-800">Chief Herbs</h3>
-                        <p className="text-sm text-gray-600 leading-relaxed">Target the primary condition with the main therapeutic action</p>
+                        <h3 className="font-serif font-semibold text-gray-800 dark:text-earth-100">Chief Herbs</h3>
+                        <p className="text-sm text-gray-600 dark:text-earth-300 leading-relaxed">Target the primary condition with the main therapeutic action</p>
                       </div>
                     </div>
                     <div className="flex items-start gap-4">
-                      <div className="w-10 h-10 rounded-full bg-gradient-to-br from-sage-100 to-sage-200 flex items-center justify-center flex-shrink-0 border border-sage-300">
+                      <div className="w-10 h-10 rounded-full bg-gradient-to-br from-sage-100 to-sage-200 dark:from-earth-800 dark:to-earth-700 flex items-center justify-center flex-shrink-0 border border-sage-300 dark:border-earth-600">
                         <svg className="w-5 h-5 text-sage-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" />
                         </svg>
                       </div>
                       <div>
-                        <h3 className="font-serif font-semibold text-gray-800">Deputy Herbs</h3>
-                        <p className="text-sm text-gray-600 leading-relaxed">Support and enhance the effects of the chief herbs</p>
+                        <h3 className="font-serif font-semibold text-gray-800 dark:text-earth-100">Deputy Herbs</h3>
+                        <p className="text-sm text-gray-600 dark:text-earth-300 leading-relaxed">Support and enhance the effects of the chief herbs</p>
                       </div>
                     </div>
                   </div>
                   <div className="space-y-4">
                     <div className="flex items-start gap-4">
-                      <div className="w-10 h-10 rounded-full bg-gradient-to-br from-earth-100 to-earth-200 flex items-center justify-center flex-shrink-0 border border-earth-300">
+                      <div className="w-10 h-10 rounded-full bg-gradient-to-br from-earth-100 to-earth-200 dark:from-earth-800 dark:to-earth-700 flex items-center justify-center flex-shrink-0 border border-earth-300 dark:border-earth-600">
                         <svg className="w-5 h-5 text-earth-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 6l3 1m0 0l-3 9a5.002 5.002 0 006.001 0M6 7l3 9M6 7l6-2m6 2l3-1m-3 1l-3 9a5.002 5.002 0 006.001 0M18 7l3 9m-3-9l-6-2m0-2v2m0 16V5m0 16H9m3 0h3" />
                         </svg>
                       </div>
                       <div>
-                        <h3 className="font-serif font-semibold text-gray-800">Assistant Herbs</h3>
-                        <p className="text-sm text-gray-600 leading-relaxed">Balance the formula and reduce potential side effects</p>
+                        <h3 className="font-serif font-semibold text-gray-800 dark:text-earth-100">Assistant Herbs</h3>
+                        <p className="text-sm text-gray-600 dark:text-earth-300 leading-relaxed">Balance the formula and reduce potential side effects</p>
                       </div>
                     </div>
                     <div className="flex items-start gap-4">
-                      <div className="w-10 h-10 rounded-full bg-gradient-to-br from-cream-100 to-cream-200 flex items-center justify-center flex-shrink-0 border border-cream-300">
+                      <div className="w-10 h-10 rounded-full bg-gradient-to-br from-cream-100 to-cream-200 dark:from-earth-800 dark:to-earth-700 flex items-center justify-center flex-shrink-0 border border-cream-300 dark:border-earth-600">
                         <svg className="w-5 h-5 text-earth-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" />
                         </svg>
                       </div>
                       <div>
-                        <h3 className="font-serif font-semibold text-gray-800">Envoy Herbs</h3>
-                        <p className="text-sm text-gray-600 leading-relaxed">Guide the formula to specific areas of the body</p>
+                        <h3 className="font-serif font-semibold text-gray-800 dark:text-earth-100">Envoy Herbs</h3>
+                        <p className="text-sm text-gray-600 dark:text-earth-300 leading-relaxed">Guide the formula to specific areas of the body</p>
                       </div>
                     </div>
                   </div>
@@ -507,7 +507,7 @@ export default async function FormulasPage({ searchParams }: PageProps) {
                 </p>
                 <Link
                   href="/herbs"
-                  className="inline-flex items-center gap-2 bg-white text-gray-800 px-8 py-3 rounded-xl font-semibold hover:bg-cream-50 transition-all shadow-lg hover:shadow-xl"
+                  className="inline-flex items-center gap-2 bg-white text-gray-800 dark:bg-earth-100 dark:text-earth-900 px-8 py-3 rounded-xl font-semibold hover:bg-cream-50 dark:hover:bg-white transition-all shadow-lg hover:shadow-xl"
                 >
                   Browse Herbs Database
                   <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">

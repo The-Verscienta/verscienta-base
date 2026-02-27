@@ -146,12 +146,12 @@ export default async function ModalitiesPage({ searchParams }: PageProps) {
   return (
     <PageWrapper>
       {/* Hero Section */}
-      <div className="relative overflow-hidden bg-gradient-to-br from-sage-50 via-earth-50/50 to-cream-100 border-b border-sage-200/50">
+      <div className="relative overflow-hidden bg-gradient-to-br from-sage-50 via-earth-50/50 to-cream-100 dark:from-earth-950 dark:via-sage-950 dark:to-earth-900 border-b border-sage-200/50 dark:border-earth-700/50">
         <LeafPattern opacity={0.04} />
 
         {/* Decorative elements */}
-        <div className="absolute top-16 left-16 w-56 h-56 bg-sage-300/15 rounded-full blur-3xl" />
-        <div className="absolute bottom-10 right-10 w-40 h-40 bg-earth-300/20 rounded-full blur-3xl" />
+        <div className="absolute top-16 left-16 w-56 h-56 bg-sage-300/15 dark:bg-sage-800/15 rounded-full blur-3xl" />
+        <div className="absolute bottom-10 right-10 w-40 h-40 bg-earth-300/20 dark:bg-earth-800/15 rounded-full blur-3xl" />
 
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
           <Breadcrumbs
@@ -170,16 +170,16 @@ export default async function ModalitiesPage({ searchParams }: PageProps) {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
                   </svg>
                 </div>
-                <span className="text-sage-600 font-medium tracking-wide uppercase text-sm">
+                <span className="text-sage-600 dark:text-sage-400 font-medium tracking-wide uppercase text-sm">
                   Healing Practices
                 </span>
               </div>
 
-              <h1 className="font-serif text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 mb-4 leading-tight">
+              <h1 className="font-serif text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 dark:text-earth-100 mb-4 leading-tight">
                 Holistic Modalities
               </h1>
 
-              <p className="text-lg md:text-xl text-gray-600 leading-relaxed">
+              <p className="text-lg md:text-xl text-gray-600 dark:text-earth-300 leading-relaxed">
                 Explore therapeutic practices and healing modalities that nurture mind, body, and spirit
                 through time-honored wisdom and modern understanding.
               </p>
@@ -187,7 +187,7 @@ export default async function ModalitiesPage({ searchParams }: PageProps) {
               {/* Category highlights */}
               {topCategories.length > 0 && (
                 <div className="mt-6 flex flex-wrap items-center gap-2">
-                  <span className="text-sm text-sage-600 font-medium mr-1">Popular for:</span>
+                  <span className="text-sm text-sage-600 dark:text-sage-400 font-medium mr-1">Popular for:</span>
                   {topCategories.map(([category, count]) => (
                     <Tag key={category} variant="sage" size="sm">
                       {category} ({count})
@@ -198,7 +198,7 @@ export default async function ModalitiesPage({ searchParams }: PageProps) {
             </div>
 
             {/* Controls */}
-            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 bg-white/60 backdrop-blur-sm rounded-xl p-4 border border-sage-200/50 shadow-sm">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 bg-white/60 dark:bg-earth-900/60 backdrop-blur-sm rounded-xl p-4 border border-sage-200/50 dark:border-earth-700/50 shadow-sm">
               <SortDropdown options={SORT_OPTIONS} defaultValue="title" />
               <div className="hidden sm:block w-px h-8 bg-sage-200" />
               <PaginationInfo
@@ -243,7 +243,7 @@ export default async function ModalitiesPage({ searchParams }: PageProps) {
               const picks = modalities.filter(m => m.field_editors_pick);
               return picks.length > 0 ? (
                 <div className="mb-12">
-                  <h2 className="font-serif text-2xl font-bold text-gray-800 mb-6 flex items-center gap-2">
+                  <h2 className="font-serif text-2xl font-bold text-gray-800 dark:text-earth-100 mb-6 flex items-center gap-2">
                     <span className="text-amber-500">&#9733;</span> Editor&apos;s Picks
                   </h2>
                   <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -253,16 +253,16 @@ export default async function ModalitiesPage({ searchParams }: PageProps) {
                         <Link
                           key={modality.id}
                           href={`/modalities/${modality.id}`}
-                          className="group bg-gradient-to-br from-amber-50 via-cream-50 to-sage-50 rounded-2xl p-6 border-2 border-amber-200 hover:border-amber-300 hover:shadow-xl transition-all duration-300"
+                          className="group bg-gradient-to-br from-amber-50 via-cream-50 to-sage-50 dark:from-amber-950/20 dark:via-earth-900 dark:to-sage-950 rounded-2xl p-6 border-2 border-amber-200 hover:border-amber-300 dark:border-amber-800 dark:hover:border-amber-700 hover:shadow-xl transition-all duration-300"
                         >
                           <div className="flex items-start justify-between mb-2">
-                            <h3 className="font-serif text-lg font-bold text-gray-800 group-hover:text-sage-700 transition-colors">{modality.title}</h3>
-                            <span className="text-xs px-2 py-0.5 rounded-full font-semibold bg-amber-100 text-amber-800 border border-amber-200">&#9733; Pick</span>
+                            <h3 className="font-serif text-lg font-bold text-gray-800 dark:text-earth-100 group-hover:text-sage-700 transition-colors">{modality.title}</h3>
+                            <span className="text-xs px-2 py-0.5 rounded-full font-semibold bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-200 border border-amber-200">&#9733; Pick</span>
                           </div>
-                          {summary && <p className="text-sm text-gray-600 line-clamp-2 mb-3">{summary}...</p>}
+                          {summary && <p className="text-sm text-gray-600 dark:text-earth-300 line-clamp-2 mb-3">{summary}...</p>}
                           <div className="flex flex-wrap gap-1.5">
-                            {modality.field_self_practice && <span className="text-xs px-2 py-0.5 rounded-full font-medium bg-green-100 text-green-700">Self-Practice</span>}
-                            {modality.field_session_cost_range && <span className="text-xs px-2 py-0.5 rounded-full font-medium bg-blue-100 text-blue-700">{modality.field_session_cost_range}</span>}
+                            {modality.field_self_practice && <span className="text-xs px-2 py-0.5 rounded-full font-medium bg-green-100 text-green-700 dark:bg-green-900/40 dark:text-green-300">Self-Practice</span>}
+                            {modality.field_session_cost_range && <span className="text-xs px-2 py-0.5 rounded-full font-medium bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300">{modality.field_session_cost_range}</span>}
                           </div>
                         </Link>
                       );
@@ -282,19 +282,19 @@ export default async function ModalitiesPage({ searchParams }: PageProps) {
                   <Link
                     key={modality.id}
                     href={`/modalities/${modality.id}`}
-                    className="group relative bg-gradient-to-br from-cream-50 via-sage-50/50 to-earth-50/30 rounded-2xl p-8 border border-sage-200 hover:border-sage-300 hover:shadow-xl transition-all duration-300 overflow-hidden"
+                    className="group relative bg-gradient-to-br from-cream-50 via-sage-50/50 to-earth-50/30 dark:from-earth-950 dark:via-sage-950 dark:to-earth-900 rounded-2xl p-8 border border-sage-200 hover:border-sage-300 dark:border-earth-700 dark:hover:border-sage-700 hover:shadow-xl transition-all duration-300 overflow-hidden"
                   >
 
                     <div className="relative flex items-start gap-5">
-                      <div className="w-16 h-16 bg-white rounded-xl shadow-md flex items-center justify-center group-hover:scale-110 group-hover:shadow-lg transition-all duration-300">
+                      <div className="w-16 h-16 bg-white dark:bg-earth-800 rounded-xl shadow-md flex items-center justify-center group-hover:scale-110 group-hover:shadow-lg transition-all duration-300">
                         <ModalityIcon type={modality.title} />
                       </div>
                       <div className="flex-1">
-                        <h2 className="font-serif text-2xl font-bold text-gray-800 mb-2 group-hover:text-sage-700 transition-colors">
+                        <h2 className="font-serif text-2xl font-bold text-gray-800 dark:text-earth-100 mb-2 group-hover:text-sage-700 transition-colors">
                           {modality.title}
                         </h2>
                         {summary && (
-                          <p className="text-gray-600 mb-4 line-clamp-2 leading-relaxed">
+                          <p className="text-gray-600 dark:text-earth-300 mb-4 line-clamp-2 leading-relaxed">
                             {summary}...
                           </p>
                         )}
@@ -323,7 +323,7 @@ export default async function ModalitiesPage({ searchParams }: PageProps) {
             {/* All Modalities Grid */}
             {modalities.length > 2 && (
               <>
-                <h2 className="font-serif text-2xl font-bold text-gray-800 mb-6">All Modalities</h2>
+                <h2 className="font-serif text-2xl font-bold text-gray-800 dark:text-earth-100 mb-6">All Modalities</h2>
                 <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-12">
                   {modalities.slice(2).map((modality) => {
                     const summary = modality.body?.summary ||
@@ -333,12 +333,12 @@ export default async function ModalitiesPage({ searchParams }: PageProps) {
                       <Link
                         key={modality.id}
                         href={`/modalities/${modality.id}`}
-                        className="group relative bg-white rounded-2xl shadow-sm hover:shadow-xl border border-earth-100 hover:border-sage-300 transition-all duration-300 overflow-hidden"
+                        className="group relative bg-white dark:bg-earth-900 rounded-2xl shadow-sm hover:shadow-xl border border-earth-100 hover:border-sage-300 dark:border-earth-700 dark:hover:border-sage-700 transition-all duration-300 overflow-hidden"
                       >
 
-                        <div className="relative bg-gradient-to-br from-sage-50/50 via-cream-50/30 to-earth-50/20 p-6 border-b border-earth-100/50">
+                        <div className="relative bg-gradient-to-br from-sage-50/50 via-cream-50/30 to-earth-50/20 dark:from-sage-900/20 dark:via-earth-900 dark:to-earth-900 p-6 border-b border-earth-100/50 dark:border-earth-700/50">
                           <div className="flex items-start justify-between">
-                            <div className="w-12 h-12 bg-white rounded-xl shadow-md flex items-center justify-center group-hover:scale-110 transition-all duration-300">
+                            <div className="w-12 h-12 bg-white dark:bg-earth-800 rounded-xl shadow-md flex items-center justify-center group-hover:scale-110 transition-all duration-300">
                               <ModalityIcon type={modality.title} />
                             </div>
                             {modality.field_excels_at && modality.field_excels_at.length > 0 && (
@@ -350,12 +350,12 @@ export default async function ModalitiesPage({ searchParams }: PageProps) {
                         </div>
 
                         <div className="p-5">
-                          <h3 className="font-serif text-lg font-bold text-gray-800 mb-2 group-hover:text-sage-700 transition-colors">
+                          <h3 className="font-serif text-lg font-bold text-gray-800 dark:text-earth-100 mb-2 group-hover:text-sage-700 transition-colors">
                             {modality.title}
                           </h3>
 
                           {summary && (
-                            <p className="text-sm text-gray-600 mb-4 line-clamp-2 leading-relaxed">
+                            <p className="text-sm text-gray-600 dark:text-earth-300 mb-4 line-clamp-2 leading-relaxed">
                               {summary}...
                             </p>
                           )}
@@ -373,13 +373,13 @@ export default async function ModalitiesPage({ searchParams }: PageProps) {
                           {/* Decision indicators */}
                           {(modality.field_editors_pick || modality.field_self_practice || modality.field_session_cost_range) && (
                             <div className="flex flex-wrap gap-1.5 mb-3">
-                              {modality.field_editors_pick && <span className="text-xs px-2 py-0.5 rounded-full font-semibold bg-amber-100 text-amber-800">&#9733; Pick</span>}
-                              {modality.field_self_practice && <span className="text-xs px-2 py-0.5 rounded-full font-medium bg-green-100 text-green-700">Self-Practice</span>}
-                              {modality.field_session_cost_range && <span className="text-xs px-2 py-0.5 rounded-full font-medium bg-blue-100 text-blue-700">{modality.field_session_cost_range}</span>}
+                              {modality.field_editors_pick && <span className="text-xs px-2 py-0.5 rounded-full font-semibold bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-200">&#9733; Pick</span>}
+                              {modality.field_self_practice && <span className="text-xs px-2 py-0.5 rounded-full font-medium bg-green-100 text-green-700 dark:bg-green-900/40 dark:text-green-300">Self-Practice</span>}
+                              {modality.field_session_cost_range && <span className="text-xs px-2 py-0.5 rounded-full font-medium bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300">{modality.field_session_cost_range}</span>}
                             </div>
                           )}
 
-                          <div className="pt-4 border-t border-earth-100">
+                          <div className="pt-4 border-t border-earth-100 dark:border-earth-700">
                             <span className="text-sage-600 font-medium text-sm flex items-center gap-1.5 group-hover:gap-3 transition-all">
                               Learn More
                               <svg className="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">

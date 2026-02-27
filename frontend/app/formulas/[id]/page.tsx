@@ -207,15 +207,24 @@ export default async function FormulaDetailPage({ params }: FormulaDetailProps) 
 
   const name = formula.title || 'Formula';
   // field_total_weight comes as a string from Drupal, convert to number
-  const totalWeight = typeof formula.field_total_weight === 'string'
+  const rawTotalWeight = typeof formula.field_total_weight === 'string'
     ? parseFloat(formula.field_total_weight)
     : (formula.field_total_weight || 0);
+  // Auto-sum ingredient quantities when field_total_weight is not set
+  const totalWeight = rawTotalWeight > 0
+    ? rawTotalWeight
+    : (formula.field_herb_ingredients?.reduce((sum, ing) => {
+        const qty = typeof ing.field_quantity === 'string'
+          ? parseFloat(ing.field_quantity)
+          : (ing.field_quantity || 0);
+        return sum + qty;
+      }, 0) ?? 0);
   const weightUnit = formula.field_total_weight_unit || 'g';
 
   return (
     <PageWrapper>
       {/* Hero Section */}
-      <div className="relative overflow-hidden bg-gradient-to-br from-earth-50 via-sage-50/50 to-cream-100 border-b border-sage-200/50">
+      <div className="relative overflow-hidden bg-gradient-to-br from-earth-50 via-sage-50/50 to-cream-100 dark:from-earth-950 dark:via-earth-900/80 dark:to-earth-900 border-b border-sage-200/50 dark:border-earth-700/50">
         <LeafPattern opacity={0.04} />
         <div className="absolute top-20 left-10 w-64 h-64 bg-sage-300/20 rounded-full blur-3xl" />
         <div className="absolute bottom-10 right-20 w-48 h-48 bg-earth-300/15 rounded-full blur-3xl" />
@@ -230,10 +239,10 @@ export default async function FormulaDetailPage({ params }: FormulaDetailProps) 
             className="mb-8"
           />
 
-          <div className="bg-white rounded-3xl shadow-xl border border-earth-200 relative overflow-hidden">
+          <div className="bg-white dark:bg-earth-900 rounded-3xl shadow-xl border border-earth-200 dark:border-earth-700 relative overflow-hidden">
             <div className="absolute -right-12 -top-12 w-64 h-64 opacity-5 pointer-events-none text-8xl">🌿</div>
             <div className="relative p-8 md:p-12">
-              <h1 className="font-serif text-5xl md:text-6xl font-bold text-gray-900 mb-4 tracking-tight">
+              <h1 className="font-serif text-5xl md:text-6xl font-bold text-gray-900 dark:text-earth-100 mb-4 tracking-tight">
                 {name}
               </h1>
               {totalWeight > 0 && (
@@ -255,7 +264,7 @@ export default async function FormulaDetailPage({ params }: FormulaDetailProps) 
               {(formula.field_editors_pick || formula.field_formula_popularity || formula.field_formula_category || formula.field_available_premade || formula.field_formula_era) && (
                 <div className="flex flex-wrap items-center gap-2 mt-4">
                   {formula.field_editors_pick && (
-                    <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-semibold bg-amber-100 text-amber-800 border border-amber-200">
+                    <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-semibold bg-amber-100 dark:bg-amber-900/40 text-amber-800 dark:text-amber-300 border border-amber-200 dark:border-amber-700">
                       &#9733; Editor&apos;s Pick
                     </span>
                   )}
@@ -268,12 +277,12 @@ export default async function FormulaDetailPage({ params }: FormulaDetailProps) 
                     <span className={`inline-flex items-center px-3 py-1.5 rounded-full text-sm font-medium ${c.bg} ${c.text}`}>{c.label}</span>
                   ) : null; })()}
                   {formula.field_available_premade && (
-                    <span className="inline-flex items-center px-3 py-1.5 rounded-full text-sm font-medium bg-green-100 text-green-700">
+                    <span className="inline-flex items-center px-3 py-1.5 rounded-full text-sm font-medium bg-green-100 dark:bg-green-900/40 text-green-700 dark:text-green-300">
                       Pre-made Available
                     </span>
                   )}
                   {formula.field_formula_era && (
-                    <span className="inline-flex items-center px-3 py-1.5 rounded-full text-sm font-medium bg-earth-100 text-earth-700">
+                    <span className="inline-flex items-center px-3 py-1.5 rounded-full text-sm font-medium bg-earth-100 dark:bg-earth-800 text-earth-700 dark:text-earth-300">
                       {formula.field_formula_era}
                     </span>
                   )}
@@ -297,7 +306,7 @@ export default async function FormulaDetailPage({ params }: FormulaDetailProps) 
               </svg>
             }
           >
-            <div className="prose max-w-none text-gray-700">
+            <div className="prose dark:prose-invert max-w-none text-gray-700 dark:text-earth-200">
               {formula.body?.value && <SafeHtml html={formula.body.value} />}
               {hasTextContent(formula.field_formula_description) && !formula.body?.value && (
                 <p>{getTextValue(formula.field_formula_description)}</p>
@@ -347,26 +356,26 @@ export default async function FormulaDetailPage({ params }: FormulaDetailProps) 
           >
             <div className="grid md:grid-cols-2 gap-4">
               {formula.field_preparation_difficulty && (() => { const c = getFieldConfig(preparationDifficultyMap, formula.field_preparation_difficulty); return c ? (
-                <div className="bg-white rounded-xl p-5 border border-earth-100 shadow-sm">
-                  <h3 className="text-xs font-bold text-earth-500 uppercase tracking-wider mb-2">Preparation Difficulty</h3>
+                <div className="bg-white dark:bg-earth-900 rounded-xl p-5 border border-earth-100 dark:border-earth-700 shadow-sm">
+                  <h3 className="text-xs font-bold text-earth-500 dark:text-earth-400 uppercase tracking-wider mb-2">Preparation Difficulty</h3>
                   <span className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${c.bg} ${c.text}`}>{c.label}</span>
                 </div>
               ) : null; })()}
               {formula.field_treatment_duration && (() => { const c = getFieldConfig(treatmentDurationMap, formula.field_treatment_duration); return c ? (
-                <div className="bg-white rounded-xl p-5 border border-earth-100 shadow-sm">
-                  <h3 className="text-xs font-bold text-earth-500 uppercase tracking-wider mb-2">Treatment Duration</h3>
+                <div className="bg-white dark:bg-earth-900 rounded-xl p-5 border border-earth-100 dark:border-earth-700 shadow-sm">
+                  <h3 className="text-xs font-bold text-earth-500 dark:text-earth-400 uppercase tracking-wider mb-2">Treatment Duration</h3>
                   <span className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${c.bg} ${c.text}`}>{c.label}</span>
                 </div>
               ) : null; })()}
               {formula.field_commercial_forms && (
-                <div className="bg-white rounded-xl p-5 border border-earth-100 shadow-sm">
-                  <h3 className="text-xs font-bold text-earth-500 uppercase tracking-wider mb-2">Commercial Forms</h3>
-                  <p className="text-gray-700">{formula.field_commercial_forms}</p>
+                <div className="bg-white dark:bg-earth-900 rounded-xl p-5 border border-earth-100 dark:border-earth-700 shadow-sm">
+                  <h3 className="text-xs font-bold text-earth-500 dark:text-earth-400 uppercase tracking-wider mb-2">Commercial Forms</h3>
+                  <p className="text-gray-700 dark:text-earth-200">{formula.field_commercial_forms}</p>
                 </div>
               )}
               {formula.field_evidence_strength && (() => { const c = getFieldConfig(evidenceStrengthMap, formula.field_evidence_strength); return c ? (
-                <div className="bg-white rounded-xl p-5 border border-earth-100 shadow-sm">
-                  <h3 className="text-xs font-bold text-earth-500 uppercase tracking-wider mb-2">Evidence Strength</h3>
+                <div className="bg-white dark:bg-earth-900 rounded-xl p-5 border border-earth-100 dark:border-earth-700 shadow-sm">
+                  <h3 className="text-xs font-bold text-earth-500 dark:text-earth-400 uppercase tracking-wider mb-2">Evidence Strength</h3>
                   <span className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${c.bg} ${c.text}`}>{c.label}</span>
                 </div>
               ) : null; })()}
@@ -387,7 +396,7 @@ export default async function FormulaDetailPage({ params }: FormulaDetailProps) 
           }
         >
           {!formula.field_herb_ingredients || formula.field_herb_ingredients.length === 0 ? (
-            <p className="text-gray-600">No ingredients specified for this formula.</p>
+            <p className="text-gray-600 dark:text-earth-300">No ingredients specified for this formula.</p>
           ) : (
             <>
               <div className="mb-6">
@@ -396,16 +405,16 @@ export default async function FormulaDetailPage({ params }: FormulaDetailProps) 
                   totalWeight={totalWeight}
                 />
               </div>
-              <div className="bg-sage-50 rounded-xl p-4 border border-sage-200">
-                <h3 className="font-semibold text-gray-900 mb-3">Formula Summary</h3>
+              <div className="bg-sage-50 dark:bg-earth-900 rounded-xl p-4 border border-sage-200 dark:border-earth-700">
+                <h3 className="font-semibold text-gray-900 dark:text-earth-100 mb-3">Formula Summary</h3>
                 <div className="overflow-x-auto">
-                  <table className="w-full text-sm text-gray-800">
+                  <table className="w-full text-sm text-gray-800 dark:text-earth-200">
                     <thead>
-                      <tr className="border-b border-sage-300">
-                        <th className="text-left py-2 px-2 font-semibold text-gray-900">Herb</th>
-                        <th className="text-left py-2 px-2 font-semibold text-gray-900">Role</th>
-                        <th className="text-right py-2 px-2 font-semibold text-gray-900">Quantity</th>
-                        <th className="text-right py-2 px-2 font-semibold text-gray-900">%</th>
+                      <tr className="border-b border-sage-300 dark:border-earth-700">
+                        <th className="text-left py-2 px-2 font-semibold text-gray-900 dark:text-earth-100">Herb</th>
+                        <th className="text-left py-2 px-2 font-semibold text-gray-900 dark:text-earth-100">Role</th>
+                        <th className="text-right py-2 px-2 font-semibold text-gray-900 dark:text-earth-100">Quantity</th>
+                        <th className="text-right py-2 px-2 font-semibold text-gray-900 dark:text-earth-100">%</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -419,22 +428,22 @@ export default async function FormulaDetailPage({ params }: FormulaDetailProps) 
                         const percentage = fieldPercentage ||
                           (totalWeight > 0 ? (fieldQuantity / totalWeight * 100) : 0);
                         return (
-                          <tr key={idx} className="border-b border-sage-200">
+                          <tr key={idx} className="border-b border-sage-200 dark:border-earth-700">
                             <td className="py-2 px-2">
-                              <Link href={`/herbs/${ingredient.id}`} className="text-earth-700 hover:text-gray-900 hover:underline font-medium">
+                              <Link href={`/herbs/${ingredient.id}`} className="text-earth-700 dark:text-earth-400 hover:text-gray-900 dark:hover:text-earth-200 hover:underline font-medium">
                                 {ingredient.title || 'Herb'}
                               </Link>
                             </td>
                             <td className="py-2 px-2">
-                              {ingredient.field_role ? <HerbRoleBadge role={ingredient.field_role} size="sm" /> : <span className="text-gray-400">-</span>}
+                              {ingredient.field_role ? <HerbRoleBadge role={ingredient.field_role} size="sm" /> : <span className="text-gray-400 dark:text-earth-500">-</span>}
                             </td>
-                            <td className="py-2 px-2 text-right text-gray-700">{ingredient.field_quantity} {ingredient.field_unit}</td>
-                            <td className="py-2 px-2 text-right text-gray-700">{percentage > 0 ? `${percentage.toFixed(1)}%` : '-'}</td>
+                            <td className="py-2 px-2 text-right text-gray-700 dark:text-earth-200">{ingredient.field_quantity} {ingredient.field_unit}</td>
+                            <td className="py-2 px-2 text-right text-gray-700 dark:text-earth-200">{percentage > 0 ? `${percentage.toFixed(1)}%` : '-'}</td>
                           </tr>
                         );
                       })}
                       {totalWeight > 0 && (
-                        <tr className="font-bold bg-sage-100 text-gray-900">
+                        <tr className="font-bold bg-sage-100 dark:bg-earth-800 text-gray-900 dark:text-earth-100">
                           <td className="py-2 px-2">Total</td>
                           <td className="py-2 px-2"></td>
                           <td className="py-2 px-2 text-right">{totalWeight} {weightUnit}</td>

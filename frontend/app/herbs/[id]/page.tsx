@@ -115,7 +115,7 @@ export default async function HerbDetailPage({ params }: HerbDetailProps) {
 
   return (
     <PageWrapper>
-    <div className="min-h-screen bg-gradient-to-b from-earth-50 via-white to-sage-50">
+    <div className="min-h-screen bg-gradient-to-b from-earth-50 via-white to-sage-50 dark:from-earth-950 dark:via-earth-900 dark:to-sage-950">
       {/* Decorative background pattern */}
       <div className="fixed inset-0 pointer-events-none opacity-[0.02]" style={{
         backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 5c-2 8-8 14-16 16 8 2 14 8 16 16 2-8 8-14 16-16-8-2-14-8-16-16z' fill='%23527a5f' fill-opacity='1'/%3E%3C/svg%3E")`,
@@ -138,7 +138,7 @@ export default async function HerbDetailPage({ params }: HerbDetailProps) {
           <div className="grid lg:grid-cols-3 gap-8">
             {/* Main Info */}
             <div className="lg:col-span-2">
-              <div className="bg-white rounded-3xl shadow-xl border border-earth-200 relative overflow-hidden">
+              <div className="bg-white dark:bg-earth-900 rounded-3xl shadow-xl border border-earth-200 dark:border-earth-700 relative overflow-hidden">
                 {/* Hero image or decorative fallback */}
                 {herb.field_images?.[0] && (herb.field_images[0].uri?.url || herb.field_images[0].url) ? (
                   <div className="relative w-full h-64 md:h-80">
@@ -179,7 +179,7 @@ export default async function HerbDetailPage({ params }: HerbDetailProps) {
 
                 <div className="relative p-8 md:p-12">
                   {/* Common name */}
-                  <h1 className="font-serif text-5xl md:text-6xl lg:text-7xl font-bold text-gray-900 mb-4 tracking-tight">
+                  <h1 className="font-serif text-5xl md:text-6xl lg:text-7xl font-bold text-gray-900 dark:text-earth-100 mb-4 tracking-tight">
                     {name}
                   </h1>
 
@@ -192,7 +192,7 @@ export default async function HerbDetailPage({ params }: HerbDetailProps) {
 
                   {/* Family */}
                   {herb.field_family && (
-                    <p className="text-lg text-gray-600 mb-8">
+                    <p className="text-lg text-gray-600 dark:text-earth-300 mb-8">
                       <span className="font-medium">Family:</span>{' '}
                       <span className="font-serif italic">{herb.field_family}</span>
                     </p>
@@ -205,7 +205,7 @@ export default async function HerbDetailPage({ params }: HerbDetailProps) {
                     {/* Common Names */}
                     {herb.field_common_names && herb.field_common_names.length > 0 && (
                       <div>
-                        <h3 className="text-sm font-semibold text-earth-500 uppercase tracking-wider mb-3">
+                        <h3 className="text-sm font-semibold text-earth-500 dark:text-earth-400 uppercase tracking-wider mb-3">
                           Also Known As
                         </h3>
                         <div className="flex flex-wrap gap-2">
@@ -224,7 +224,7 @@ export default async function HerbDetailPage({ params }: HerbDetailProps) {
                     {/* Parts Used */}
                     {herb.field_parts_used && herb.field_parts_used.length > 0 && (
                       <div>
-                        <h3 className="text-sm font-semibold text-earth-500 uppercase tracking-wider mb-3">
+                        <h3 className="text-sm font-semibold text-earth-500 dark:text-earth-400 uppercase tracking-wider mb-3">
                           Parts Used
                         </h3>
                         <div className="flex flex-wrap gap-2">
@@ -240,7 +240,7 @@ export default async function HerbDetailPage({ params }: HerbDetailProps) {
                   {(herb.field_popularity || herb.field_beginner_friendly || herb.field_editors_pick || herb.field_onset_speed || herb.field_evidence_strength) && (
                     <div className="flex flex-wrap gap-2 mt-6">
                       {herb.field_editors_pick && (
-                        <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-semibold bg-amber-100 text-amber-800 border border-amber-200">
+                        <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-semibold bg-amber-100 dark:bg-amber-900/40 text-amber-800 dark:text-amber-200 border border-amber-200 dark:border-amber-800">
                           &#9733; Editor&apos;s Pick
                         </span>
                       )}
@@ -250,7 +250,7 @@ export default async function HerbDetailPage({ params }: HerbDetailProps) {
                         </span>
                       ) : null; })()}
                       {herb.field_beginner_friendly && (
-                        <span className="inline-flex items-center gap-1 px-3 py-1.5 rounded-full text-sm font-medium bg-green-100 text-green-700">
+                        <span className="inline-flex items-center gap-1 px-3 py-1.5 rounded-full text-sm font-medium bg-green-100 dark:bg-green-900/40 text-green-700 dark:text-green-300">
                           Beginner Friendly
                         </span>
                       )}
@@ -276,7 +276,7 @@ export default async function HerbDetailPage({ params }: HerbDetailProps) {
                     const imgUrl = image.uri?.url || image.url;
                     if (!imgUrl) return null;
                     return (
-                      <div key={image.id || idx} className="relative aspect-square rounded-xl overflow-hidden border border-earth-200 shadow-sm">
+                      <div key={image.id || idx} className="relative aspect-square rounded-xl overflow-hidden border border-earth-200 dark:border-earth-700 shadow-sm">
                         <Image
                           src={imgUrl}
                           alt={image.meta?.alt || `${name} image ${idx + 2}`}
@@ -293,8 +293,8 @@ export default async function HerbDetailPage({ params }: HerbDetailProps) {
 
             {/* Sidebar - Table of Contents */}
             <aside className="lg:sticky lg:top-24 lg:self-start">
-              <nav className="bg-white/80 backdrop-blur-sm rounded-2xl border border-earth-200 p-6 shadow-lg">
-                <h3 className="text-sm font-bold text-earth-500 uppercase tracking-widest mb-4 flex items-center gap-2">
+              <nav className="bg-white/80 dark:bg-earth-900/80 backdrop-blur-sm rounded-2xl border border-earth-200 dark:border-earth-700 p-6 shadow-lg">
+                <h3 className="text-sm font-bold text-earth-500 dark:text-earth-400 uppercase tracking-widest mb-4 flex items-center gap-2">
                   <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                     <path d="M4 6h16M4 12h16M4 18h12"/>
                   </svg>
@@ -305,7 +305,7 @@ export default async function HerbDetailPage({ params }: HerbDetailProps) {
                     <li key={item.id}>
                       <a
                         href={`#${item.id}`}
-                        className="block py-2 px-3 text-sm text-earth-600 hover:text-gray-900 hover:bg-earth-50 rounded-lg transition-colors font-medium"
+                        className="block py-2 px-3 text-sm text-earth-600 dark:text-earth-300 hover:text-gray-900 dark:hover:text-earth-100 hover:bg-earth-50 dark:hover:bg-earth-800 rounded-lg transition-colors font-medium"
                       >
                         {item.label}
                       </a>
@@ -324,7 +324,7 @@ export default async function HerbDetailPage({ params }: HerbDetailProps) {
             {/* Overview */}
             {herb.body?.value && (
               <Section id="overview" title="Overview" icon="📖">
-                <div className="prose prose-lg max-w-none prose-headings:font-serif prose-headings:text-gray-800 prose-a:text-sage-600">
+                <div className="prose prose-lg max-w-none prose-headings:font-serif prose-headings:text-gray-800 dark:prose-headings:text-earth-100 prose-a:text-sage-600">
                   <SafeHtml html={herb.body.value} />
                 </div>
               </Section>
@@ -335,11 +335,11 @@ export default async function HerbDetailPage({ params }: HerbDetailProps) {
               <Section id="botanical" title="Botanical Information" icon="🌱">
                 {getTextValue(herb.field_botanical_description as DrupalTextField) && (
                   <div className="mb-6">
-                    <h3 className="text-lg font-semibold text-earth-700 mb-3 flex items-center gap-2">
+                    <h3 className="text-lg font-semibold text-earth-700 dark:text-earth-300 mb-3 flex items-center gap-2">
                       <span className="w-1.5 h-1.5 rounded-full bg-sage-500" />
                       Description
                     </h3>
-                    <div className="prose max-w-none text-gray-700">
+                    <div className="prose max-w-none text-gray-700 dark:text-earth-200">
                       <SafeHtml html={getTextValue(herb.field_botanical_description as DrupalTextField)!} />
                     </div>
                   </div>
@@ -347,8 +347,8 @@ export default async function HerbDetailPage({ params }: HerbDetailProps) {
 
                 <div className="grid md:grid-cols-2 gap-6">
                   {herb.field_native_region && herb.field_native_region.length > 0 && (
-                    <div className="bg-sage-50/50 rounded-xl p-5 border border-sage-100">
-                      <h3 className="text-sm font-bold text-sage-700 uppercase tracking-wider mb-3 flex items-center gap-2">
+                    <div className="bg-sage-50/50 dark:bg-sage-950/50 rounded-xl p-5 border border-sage-100 dark:border-sage-800">
+                      <h3 className="text-sm font-bold text-sage-700 dark:text-sage-300 uppercase tracking-wider mb-3 flex items-center gap-2">
                         <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                           <circle cx="12" cy="12" r="10"/>
                           <path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
@@ -357,7 +357,7 @@ export default async function HerbDetailPage({ params }: HerbDetailProps) {
                       </h3>
                       <ul className="space-y-1.5">
                         {herb.field_native_region.map((region, idx) => (
-                          <li key={idx} className="flex items-center gap-2 text-gray-700">
+                          <li key={idx} className="flex items-center gap-2 text-gray-700 dark:text-earth-200">
                             <span className="w-1 h-1 rounded-full bg-sage-400" />
                             {region}
                           </li>
@@ -367,14 +367,14 @@ export default async function HerbDetailPage({ params }: HerbDetailProps) {
                   )}
 
                   {getTextValue(herb.field_habitat as DrupalTextField) && (
-                    <div className="bg-earth-50/50 rounded-xl p-5 border border-earth-100">
-                      <h3 className="text-sm font-bold text-earth-700 uppercase tracking-wider mb-3 flex items-center gap-2">
+                    <div className="bg-earth-50/50 dark:bg-earth-950/50 rounded-xl p-5 border border-earth-100 dark:border-earth-700">
+                      <h3 className="text-sm font-bold text-earth-700 dark:text-earth-300 uppercase tracking-wider mb-3 flex items-center gap-2">
                         <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                           <path d="M3 21h18M9 8h1M9 12h1M9 16h1M14 8h1M14 12h1M14 16h1M5 21V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16"/>
                         </svg>
                         Habitat
                       </h3>
-                      <div className="prose prose-sm max-w-none text-gray-700">
+                      <div className="prose prose-sm max-w-none text-gray-700 dark:text-earth-200">
                         <SafeHtml html={getTextValue(herb.field_habitat as DrupalTextField)!} />
                       </div>
                     </div>
@@ -382,14 +382,14 @@ export default async function HerbDetailPage({ params }: HerbDetailProps) {
                 </div>
 
                 {getTextValue(herb.field_conservation_notes as DrupalTextField) && (
-                  <div className="mt-6 bg-amber-50 border-l-4 border-amber-400 rounded-r-xl p-5">
-                    <h3 className="text-sm font-bold text-amber-800 uppercase tracking-wider mb-2 flex items-center gap-2">
+                  <div className="mt-6 bg-amber-50 dark:bg-amber-950/20 border-l-4 border-amber-400 rounded-r-xl p-5">
+                    <h3 className="text-sm font-bold text-amber-800 dark:text-amber-200 uppercase tracking-wider mb-2 flex items-center gap-2">
                       <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                         <path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
                       </svg>
                       Conservation Notes
                     </h3>
-                    <div className="prose prose-sm max-w-none text-amber-900">
+                    <div className="prose prose-sm max-w-none text-amber-900 dark:text-amber-200">
                       <SafeHtml html={getTextValue(herb.field_conservation_notes as DrupalTextField)!} />
                     </div>
                   </div>
@@ -403,7 +403,7 @@ export default async function HerbDetailPage({ params }: HerbDetailProps) {
                 <div className="grid md:grid-cols-2 gap-6">
                   {herb.field_tcm_properties.field_tcm_taste && herb.field_tcm_properties.field_tcm_taste.length > 0 && (
                     <div>
-                      <h3 className="text-sm font-bold text-amber-800 uppercase tracking-wider mb-3">Taste (味 Wèi)</h3>
+                      <h3 className="text-sm font-bold text-amber-800 dark:text-amber-200 uppercase tracking-wider mb-3">Taste (味 Wèi)</h3>
                       <div className="flex flex-wrap gap-2">
                         {herb.field_tcm_properties.field_tcm_taste.map((taste, idx) => (
                           <Tag key={idx} variant="amber">{taste}</Tag>
@@ -414,7 +414,7 @@ export default async function HerbDetailPage({ params }: HerbDetailProps) {
 
                   {herb.field_tcm_properties.field_tcm_temperature && (
                     <div>
-                      <h3 className="text-sm font-bold text-amber-800 uppercase tracking-wider mb-3">Temperature (性 Xìng)</h3>
+                      <h3 className="text-sm font-bold text-amber-800 dark:text-amber-200 uppercase tracking-wider mb-3">Temperature (性 Xìng)</h3>
                       <span className={`inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold ${
                         herb.field_tcm_properties.field_tcm_temperature.toLowerCase().includes('cold')
                           ? 'bg-blue-500 text-white'
@@ -433,7 +433,7 @@ export default async function HerbDetailPage({ params }: HerbDetailProps) {
 
                   {herb.field_tcm_properties.field_tcm_meridians && herb.field_tcm_properties.field_tcm_meridians.length > 0 && (
                     <div>
-                      <h3 className="text-sm font-bold text-amber-800 uppercase tracking-wider mb-3">Meridians (經絡 Jīngluò)</h3>
+                      <h3 className="text-sm font-bold text-amber-800 dark:text-amber-200 uppercase tracking-wider mb-3">Meridians (經絡 Jīngluò)</h3>
                       <div className="flex flex-wrap gap-2">
                         {herb.field_tcm_properties.field_tcm_meridians.map((meridian, idx) => (
                           <Tag key={idx} variant="purple">{meridian}</Tag>
@@ -444,16 +444,16 @@ export default async function HerbDetailPage({ params }: HerbDetailProps) {
 
                   {herb.field_tcm_properties.field_tcm_category && (
                     <div>
-                      <h3 className="text-sm font-bold text-amber-800 uppercase tracking-wider mb-3">Category</h3>
+                      <h3 className="text-sm font-bold text-amber-800 dark:text-amber-200 uppercase tracking-wider mb-3">Category</h3>
                       <Tag variant="orange">{herb.field_tcm_properties.field_tcm_category}</Tag>
                     </div>
                   )}
                 </div>
 
                 {getTextValue(herb.field_tcm_properties.field_tcm_functions as DrupalTextField) && (
-                  <div className="mt-6 pt-6 border-t border-amber-200">
-                    <h3 className="text-sm font-bold text-amber-800 uppercase tracking-wider mb-3">Functions & Indications</h3>
-                    <div className="prose max-w-none text-amber-900">
+                  <div className="mt-6 pt-6 border-t border-amber-200 dark:border-amber-800">
+                    <h3 className="text-sm font-bold text-amber-800 dark:text-amber-200 uppercase tracking-wider mb-3">Functions & Indications</h3>
+                    <div className="prose max-w-none text-amber-900 dark:text-amber-200">
                       <SafeHtml html={getTextValue(herb.field_tcm_properties.field_tcm_functions as DrupalTextField)!} />
                     </div>
                   </div>
@@ -471,8 +471,8 @@ export default async function HerbDetailPage({ params }: HerbDetailProps) {
                 )}
 
                 {herb.field_western_properties && herb.field_western_properties.length > 0 && (
-                  <div className="bg-blue-50/50 rounded-xl p-6 border border-blue-100">
-                    <h3 className="text-sm font-bold text-blue-700 uppercase tracking-wider mb-4">
+                  <div className="bg-blue-50/50 dark:bg-blue-950/20 rounded-xl p-6 border border-blue-100 dark:border-blue-800">
+                    <h3 className="text-sm font-bold text-blue-700 dark:text-blue-300 uppercase tracking-wider mb-4">
                       Western Herbal Properties
                     </h3>
                     <div className="flex flex-wrap gap-2">
@@ -484,8 +484,8 @@ export default async function HerbDetailPage({ params }: HerbDetailProps) {
                 )}
 
                 {herb.field_pharmacological_effects?.value && (
-                  <div className="mt-6 pt-6 border-t border-earth-200">
-                    <h3 className="text-lg font-semibold text-earth-700 mb-3">Pharmacological Effects</h3>
+                  <div className="mt-6 pt-6 border-t border-earth-200 dark:border-earth-700">
+                    <h3 className="text-lg font-semibold text-earth-700 dark:text-earth-300 mb-3">Pharmacological Effects</h3>
                     <div className="prose max-w-none">
                       <SafeHtml html={herb.field_pharmacological_effects.value} />
                     </div>
@@ -500,22 +500,22 @@ export default async function HerbDetailPage({ params }: HerbDetailProps) {
                 <div className="overflow-x-auto">
                   <table className="w-full">
                     <thead>
-                      <tr className="border-b-2 border-earth-200">
-                        <th className="text-left py-3 px-4 font-bold text-gray-800 text-sm uppercase tracking-wider">Compound</th>
-                        <th className="text-left py-3 px-4 font-bold text-gray-800 text-sm uppercase tracking-wider">Class</th>
-                        <th className="text-right py-3 px-4 font-bold text-gray-800 text-sm uppercase tracking-wider">%</th>
-                        <th className="text-left py-3 px-4 font-bold text-gray-800 text-sm uppercase tracking-wider">Effects</th>
+                      <tr className="border-b-2 border-earth-200 dark:border-earth-700">
+                        <th className="text-left py-3 px-4 font-bold text-gray-800 dark:text-earth-100 text-sm uppercase tracking-wider">Compound</th>
+                        <th className="text-left py-3 px-4 font-bold text-gray-800 dark:text-earth-100 text-sm uppercase tracking-wider">Class</th>
+                        <th className="text-right py-3 px-4 font-bold text-gray-800 dark:text-earth-100 text-sm uppercase tracking-wider">%</th>
+                        <th className="text-left py-3 px-4 font-bold text-gray-800 dark:text-earth-100 text-sm uppercase tracking-wider">Effects</th>
                       </tr>
                     </thead>
-                    <tbody className="divide-y divide-earth-100">
+                    <tbody className="divide-y divide-earth-100 dark:divide-earth-700">
                       {herb.field_active_constituents.map((constituent, idx) => (
-                        <tr key={idx} className="hover:bg-earth-50/50 transition-colors">
-                          <td className="py-3 px-4 font-semibold text-gray-900">{constituent.field_compound_name}</td>
-                          <td className="py-3 px-4 text-gray-600">{constituent.field_compound_class || '—'}</td>
-                          <td className="py-3 px-4 text-right font-mono text-gray-600">
+                        <tr key={idx} className="hover:bg-earth-50/50 dark:hover:bg-earth-800/50 transition-colors">
+                          <td className="py-3 px-4 font-semibold text-gray-900 dark:text-earth-100">{constituent.field_compound_name}</td>
+                          <td className="py-3 px-4 text-gray-600 dark:text-earth-300">{constituent.field_compound_class || '—'}</td>
+                          <td className="py-3 px-4 text-right font-mono text-gray-600 dark:text-earth-300">
                             {constituent.field_compound_percentage ? `${constituent.field_compound_percentage}%` : '—'}
                           </td>
-                          <td className="py-3 px-4 text-gray-600 text-sm">{constituent.field_compound_effects || '—'}</td>
+                          <td className="py-3 px-4 text-gray-600 dark:text-earth-300 text-sm">{constituent.field_compound_effects || '—'}</td>
                         </tr>
                       ))}
                     </tbody>
@@ -529,16 +529,16 @@ export default async function HerbDetailPage({ params }: HerbDetailProps) {
               <Section id="dosage" title="Recommended Dosage" icon="⚖️">
                 <div className="grid gap-4">
                   {herb.field_recommended_dosage.map((dosage, idx) => (
-                    <div key={idx} className="bg-gradient-to-r from-sage-50 to-earth-50 rounded-xl p-5 border border-sage-200 hover:shadow-md transition-shadow">
+                    <div key={idx} className="bg-gradient-to-r from-sage-50 to-earth-50 dark:from-sage-950 dark:to-earth-950 rounded-xl p-5 border border-sage-200 dark:border-sage-800 hover:shadow-md transition-shadow">
                       <div className="flex flex-wrap items-center gap-3 mb-2">
-                        <span className="text-lg font-bold text-gray-800">{dosage.field_dosage_form}</span>
+                        <span className="text-lg font-bold text-gray-800 dark:text-earth-100">{dosage.field_dosage_form}</span>
                         {dosage.field_dosage_population && (
-                          <span className="text-xs font-semibold bg-sage-200 text-sage-800 px-2 py-1 rounded-full">
+                          <span className="text-xs font-semibold bg-sage-200 dark:bg-sage-800 text-sage-800 dark:text-sage-200 px-2 py-1 rounded-full">
                             {dosage.field_dosage_population}
                           </span>
                         )}
                       </div>
-                      <p className="text-gray-700 text-lg">
+                      <p className="text-gray-700 dark:text-earth-200 text-lg">
                         <span className="font-semibold">{dosage.field_dosage_amount}</span>
                         {dosage.field_dosage_frequency && (
                           <span className="text-earth-500"> — {dosage.field_dosage_frequency}</span>
@@ -565,7 +565,7 @@ export default async function HerbDetailPage({ params }: HerbDetailProps) {
               <Section id="safety" title="Safety Information" icon="⚠️" variant="warning">
                 {herb.field_contraindications?.value && (
                   <div className="mb-6">
-                    <h3 className="text-lg font-bold text-red-800 mb-3 flex items-center gap-2">
+                    <h3 className="text-lg font-bold text-red-800 dark:text-red-200 mb-3 flex items-center gap-2">
                       <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                         <circle cx="12" cy="12" r="10"/>
                         <line x1="15" y1="9" x2="9" y2="15"/>
@@ -573,7 +573,7 @@ export default async function HerbDetailPage({ params }: HerbDetailProps) {
                       </svg>
                       Contraindications
                     </h3>
-                    <div className="prose max-w-none text-red-900">
+                    <div className="prose max-w-none text-red-900 dark:text-red-200">
                       <SafeHtml html={herb.field_contraindications.value} />
                     </div>
                   </div>
@@ -581,8 +581,8 @@ export default async function HerbDetailPage({ params }: HerbDetailProps) {
 
                 {herb.field_side_effects?.value && (
                   <div className="mb-6">
-                    <h3 className="text-lg font-bold text-orange-800 mb-3">Possible Side Effects</h3>
-                    <div className="prose max-w-none text-orange-900">
+                    <h3 className="text-lg font-bold text-orange-800 dark:text-orange-200 mb-3">Possible Side Effects</h3>
+                    <div className="prose max-w-none text-orange-900 dark:text-orange-200">
                       <SafeHtml html={herb.field_side_effects.value} />
                     </div>
                   </div>
@@ -590,15 +590,15 @@ export default async function HerbDetailPage({ params }: HerbDetailProps) {
 
                 {herb.field_drug_interactions && herb.field_drug_interactions.length > 0 && (
                   <div className="mb-6">
-                    <h3 className="text-lg font-bold text-red-800 mb-3">Drug Interactions</h3>
+                    <h3 className="text-lg font-bold text-red-800 dark:text-red-200 mb-3">Drug Interactions</h3>
                     <div className="space-y-3">
                       {herb.field_drug_interactions.map((interaction, idx) => (
-                        <div key={idx} className="bg-white rounded-lg p-4 border border-red-200 shadow-sm">
-                          <p className="font-bold text-red-900">{interaction.field_drug_name}</p>
-                          <p className="text-sm font-semibold text-red-600 mt-1">
+                        <div key={idx} className="bg-white dark:bg-earth-900 rounded-lg p-4 border border-red-200 dark:border-red-800 shadow-sm">
+                          <p className="font-bold text-red-900 dark:text-red-200">{interaction.field_drug_name}</p>
+                          <p className="text-sm font-semibold text-red-600 dark:text-red-300 mt-1">
                             Interaction: {interaction.field_interaction_type}
                           </p>
-                          <p className="text-sm text-red-800 mt-2">{interaction.field_interaction_description}</p>
+                          <p className="text-sm text-red-800 dark:text-red-300 mt-2">{interaction.field_interaction_description}</p>
                         </div>
                       ))}
                     </div>
@@ -606,25 +606,25 @@ export default async function HerbDetailPage({ params }: HerbDetailProps) {
                 )}
 
                 {herb.field_toxicity_info && (
-                  <div className="mb-6 bg-red-100 rounded-xl p-5 border border-red-300">
-                    <h3 className="text-lg font-bold text-red-900 mb-3">Toxicity Information</h3>
+                  <div className="mb-6 bg-red-100 dark:bg-red-950/30 rounded-xl p-5 border border-red-300 dark:border-red-800">
+                    <h3 className="text-lg font-bold text-red-900 dark:text-red-200 mb-3">Toxicity Information</h3>
                     <dl className="space-y-2">
                       {herb.field_toxicity_info.field_toxicity_level && (
                         <div className="flex gap-2">
-                          <dt className="font-semibold text-red-800">Level:</dt>
-                          <dd className="text-red-900">{herb.field_toxicity_info.field_toxicity_level}</dd>
+                          <dt className="font-semibold text-red-800 dark:text-red-300">Level:</dt>
+                          <dd className="text-red-900 dark:text-red-200">{herb.field_toxicity_info.field_toxicity_level}</dd>
                         </div>
                       )}
                       {herb.field_toxicity_info.field_toxic_compounds && (
                         <div className="flex gap-2">
-                          <dt className="font-semibold text-red-800">Compounds:</dt>
-                          <dd className="text-red-900">{herb.field_toxicity_info.field_toxic_compounds}</dd>
+                          <dt className="font-semibold text-red-800 dark:text-red-300">Compounds:</dt>
+                          <dd className="text-red-900 dark:text-red-200">{herb.field_toxicity_info.field_toxic_compounds}</dd>
                         </div>
                       )}
                       {herb.field_toxicity_info.field_toxic_symptoms && (
                         <div className="flex gap-2">
-                          <dt className="font-semibold text-red-800">Symptoms:</dt>
-                          <dd className="text-red-900">{herb.field_toxicity_info.field_toxic_symptoms}</dd>
+                          <dt className="font-semibold text-red-800 dark:text-red-300">Symptoms:</dt>
+                          <dd className="text-red-900 dark:text-red-200">{herb.field_toxicity_info.field_toxic_symptoms}</dd>
                         </div>
                       )}
                     </dl>
@@ -740,8 +740,8 @@ export default async function HerbDetailPage({ params }: HerbDetailProps) {
                 <div className="grid md:grid-cols-2 gap-4">
                   {herb.field_preparation_methods.map((method, idx) => (
                     <div key={idx} className="bg-gradient-to-br from-sage-50 to-earth-50 rounded-xl p-5 border border-sage-200 hover:shadow-lg transition-all hover:-translate-y-1">
-                      <h3 className="font-bold text-gray-800 text-lg mb-2">{method.field_method_type}</h3>
-                      <p className="text-gray-700 text-sm leading-relaxed">{method.field_method_instructions}</p>
+                      <h3 className="font-bold text-gray-800 dark:text-earth-100 text-lg mb-2">{method.field_method_type}</h3>
+                      <p className="text-gray-700 dark:text-earth-300 text-sm leading-relaxed">{method.field_method_instructions}</p>
                       {method.field_method_time && (
                         <p className="text-sage-600 text-sm mt-3 font-medium flex items-center gap-2">
                           <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -762,32 +762,32 @@ export default async function HerbDetailPage({ params }: HerbDetailProps) {
               <Section id="practical" title="Practical Information" icon="&#x1F4CB;">
                 <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
                   {herb.field_cost_tier && (() => { const c = getFieldConfig(costTierMap, herb.field_cost_tier); return c ? (
-                    <div className="bg-white rounded-xl p-5 border border-earth-100 shadow-sm">
-                      <h3 className="text-xs font-bold text-earth-500 uppercase tracking-wider mb-2">Cost</h3>
+                    <div className="bg-white dark:bg-earth-900 rounded-xl p-5 border border-earth-100 dark:border-earth-700 shadow-sm">
+                      <h3 className="text-xs font-bold text-earth-500 dark:text-earth-400 uppercase tracking-wider mb-2">Cost</h3>
                       <span className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${c.bg} ${c.text}`}>{c.label}</span>
                     </div>
                   ) : null; })()}
                   {herb.field_availability && (() => { const c = getFieldConfig(availabilityMap, herb.field_availability); return c ? (
-                    <div className="bg-white rounded-xl p-5 border border-earth-100 shadow-sm">
-                      <h3 className="text-xs font-bold text-earth-500 uppercase tracking-wider mb-2">Availability</h3>
+                    <div className="bg-white dark:bg-earth-900 rounded-xl p-5 border border-earth-100 dark:border-earth-700 shadow-sm">
+                      <h3 className="text-xs font-bold text-earth-500 dark:text-earth-400 uppercase tracking-wider mb-2">Availability</h3>
                       <span className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${c.bg} ${c.text}`}>{c.label}</span>
                     </div>
                   ) : null; })()}
                   {herb.field_palatability && (() => { const c = getFieldConfig(palatabilityMap, herb.field_palatability); return c ? (
-                    <div className="bg-white rounded-xl p-5 border border-earth-100 shadow-sm">
-                      <h3 className="text-xs font-bold text-earth-500 uppercase tracking-wider mb-2">Taste</h3>
+                    <div className="bg-white dark:bg-earth-900 rounded-xl p-5 border border-earth-100 dark:border-earth-700 shadow-sm">
+                      <h3 className="text-xs font-bold text-earth-500 dark:text-earth-400 uppercase tracking-wider mb-2">Taste</h3>
                       <span className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${c.bg} ${c.text}`}>{c.label}</span>
                     </div>
                   ) : null; })()}
                   {herb.field_best_season && (() => { const c = getFieldConfig(bestSeasonMap, herb.field_best_season); return c ? (
-                    <div className="bg-white rounded-xl p-5 border border-earth-100 shadow-sm">
-                      <h3 className="text-xs font-bold text-earth-500 uppercase tracking-wider mb-2">Best Season</h3>
+                    <div className="bg-white dark:bg-earth-900 rounded-xl p-5 border border-earth-100 dark:border-earth-700 shadow-sm">
+                      <h3 className="text-xs font-bold text-earth-500 dark:text-earth-400 uppercase tracking-wider mb-2">Best Season</h3>
                       <span className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${c.bg} ${c.text}`}>{c.label}</span>
                     </div>
                   ) : null; })()}
                   {herb.field_pregnancy_safety && (() => { const c = getFieldConfig(pregnancySafetyMap, herb.field_pregnancy_safety); return c ? (
-                    <div className="bg-white rounded-xl p-5 border border-earth-100 shadow-sm">
-                      <h3 className="text-xs font-bold text-earth-500 uppercase tracking-wider mb-2">Pregnancy Safety</h3>
+                    <div className="bg-white dark:bg-earth-900 rounded-xl p-5 border border-earth-100 dark:border-earth-700 shadow-sm">
+                      <h3 className="text-xs font-bold text-earth-500 dark:text-earth-400 uppercase tracking-wider mb-2">Pregnancy Safety</h3>
                       <span className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${c.bg} ${c.text}`}>{c.label}</span>
                     </div>
                   ) : null; })()}
@@ -800,25 +800,25 @@ export default async function HerbDetailPage({ params }: HerbDetailProps) {
               <Section id="storage" title="Storage & Sourcing" icon="📦">
                 <div className="grid md:grid-cols-2 gap-6">
                   {herb.field_storage_requirements && (
-                    <div className="bg-earth-50/50 rounded-xl p-5 border border-earth-100">
-                      <h3 className="text-sm font-bold text-earth-700 uppercase tracking-wider mb-4">Storage Requirements</h3>
+                    <div className="bg-earth-50/50 dark:bg-earth-900/50 rounded-xl p-5 border border-earth-100 dark:border-earth-700">
+                      <h3 className="text-sm font-bold text-earth-700 dark:text-earth-300 uppercase tracking-wider mb-4">Storage Requirements</h3>
                       <dl className="space-y-3">
                         {herb.field_storage_requirements.field_storage_conditions && (
                           <div>
-                            <dt className="text-xs font-semibold text-earth-500 uppercase">Conditions</dt>
-                            <dd className="text-gray-800">{herb.field_storage_requirements.field_storage_conditions}</dd>
+                            <dt className="text-xs font-semibold text-earth-500 dark:text-earth-400 uppercase">Conditions</dt>
+                            <dd className="text-gray-800 dark:text-earth-200">{herb.field_storage_requirements.field_storage_conditions}</dd>
                           </div>
                         )}
                         {herb.field_storage_requirements.field_shelf_life && (
                           <div>
-                            <dt className="text-xs font-semibold text-earth-500 uppercase">Shelf Life</dt>
-                            <dd className="text-gray-800">{herb.field_storage_requirements.field_shelf_life}</dd>
+                            <dt className="text-xs font-semibold text-earth-500 dark:text-earth-400 uppercase">Shelf Life</dt>
+                            <dd className="text-gray-800 dark:text-earth-200">{herb.field_storage_requirements.field_shelf_life}</dd>
                           </div>
                         )}
                         {herb.field_storage_requirements.field_storage_temperature && (
                           <div>
-                            <dt className="text-xs font-semibold text-earth-500 uppercase">Temperature</dt>
-                            <dd className="text-gray-800">{herb.field_storage_requirements.field_storage_temperature}</dd>
+                            <dt className="text-xs font-semibold text-earth-500 dark:text-earth-400 uppercase">Temperature</dt>
+                            <dd className="text-gray-800 dark:text-earth-200">{herb.field_storage_requirements.field_storage_temperature}</dd>
                           </div>
                         )}
                       </dl>
@@ -826,25 +826,25 @@ export default async function HerbDetailPage({ params }: HerbDetailProps) {
                   )}
 
                   {herb.field_sourcing_info && (
-                    <div className="bg-sage-50/50 rounded-xl p-5 border border-sage-100">
-                      <h3 className="text-sm font-bold text-sage-700 uppercase tracking-wider mb-4">Sourcing Information</h3>
+                    <div className="bg-sage-50/50 dark:bg-sage-900/20 rounded-xl p-5 border border-sage-100 dark:border-sage-800">
+                      <h3 className="text-sm font-bold text-sage-700 dark:text-sage-300 uppercase tracking-wider mb-4">Sourcing Information</h3>
                       <dl className="space-y-3">
                         {herb.field_sourcing_info.field_sourcing_type && (
                           <div>
-                            <dt className="text-xs font-semibold text-sage-500 uppercase">Type</dt>
-                            <dd className="text-sage-800">{herb.field_sourcing_info.field_sourcing_type}</dd>
+                            <dt className="text-xs font-semibold text-sage-500 dark:text-sage-400 uppercase">Type</dt>
+                            <dd className="text-sage-800 dark:text-sage-200">{herb.field_sourcing_info.field_sourcing_type}</dd>
                           </div>
                         )}
                         {herb.field_sourcing_info.field_organic_available !== undefined && (
                           <div>
-                            <dt className="text-xs font-semibold text-sage-500 uppercase">Organic Available</dt>
-                            <dd className="text-sage-800">{herb.field_sourcing_info.field_organic_available ? 'Yes' : 'No'}</dd>
+                            <dt className="text-xs font-semibold text-sage-500 dark:text-sage-400 uppercase">Organic Available</dt>
+                            <dd className="text-sage-800 dark:text-sage-200">{herb.field_sourcing_info.field_organic_available ? 'Yes' : 'No'}</dd>
                           </div>
                         )}
                         {herb.field_sourcing_info.field_sustainable_harvest && (
                           <div>
-                            <dt className="text-xs font-semibold text-sage-500 uppercase">Sustainability</dt>
-                            <dd className="text-sage-800">{herb.field_sourcing_info.field_sustainable_harvest}</dd>
+                            <dt className="text-xs font-semibold text-sage-500 dark:text-sage-400 uppercase">Sustainability</dt>
+                            <dd className="text-sage-800 dark:text-sage-200">{herb.field_sourcing_info.field_sustainable_harvest}</dd>
                           </div>
                         )}
                       </dl>
@@ -887,7 +887,7 @@ export default async function HerbDetailPage({ params }: HerbDetailProps) {
                         <Link
                           key={species.id}
                           href={`/herbs/${species.id}`}
-                          className="inline-flex items-center gap-2 bg-earth-100 hover:bg-earth-200 text-gray-800 px-4 py-2 rounded-full text-sm font-medium transition-all hover:scale-105 hover:shadow-md"
+                          className="inline-flex items-center gap-2 bg-earth-100 hover:bg-earth-200 dark:bg-earth-800 dark:hover:bg-earth-700 text-gray-800 dark:text-earth-200 px-4 py-2 rounded-full text-sm font-medium transition-all hover:scale-105 hover:shadow-md"
                         >
                           {species.title || 'View Herb'}
                           <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">

@@ -6,7 +6,7 @@ import React from 'react';
 export function BotanicalDivider({ className = '' }: { className?: string }) {
   return (
     <div className={`flex items-center justify-center py-6 ${className}`}>
-      <svg viewBox="0 0 200 24" className="w-48 h-6 text-earth-300" fill="currentColor">
+      <svg viewBox="0 0 200 24" className="w-48 h-6 text-earth-300 dark:text-earth-600" fill="currentColor">
         <path d="M100 12c-8-8-20-10-30-8s-18 8-25 8-15-4-25-4-18 4-20 4v4c2 0 10-4 20-4s18 4 25 4 15-6 25-8 22 0 30 8c8-8 20-10 30-8s18 8 25 8 15-4 25-4 18 4 20 4v-4c-2 0-10 4-20 4s-18-4-25-4-15 6-25 8-22 0-30-8z" opacity="0.6"/>
         <circle cx="100" cy="12" r="4"/>
         <circle cx="85" cy="12" r="2"/>
@@ -39,7 +39,7 @@ export function PageWrapper({
   className?: string
 }) {
   return (
-    <div className={`min-h-screen bg-gradient-to-b from-earth-50 via-white to-sage-50 ${className}`}>
+    <div className={`min-h-screen bg-gradient-to-b from-earth-50 via-white to-sage-50 dark:from-earth-950 dark:via-[#1e331e] dark:to-sage-950 ${className}`}>
       <LeafPattern />
       <div className="relative">
         {children}
@@ -67,23 +67,23 @@ export function Section({
   className?: string;
 }) {
   const variants = {
-    default: 'bg-white border-earth-200',
-    warning: 'bg-gradient-to-br from-red-50 to-orange-50 border-red-200',
-    tcm: 'bg-gradient-to-br from-amber-50 via-orange-50 to-red-50 border-amber-300',
-    cultural: 'bg-gradient-to-br from-sage-50 via-earth-50 to-gold-50 border-sage-300',
-    feature: 'bg-gradient-to-br from-earth-50 to-sage-50 border-earth-200',
-    card: 'bg-white border-earth-100 shadow-sm',
-    botanical: 'bg-gradient-to-br from-cream-50 via-sage-50/30 to-earth-50/20 border-sage-200',
+    default: 'bg-white border-earth-200 dark:bg-earth-900 dark:border-earth-700',
+    warning: 'bg-gradient-to-br from-red-50 to-orange-50 border-red-200 dark:from-red-950/30 dark:to-orange-950/20 dark:border-red-800',
+    tcm: 'bg-gradient-to-br from-amber-50 via-orange-50 to-red-50 border-amber-300 dark:from-amber-950/30 dark:via-orange-950/20 dark:to-red-950/10 dark:border-amber-700',
+    cultural: 'bg-gradient-to-br from-sage-50 via-earth-50 to-gold-50 border-sage-300 dark:from-sage-950/30 dark:via-earth-950/20 dark:to-gold-950/10 dark:border-sage-700',
+    feature: 'bg-gradient-to-br from-earth-50 to-sage-50 border-earth-200 dark:from-earth-900 dark:to-sage-900 dark:border-earth-700',
+    card: 'bg-white border-earth-100 shadow-sm dark:bg-earth-900 dark:border-earth-700',
+    botanical: 'bg-gradient-to-br from-cream-50 via-sage-50/30 to-earth-50/20 border-sage-200 dark:from-earth-900 dark:via-sage-950/30 dark:to-earth-950/20 dark:border-sage-700',
   };
 
   const titleColors = {
-    default: 'text-gray-900',
-    warning: 'text-red-800',
-    tcm: 'text-amber-900',
-    cultural: 'text-gray-900',
-    feature: 'text-gray-900',
-    card: 'text-gray-900',
-    botanical: 'text-gray-900',
+    default: 'text-gray-900 dark:text-earth-100',
+    warning: 'text-red-800 dark:text-red-200',
+    tcm: 'text-amber-900 dark:text-amber-200',
+    cultural: 'text-gray-900 dark:text-earth-100',
+    feature: 'text-gray-900 dark:text-earth-100',
+    card: 'text-gray-900 dark:text-earth-100',
+    botanical: 'text-gray-900 dark:text-earth-100',
   };
 
   return (
@@ -99,7 +99,7 @@ export function Section({
             {title}
           </h2>
           {subtitle && (
-            <p className="text-gray-600 mt-2 text-lg">{subtitle}</p>
+            <p className="text-gray-600 dark:text-earth-300 mt-2 text-lg">{subtitle}</p>
           )}
         </div>
       )}
@@ -119,19 +119,19 @@ export function Tag({
   size?: 'sm' | 'md' | 'lg';
 }) {
   const variants = {
-    sage: 'bg-sage-100 text-sage-800 border-sage-200',
-    earth: 'bg-earth-100 text-gray-800 border-earth-200',
-    amber: 'bg-amber-100 text-amber-800 border-amber-200',
-    blue: 'bg-blue-100 text-blue-800 border-blue-200',
-    purple: 'bg-purple-100 text-purple-800 border-purple-200',
-    red: 'bg-red-100 text-red-800 border-red-200',
-    cyan: 'bg-cyan-100 text-cyan-800 border-cyan-200',
-    orange: 'bg-orange-100 text-orange-800 border-orange-200',
-    green: 'bg-green-100 text-green-800 border-green-200',
-    gray: 'bg-gray-100 text-gray-800 border-gray-200',
-    gold: 'bg-gold-100 text-gold-700 border-gold-200',
-    warm: 'bg-warm-100 text-warm-700 border-warm-200',
-    muted: 'bg-gray-100 text-gray-600 border-gray-200',
+    sage: 'bg-sage-100 text-sage-800 border-sage-200 dark:bg-sage-900/40 dark:text-sage-200 dark:border-sage-700',
+    earth: 'bg-earth-100 text-gray-800 border-earth-200 dark:bg-earth-900/40 dark:text-earth-200 dark:border-earth-700',
+    amber: 'bg-amber-100 text-amber-800 border-amber-200 dark:bg-amber-900/40 dark:text-amber-200 dark:border-amber-700',
+    blue: 'bg-blue-100 text-blue-800 border-blue-200 dark:bg-blue-900/40 dark:text-blue-200 dark:border-blue-700',
+    purple: 'bg-purple-100 text-purple-800 border-purple-200 dark:bg-purple-900/40 dark:text-purple-200 dark:border-purple-700',
+    red: 'bg-red-100 text-red-800 border-red-200 dark:bg-red-900/40 dark:text-red-200 dark:border-red-700',
+    cyan: 'bg-cyan-100 text-cyan-800 border-cyan-200 dark:bg-cyan-900/40 dark:text-cyan-200 dark:border-cyan-700',
+    orange: 'bg-orange-100 text-orange-800 border-orange-200 dark:bg-orange-900/40 dark:text-orange-200 dark:border-orange-700',
+    green: 'bg-green-100 text-green-800 border-green-200 dark:bg-green-900/40 dark:text-green-200 dark:border-green-700',
+    gray: 'bg-gray-100 text-gray-800 border-gray-200 dark:bg-gray-800/40 dark:text-gray-200 dark:border-gray-600',
+    gold: 'bg-gold-100 text-gold-700 border-gold-200 dark:bg-gold-900/40 dark:text-gold-300 dark:border-gold-700',
+    warm: 'bg-warm-100 text-warm-700 border-warm-200 dark:bg-warm-900/40 dark:text-warm-300 dark:border-warm-600',
+    muted: 'bg-gray-100 text-gray-600 border-gray-200 dark:bg-gray-800/40 dark:text-gray-300 dark:border-gray-600',
   };
 
   const sizes = {
@@ -169,14 +169,14 @@ export function FeatureCard({
   return (
     <Wrapper
       {...wrapperProps}
-      className={`group relative block bg-white rounded-2xl border border-earth-200 p-6 card-interactive hover:border-sage-300 ${href ? 'cursor-pointer' : ''} ${variant === 'featured' ? 'md:p-8' : ''}`}
+      className={`group relative block bg-white dark:bg-earth-900 rounded-2xl border border-earth-200 dark:border-earth-700 p-6 card-interactive hover:border-sage-300 dark:hover:border-sage-700 ${href ? 'cursor-pointer' : ''} ${variant === 'featured' ? 'md:p-8' : ''}`}
     >
       <div className="text-4xl mb-4">{icon}</div>
-      <h3 className={`font-serif font-bold text-gray-900 mb-2 group-hover:text-sage-700 transition-colors ${variant === 'featured' ? 'text-2xl' : 'text-xl'}`}>
+      <h3 className={`font-serif font-bold text-gray-900 dark:text-earth-100 mb-2 group-hover:text-sage-700 dark:group-hover:text-sage-400 transition-colors ${variant === 'featured' ? 'text-2xl' : 'text-xl'}`}>
         {title}
       </h3>
       {description && (
-        <p className="text-gray-600 text-sm leading-relaxed mb-4">{description}</p>
+        <p className="text-gray-600 dark:text-earth-300 text-sm leading-relaxed mb-4">{description}</p>
       )}
       {tags && tags.length > 0 && (
         <div className="flex flex-wrap gap-2">
@@ -186,7 +186,7 @@ export function FeatureCard({
         </div>
       )}
       {href && (
-        <div className="mt-4 flex items-center gap-2 text-sage-600 font-medium text-sm group-hover:text-sage-700 group-hover:gap-3 transition-all">
+        <div className="mt-4 flex items-center gap-2 text-sage-600 dark:text-sage-400 font-medium text-sm group-hover:text-sage-700 dark:group-hover:text-sage-300 group-hover:gap-3 transition-all">
           Learn more
           <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
             <path d="M5 12h14M12 5l7 7-7 7"/>
@@ -218,22 +218,22 @@ export function HeroSection({
   return (
     <header className={`relative overflow-hidden ${sizes[size]}`}>
       {/* Background decoration */}
-      <div className="absolute inset-0 bg-gradient-to-br from-earth-100 via-sage-50 to-earth-50" />
-      <div className="absolute inset-0 opacity-[0.03]" style={{
+      <div className="absolute inset-0 bg-gradient-to-br from-earth-100 via-sage-50 to-earth-50 dark:from-earth-950 dark:via-sage-950 dark:to-earth-900" />
+      <div className="absolute inset-0 opacity-[0.03] dark:opacity-[0.05]" style={{
         backgroundImage: `url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M50 10c0 20-15 40-15 60s15 20 15 20 15 0 15-20-15-40-15-60z' fill='%23527a5f'/%3E%3C/svg%3E")`,
         backgroundSize: '100px 100px'
       }} />
 
       {/* Decorative circles */}
-      <div className="absolute -top-20 -right-20 w-80 h-80 bg-sage-200/20 rounded-full blur-3xl" />
-      <div className="absolute -bottom-20 -left-20 w-60 h-60 bg-earth-200/20 rounded-full blur-3xl" />
+      <div className="absolute -top-20 -right-20 w-80 h-80 bg-sage-200/20 dark:bg-sage-800/15 rounded-full blur-3xl" />
+      <div className="absolute -bottom-20 -left-20 w-60 h-60 bg-earth-200/20 dark:bg-earth-800/15 rounded-full blur-3xl" />
 
       <div className="relative max-w-6xl mx-auto px-4 text-center">
-        <h1 className="font-serif text-5xl md:text-6xl lg:text-7xl font-bold text-gray-900 mb-6 tracking-tight">
+        <h1 className="font-serif text-5xl md:text-6xl lg:text-7xl font-bold text-gray-900 dark:text-earth-100 mb-6 tracking-tight">
           {title}
         </h1>
         {subtitle && (
-          <p className="text-xl md:text-2xl text-gray-600 max-w-3xl mx-auto mb-8 leading-relaxed">
+          <p className="text-xl md:text-2xl text-gray-600 dark:text-earth-300 max-w-3xl mx-auto mb-8 leading-relaxed">
             {subtitle}
           </p>
         )}
@@ -248,10 +248,10 @@ export function StatsBar({ stats }: { stats: { label: string; value: string | nu
   return (
     <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
       {stats.map((stat, idx) => (
-        <div key={idx} className="bg-white/80 backdrop-blur-sm rounded-xl border border-earth-200 p-4 text-center">
+        <div key={idx} className="bg-white/80 dark:bg-earth-900/80 backdrop-blur-sm rounded-xl border border-earth-200 dark:border-earth-700 p-4 text-center">
           {stat.icon && <span className="text-2xl mb-2 block">{stat.icon}</span>}
-          <div className="text-3xl font-bold text-gray-800 font-serif">{stat.value}</div>
-          <div className="text-sm text-gray-600 mt-1">{stat.label}</div>
+          <div className="text-3xl font-bold text-gray-800 dark:text-earth-100 font-serif">{stat.value}</div>
+          <div className="text-sm text-gray-600 dark:text-earth-300 mt-1">{stat.label}</div>
         </div>
       ))}
     </div>
@@ -277,9 +277,9 @@ export function EmptyState({
       <div className="text-6xl mb-4 opacity-50">
         {typeof icon === 'string' ? icon : <div className="flex justify-center">{icon}</div>}
       </div>
-      <h3 className="font-serif text-2xl font-bold text-gray-800 mb-2">{title}</h3>
+      <h3 className="font-serif text-2xl font-bold text-gray-800 dark:text-earth-100 mb-2">{title}</h3>
       {description && (
-        <p className="text-gray-600 max-w-md mx-auto mb-6">{description}</p>
+        <p className="text-gray-600 dark:text-earth-300 max-w-md mx-auto mb-6">{description}</p>
       )}
       {action}
     </div>
@@ -305,18 +305,18 @@ export function DisclaimerBox({
   );
 
   return (
-    <div className={`bg-gradient-to-r from-amber-50 to-yellow-50 border border-amber-200 rounded-2xl p-6 md:p-8 shadow-sm ${className}`}>
+    <div className={`bg-gradient-to-r from-amber-50 to-yellow-50 dark:from-amber-950/20 dark:to-yellow-950/10 border border-amber-200 dark:border-amber-800 rounded-2xl p-6 md:p-8 shadow-sm ${className}`}>
       <div className="flex gap-4">
         <div className="flex-shrink-0">
-          <div className="w-12 h-12 bg-amber-100 rounded-xl flex items-center justify-center">
-            <svg className="w-6 h-6 text-amber-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+          <div className="w-12 h-12 bg-amber-100 dark:bg-amber-900/40 rounded-xl flex items-center justify-center">
+            <svg className="w-6 h-6 text-amber-600 dark:text-amber-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
               <path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
             </svg>
           </div>
         </div>
         <div>
-          <h3 className="font-bold text-amber-900 text-lg mb-2">{title}</h3>
-          <div className="text-amber-800 leading-relaxed">{children || defaultContent}</div>
+          <h3 className="font-bold text-amber-900 dark:text-amber-200 text-lg mb-2">{title}</h3>
+          <div className="text-amber-800 dark:text-amber-300 leading-relaxed">{children || defaultContent}</div>
         </div>
       </div>
     </div>
@@ -362,7 +362,7 @@ export function BackLink({
     <div className={`text-center py-8 ${className}`}>
       <a
         href={href}
-        className="inline-flex items-center gap-3 text-earth-600 hover:text-gray-800 font-semibold text-lg transition-colors group"
+        className="inline-flex items-center gap-3 text-earth-600 dark:text-sage-400 hover:text-gray-800 dark:hover:text-earth-100 font-semibold text-lg transition-colors group"
       >
         <svg className="w-5 h-5 transition-transform group-hover:-translate-x-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
           <path d="M19 12H5M12 19l-7-7 7-7"/>
@@ -384,8 +384,8 @@ export function TableOfContents({
   if (items.length === 0) return null;
 
   return (
-    <nav className={`bg-white/80 backdrop-blur-sm rounded-2xl border border-earth-200 p-6 shadow-lg ${className}`}>
-      <h3 className="text-sm font-bold text-earth-500 uppercase tracking-widest mb-4 flex items-center gap-2">
+    <nav className={`bg-white/80 dark:bg-earth-900/80 backdrop-blur-sm rounded-2xl border border-earth-200 dark:border-earth-700 p-6 shadow-lg ${className}`}>
+      <h3 className="text-sm font-bold text-earth-500 dark:text-earth-400 uppercase tracking-widest mb-4 flex items-center gap-2">
         <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
           <path d="M4 6h16M4 12h16M4 18h12"/>
         </svg>
@@ -396,7 +396,7 @@ export function TableOfContents({
           <li key={item.id}>
             <a
               href={`#${item.id}`}
-              className="block py-2 px-3 text-sm text-earth-600 hover:text-gray-900 hover:bg-earth-50 rounded-lg transition-colors font-medium"
+              className="block py-2 px-3 text-sm text-earth-600 dark:text-earth-300 hover:text-gray-900 dark:hover:text-earth-100 hover:bg-earth-50 dark:hover:bg-earth-800 rounded-lg transition-colors font-medium"
             >
               {item.label}
             </a>
@@ -418,11 +418,11 @@ export function IconBox({
   size?: 'sm' | 'md' | 'lg';
 }) {
   const variants = {
-    sage: 'bg-sage-100 text-sage-600',
-    earth: 'bg-earth-100 text-earth-600',
-    amber: 'bg-amber-100 text-amber-600',
-    red: 'bg-red-100 text-red-600',
-    blue: 'bg-blue-100 text-blue-600',
+    sage: 'bg-sage-100 text-sage-600 dark:bg-sage-900/40 dark:text-sage-400',
+    earth: 'bg-earth-100 text-earth-600 dark:bg-earth-900/40 dark:text-earth-400',
+    amber: 'bg-amber-100 text-amber-600 dark:bg-amber-900/40 dark:text-amber-400',
+    red: 'bg-red-100 text-red-600 dark:bg-red-900/40 dark:text-red-400',
+    blue: 'bg-blue-100 text-blue-600 dark:bg-blue-900/40 dark:text-blue-400',
   };
 
   const sizes = {
@@ -461,7 +461,7 @@ export function GlowCard({
       <div
         className={`absolute -inset-0.5 bg-gradient-to-r ${glowColors[glowColor]} rounded-2xl opacity-0 group-hover:opacity-100 blur-sm transition-opacity duration-500`}
       />
-      <div className="relative bg-white rounded-2xl border border-earth-100 shadow-sm group-hover:shadow-xl transition-all duration-300">
+      <div className="relative bg-white dark:bg-earth-900 rounded-2xl border border-earth-100 dark:border-earth-700 shadow-sm group-hover:shadow-xl transition-all duration-300">
         {children}
       </div>
     </div>
@@ -487,12 +487,12 @@ export function TestimonialCard({
       className={`relative overflow-hidden rounded-2xl p-8 ${
         variant === 'featured'
           ? 'bg-gradient-to-br from-earth-700 via-earth-800 to-sage-800 text-white'
-          : 'bg-white border border-earth-100 shadow-sm'
+          : 'bg-white dark:bg-earth-900 border border-earth-100 dark:border-earth-700 shadow-sm'
       }`}
     >
       {/* Decorative quote mark */}
       <div className={`absolute top-4 right-4 text-6xl font-serif leading-none ${
-        variant === 'featured' ? 'text-white/10' : 'text-sage-200'
+        variant === 'featured' ? 'text-white/10' : 'text-sage-200 dark:text-sage-800'
       }`}>
         &ldquo;
       </div>
@@ -504,7 +504,7 @@ export function TestimonialCard({
 
       <div className="relative">
         <p className={`text-lg leading-relaxed mb-6 ${
-          variant === 'featured' ? 'text-earth-100' : 'text-gray-700'
+          variant === 'featured' ? 'text-earth-100' : 'text-gray-700 dark:text-earth-200'
         }`}>
           {quote}
         </p>
@@ -521,13 +521,13 @@ export function TestimonialCard({
           )}
           <div>
             <p className={`font-semibold ${
-              variant === 'featured' ? 'text-white' : 'text-gray-800'
+              variant === 'featured' ? 'text-white' : 'text-gray-800 dark:text-earth-100'
             }`}>
               {author}
             </p>
             {role && (
               <p className={`text-sm ${
-                variant === 'featured' ? 'text-earth-300' : 'text-sage-600'
+                variant === 'featured' ? 'text-earth-300' : 'text-sage-600 dark:text-sage-400'
               }`}>
                 {role}
               </p>
@@ -664,11 +664,11 @@ export function BotanicalProgress({
     <div className="space-y-2">
       {(label || showValue) && (
         <div className="flex items-center justify-between text-sm">
-          {label && <span className="text-earth-700 font-medium">{label}</span>}
-          {showValue && <span className="text-sage-600 font-semibold">{Math.round(percentage)}%</span>}
+          {label && <span className="text-earth-700 dark:text-earth-300 font-medium">{label}</span>}
+          {showValue && <span className="text-sage-600 dark:text-sage-400 font-semibold">{Math.round(percentage)}%</span>}
         </div>
       )}
-      <div className="relative h-3 bg-earth-100 rounded-full overflow-hidden">
+      <div className="relative h-3 bg-earth-100 dark:bg-earth-800 rounded-full overflow-hidden">
         {/* Background pattern */}
         <div className="absolute inset-0 opacity-30">
           <div
@@ -706,13 +706,13 @@ export function Accordion({
       {items.map((item, index) => (
         <div
           key={index}
-          className="bg-white rounded-xl border border-earth-100 overflow-hidden shadow-sm"
+          className="bg-white dark:bg-earth-900 rounded-xl border border-earth-100 dark:border-earth-700 overflow-hidden shadow-sm"
         >
           <button
             onClick={() => setOpenIndex(openIndex === index ? null : index)}
-            className="w-full flex items-center justify-between px-6 py-4 text-left hover:bg-earth-50/50 transition-colors"
+            className="w-full flex items-center justify-between px-6 py-4 text-left hover:bg-earth-50/50 dark:hover:bg-earth-800/50 transition-colors"
           >
-            <span className="font-serif font-semibold text-gray-800">{item.title}</span>
+            <span className="font-serif font-semibold text-gray-800 dark:text-earth-100">{item.title}</span>
             <svg
               className={`w-5 h-5 text-sage-600 transition-transform duration-300 ${
                 openIndex === index ? 'rotate-180' : ''
@@ -729,7 +729,7 @@ export function Accordion({
               openIndex === index ? 'max-h-96' : 'max-h-0'
             }`}
           >
-            <div className="px-6 pb-4 text-gray-600 leading-relaxed border-t border-earth-100 pt-4">
+            <div className="px-6 pb-4 text-gray-600 dark:text-earth-300 leading-relaxed border-t border-earth-100 dark:border-earth-700 pt-4">
               {item.content}
             </div>
           </div>
@@ -805,15 +805,15 @@ export function PillNav({
   className?: string;
 }) {
   return (
-    <div className={`inline-flex bg-earth-100 rounded-full p-1 ${className}`}>
+    <div className={`inline-flex bg-earth-100 dark:bg-earth-800 rounded-full p-1 ${className}`}>
       {items.map((item, index) => (
         <button
           key={index}
           onClick={() => onChange(index)}
           className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 ${
             activeIndex === index
-              ? 'bg-white text-gray-800 shadow-sm'
-              : 'text-earth-600 hover:text-gray-800'
+              ? 'bg-white dark:bg-earth-700 text-gray-800 dark:text-earth-100 shadow-sm'
+              : 'text-earth-600 dark:text-earth-300 hover:text-gray-800 dark:hover:text-earth-100'
           }`}
         >
           {item.icon && <span>{item.icon}</span>}
@@ -840,9 +840,9 @@ export function CornerFlourish({
   };
 
   const colors = {
-    sage: 'text-sage-200',
-    earth: 'text-earth-200',
-    gold: 'text-gold-200',
+    sage: 'text-sage-200 dark:text-sage-800',
+    earth: 'text-earth-200 dark:text-earth-800',
+    gold: 'text-gold-200 dark:text-gold-800',
   };
 
   return (
@@ -859,8 +859,8 @@ export function CornerFlourish({
 export function ScrollIndicator({ className = '' }: { className?: string }) {
   return (
     <div className={`flex flex-col items-center gap-2 ${className}`}>
-      <span className="text-xs text-earth-400 uppercase tracking-widest font-medium">Scroll</span>
-      <div className="w-6 h-10 border-2 border-earth-300 rounded-full flex justify-center pt-2">
+      <span className="text-xs text-earth-400 dark:text-earth-500 uppercase tracking-widest font-medium">Scroll</span>
+      <div className="w-6 h-10 border-2 border-earth-300 dark:border-earth-600 rounded-full flex justify-center pt-2">
         <div className="w-1.5 h-3 bg-sage-500 rounded-full animate-bounce" />
       </div>
     </div>
@@ -883,8 +883,8 @@ export function NumberedList({
             {index + 1}
           </div>
           <div className="pt-1">
-            <h4 className="font-serif font-bold text-gray-800 mb-1">{item.title}</h4>
-            <p className="text-gray-600 text-sm leading-relaxed">{item.description}</p>
+            <h4 className="font-serif font-bold text-gray-800 dark:text-earth-100 mb-1">{item.title}</h4>
+            <p className="text-gray-600 dark:text-earth-300 text-sm leading-relaxed">{item.description}</p>
           </div>
         </div>
       ))}

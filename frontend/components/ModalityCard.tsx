@@ -54,12 +54,12 @@ export function ModalityCard({
         <div className="flex flex-wrap gap-1.5 mt-2">
           {modality.field_editors_pick && <span className="text-xs px-2 py-0.5 rounded-full font-semibold bg-amber-100 text-amber-800">&#9733; Pick</span>}
           {modality.field_self_practice && <span className="text-xs px-2 py-0.5 rounded-full font-medium bg-green-100 text-green-700">Self-Practice</span>}
-          {modality.field_session_cost_range && <span className="text-xs px-2 py-0.5 rounded-full font-medium bg-gray-100 text-gray-700">{modality.field_session_cost_range}</span>}
+          {modality.field_session_cost_range && <span className="text-xs px-2 py-0.5 rounded-full font-medium bg-gray-100 dark:bg-earth-800 text-gray-700 dark:text-earth-200">{modality.field_session_cost_range}</span>}
         </div>
       )}
 
       {modality.field_benefits && (
-        <p className="mt-2 text-gray-700">{modality.field_benefits}</p>
+        <p className="mt-2 text-gray-700 dark:text-earth-200">{modality.field_benefits}</p>
       )}
 
       {showDetails && modality.field_excels_at && (

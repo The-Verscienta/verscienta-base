@@ -93,15 +93,15 @@ export function ContributionForm({
   if (!isAuthenticated) {
     return (
       <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-        <div className="bg-white rounded-xl shadow-xl max-w-md w-full p-6">
-          <h2 className="text-xl font-bold text-gray-800 mb-4">Login Required</h2>
-          <p className="text-gray-600 mb-6">
+        <div className="bg-white rounded-xl shadow-xl max-w-md w-full p-6 dark:bg-earth-900">
+          <h2 className="text-xl font-bold text-gray-800 mb-4 dark:text-earth-100">Login Required</h2>
+          <p className="text-gray-600 mb-6 dark:text-earth-300">
             You need to be logged in to submit contributions to formulas.
           </p>
           <div className="flex gap-3">
             <button
               onClick={onClose}
-              className="flex-1 px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50"
+              className="flex-1 px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 dark:border-earth-600 dark:text-earth-200 dark:hover:bg-earth-800"
             >
               Cancel
             </button>
@@ -119,16 +119,16 @@ export function ContributionForm({
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4 overflow-y-auto">
-      <div className="bg-white rounded-xl shadow-xl max-w-2xl w-full my-8">
+      <div className="bg-white rounded-xl shadow-xl max-w-2xl w-full my-8 dark:bg-earth-900">
         {/* Header */}
-        <div className="flex items-center justify-between p-6 border-b border-gray-200">
+        <div className="flex items-center justify-between p-6 border-b border-gray-200 dark:border-earth-700">
           <div>
-            <h2 className="text-xl font-bold text-gray-800">Add Formula Contribution</h2>
-            <p className="text-sm text-gray-600 mt-1">{formulaTitle}</p>
+            <h2 className="text-xl font-bold text-gray-800 dark:text-earth-100">Add Formula Contribution</h2>
+            <p className="text-sm text-gray-600 mt-1 dark:text-earth-300">{formulaTitle}</p>
           </div>
           <button
             onClick={onClose}
-            className="text-gray-500 hover:text-gray-700 text-2xl leading-none"
+            className="text-gray-500 hover:text-gray-700 text-2xl leading-none dark:text-earth-400 dark:hover:text-earth-200"
             aria-label="Close"
           >
             &times;
@@ -147,18 +147,18 @@ export function ContributionForm({
             {/* Mode Selection */}
             {mode === 'select' && (
               <div className="space-y-4">
-                <p className="text-gray-600">What type of contribution would you like to make?</p>
+                <p className="text-gray-600 dark:text-earth-300">What type of contribution would you like to make?</p>
 
                 <button
                   type="button"
                   onClick={() => setMode('clinical_note')}
-                  className="w-full p-4 text-left border border-gray-200 rounded-lg hover:border-sage-400 hover:bg-sage-50 transition"
+                  className="w-full p-4 text-left border border-gray-200 rounded-lg hover:border-sage-400 hover:bg-sage-50 transition dark:border-earth-700 dark:hover:border-sage-500 dark:hover:bg-earth-800"
                 >
                   <div className="flex items-start gap-3">
                     <span className="text-2xl">📝</span>
                     <div>
-                      <h3 className="font-semibold text-gray-800">Clinical Note</h3>
-                      <p className="text-sm text-gray-600">
+                      <h3 className="font-semibold text-gray-800 dark:text-earth-100">Clinical Note</h3>
+                      <p className="text-sm text-gray-600 dark:text-earth-300">
                         Share your clinical experience with this formula
                       </p>
                     </div>
@@ -168,13 +168,13 @@ export function ContributionForm({
                 <button
                   type="button"
                   onClick={() => setMode('modification')}
-                  className="w-full p-4 text-left border border-gray-200 rounded-lg hover:border-sage-400 hover:bg-sage-50 transition"
+                  className="w-full p-4 text-left border border-gray-200 rounded-lg hover:border-sage-400 hover:bg-sage-50 transition dark:border-earth-700 dark:hover:border-sage-500 dark:hover:bg-earth-800"
                 >
                   <div className="flex items-start gap-3">
                     <span className="text-2xl">✏️</span>
                     <div>
-                      <h3 className="font-semibold text-gray-800">Suggest Modification</h3>
-                      <p className="text-sm text-gray-600">
+                      <h3 className="font-semibold text-gray-800 dark:text-earth-100">Suggest Modification</h3>
+                      <p className="text-sm text-gray-600 dark:text-earth-300">
                         Propose herb changes for specific cases or conditions
                       </p>
                     </div>
@@ -195,7 +195,7 @@ export function ContributionForm({
                 </button>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-medium text-gray-700 mb-2 dark:text-earth-200">
                     Your Clinical Note *
                   </label>
                   <textarea
@@ -203,8 +203,8 @@ export function ContributionForm({
                     onChange={(e) => setClinicalNote(e.target.value)}
                     placeholder="Share your experience using this formula in clinical practice. What conditions did you use it for? What results did you observe? Any tips for other practitioners?"
                     rows={6}
-                    className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-sage-500 focus:border-sage-500 resize-none ${
-                      fieldErrors['clinical_note'] ? 'border-red-400' : 'border-gray-300'
+                    className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-sage-500 focus:border-sage-500 resize-none dark:bg-earth-800 dark:text-earth-100 dark:placeholder-earth-500 ${
+                      fieldErrors['clinical_note'] ? 'border-red-400' : 'border-gray-300 dark:border-earth-600'
                     }`}
                   />
                   {fieldErrors['clinical_note'] && (

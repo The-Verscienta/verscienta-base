@@ -48,7 +48,7 @@ export function ServerPagination({
         <button
           onClick={() => navigateToPage(1)}
           disabled={currentPage === 1}
-          className="p-2 rounded-lg text-gray-600 hover:bg-sage-100 hover:text-earth-700 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+          className="p-2 rounded-lg text-gray-600 dark:text-earth-400 hover:bg-sage-100 dark:hover:bg-earth-800 hover:text-earth-700 dark:hover:text-earth-200 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
           aria-label="Go to first page"
         >
           <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -61,7 +61,7 @@ export function ServerPagination({
       <button
         onClick={() => navigateToPage(currentPage - 1)}
         disabled={currentPage === 1}
-        className="p-2 rounded-lg text-gray-600 hover:bg-sage-100 hover:text-earth-700 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+        className="p-2 rounded-lg text-gray-600 dark:text-earth-400 hover:bg-sage-100 dark:hover:bg-earth-800 hover:text-earth-700 dark:hover:text-earth-200 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
         aria-label="Go to previous page"
       >
         <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -74,7 +74,7 @@ export function ServerPagination({
         {pages.map((page, index) => {
           if (page === 'ellipsis') {
             return (
-              <span key={`ellipsis-${index}`} className="px-2 text-gray-400">
+              <span key={`ellipsis-${index}`} className="px-2 text-gray-400 dark:text-earth-500">
                 ...
               </span>
             );
@@ -90,7 +90,7 @@ export function ServerPagination({
               className={`min-w-[40px] h-10 rounded-lg font-medium transition-colors ${
                 isActive
                   ? 'bg-earth-600 text-white'
-                  : 'text-gray-700 hover:bg-sage-100 hover:text-earth-700'
+                  : 'text-gray-700 dark:text-earth-300 hover:bg-sage-100 dark:hover:bg-earth-800 hover:text-earth-700 dark:hover:text-earth-100'
               }`}
               aria-label={`Go to page ${pageNum}`}
               aria-current={isActive ? 'page' : undefined}
@@ -105,7 +105,7 @@ export function ServerPagination({
       <button
         onClick={() => navigateToPage(currentPage + 1)}
         disabled={currentPage === totalPages}
-        className="p-2 rounded-lg text-gray-600 hover:bg-sage-100 hover:text-earth-700 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+        className="p-2 rounded-lg text-gray-600 dark:text-earth-400 hover:bg-sage-100 dark:hover:bg-earth-800 hover:text-earth-700 dark:hover:text-earth-200 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
         aria-label="Go to next page"
       >
         <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -118,7 +118,7 @@ export function ServerPagination({
         <button
           onClick={() => navigateToPage(totalPages)}
           disabled={currentPage === totalPages}
-          className="p-2 rounded-lg text-gray-600 hover:bg-sage-100 hover:text-earth-700 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+          className="p-2 rounded-lg text-gray-600 dark:text-earth-400 hover:bg-sage-100 dark:hover:bg-earth-800 hover:text-earth-700 dark:hover:text-earth-200 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
           aria-label="Go to last page"
         >
           <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -196,7 +196,7 @@ export function PaginationInfo({
   }
 
   return (
-    <p className={`text-sm text-gray-600 ${className}`}>
+    <p className={`text-sm text-gray-600 dark:text-earth-300 ${className}`}>
       Showing <span className="font-medium">{start}</span> to{' '}
       <span className="font-medium">{end}</span> of{' '}
       <span className="font-medium">{totalItems}</span> results
