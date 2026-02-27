@@ -604,6 +604,14 @@ create_text_field \
     "Chinese name in Pinyin transliteration" \
     "string"
 
+# Modification Notes (explains how this formula was derived from its parent)
+create_text_field \
+    "field_modification_notes" \
+    "formula" \
+    "Modification Notes" \
+    "Describes how this formula was modified from its parent formula (e.g., 'Gui Zhi Tang with Long Gu and Mu Li added for palpitations')" \
+    "text_long"
+
 # Chinese Characters
 create_text_field \
     "field_chinese_name" \

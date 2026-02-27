@@ -407,6 +407,12 @@ export interface FormulaEntity extends DrupalNode {
   field_formula_category?: 'tonifying' | 'clearing_heat' | 'releasing_exterior' | 'regulating_qi' | 'blood_invigorating' | 'phlegm_resolving' | 'digestive' | 'calming' | 'warming_interior' | 'other';
   field_editors_pick?: boolean;
   field_evidence_strength?: 'strong' | 'moderate' | 'preliminary' | 'traditional_only';
+  field_parent_formula?: {
+    id: string;
+    type: string;
+    title?: string;
+  };
+  field_modification_notes?: DrupalTextField;
 }
 
 // TCM Database Entities

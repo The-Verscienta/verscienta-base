@@ -359,6 +359,16 @@ create_entity_reference \
     "Similar or derivative formulas" \
     -1
 
+# Formula -> Parent Formula (for formula families/lineages)
+create_entity_reference \
+    "field_parent_formula" \
+    "formula" \
+    "node" \
+    "formula" \
+    "Parent Formula" \
+    "The classical or base formula this formula is derived from (leave blank for root formulas)" \
+    1
+
 # Formula -> Source Modality (which tradition)
 create_entity_reference \
     "field_source_tradition" \

@@ -9,7 +9,7 @@ import { Breadcrumbs } from '@/components/ui/Breadcrumbs';
 import { SafeHtml } from '@/components/ui/SafeHtml';
 import { GroupedIngredientsList } from '@/components/formula';
 import { HerbRoleBadge } from '@/components/formula/HerbRoleBadge';
-import { SimilarFormulasSkeleton, ContributionsSkeleton } from '@/components/formula/LoadingSkeletons';
+import { FormulaFamilySkeleton, SimilarFormulasSkeleton, ContributionsSkeleton } from '@/components/formula/LoadingSkeletons';
 import { getTextValue, hasTextContent, herbDisplayName } from '@/lib/drupal-helpers';
 import {
   PageWrapper,
@@ -34,6 +34,11 @@ import {
 export const revalidate = 300;
 
 // Lazy load heavy client components
+const FormulaFamily = dynamic(
+  () => import('@/components/formula/FormulaFamily').then(mod => ({ default: mod.FormulaFamily })),
+  { loading: () => <FormulaFamilySkeleton /> }
+);
+
 const SimilarFormulas = dynamic(
   () => import('@/components/formula/SimilarFormulas').then(mod => ({ default: mod.SimilarFormulas })),
   { loading: () => <SimilarFormulasSkeleton /> }
@@ -464,6 +469,10 @@ export default async function FormulaDetailPage({ params }: FormulaDetailProps) 
             </>
           )}
         </Section>
+
+        <Suspense fallback={<FormulaFamilySkeleton />}>
+          <FormulaFamily formulaId={id} />
+        </Suspense>
 
         <Suspense fallback={<SimilarFormulasSkeleton />}>
           <SimilarFormulas formulaId={id} minSimilarity={10} maxResults={5} />

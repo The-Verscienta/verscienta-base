@@ -1,5 +1,25 @@
 'use client';
 
+export function FormulaFamilySkeleton() {
+  return (
+    <div className="bg-white dark:bg-earth-900 rounded-lg shadow-lg p-8 mb-6 animate-pulse">
+      <div className="flex items-center gap-3 mb-6">
+        <div className="w-10 h-10 bg-gray-200 dark:bg-earth-700 rounded-xl" />
+        <div className="space-y-1.5">
+          <div className="h-5 bg-gray-200 dark:bg-earth-700 rounded w-36" />
+          <div className="h-3.5 bg-gray-200 dark:bg-earth-700 rounded w-52" />
+        </div>
+      </div>
+      <div className="h-16 bg-gray-100 dark:bg-earth-800 rounded-xl mb-4" />
+      <div className="grid sm:grid-cols-2 gap-3">
+        {[1, 2].map(i => (
+          <div key={i} className="h-16 bg-gray-100 dark:bg-earth-800 rounded-xl" />
+        ))}
+      </div>
+    </div>
+  );
+}
+
 export function SimilarFormulasSkeleton() {
   return (
     <div className="bg-white dark:bg-earth-900 rounded-lg shadow-lg p-8 mb-6 animate-pulse">
