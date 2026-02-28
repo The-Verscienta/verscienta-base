@@ -201,6 +201,9 @@ export interface HerbEntity extends DrupalNode {
 
   // Herb Pairings
   field_herb_pairings?: HerbPairing[];
+
+  // Processing Variations (Paozhi)
+  field_processing_variations?: HerbProcessing[];
 }
 
 export interface ModalityEntity extends DrupalNode {
@@ -811,6 +814,16 @@ export interface TcmPatternEntity extends DrupalNode {
 
 export function isTcmPatternEntity(entity: DrupalNode): entity is TcmPatternEntity {
   return entity.type === 'node--tcm_pattern';
+}
+
+// ─── Herb Processing Variations (Paozhi 炮製) ─────────────────────────────────
+
+export interface HerbProcessing {
+  id: string;
+  type: string;
+  field_processing_method?: string;
+  field_processing_effect?: DrupalTextField;
+  field_processing_indication_change?: DrupalTextField;
 }
 
 // ─── Herb Pairings ────────────────────────────────────────────────────────────

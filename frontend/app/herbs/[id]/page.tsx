@@ -8,6 +8,7 @@ import type { Metadata } from 'next';
 import type { HerbEntity, DrupalTextField } from '@/types/drupal';
 import { herbDisplayName } from '@/lib/drupal-helpers';
 import { HerbPairingsSection } from '@/components/herb/HerbPairingsSection';
+import { ProcessingVariationsSection } from '@/components/herb/ProcessingVariationsSection';
 import { QRCodeModal } from '@/components/ui/QRCodeModal';
 import { MolecularTargetsSkeleton } from '@/components/herb/MolecularTargets';
 import { DoseCalculator } from '@/components/herb/DoseCalculator';
@@ -60,7 +61,7 @@ async function getHerb(id: string): Promise<HerbEntity | null> {
   try {
     const herb = await drupal.getResource<HerbEntity>('node--herb', id, {
       params: {
-        'include': 'field_images,field_herb_pairings,field_herb_pairings.field_partner_herb,field_herb_pairings.field_example_formula',
+        'include': 'field_images,field_herb_pairings,field_herb_pairings.field_partner_herb,field_herb_pairings.field_example_formula,field_processing_variations',
       },
     });
     return herb;
@@ -701,6 +702,9 @@ export default async function HerbDetailPage({ params }: HerbDetailProps) {
 
             {/* Herb Pairings */}
             <HerbPairingsSection pairings={herb.field_herb_pairings ?? []} />
+
+            {/* Processing Variations (Paozhi) */}
+            <ProcessingVariationsSection variations={herb.field_processing_variations ?? []} />
 
             {/* Molecular Targets (BATMAN-TCM data) */}
             <Suspense fallback={<MolecularTargetsSkeleton />}>

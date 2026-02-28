@@ -276,8 +276,8 @@ Script: `/backend/scripts/setup-taxonomies.sh`
 
 - [x] Screen reader testing (skip-to-content, aria-labels, roles)
 - [x] Keyboard navigation audit (focus-visible, Escape key support)
-- [ ] Color contrast verification
-- [ ] WCAG 2.1 AA compliance check
+- [x] Color contrast verification (WCAG AA audit complete; earth/sage/gold palette fixed)
+- [x] WCAG 2.1 AA compliance check (4 contrast failures fixed; regression test in `__tests__/a11y/color-contrast.test.ts`)
 - [x] aria-labels where needed
 - [x] Focus management (focus-visible styles, prefers-reduced-motion)
 
@@ -546,66 +546,41 @@ Research date: 2026-02-27. Compared Verscienta against meandqi.com (504 herbs, 3
 
 ### 12.1 HIGH PRIORITY — Core clinical content missing
 
-- [ ] **Acupuncture Points database** (`/points`, `/points/[id]`)
-  - Content type: `acupuncture_point` with channel/meridian, location, needle depth, needle angle, moxa suitability, cautions/contraindications, actions, indications
-  - meandqi.com has 360 points; americandragon.com has 400+
-  - Backend: new content type + setup script
-  - Frontend: listing page, detail page, filter by channel
+- [x] **Acupuncture Points database** (`/points`, `/points/[id]`)
+  - Commit `563a2e5f` — content type, listing page, detail page, MeridianFilterBar, 517 tests passing
 
-- [ ] **TCM Patterns / Syndromes database** (`/patterns`, `/patterns/[id]`)
-  - Content type: `tcm_pattern` with pattern name (Chinese + Pinyin), etiology, pathomechanism, signs & symptoms, tongue criteria, pulse criteria, treatment principle, differential diagnosis notes
-  - meandqi.com has 276 patterns; critical for clinical differentiation
-  - Links to: formulas, herbs, acupuncture points, conditions
-  - Backend: new content type + entity references
-  - Frontend: listing page, detail page, filter by organ system
+- [x] **TCM Patterns / Syndromes database** (`/patterns`, `/patterns/[id]`)
+  - Commit `164678be` — tcm_pattern content type, organ_system taxonomy, listing + detail pages, OrganSystemFilterBar, TongueAndPulsePanel
 
-- [ ] **Condition → Pattern → Formula → Points clinical chain**
-  - The full clinical workflow: a condition differentiates into patterns, each pattern maps to formulas and point combinations
-  - Currently Verscienta has conditions and formulas but no intermediate pattern layer
-  - Requires: TCM Patterns database (above) + entity reference fields linking condition→patterns, pattern→formulas, pattern→points
-  - Frontend: condition detail page shows "Common TCM Patterns" section; pattern detail shows recommended formulas and point combinations
+- [x] **Condition → Pattern → Formula → Points clinical chain**
+  - Commit `2918dea2` — `field_related_patterns` on condition, "Common TCM Patterns" amber cards section on condition detail page
 
 ### 12.2 MEDIUM PRIORITY — Herb & Formula depth
 
-- [ ] **Chinese characters (Hanzi) field on herbs and formulas**
-  - `field_herb_chinese_name` (string) on herb; `field_formula_chinese_name` on formula
-  - Display alongside English and Pinyin: "Asian Ginseng (Ren Shen / 人参)"
-  - americandragon.com displays characters throughout; most practitioners expect them
-  - Backend: add fields via `setup-additional-fields.sh`
-  - Frontend: update `herbDisplayName()` utility + all herb/formula display components
+- [x] **Chinese characters (Hanzi) field on herbs and formulas**
+  - Commit `178b9172` — `field_herb_chinese_name`, `field_formula_chinese_name`; `herbDisplayName()` called with 3 args everywhere; FormulaCard shows Chinese name
 
-- [ ] **Two-herb combination pairings section on herb detail pages**
-  - americandragon.com shows "Herb Pairings" — pairs of herbs that synergize (e.g., Huang Qi + Dang Shen)
-  - Content type: `herb_pairing` or paragraph type on herb with: partner herb (entity ref), synergistic action, example formula
-  - Frontend: new "Herb Pairings" section on `/herbs/[id]`
+- [x] **Two-herb combination pairings section on herb detail pages**
+  - Commit `178b9172` — `herb_pairing` paragraph type, `HerbPairingsSection` component, 6 tests
 
-- [ ] **Tongue and pulse diagnosis on herb pages**
-  - americandragon.com lists tongue appearance and pulse quality that indicate use of each herb
-  - Fields: `field_tongue_indication`, `field_pulse_indication` (text fields) on herb
-  - Frontend: display in herb detail indications section
+- [x] **Tongue and pulse diagnosis on herb pages**
+  - Type fields + frontend display done (TCM section in `/herbs/[id]`); backend script: `setup-herb-tongue-pulse.sh`
 
-- [ ] **Formula jia jian (加减) modifications as structured UI**
-  - meandqi.com and americandragon.com show "Add X herb for Y symptom / Remove Z herb if A"
-  - Currently formulas have `field_modification_notes` (free text) and parent/child formula family
-  - Enhancement: paragraph type `formula_modification` (condition text + herb entity ref + add/remove flag)
-  - Frontend: "Modifications" accordion section on formula detail
+- [x] **Formula jia jian (加减) modifications as structured UI**
+  - Commit `178b9172` — `formula_modification` paragraph type, `JiaJianSection` component, 7 tests
 
-- [ ] **Formula biomedical cross-references (Western conditions)**
-  - americandragon.com cross-references each formula to Western biomedical conditions (ICD-10 codes or plain text)
-  - Field: `field_biomedical_conditions` (text list or entity ref to condition) on formula
-  - Frontend: "Biomedical Equivalent" section on formula detail
+- [x] **Formula biomedical cross-references (Western conditions)**
+  - Already existed — `field_biomedical_conditions` displayed as blue pill badges on formula detail
 
-- [ ] **Structured TCM Concepts / Theory database** (`/concepts`, `/concepts/[id]`)
-  - meandqi.com has 120 TCM concept pages (Qi, Blood, Yin/Yang, Five Elements, etc.)
-  - Content type: `tcm_concept` with explanation, clinical relevance, related patterns, related herbs
-  - Primarily educational content; useful for patient-facing explanations
+- [x] **Structured TCM Concepts / Theory database** (`/concepts`, `/concepts/[id]`)
+  - Commit `178b9172` — tcm_concept content type, concept_category taxonomy, listing + detail pages, ConceptCard, ConceptCategoryFilterBar, Navigation links
 
 ### 12.3 LOWER PRIORITY — Clinical depth additions
 
-- [ ] **Herb processing variations (Paozhi 炮製)**
-  - Each herb can have multiple processed forms (raw, honey-fried, salt-processed, wine-processed) with different properties
-  - Paragraph type: `herb_processing` (processing method, effect on properties, indication change)
-  - americandragon.com documents major processing variations
+- [x] **Herb processing variations (Paozhi 炮製)**
+  - `herb_processing` paragraph type (`setup-herb-processing.sh`); `field_processing_variations` on herb
+  - `HerbProcessing` type + `ProcessingVariationsSection` component; rendered after Herb Pairings in herb detail
+  - 7 tests in `__tests__/components/ProcessingVariationsSection.test.tsx`
 
 - [ ] **Formula historical source citations**
   - Fields already exist (`field_classic_source`) but no structured display
