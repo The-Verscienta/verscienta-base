@@ -32,9 +32,12 @@ interface ConditionDetailProps {
 
 async function getCondition(id: string) {
   try {
-    // Note: field_modalities may not exist as entity reference in Drupal yet
-    // Remove include param until relationship fields are configured in Drupal
-    const condition = await drupal.getResource<ConditionEntity>('node--condition', id);
+    const condition = await drupal.getResource<ConditionEntity>('node--condition', id, {
+      params: {
+        include: 'field_related_patterns',
+        'fields[node--tcm_pattern]': 'id,title,field_pattern_name_chinese,field_pattern_name_pinyin',
+      },
+    });
     return condition;
   } catch (error) {
     console.error('Failed to fetch condition:', error);
@@ -188,6 +191,51 @@ export default async function ConditionDetailPage({ params }: ConditionDetailPro
               ))}
             </ul>
           </Section>
+        )}
+
+        {condition.field_related_patterns && condition.field_related_patterns.length > 0 && (
+          <>
+            <BotanicalDivider />
+            <Section
+              id="tcm-patterns"
+              variant="tcm"
+              title="Common TCM Patterns"
+              icon={
+                <svg className="w-8 h-8 text-amber-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" />
+                </svg>
+              }
+            >
+              <p className="text-sm text-gray-600 dark:text-earth-400 mb-4">
+                In Traditional Chinese Medicine, {name} is often associated with these underlying patterns:
+              </p>
+              <div className="grid md:grid-cols-2 gap-4">
+                {condition.field_related_patterns.map(pattern => (
+                  <Link
+                    key={pattern.id}
+                    href={`/patterns/${pattern.id}`}
+                    className="block border border-amber-200 dark:border-amber-800/50 rounded-xl p-4
+                      hover:shadow-lg hover:border-amber-400 dark:hover:border-amber-600 transition
+                      bg-amber-50/50 dark:bg-amber-950/20"
+                  >
+                    <h3 className="font-bold text-gray-800 dark:text-earth-100 text-base mb-1">
+                      {pattern.title}
+                    </h3>
+                    {(pattern.field_pattern_name_chinese || pattern.field_pattern_name_pinyin) && (
+                      <p className="text-sm text-amber-700 dark:text-amber-400 font-serif mb-2">
+                        {pattern.field_pattern_name_chinese}
+                        {pattern.field_pattern_name_chinese && pattern.field_pattern_name_pinyin && ' · '}
+                        {pattern.field_pattern_name_pinyin && <span className="italic">{pattern.field_pattern_name_pinyin}</span>}
+                      </p>
+                    )}
+                    <div className="text-amber-600 dark:text-amber-500 text-sm font-medium">
+                      Explore Pattern →
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            </Section>
+          </>
         )}
 
         {condition.field_modalities && condition.field_modalities.length > 0 && (

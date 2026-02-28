@@ -244,6 +244,15 @@ export interface ConditionEntity extends DrupalNode {
     title?: string;
   }>;
 
+  // TCM Patterns linked to this condition
+  field_related_patterns?: Array<{
+    id: string;
+    type: string;
+    title?: string;
+    field_pattern_name_chinese?: string;
+    field_pattern_name_pinyin?: string;
+  }>;
+
   // Decision-Making Fields
   field_self_treatable?: 'yes' | 'with_guidance' | 'professional_recommended' | 'professional_required';
   field_holistic_response_time?: 'days' | 'weeks' | 'months' | 'varies_widely';
