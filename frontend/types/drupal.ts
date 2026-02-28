@@ -765,3 +765,46 @@ export function isTcmClinicalEvidenceEntity(entity: DrupalNode): entity is TcmCl
 export function isImportLogEntity(entity: DrupalNode): entity is ImportLogEntity {
   return entity.type === 'node--import_log';
 }
+
+// ─── TCM Pattern / Syndrome ───────────────────────────────────────────────────
+
+export type PatternCategory = 'deficiency' | 'excess' | 'mixed';
+export type PatternTemperature = 'cold' | 'heat' | 'neutral';
+
+export interface TcmPatternEntity extends DrupalNode {
+  type: 'node--tcm_pattern';
+  field_pattern_name_chinese?: string;
+  field_pattern_name_pinyin?: string;
+  field_organ_system?: { id: string; type: string; name?: string; description?: string };
+  field_etiology?: DrupalTextField;
+  field_pathomechanism?: DrupalTextField;
+  field_signs_symptoms?: DrupalTextField;
+  field_tongue_criteria?: DrupalTextField;
+  field_pulse_criteria?: DrupalTextField;
+  field_treatment_principle?: DrupalTextField;
+  field_differential_diagnosis?: DrupalTextField;
+  field_pattern_category?: PatternCategory;
+  field_temperature?: PatternTemperature;
+  field_related_formulas?: Array<{ id: string; type: string; title?: string }>;
+  field_related_herbs?: Array<{ id: string; type: string; title?: string; field_herb_pinyin_name?: string }>;
+  field_related_points?: Array<{ id: string; type: string; title?: string; field_point_code?: string }>;
+  field_related_conditions?: Array<{ id: string; type: string; title?: string }>;
+  field_popularity?: 'staple' | 'common' | 'specialty' | 'rare';
+  field_editors_pick?: boolean;
+}
+
+export function isTcmPatternEntity(entity: DrupalNode): entity is TcmPatternEntity {
+  return entity.type === 'node--tcm_pattern';
+}
+
+export interface TcmPatternListItem {
+  id: string;
+  title: string;
+  chineseName?: string;
+  pinyinName?: string;
+  organSystem?: string;
+  category?: PatternCategory;
+  temperature?: PatternTemperature;
+  popularity?: string;
+  editorsPick?: boolean;
+}
