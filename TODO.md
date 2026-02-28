@@ -447,26 +447,26 @@ Script: `/backend/scripts/setup-taxonomies.sh`
 
 - [x] Create `.github/workflows/test.yml` - Run tests on PR (unit + E2E)
 - [x] Create `.github/workflows/lint.yml` - Run linting + type checking
-- [ ] Create `.github/workflows/deploy-frontend.yml`
-- [ ] Create `.github/workflows/deploy-backend.yml`
-- [ ] Configure environment secrets in GitHub
+- [x] Create `.github/workflows/deploy-frontend.yml` - lint+test gate → build GHCR image → trigger Coolify
+- [x] Create `.github/workflows/deploy-backend.yml` - build Drupal + SymPy GHCR images → trigger Coolify
+- [ ] Configure environment secrets in GitHub (see COOLIFY-DEPLOYMENT.md for secret names)
 
 ### 9.2 Frontend Deployment
 
-- [ ] Create nixpacks.toml (or Vercel config)
-- [ ] Configure environment variables
-- [ ] Set up custom domain
-- [ ] Configure SSL
-- [ ] Set up CDN
+- [x] Dockerfile already exists (`frontend/Dockerfile`) — multi-stage, standalone output, Coolify-ready
+- [x] Configure environment variables (build-args in deploy-frontend.yml + runtime env in docker-compose.prod.yml)
+- [ ] Set up custom domain (configure DNS + Coolify domain settings)
+- [ ] Configure SSL (Coolify auto-provisions Let's Encrypt; nginx/ssl/ for self-hosted)
+- [ ] Set up CDN (Cloudflare proxy recommended in front of Coolify)
 
 ### 9.3 Backend Deployment
 
-- [ ] Finalize docker-compose for production
-- [ ] Configure production settings.php
-- [ ] Set up database backups (daily)
-- [ ] Configure file system backups (weekly)
-- [ ] Set up monitoring (uptime, errors)
-- [ ] Configure reverse proxy (nginx)
+- [x] Finalize docker-compose for production (`docker-compose.prod.yml` — MariaDB, nginx, resource limits, internal network)
+- [x] Configure production settings.php (`backend/docker/settings.local.php` reads all config from env vars)
+- [x] Set up database backups (daily) (`scripts/backup.sh` — mysqldump + gzip + optional S3 upload)
+- [x] Configure file system backups (weekly) (`scripts/backup.sh --full` — Drupal files + private/ tar.gz)
+- [ ] Set up monitoring (uptime, errors) (recommend UptimeRobot free tier + Coolify metrics)
+- [x] Configure reverse proxy (nginx) (`nginx/conf.d/verscienta.conf` — HTTP→HTTPS, upstream proxying, cache headers)
 
 ---
 
