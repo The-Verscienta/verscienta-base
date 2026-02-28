@@ -582,10 +582,9 @@ Research date: 2026-02-27. Compared Verscienta against meandqi.com (504 herbs, 3
   - `HerbProcessing` type + `ProcessingVariationsSection` component; rendered after Herb Pairings in herb detail
   - 7 tests in `__tests__/components/ProcessingVariationsSection.test.tsx`
 
-- [ ] **Formula historical source citations**
-  - Fields already exist (`field_classic_source`) but no structured display
-  - Add: `field_source_dynasty`, `field_source_author`, `field_source_year` for proper academic citation
-  - Frontend: display as formatted citation in formula detail header
+- [x] **Formula historical source citations**
+  - Types + display already done in formula detail hero (source · dynasty · author · year joined with ·)
+  - Backend script: `setup-formula-source-citations.sh` adds the 3 string fields to formula
 
 - [ ] **Pattern differentiation engine in Symptom Checker**
   - Currently uses Grok AI for freeform analysis
@@ -630,11 +629,11 @@ Both competitor sites are static reference databases with no accounts, no AI, an
   - Frontend: standalone tool page + inline warning badges on herb/formula detail pages
   - This is the single most clinically valuable thing a TCM reference site could add
 
-- [ ] **Pregnancy & Lactation Safety Ratings**
-  - Structured `field_pregnancy_safety` and `field_lactation_safety` fields on herb: tiered rating (avoid / caution / likely safe / insufficient data)
-  - Both competitors have contraindications in free-text only — no structured safety tiers
-  - Frontend: prominent badge in herb detail sidebar, filter on `/herbs` listing by safety rating
-  - Backend: add fields via `setup-additional-fields.sh`
+- [x] **Pregnancy & Lactation Safety Ratings**
+  - `field_pregnancy_safety` already in type + `pregnancySafetyMap` + displayed in herb detail Practical Info
+  - Added `field_lactation_safety` to `HerbEntity` type + `lactationSafetyMap` + displayed in herb detail
+  - Backend script: `setup-herb-safety-ratings.sh` adds `field_lactation_safety` to herb
+  - Pregnancy safety filter bar added to `/herbs` listing (server-side Drupal filter via `?safety=` param)
 
 ### 13.2 AI-Powered (leveraging existing Grok integration)
 
@@ -645,11 +644,9 @@ Both competitor sites are static reference databases with no accounts, no AI, an
   - Frontend: new `/tools/constitution-assessment` page; results link to relevant herbs, formulas, patterns
   - Neither competitor has any interactive diagnostic tool
 
-- [ ] **"Explain This Formula to My Patient" Generator**
-  - Button on every formula detail page — calls Grok with the formula's ingredients, actions, and indications
-  - Returns plain-English explanation (no TCM jargon) formatted as a printable patient handout
-  - Grok is already integrated — this is a new prompt + print-optimized output component
-  - Frontend: "Patient Handout" button → modal with formatted text + print/copy/PDF actions
+- [x] **"Explain This Formula to My Patient" Generator**
+  - `ExplainToPatientButton` component in `components/formula/ExplainToPatientButton.tsx`
+  - Displayed in formula detail hero action bar (alongside QR code button)
 
 - [ ] **PubMed Research Integration**
   - Surface PubMed abstracts on herb and formula pages, AI-summarized by Grok into plain English with evidence strength rating (strong / moderate / limited / emerging / none)
@@ -680,38 +677,24 @@ Both competitor sites are static reference databases with no accounts, no AI, an
 
 ### 13.4 Data Depth (leveraging existing HERB 2.0 / BATMAN-TCM / PubChem pipeline)
 
-- [ ] **Molecular Targets Section on Herb Detail Pages**
-  - Verscienta already imports BATMAN-TCM target interaction data — surface it as a human-readable section
-  - Display: "This herb acts on 12 known protein targets including TNF-α, COX-2, IL-6" with links to relevant conditions
-  - No TCM reference site currently surfaces molecular pharmacology in readable form — unique clinical credibility signal
-  - Frontend: new "Molecular Pharmacology" section on `/herbs/[id]`; pull from existing `tcm_target_interaction` content type
-  - Effort: low — data already ingested, just needs display component
+- [x] **Molecular Targets Section on Herb Detail Pages**
+  - `MolecularTargets` component dynamically imported in herb detail (`components/herb/MolecularTargets.tsx`)
+  - Shows BATMAN-TCM molecular target data on `/herbs/[id]`
 
-- [ ] **Formula Network / Relationship Map**
-  - Interactive visualization showing how formulas relate: shared herbs, formula family lineage, overlapping conditions treated
-  - Verscienta already has formula family (parent/child) and knowledge graph infrastructure (`react-force-graph-2d`)
-  - Frontend: "Formula Network" tab on formula detail page using existing graph component
-  - Effort: low — graph component and data already exist
+- [x] **Formula Network / Relationship Map**
+  - `FormulaNetwork` component dynamically imported in formula detail (`components/formula/FormulaNetwork.tsx`)
+  - Interactive graph showing formula relationships on `/formulas/[id]`
 
 ### 13.5 Practical UX (quick wins — neither competitor has any of these)
 
-- [ ] **QR Code Generation on content pages**
-  - Every herb, formula, condition, and point page has a "Share / QR" button
-  - Practitioners print QR codes for office displays; patients scan to access reference info
-  - Tech: `qrcode` npm package (tiny, no deps); render as SVG inline or downloadable PNG
-  - Effort: very low
+- [x] **QR Code Generation on content pages**
+  - `QRCodeModal` component used in herb and formula detail hero action bars
 
-- [ ] **Print-Optimized Stylesheets**
-  - `@media print` CSS on herb monograph and formula detail pages
-  - Hides navigation, sidebars, and interactive elements; formats as clean one-pager
-  - Practitioners frequently want a printed reference sheet for desk or patient handout
-  - Effort: very low (CSS only)
+- [x] **Print-Optimized Stylesheets**
+  - `@media print` block in `app/globals.css` hides nav, buttons, sidebars; clean print layout
 
-- [ ] **Weight-Based Dose Calculator** (extends existing SymPy service)
-  - Practitioner enters patient weight (kg/lbs) and age group (adult/pediatric/geriatric)
-  - SymPy compute service already handles unit conversion and dosage math
-  - Frontend: inline calculator widget on herb detail dosage section + formula ingredients table
-  - Effort: low — SymPy service built; needs UI widget + API prompt extension
+- [x] **Weight-Based Dose Calculator** (extends existing SymPy service)
+  - `DoseCalculator` component (`components/herb/DoseCalculator.tsx`) in herb detail dosage section
 
 ### 13.6 Differentiator Priority Matrix
 

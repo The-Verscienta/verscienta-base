@@ -55,6 +55,7 @@ interface Herb {
   field_primary_actions?: string[];
   field_tcm_temperature?: string;
   field_popularity?: string;
+  field_pregnancy_safety?: string;
   field_beginner_friendly?: boolean;
   field_editors_pick?: boolean;
   field_images?: Array<{
@@ -77,26 +78,32 @@ interface HerbsResult {
   total: number;
 }
 
-async function getHerbs(sort: string = 'title', page: number = 1): Promise<HerbsResult> {
+async function getHerbs(sort: string = 'title', page: number = 1, safety?: string): Promise<HerbsResult> {
   try {
     const offset = (page - 1) * PAGE_SIZE;
+    const listParams: Record<string, any> = {
+      'sort': sort,
+      'page[limit]': PAGE_SIZE,
+      'page[offset]': offset,
+      'filter[status]': 1,
+      'include': 'field_images',
+    };
+    if (safety) listParams['filter[field_pregnancy_safety]'] = safety;
+
     const herbs = await drupal.getResourceCollection<Herb[]>('node--herb', {
-      params: {
-        'sort': sort,
-        'page[limit]': PAGE_SIZE,
-        'page[offset]': offset,
-        'filter[status]': 1,
-        'include': 'field_images',
-      },
+      params: listParams,
     });
 
     // Get total count (fetch all IDs only for counting)
+    const countParams: Record<string, any> = {
+      'filter[status]': 1,
+      'fields[node--herb]': 'id',
+      'page[limit]': 500,
+    };
+    if (safety) countParams['filter[field_pregnancy_safety]'] = safety;
+
     const allHerbs = await drupal.getResourceCollection<Herb[]>('node--herb', {
-      params: {
-        'filter[status]': 1,
-        'fields[node--herb]': 'id',
-        'page[limit]': 500,
-      },
+      params: countParams,
     });
 
     return {
@@ -165,15 +172,23 @@ function HerbIcon() {
   );
 }
 
+const SAFETY_OPTIONS = [
+  { value: 'generally_safe',  label: 'Generally Safe',   color: 'bg-green-100 text-green-800 border-green-300' },
+  { value: 'use_caution',     label: 'Use Caution',      color: 'bg-yellow-100 text-yellow-800 border-yellow-300' },
+  { value: 'avoid',           label: 'Avoid',            color: 'bg-orange-100 text-orange-800 border-orange-300' },
+  { value: 'contraindicated', label: 'Contraindicated',  color: 'bg-red-100 text-red-800 border-red-300' },
+];
+
 interface PageProps {
-  searchParams: Promise<{ sort?: string; page?: string }>;
+  searchParams: Promise<{ sort?: string; page?: string; safety?: string }>;
 }
 
 export default async function HerbsPage({ searchParams }: PageProps) {
   const params = await searchParams;
   const sort = params.sort || 'title';
   const currentPage = Math.max(1, parseInt(params.page || '1', 10));
-  const { herbs, total } = await getHerbs(sort, currentPage);
+  const safety = params.safety || '';
+  const { herbs, total } = await getHerbs(sort, currentPage, safety || undefined);
   const totalPages = Math.ceil(total / PAGE_SIZE);
 
   // Count unique characteristics for filter display
@@ -242,6 +257,38 @@ export default async function HerbsPage({ searchParams }: PageProps) {
                   })}
                 </div>
               )}
+            </div>
+
+            {/* Pregnancy Safety Filter */}
+            <div className="mt-4">
+              <p className="text-xs text-earth-500 dark:text-earth-400 uppercase tracking-wide font-semibold mb-2">
+                Filter by Pregnancy Safety:
+              </p>
+              <div className="flex flex-wrap gap-2">
+                <a
+                  href={`/herbs?sort=${sort}`}
+                  className={`inline-flex items-center px-3 py-1.5 rounded-full text-xs font-semibold border transition ${
+                    !safety
+                      ? 'bg-earth-700 text-white border-earth-700'
+                      : 'bg-white dark:bg-earth-900 text-earth-600 dark:text-earth-300 border-earth-300 dark:border-earth-600 hover:border-earth-500'
+                  }`}
+                >
+                  All
+                </a>
+                {SAFETY_OPTIONS.map(opt => (
+                  <a
+                    key={opt.value}
+                    href={`/herbs?sort=${sort}&safety=${opt.value}`}
+                    className={`inline-flex items-center px-3 py-1.5 rounded-full text-xs font-semibold border transition ${
+                      safety === opt.value
+                        ? opt.color + ' ring-2 ring-offset-1 ring-current'
+                        : 'bg-white dark:bg-earth-900 text-earth-600 dark:text-earth-300 border-earth-300 dark:border-earth-600 hover:border-earth-500'
+                    }`}
+                  >
+                    {opt.label}
+                  </a>
+                ))}
+              </div>
             </div>
 
             {/* Sort & Pagination Controls */}

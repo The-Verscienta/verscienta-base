@@ -194,6 +194,7 @@ export interface HerbEntity extends DrupalNode {
   field_cost_tier?: 'budget' | 'moderate' | 'premium' | 'expensive';
   field_palatability?: 'pleasant' | 'neutral' | 'bitter' | 'very_bitter' | 'pungent';
   field_pregnancy_safety?: 'generally_safe' | 'use_caution' | 'avoid' | 'contraindicated';
+  field_lactation_safety?: 'generally_safe' | 'use_caution' | 'avoid' | 'contraindicated' | 'insufficient_data';
   field_availability?: 'widely_available' | 'specialty_stores' | 'online_only' | 'hard_to_source' | 'practitioner_only';
   field_best_season?: 'spring' | 'summer' | 'autumn' | 'winter' | 'year_round';
   field_evidence_strength?: 'strong' | 'moderate' | 'preliminary' | 'traditional_only';

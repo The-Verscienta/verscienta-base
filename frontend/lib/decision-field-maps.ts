@@ -50,6 +50,14 @@ export const pregnancySafetyMap: Record<string, FieldConfig> = {
   contraindicated: { label: 'Contraindicated', bg: 'bg-red-100', text: 'text-red-700' },
 };
 
+export const lactationSafetyMap: Record<string, FieldConfig> = {
+  generally_safe: { label: 'Generally Safe', bg: 'bg-green-100', text: 'text-green-700' },
+  use_caution: { label: 'Use Caution', bg: 'bg-yellow-100', text: 'text-yellow-700' },
+  avoid: { label: 'Avoid', bg: 'bg-orange-100', text: 'text-orange-700' },
+  contraindicated: { label: 'Contraindicated', bg: 'bg-red-100', text: 'text-red-700' },
+  insufficient_data: { label: 'Insufficient Data', bg: 'bg-gray-100', text: 'text-gray-600' },
+};
+
 export const availabilityMap: Record<string, FieldConfig> = {
   widely_available: { label: 'Widely Available', bg: 'bg-green-100', text: 'text-green-700' },
   specialty_stores: { label: 'Specialty Stores', bg: 'bg-blue-100', text: 'text-blue-700' },
