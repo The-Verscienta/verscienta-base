@@ -1,3 +1,5 @@
+import dynamic from 'next/dynamic';
+import { Suspense } from 'react';
 import { drupal } from '@/lib/drupal';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
@@ -5,6 +7,14 @@ import Image from 'next/image';
 import type { Metadata } from 'next';
 import type { HerbEntity, DrupalTextField } from '@/types/drupal';
 import { herbDisplayName } from '@/lib/drupal-helpers';
+import { QRCodeModal } from '@/components/ui/QRCodeModal';
+import { MolecularTargetsSkeleton } from '@/components/herb/MolecularTargets';
+import { DoseCalculator } from '@/components/herb/DoseCalculator';
+
+const MolecularTargets = dynamic(
+  () => import('@/components/herb/MolecularTargets').then(mod => ({ default: mod.MolecularTargets })),
+  { loading: () => <MolecularTargetsSkeleton /> }
+);
 
 // ISR: revalidate every 5 minutes
 export const revalidate = 300;
@@ -181,7 +191,7 @@ export default async function HerbDetailPage({ params }: HerbDetailProps) {
                 <div className="relative p-8 md:p-12">
                   {/* Common name */}
                   <h1 className="font-serif text-5xl md:text-6xl lg:text-7xl font-bold text-gray-900 dark:text-earth-100 mb-4 tracking-tight">
-                    {herbDisplayName(name, herb.field_herb_pinyin_name)}
+                    {herbDisplayName(name, herb.field_herb_pinyin_name, herb.field_herb_chinese_name)}
                   </h1>
 
                   {/* Scientific name */}
@@ -267,6 +277,11 @@ export default async function HerbDetailPage({ params }: HerbDetailProps) {
                       ) : null; })()}
                     </div>
                   )}
+
+                  {/* Hero action bar */}
+                  <div className="flex flex-wrap gap-2 mt-4">
+                    <QRCodeModal title={name} />
+                  </div>
                 </div>
               </div>
 
@@ -459,6 +474,31 @@ export default async function HerbDetailPage({ params }: HerbDetailProps) {
                     </div>
                   </div>
                 )}
+
+                {/* Tongue & Pulse Diagnosis */}
+                {(herb.field_tongue_indication || herb.field_pulse_indication) && (
+                  <div className="mt-6 pt-6 border-t border-amber-200 dark:border-amber-800">
+                    <h3 className="text-sm font-bold text-amber-800 dark:text-amber-200 uppercase tracking-wider mb-4">Tongue & Pulse Diagnosis</h3>
+                    <div className="grid sm:grid-cols-2 gap-4">
+                      {herb.field_tongue_indication && (
+                        <div className="bg-amber-50/60 dark:bg-amber-950/20 rounded-xl p-4 border border-amber-100 dark:border-amber-900">
+                          <p className="text-xs font-bold text-amber-700 dark:text-amber-300 uppercase tracking-wide mb-2 flex items-center gap-2">
+                            <span>👅</span> Tongue Indication
+                          </p>
+                          <p className="text-sm text-amber-900 dark:text-amber-200">{herb.field_tongue_indication}</p>
+                        </div>
+                      )}
+                      {herb.field_pulse_indication && (
+                        <div className="bg-amber-50/60 dark:bg-amber-950/20 rounded-xl p-4 border border-amber-100 dark:border-amber-900">
+                          <p className="text-xs font-bold text-amber-700 dark:text-amber-300 uppercase tracking-wide mb-2 flex items-center gap-2">
+                            <span>💓</span> Pulse Indication
+                          </p>
+                          <p className="text-sm text-amber-900 dark:text-amber-200">{herb.field_pulse_indication}</p>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                )}
               </Section>
             )}
 
@@ -551,8 +591,9 @@ export default async function HerbDetailPage({ params }: HerbDetailProps) {
                     </div>
                   ))}
                 </div>
-                <div className="mt-4">
+                <div className="mt-4 space-y-3">
                   <SymbolicVerifyButton herbId={name} />
+                  <DoseCalculator herbName={name} />
                 </div>
               </Section>
             )}
@@ -656,6 +697,11 @@ export default async function HerbDetailPage({ params }: HerbDetailProps) {
                 )}
               </Section>
             )}
+
+            {/* Molecular Targets (BATMAN-TCM data) */}
+            <Suspense fallback={<MolecularTargetsSkeleton />}>
+              <MolecularTargets herbId={herb.id} />
+            </Suspense>
 
             {/* Traditional Uses */}
             {(herb.field_traditional_chinese_uses?.value ||

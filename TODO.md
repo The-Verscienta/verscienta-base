@@ -1,7 +1,7 @@
 # Verscienta Health - Comprehensive TODO List
 
-**Last Updated:** 2026-02-22
-**Overall Progress:** ~98% complete
+**Last Updated:** 2026-02-27
+**Overall Progress:** ~98% complete (core platform); feature gap analysis added in §12
 
 ---
 
@@ -537,6 +537,224 @@ Script: `/backend/scripts/setup-taxonomies.sh`
 - [ ] E-commerce integration (herb sales)
 - [ ] User forums/community
 - [ ] Mobile app (React Native)
+
+---
+
+## 12. FEATURE GAP ANALYSIS — vs. meandqi.com & americandragon.com
+
+Research date: 2026-02-27. Compared Verscienta against meandqi.com (504 herbs, 362 formulas, 276 patterns, 360 acupuncture points, 1,362 conditions, 120 TCM concepts) and americandragon.com (deep clinical content, two-herb combinations, 400+ acupuncture points, full condition→pattern→formula→points chain).
+
+### 12.1 HIGH PRIORITY — Core clinical content missing
+
+- [ ] **Acupuncture Points database** (`/points`, `/points/[id]`)
+  - Content type: `acupuncture_point` with channel/meridian, location, needle depth, needle angle, moxa suitability, cautions/contraindications, actions, indications
+  - meandqi.com has 360 points; americandragon.com has 400+
+  - Backend: new content type + setup script
+  - Frontend: listing page, detail page, filter by channel
+
+- [ ] **TCM Patterns / Syndromes database** (`/patterns`, `/patterns/[id]`)
+  - Content type: `tcm_pattern` with pattern name (Chinese + Pinyin), etiology, pathomechanism, signs & symptoms, tongue criteria, pulse criteria, treatment principle, differential diagnosis notes
+  - meandqi.com has 276 patterns; critical for clinical differentiation
+  - Links to: formulas, herbs, acupuncture points, conditions
+  - Backend: new content type + entity references
+  - Frontend: listing page, detail page, filter by organ system
+
+- [ ] **Condition → Pattern → Formula → Points clinical chain**
+  - The full clinical workflow: a condition differentiates into patterns, each pattern maps to formulas and point combinations
+  - Currently Verscienta has conditions and formulas but no intermediate pattern layer
+  - Requires: TCM Patterns database (above) + entity reference fields linking condition→patterns, pattern→formulas, pattern→points
+  - Frontend: condition detail page shows "Common TCM Patterns" section; pattern detail shows recommended formulas and point combinations
+
+### 12.2 MEDIUM PRIORITY — Herb & Formula depth
+
+- [ ] **Chinese characters (Hanzi) field on herbs and formulas**
+  - `field_herb_chinese_name` (string) on herb; `field_formula_chinese_name` on formula
+  - Display alongside English and Pinyin: "Asian Ginseng (Ren Shen / 人参)"
+  - americandragon.com displays characters throughout; most practitioners expect them
+  - Backend: add fields via `setup-additional-fields.sh`
+  - Frontend: update `herbDisplayName()` utility + all herb/formula display components
+
+- [ ] **Two-herb combination pairings section on herb detail pages**
+  - americandragon.com shows "Herb Pairings" — pairs of herbs that synergize (e.g., Huang Qi + Dang Shen)
+  - Content type: `herb_pairing` or paragraph type on herb with: partner herb (entity ref), synergistic action, example formula
+  - Frontend: new "Herb Pairings" section on `/herbs/[id]`
+
+- [ ] **Tongue and pulse diagnosis on herb pages**
+  - americandragon.com lists tongue appearance and pulse quality that indicate use of each herb
+  - Fields: `field_tongue_indication`, `field_pulse_indication` (text fields) on herb
+  - Frontend: display in herb detail indications section
+
+- [ ] **Formula jia jian (加减) modifications as structured UI**
+  - meandqi.com and americandragon.com show "Add X herb for Y symptom / Remove Z herb if A"
+  - Currently formulas have `field_modification_notes` (free text) and parent/child formula family
+  - Enhancement: paragraph type `formula_modification` (condition text + herb entity ref + add/remove flag)
+  - Frontend: "Modifications" accordion section on formula detail
+
+- [ ] **Formula biomedical cross-references (Western conditions)**
+  - americandragon.com cross-references each formula to Western biomedical conditions (ICD-10 codes or plain text)
+  - Field: `field_biomedical_conditions` (text list or entity ref to condition) on formula
+  - Frontend: "Biomedical Equivalent" section on formula detail
+
+- [ ] **Structured TCM Concepts / Theory database** (`/concepts`, `/concepts/[id]`)
+  - meandqi.com has 120 TCM concept pages (Qi, Blood, Yin/Yang, Five Elements, etc.)
+  - Content type: `tcm_concept` with explanation, clinical relevance, related patterns, related herbs
+  - Primarily educational content; useful for patient-facing explanations
+
+### 12.3 LOWER PRIORITY — Clinical depth additions
+
+- [ ] **Herb processing variations (Paozhi 炮製)**
+  - Each herb can have multiple processed forms (raw, honey-fried, salt-processed, wine-processed) with different properties
+  - Paragraph type: `herb_processing` (processing method, effect on properties, indication change)
+  - americandragon.com documents major processing variations
+
+- [ ] **Formula historical source citations**
+  - Fields already exist (`field_classic_source`) but no structured display
+  - Add: `field_source_dynasty`, `field_source_author`, `field_source_year` for proper academic citation
+  - Frontend: display as formatted citation in formula detail header
+
+- [ ] **Pattern differentiation engine in Symptom Checker**
+  - Currently uses Grok AI for freeform analysis
+  - Enhancement: structured output that maps symptoms → TCM patterns → recommended formulas + points
+  - Requires TCM Patterns database to be populated first
+  - Could be a Grok prompt enhancement that returns structured JSON with pattern matches
+
+- [ ] **E-commerce / practitioner product integration**
+  - meandqi.com links to herb/formula products for sale
+  - Low priority but high revenue potential — affiliate links or direct store integration
+  - Would require: `field_product_url` (URL) on herb and formula, "Buy" button on detail pages
+
+### 12.4 Impact vs. Effort Matrix
+
+| Feature | Patient Impact | Practitioner Impact | Effort | Priority |
+|---|---|---|---|---|
+| Acupuncture Points DB | Medium | **High** | Medium | **HIGH** |
+| TCM Patterns DB | Medium | **High** | Medium | **HIGH** |
+| Condition→Pattern→Formula chain | Medium | **High** | Low (once above exist) | **HIGH** |
+| Chinese characters (Hanzi) | Low | **High** | Low | **MEDIUM** |
+| Herb pairings | Low | Medium | Medium | **MEDIUM** |
+| Formula jia jian UI | Low | **High** | Medium | **MEDIUM** |
+| Biomedical cross-refs | **High** | Medium | Low | **MEDIUM** |
+| TCM Concepts DB | **High** | Low | High | MEDIUM |
+| Tongue/pulse on herbs | Low | Medium | Low | LOW |
+| Processing variations | Low | Medium | Medium | LOW |
+| Pattern differentiation in symptom checker | **High** | Medium | High | LOW (needs Patterns DB first) |
+| E-commerce | **High** | Low | High | LOW |
+
+---
+
+## 13. COMPETITIVE DIFFERENTIATORS — Features Neither meandqi.com nor americandragon.com Have
+
+Both competitor sites are static reference databases with no accounts, no AI, and no interactivity beyond browsing. These features would make Verscienta categorically different.
+
+### 13.1 Safety-Critical (highest clinical differentiation value)
+
+- [ ] **Herb-Drug Interaction Checker** (`/tools/herb-drug-interactions`)
+  - User enters current Western medications (text input or drug name autocomplete), gets flagged herbs/formulas to avoid with severity rating (contraindicated / caution / monitor)
+  - Data source: Natural Medicines database (licensed), NatMedPro, or curated from published interaction literature
+  - Backend: new `herb_drug_interaction` content type (herb entity ref, drug name, mechanism, severity, evidence level)
+  - Frontend: standalone tool page + inline warning badges on herb/formula detail pages
+  - This is the single most clinically valuable thing a TCM reference site could add
+
+- [ ] **Pregnancy & Lactation Safety Ratings**
+  - Structured `field_pregnancy_safety` and `field_lactation_safety` fields on herb: tiered rating (avoid / caution / likely safe / insufficient data)
+  - Both competitors have contraindications in free-text only — no structured safety tiers
+  - Frontend: prominent badge in herb detail sidebar, filter on `/herbs` listing by safety rating
+  - Backend: add fields via `setup-additional-fields.sh`
+
+### 13.2 AI-Powered (leveraging existing Grok integration)
+
+- [ ] **TCM Constitution Assessment → Personalized Recommendations**
+  - Guided questionnaire (15-20 questions) based on Ba Gang (Eight Principles: Yin/Yang, Interior/Exterior, Cold/Heat, Deficiency/Excess) or Five Element typing
+  - User answers questions → receives TCM constitution profile → personalized herb and formula recommendations
+  - Backend: store constitution results in user profile (`field_tcm_constitution`)
+  - Frontend: new `/tools/constitution-assessment` page; results link to relevant herbs, formulas, patterns
+  - Neither competitor has any interactive diagnostic tool
+
+- [ ] **"Explain This Formula to My Patient" Generator**
+  - Button on every formula detail page — calls Grok with the formula's ingredients, actions, and indications
+  - Returns plain-English explanation (no TCM jargon) formatted as a printable patient handout
+  - Grok is already integrated — this is a new prompt + print-optimized output component
+  - Frontend: "Patient Handout" button → modal with formatted text + print/copy/PDF actions
+
+- [ ] **PubMed Research Integration**
+  - Surface PubMed abstracts on herb and formula pages, AI-summarized by Grok into plain English with evidence strength rating (strong / moderate / limited / emerging / none)
+  - Verscienta already imports HERB 2.0 molecular target data — extend to show the full evidence chain: molecular target → published study → clinical outcome
+  - Backend: `tcm_clinical_evidence` content type already exists; add PubMed ID field + fetch-on-demand API route
+  - Frontend: "Research Evidence" accordion section on herb and formula detail pages
+
+### 13.3 Practitioner Tools (neither competitor has practitioner accounts)
+
+- [ ] **Digital Prescription Pad / Patient Handout PDF Generator**
+  - Practitioner builds a protocol (formula + adjunct herbs + lifestyle/dietary recommendations) and generates a branded PDF
+  - PDF includes: formula name (English/Pinyin/Chinese), ingredient list with quantities and percentages, preparation instructions, dosage, dietary recommendations, practitioner contact info
+  - Frontend: new `/practitioner/prescription` page; uses existing practitioner account system
+  - Tech: `@react-pdf/renderer` or server-side PDF generation via Puppeteer/html-to-pdf
+
+- [ ] **Patient Symptom Journal / Progress Tracking**
+  - Patients log daily/weekly symptoms on a simple scale, tied to their active treatment protocol
+  - Practitioners can view trend charts for their patients
+  - Backend: new `symptom_log` content type (user ref, date, symptom list, severity scores, notes)
+  - Frontend: `/profile/journal` for patients; `/practitioner/patients/[id]` dashboard for practitioners
+  - Neither competitor has any concept of a logged-in patient with persistent data
+
+- [ ] **Practitioner Case Study Sharing** (community / gated)
+  - Practitioners post anonymized clinical cases: pattern diagnosis → formula/herb protocol → outcome after N weeks
+  - Peer-reviewable by other practitioners (leverages existing review/rating system)
+  - Backend: new `case_study` content type (pattern ref, formula refs, herb refs, treatment duration, outcome summary, practitioner ref)
+  - Frontend: `/community/cases` listing; `/community/cases/[id]` detail; gated to practitioner role
+
+### 13.4 Data Depth (leveraging existing HERB 2.0 / BATMAN-TCM / PubChem pipeline)
+
+- [ ] **Molecular Targets Section on Herb Detail Pages**
+  - Verscienta already imports BATMAN-TCM target interaction data — surface it as a human-readable section
+  - Display: "This herb acts on 12 known protein targets including TNF-α, COX-2, IL-6" with links to relevant conditions
+  - No TCM reference site currently surfaces molecular pharmacology in readable form — unique clinical credibility signal
+  - Frontend: new "Molecular Pharmacology" section on `/herbs/[id]`; pull from existing `tcm_target_interaction` content type
+  - Effort: low — data already ingested, just needs display component
+
+- [ ] **Formula Network / Relationship Map**
+  - Interactive visualization showing how formulas relate: shared herbs, formula family lineage, overlapping conditions treated
+  - Verscienta already has formula family (parent/child) and knowledge graph infrastructure (`react-force-graph-2d`)
+  - Frontend: "Formula Network" tab on formula detail page using existing graph component
+  - Effort: low — graph component and data already exist
+
+### 13.5 Practical UX (quick wins — neither competitor has any of these)
+
+- [ ] **QR Code Generation on content pages**
+  - Every herb, formula, condition, and point page has a "Share / QR" button
+  - Practitioners print QR codes for office displays; patients scan to access reference info
+  - Tech: `qrcode` npm package (tiny, no deps); render as SVG inline or downloadable PNG
+  - Effort: very low
+
+- [ ] **Print-Optimized Stylesheets**
+  - `@media print` CSS on herb monograph and formula detail pages
+  - Hides navigation, sidebars, and interactive elements; formats as clean one-pager
+  - Practitioners frequently want a printed reference sheet for desk or patient handout
+  - Effort: very low (CSS only)
+
+- [ ] **Weight-Based Dose Calculator** (extends existing SymPy service)
+  - Practitioner enters patient weight (kg/lbs) and age group (adult/pediatric/geriatric)
+  - SymPy compute service already handles unit conversion and dosage math
+  - Frontend: inline calculator widget on herb detail dosage section + formula ingredients table
+  - Effort: low — SymPy service built; needs UI widget + API prompt extension
+
+### 13.6 Differentiator Priority Matrix
+
+| Feature | Uniqueness | Patient Value | Practitioner Value | Effort |
+|---|---|---|---|---|
+| Herb-drug interaction checker | Very high | Very high | Very high | High |
+| Pregnancy/lactation safety ratings | High | Very high | High | Low |
+| Constitution assessment quiz | High | High | High | Medium |
+| Molecular targets on herb pages | Very high | Medium | High | **Low** |
+| "Explain to patient" Grok button | High | High | High | **Low** |
+| Formula network map | High | Medium | Medium | **Low** |
+| Print stylesheets | Medium | Medium | High | **Very low** |
+| QR code generation | Medium | Medium | High | **Very low** |
+| Digital prescription pad / PDF | High | High | Very high | Medium |
+| Patient symptom journal | High | High | High | Medium |
+| PubMed research integration | High | Medium | High | Medium |
+| Practitioner case studies | High | Medium | High | High |
+| Weight-based dose calculator | High | Medium | High | Low |
 
 ---
 

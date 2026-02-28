@@ -25,11 +25,20 @@ export function getProcessedValue(field: DrupalTextField): string {
 }
 
 /**
- * Format herb display name with optional pinyin in parentheses
+ * Format herb display name with optional pinyin and Chinese characters.
+ * e.g. herbDisplayName('Asian Ginseng', 'Ren Shen', '人参') → 'Asian Ginseng (Ren Shen / 人参)'
  * e.g. herbDisplayName('Asian Ginseng', 'Ren Shen') → 'Asian Ginseng (Ren Shen)'
+ * e.g. herbDisplayName('Asian Ginseng', null, '人参') → 'Asian Ginseng (人参)'
  */
-export function herbDisplayName(title: string, pinyinName?: string | null): string {
-  if (pinyinName) return `${title} (${pinyinName})`;
+export function herbDisplayName(
+  title: string,
+  pinyinName?: string | null,
+  chineseName?: string | null
+): string {
+  const parts: string[] = [];
+  if (pinyinName) parts.push(pinyinName);
+  if (chineseName) parts.push(chineseName);
+  if (parts.length > 0) return `${title} (${parts.join(' / ')})`;
   return title;
 }
 

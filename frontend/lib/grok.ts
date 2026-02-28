@@ -225,6 +225,66 @@ Generate follow-up questions to gather more information.`;
   }
 }
 
+export interface ExplainFormulaRequest {
+  formulaName: string;
+  ingredients: string[];
+  actions: string;
+  indications: string;
+}
+
+/**
+ * Explain a TCM formula in plain English for patients
+ */
+export async function explainFormula(req: ExplainFormulaRequest): Promise<string> {
+  if (!XAI_API_KEY) {
+    throw new Error('XAI_API_KEY is not configured');
+  }
+
+  const systemPrompt = `You are a friendly health educator who explains Traditional Chinese Medicine (TCM) formulas in plain English for patients with no medical training.
+
+Guidelines:
+- Write 2-3 short paragraphs, no jargon
+- When you must use a TCM term, immediately explain it in plain language
+- Use warm, reassuring language
+- End with a note to always follow their practitioner's guidance
+- Do not diagnose or prescribe
+- Return only the explanation text, no JSON`;
+
+  const userPrompt = `Please explain this TCM formula in plain English for a patient:
+
+Formula Name: ${req.formulaName}
+Contains: ${req.ingredients.join(', ')}
+Main Actions: ${req.actions || 'Not specified'}
+Used For: ${req.indications || 'Not specified'}`;
+
+  const response = await fetch(`${XAI_API_URL}/chat/completions`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${XAI_API_KEY}`,
+    },
+    body: JSON.stringify({
+      model: 'grok-beta',
+      messages: [
+        { role: 'system', content: systemPrompt },
+        { role: 'user', content: userPrompt },
+      ],
+      temperature: 0.6,
+      max_tokens: 600,
+    }),
+  });
+
+  if (!response.ok) {
+    const error = await response.json();
+    throw new Error(`xAI API error: ${error.message || response.statusText}`);
+  }
+
+  const data = await response.json();
+  const content = data.choices[0]?.message?.content;
+  if (!content) throw new Error('No response from Grok AI');
+  return content;
+}
+
 /**
  * Summarize content (for modality/herb descriptions)
  */

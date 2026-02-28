@@ -203,4 +203,58 @@ describe('lib/grok', () => {
         .rejects.toThrow('XAI_API_KEY is not configured');
     });
   });
+
+  describe('explainFormula', () => {
+    it('returns plain-English explanation string', async () => {
+      const { explainFormula } = loadModule();
+
+      mockGrokResponse('This formula gently supports your energy. It contains four herbs...');
+
+      const result = await explainFormula({
+        formulaName: 'Si Jun Zi Tang',
+        ingredients: ['Ren Shen', 'Bai Zhu', 'Fu Ling', 'Gan Cao'],
+        actions: 'Tonifies Qi',
+        indications: 'Qi deficiency',
+      });
+
+      expect(result).toContain('formula');
+      expect(mockFetch).toHaveBeenCalledWith(
+        'https://api.x.ai/v1/chat/completions',
+        expect.objectContaining({ method: 'POST' })
+      );
+      const body = JSON.parse(mockFetch.mock.calls[0][1].body);
+      expect(body.messages[1].content).toContain('Si Jun Zi Tang');
+      expect(body.messages[1].content).toContain('Ren Shen');
+    });
+
+    it('throws when XAI_API_KEY is not set', async () => {
+      jest.resetModules();
+      delete process.env.XAI_API_KEY;
+      const mod = require('@/lib/grok');
+
+      await expect(mod.explainFormula({
+        formulaName: 'Test',
+        ingredients: [],
+        actions: '',
+        indications: '',
+      })).rejects.toThrow('XAI_API_KEY is not configured');
+    });
+
+    it('throws on API error response', async () => {
+      const { explainFormula } = loadModule();
+
+      mockFetch.mockResolvedValueOnce({
+        ok: false,
+        statusText: 'Unauthorized',
+        json: async () => ({ message: 'Invalid key' }),
+      });
+
+      await expect(explainFormula({
+        formulaName: 'Test',
+        ingredients: [],
+        actions: '',
+        indications: '',
+      })).rejects.toThrow('xAI API error');
+    });
+  });
 });

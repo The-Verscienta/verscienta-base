@@ -4,6 +4,7 @@ import {
   reviewSchema,
   contactFormSchema,
   symptomAnalysisSchema,
+  explainFormulaSchema,
   validateData,
   formatZodErrors,
 } from '@/lib/validation';
@@ -191,6 +192,68 @@ describe('Validation Schemas', () => {
         expect(formatted).toHaveProperty('username');
         expect(formatted).toHaveProperty('password');
       }
+    });
+  });
+
+  describe('explainFormulaSchema', () => {
+    it('accepts valid formula explanation request', () => {
+      const result = explainFormulaSchema.safeParse({
+        formulaName: 'Si Jun Zi Tang',
+        ingredients: ['Ren Shen', 'Bai Zhu'],
+        actions: 'Tonifies Qi',
+        indications: 'Qi deficiency with fatigue',
+      });
+      expect(result.success).toBe(true);
+    });
+
+    it('accepts empty ingredients array', () => {
+      const result = explainFormulaSchema.safeParse({
+        formulaName: 'Test Formula',
+        ingredients: [],
+        actions: '',
+        indications: '',
+      });
+      expect(result.success).toBe(true);
+    });
+
+    it('rejects empty formulaName', () => {
+      const result = explainFormulaSchema.safeParse({
+        formulaName: '',
+        ingredients: [],
+        actions: '',
+        indications: '',
+      });
+      expect(result.success).toBe(false);
+    });
+
+    it('rejects formulaName exceeding 200 chars', () => {
+      const result = explainFormulaSchema.safeParse({
+        formulaName: 'A'.repeat(201),
+        ingredients: [],
+        actions: '',
+        indications: '',
+      });
+      expect(result.success).toBe(false);
+    });
+
+    it('rejects ingredients array exceeding 50 items', () => {
+      const result = explainFormulaSchema.safeParse({
+        formulaName: 'Test',
+        ingredients: Array(51).fill('Herb'),
+        actions: '',
+        indications: '',
+      });
+      expect(result.success).toBe(false);
+    });
+
+    it('rejects actions exceeding 500 chars', () => {
+      const result = explainFormulaSchema.safeParse({
+        formulaName: 'Test',
+        ingredients: [],
+        actions: 'A'.repeat(501),
+        indications: '',
+      });
+      expect(result.success).toBe(false);
     });
   });
 });

@@ -40,6 +40,18 @@ export function SimilarFormulasSkeleton() {
   );
 }
 
+export function FormulaNetworkSkeleton() {
+  return (
+    <div className="bg-white dark:bg-earth-900 rounded-2xl shadow-lg border border-earth-200 dark:border-earth-700 p-6 animate-pulse">
+      <div className="flex items-center gap-3 mb-4">
+        <div className="w-8 h-8 bg-earth-200 dark:bg-earth-700 rounded" />
+        <div className="h-6 bg-earth-200 dark:bg-earth-700 rounded w-44" />
+      </div>
+      <div className="h-64 bg-earth-100 dark:bg-earth-800 rounded-xl" />
+    </div>
+  );
+}
+
 export function ContributionsSkeleton() {
   return (
     <div className="bg-white dark:bg-earth-900 rounded-lg shadow-lg p-8 mb-6 animate-pulse">

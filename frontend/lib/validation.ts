@@ -239,6 +239,14 @@ export const dosageComputeSchema = z.object({
   form: z.enum(['powder', 'tincture', 'capsule', 'tea', 'decoction', 'extract']).optional(),
 });
 
+// Explain Formula Schema (Grok AI patient explanation)
+export const explainFormulaSchema = z.object({
+  formulaName: z.string().min(1).max(200),
+  ingredients: z.array(z.string()).max(50),
+  actions: z.string().max(500),
+  indications: z.string().max(500),
+});
+
 // Utility function to validate and parse data
 export function validateData<T extends z.ZodType>(
   schema: T,
@@ -284,3 +292,4 @@ export type HerbModificationInput = z.infer<typeof herbModificationSchema>;
 export type FormulaContributionInput = z.infer<typeof formulaContributionSchema>;
 export type SymbolicComputeInput = z.infer<typeof symbolicComputeSchema>;
 export type DosageComputeInput = z.infer<typeof dosageComputeSchema>;
+export type ExplainFormulaInput = z.infer<typeof explainFormulaSchema>;

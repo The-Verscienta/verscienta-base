@@ -43,6 +43,7 @@ export interface HerbEntity extends DrupalNode {
   field_herb_source_dbs?: string[];
   field_herb_latin_name?: string;
   field_herb_pinyin_name?: string;
+  field_herb_chinese_name?: string;
 
   // Botanical Information
   field_scientific_name?: string;
@@ -149,6 +150,10 @@ export interface HerbEntity extends DrupalNode {
     field_warning_description: string;
   }>;
   field_allergenic_potential?: string;
+
+  // Tongue & Pulse Diagnosis
+  field_tongue_indication?: string;
+  field_pulse_indication?: string;
 
   // Cross-references
   field_related_species?: Array<{
@@ -413,6 +418,21 @@ export interface FormulaEntity extends DrupalNode {
     title?: string;
   };
   field_modification_notes?: DrupalTextField;
+
+  // Formula identity
+  field_formula_chinese_name?: string;
+  field_classic_source?: string;
+  field_source_dynasty?: string;
+  field_source_author?: string;
+  field_source_year?: string;
+
+  // Biomedical cross-references
+  field_biomedical_conditions?: string[];
+
+  // Actions & Indications (clinical)
+  field_actions?: DrupalTextField;
+  field_indications?: DrupalTextField;
+  field_contraindications?: DrupalTextField;
 }
 
 // TCM Database Entities

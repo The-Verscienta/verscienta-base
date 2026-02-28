@@ -1,6 +1,8 @@
 import { Suspense } from 'react';
 import dynamic from 'next/dynamic';
 import { drupal } from '@/lib/drupal';
+import { QRCodeModal } from '@/components/ui/QRCodeModal';
+import { ExplainToPatientButton } from '@/components/formula/ExplainToPatientButton';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import type { Metadata } from 'next';
@@ -9,7 +11,7 @@ import { Breadcrumbs } from '@/components/ui/Breadcrumbs';
 import { SafeHtml } from '@/components/ui/SafeHtml';
 import { GroupedIngredientsList } from '@/components/formula';
 import { HerbRoleBadge } from '@/components/formula/HerbRoleBadge';
-import { FormulaFamilySkeleton, SimilarFormulasSkeleton, ContributionsSkeleton } from '@/components/formula/LoadingSkeletons';
+import { FormulaFamilySkeleton, SimilarFormulasSkeleton, ContributionsSkeleton, FormulaNetworkSkeleton } from '@/components/formula/LoadingSkeletons';
 import { getTextValue, hasTextContent, herbDisplayName } from '@/lib/drupal-helpers';
 import {
   PageWrapper,
@@ -47,6 +49,11 @@ const SimilarFormulas = dynamic(
 const ContributionsSection = dynamic(
   () => import('@/components/formula/ContributionsSection').then(mod => ({ default: mod.ContributionsSection })),
   { loading: () => <ContributionsSkeleton /> }
+);
+
+const FormulaNetwork = dynamic(
+  () => import('@/components/formula/FormulaNetwork').then(mod => ({ default: mod.FormulaNetwork })),
+  { loading: () => <FormulaNetworkSkeleton /> }
 );
 
 interface FormulaDetailProps {
@@ -174,6 +181,15 @@ async function getFormula(id: string): Promise<FormulaEntity | null> {
       field_formula_category: data.attributes?.field_formula_category,
       field_editors_pick: data.attributes?.field_editors_pick,
       field_evidence_strength: data.attributes?.field_evidence_strength,
+      field_formula_chinese_name: data.attributes?.field_formula_chinese_name,
+      field_classic_source: data.attributes?.field_classic_source,
+      field_source_dynasty: data.attributes?.field_source_dynasty,
+      field_source_author: data.attributes?.field_source_author,
+      field_source_year: data.attributes?.field_source_year,
+      field_biomedical_conditions: data.attributes?.field_biomedical_conditions,
+      field_actions: data.attributes?.field_actions,
+      field_indications: data.attributes?.field_indications,
+      field_contraindications: data.attributes?.field_contraindications,
     };
   } catch (error) {
     console.error('Failed to fetch formula:', error);
@@ -248,14 +264,42 @@ export default async function FormulaDetailPage({ params }: FormulaDetailProps) 
           <div className="bg-white dark:bg-earth-900 rounded-3xl shadow-xl border border-earth-200 dark:border-earth-700 relative overflow-hidden">
             <div className="absolute -right-12 -top-12 w-64 h-64 opacity-5 pointer-events-none text-8xl">🌿</div>
             <div className="relative p-8 md:p-12">
-              <h1 className="font-serif text-5xl md:text-6xl font-bold text-gray-900 dark:text-earth-100 mb-4 tracking-tight">
+              <h1 className="font-serif text-5xl md:text-6xl font-bold text-gray-900 dark:text-earth-100 mb-2 tracking-tight">
                 {name}
               </h1>
+              {/* Chinese name + Pinyin subtitle */}
+              {formula.field_formula_chinese_name && (
+                <p className="text-2xl md:text-3xl font-serif text-earth-500 dark:text-earth-400 mb-1 tracking-wide">
+                  {formula.field_formula_chinese_name}
+                </p>
+              )}
+              {/* Historical source citation */}
+              {(formula.field_classic_source || formula.field_source_dynasty) && (
+                <p className="text-sm text-earth-500 dark:text-earth-400 italic mb-3">
+                  {[
+                    formula.field_classic_source,
+                    formula.field_source_dynasty,
+                    formula.field_source_author,
+                    formula.field_source_year,
+                  ].filter(Boolean).join(' · ')}
+                </p>
+              )}
               {totalWeight > 0 && (
                 <p className="text-lg text-sage-600">
                   Total Formula Weight: {totalWeight} {weightUnit}
                 </p>
               )}
+
+              {/* Hero action bar */}
+              <div className="flex flex-wrap gap-2 mt-4">
+                <QRCodeModal title={name} />
+                <ExplainToPatientButton
+                  formulaName={name}
+                  ingredients={(formula.field_herb_ingredients || []).map(i => i.title || 'Herb')}
+                  actions={formula.field_formula_category || ''}
+                  indications={(formula.field_use_cases || []).join(', ')}
+                />
+              </div>
               {formula.field_use_cases && formula.field_use_cases.length > 0 && (
                 <div className="flex flex-wrap gap-2 mt-4">
                   {formula.field_use_cases.map((useCase, idx) => (
@@ -343,6 +387,34 @@ export default async function FormulaDetailPage({ params }: FormulaDetailProps) 
                     {condition.title || 'Condition'}
                   </Tag>
                 </Link>
+              ))}
+            </div>
+          </Section>
+        )}
+
+        {/* Biomedical Cross-References */}
+        {formula.field_biomedical_conditions && formula.field_biomedical_conditions.length > 0 && (
+          <Section
+            id="biomedical"
+            variant="default"
+            title="Biomedical Equivalents"
+            icon={
+              <svg className="w-8 h-8 text-sage-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
+              </svg>
+            }
+          >
+            <p className="text-sm text-earth-500 dark:text-earth-400 mb-4">
+              This formula is commonly used in integrative settings for the following Western conditions:
+            </p>
+            <div className="flex flex-wrap gap-2">
+              {formula.field_biomedical_conditions.map((cond, idx) => (
+                <span
+                  key={idx}
+                  className="inline-flex items-center px-3 py-1.5 rounded-full text-sm font-medium bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 border border-blue-100 dark:border-blue-800"
+                >
+                  {cond}
+                </span>
               ))}
             </div>
           </Section>
@@ -476,6 +548,10 @@ export default async function FormulaDetailPage({ params }: FormulaDetailProps) 
 
         <Suspense fallback={<SimilarFormulasSkeleton />}>
           <SimilarFormulas formulaId={id} minSimilarity={10} maxResults={5} />
+        </Suspense>
+
+        <Suspense fallback={<FormulaNetworkSkeleton />}>
+          <FormulaNetwork formulaId={id} />
         </Suspense>
 
         <BotanicalDivider />

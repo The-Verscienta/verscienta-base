@@ -1,4 +1,4 @@
-import { getTextValue, getProcessedValue, hasTextContent } from '@/lib/drupal-helpers';
+import { getTextValue, getProcessedValue, hasTextContent, herbDisplayName } from '@/lib/drupal-helpers';
 
 describe('drupal-helpers', () => {
   describe('getTextValue', () => {
@@ -63,6 +63,32 @@ describe('drupal-helpers', () => {
 
     it('returns false when object has empty .value', () => {
       expect(hasTextContent({ value: '', format: 'plain_text', processed: '' })).toBe(false);
+    });
+  });
+
+  describe('herbDisplayName', () => {
+    it('returns plain title when no pinyin or chinese name', () => {
+      expect(herbDisplayName('Asian Ginseng')).toBe('Asian Ginseng');
+    });
+
+    it('appends pinyin in parentheses', () => {
+      expect(herbDisplayName('Asian Ginseng', 'Ren Shen')).toBe('Asian Ginseng (Ren Shen)');
+    });
+
+    it('appends chinese name when no pinyin', () => {
+      expect(herbDisplayName('Asian Ginseng', null, '人参')).toBe('Asian Ginseng (人参)');
+    });
+
+    it('appends both pinyin and chinese separated by slash', () => {
+      expect(herbDisplayName('Asian Ginseng', 'Ren Shen', '人参')).toBe('Asian Ginseng (Ren Shen / 人参)');
+    });
+
+    it('ignores empty string pinyin', () => {
+      expect(herbDisplayName('Asian Ginseng', '', '人参')).toBe('Asian Ginseng (人参)');
+    });
+
+    it('ignores empty string chinese name', () => {
+      expect(herbDisplayName('Asian Ginseng', 'Ren Shen', '')).toBe('Asian Ginseng (Ren Shen)');
     });
   });
 });
