@@ -623,11 +623,15 @@ Both competitor sites are static reference databases with no accounts, no AI, an
 
 ### 13.1 Safety-Critical (highest clinical differentiation value)
 
-- [ ] **Herb-Drug Interaction Checker** (`/tools/herb-drug-interactions`)
-  - User enters current Western medications (text input or drug name autocomplete), gets flagged herbs/formulas to avoid with severity rating (contraindicated / caution / monitor)
-  - Data source: Natural Medicines database (licensed), NatMedPro, or curated from published interaction literature
-  - Backend: new `herb_drug_interaction` content type (herb entity ref, drug name, mechanism, severity, evidence level)
-  - Frontend: standalone tool page + inline warning badges on herb/formula detail pages
+- [x] **Herb-Drug Interaction Checker** (`/tools/herb-drug-interactions`)
+  - Grok AI-powered tool: user enters medications → AI identifies TCM herb interactions with severity (contraindicated/caution/monitor), mechanism, clinical effect, evidence level
+  - `checkHerbDrugInteractions()` in `lib/grok.ts` — safety-focused prompt, temperature=0.3 for conservative output
+  - API route: `POST /api/grok/herb-drug-check` — CSRF + rate limit (ai tier) + Zod validation
+  - Tool page at `/tools/herb-drug-interactions` — red/orange hero, severity-grouped results, links to herb pages
+  - "Drug Checker" link added to Header.tsx and Navigation.tsx
+  - Backend: `setup-herb-drug-interactions.sh` creates herb_drug_interaction paragraph type on herb content type
+  - Inline display on herb detail already existed (`field_drug_interactions` paragraph array)
+  - 14 new tests (5 grok.test.ts + 8 route tests)
   - This is the single most clinically valuable thing a TCM reference site could add
 
 - [x] **Pregnancy & Lactation Safety Ratings**

@@ -310,4 +310,88 @@ describe('lib/grok', () => {
       })).rejects.toThrow('xAI API error');
     });
   });
+
+  describe('checkHerbDrugInteractions', () => {
+    it('returns interactions for given medications', async () => {
+      const { checkHerbDrugInteractions } = loadModule();
+
+      const mockResult = {
+        interactions: [
+          {
+            herbName: 'Dang Gui',
+            herbChineseName: '当归',
+            herbPinyinName: 'Dāng Guī',
+            medicationName: 'Warfarin',
+            severity: 'contraindicated',
+            mechanism: 'Coumarins in Dang Gui may potentiate anticoagulant effects.',
+            clinicalEffect: 'Increased bleeding risk',
+            evidenceLevel: 'strong',
+          },
+        ],
+        summary: 'Warfarin has significant interactions with several TCM herbs.',
+        checkedMedications: ['warfarin'],
+        disclaimer: 'Consult your healthcare provider.',
+      };
+      mockGrokResponse(JSON.stringify(mockResult));
+
+      const result = await checkHerbDrugInteractions(['warfarin']);
+
+      expect(result.interactions).toHaveLength(1);
+      expect(result.interactions[0].herbName).toBe('Dang Gui');
+      expect(result.interactions[0].severity).toBe('contraindicated');
+      expect(result.interactions[0].evidenceLevel).toBe('strong');
+      expect(result.checkedMedications).toContain('warfarin');
+    });
+
+    it('uses low temperature (0.3) for safety-critical content', async () => {
+      const { checkHerbDrugInteractions } = loadModule();
+
+      mockGrokResponse(JSON.stringify({
+        interactions: [],
+        summary: 'No interactions found.',
+        checkedMedications: ['ibuprofen'],
+        disclaimer: 'Disclaimer.',
+      }));
+
+      await checkHerbDrugInteractions(['ibuprofen']);
+
+      const body = JSON.parse(mockFetch.mock.calls[0][1].body);
+      expect(body.temperature).toBe(0.3);
+    });
+
+    it('handles non-JSON response gracefully', async () => {
+      const { checkHerbDrugInteractions } = loadModule();
+
+      mockGrokResponse('Plain text response from AI');
+
+      const result = await checkHerbDrugInteractions(['aspirin']);
+
+      expect(result.interactions).toEqual([]);
+      expect(result.summary).toBe('Plain text response from AI');
+      expect(result.checkedMedications).toEqual(['aspirin']);
+      expect(result.disclaimer).toBeTruthy();
+    });
+
+    it('throws on API error response', async () => {
+      const { checkHerbDrugInteractions } = loadModule();
+
+      mockFetch.mockResolvedValueOnce({
+        ok: false,
+        statusText: 'Unauthorized',
+        json: async () => ({ message: 'Invalid API key' }),
+      });
+
+      await expect(checkHerbDrugInteractions(['warfarin']))
+        .rejects.toThrow('xAI API error');
+    });
+
+    it('throws when XAI_API_KEY is not set', async () => {
+      jest.resetModules();
+      delete process.env.XAI_API_KEY;
+      const mod = require('@/lib/grok');
+
+      await expect(mod.checkHerbDrugInteractions(['warfarin']))
+        .rejects.toThrow('XAI_API_KEY is not configured');
+    });
+  });
 });

@@ -317,6 +317,115 @@ Used For: ${req.indications || 'Not specified'}`;
   return content;
 }
 
+export interface HerbDrugInteractionResult {
+  herbName: string;
+  herbChineseName?: string;
+  herbPinyinName?: string;
+  medicationName: string;
+  severity: 'contraindicated' | 'caution' | 'monitor';
+  mechanism: string;
+  clinicalEffect: string;
+  evidenceLevel: 'strong' | 'moderate' | 'preliminary' | 'theoretical';
+}
+
+export interface HerbDrugCheckResponse {
+  interactions: HerbDrugInteractionResult[];
+  summary: string;
+  checkedMedications: string[];
+  disclaimer: string;
+}
+
+/**
+ * Check TCM herb-drug interactions for a list of pharmaceutical medications
+ */
+export async function checkHerbDrugInteractions(
+  medications: string[]
+): Promise<HerbDrugCheckResponse> {
+  if (!XAI_API_KEY) {
+    throw new Error('XAI_API_KEY is not configured');
+  }
+
+  const systemPrompt = `You are a clinical pharmacology and Traditional Chinese Medicine (TCM) safety expert. Identify known or theoretically significant interactions between conventional pharmaceutical drugs and commonly used TCM herbs.
+
+GUIDELINES:
+- Only report clinically meaningful interactions with a pharmacological basis
+- Severity levels:
+  - "contraindicated": Should NOT be combined; serious risk of harm
+  - "caution": May be combined with close monitoring; moderate risk
+  - "monitor": Potential interaction; requires awareness but low immediate risk
+- Evidence levels:
+  - "strong": Multiple published clinical trials or case reports
+  - "moderate": Some clinical evidence or well-established pharmacological basis
+  - "preliminary": Limited studies; theoretical but plausible
+  - "theoretical": Based on known pharmacology; not well-studied clinically
+- Include Chinese name (Hanzi) and Pinyin for each herb when known
+- Focus on commonly used TCM herbs (Ginkgo, Dang Gui, Ren Shen, Dan Shen, etc.)
+- Err on the side of caution — flag potential interactions rather than miss dangerous ones
+- Never diagnose or treat; always recommend consulting healthcare professionals
+
+Format response as JSON:
+{
+  "interactions": [
+    {
+      "herbName": "Dang Gui",
+      "herbChineseName": "当归",
+      "herbPinyinName": "Dāng Guī",
+      "medicationName": "Warfarin",
+      "severity": "contraindicated",
+      "mechanism": "Contains coumarins that inhibit platelet aggregation and may enhance anticoagulant effects via CYP2C9 inhibition.",
+      "clinicalEffect": "Increased bleeding risk; INR elevation",
+      "evidenceLevel": "strong"
+    }
+  ],
+  "summary": "Brief 2-3 sentence overall assessment",
+  "checkedMedications": ["warfarin"],
+  "disclaimer": "Safety disclaimer text"
+}`;
+
+  const userPrompt = `Check the following medications for interactions with TCM herbs:
+
+Medications: ${medications.join(', ')}
+
+Identify all clinically significant herb-drug interactions for these medications.`;
+
+  const response = await fetch(`${XAI_API_URL}/chat/completions`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${XAI_API_KEY}`,
+    },
+    body: JSON.stringify({
+      model: 'grok-beta',
+      messages: [
+        { role: 'system', content: systemPrompt },
+        { role: 'user', content: userPrompt },
+      ],
+      temperature: 0.3,
+      max_tokens: 2000,
+    }),
+  });
+
+  if (!response.ok) {
+    const error = await response.json();
+    throw new Error(`xAI API error: ${error.message || response.statusText}`);
+  }
+
+  const data = await response.json();
+  const content = data.choices[0]?.message?.content;
+  if (!content) throw new Error('No response from Grok AI');
+
+  try {
+    return JSON.parse(content) as HerbDrugCheckResponse;
+  } catch {
+    return {
+      interactions: [],
+      summary: content,
+      checkedMedications: medications,
+      disclaimer: 'This information is for educational purposes only. Always consult your healthcare provider before combining medications with herbal products.',
+    };
+  }
+}
+
 /**
  * Summarize content (for modality/herb descriptions)
  */

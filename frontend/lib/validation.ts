@@ -98,6 +98,13 @@ export const symptomAnalysisSchema = z.object({
   }).optional(),
 });
 
+export const herbDrugCheckSchema = z.object({
+  medications: z
+    .string()
+    .min(2, 'Please enter at least one medication name')
+    .max(500, 'Too many medications listed (max 500 characters)'),
+});
+
 // Contact/Communication Schemas
 export const contactFormSchema = z.object({
   name: z.string().min(1, 'Name is required').max(100),
@@ -282,6 +289,7 @@ export type ForgotPasswordInput = z.infer<typeof forgotPasswordSchema>;
 export type ResetPasswordInput = z.infer<typeof resetPasswordSchema>;
 export type NewsletterInput = z.infer<typeof newsletterSchema>;
 export type SymptomAnalysisInput = z.infer<typeof symptomAnalysisSchema>;
+export type HerbDrugCheckInput = z.infer<typeof herbDrugCheckSchema>;
 export type ContactFormInput = z.infer<typeof contactFormSchema>;
 export type ReviewInput = z.infer<typeof reviewSchema>;
 export type SearchQueryInput = z.infer<typeof searchQuerySchema>;

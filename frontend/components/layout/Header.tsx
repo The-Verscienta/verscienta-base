@@ -68,6 +68,7 @@ export function Header() {
   const primaryLinks = [
     { href: '/', label: 'Home' },
     { href: '/symptom-checker', label: 'Symptom Checker', highlight: true },
+    { href: '/tools/herb-drug-interactions', label: 'Drug Checker', highlight: true },
     { href: '/herbs', label: 'Herbs' },
     { href: '/formulas', label: 'Formulas' },
     { href: '/points', label: 'Points' },

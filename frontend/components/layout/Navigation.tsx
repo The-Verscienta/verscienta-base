@@ -26,6 +26,7 @@ const defaultItems: NavItem[] = [
   { href: '/conditions', label: 'Conditions' },
   { href: '/practitioners', label: 'Practitioners' },
   { href: '/symptom-checker', label: 'Symptom Checker' },
+  { href: '/tools/herb-drug-interactions', label: 'Drug Checker' },
   { href: '/search', label: 'Search' },
 ];
 
