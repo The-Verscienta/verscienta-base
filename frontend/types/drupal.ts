@@ -536,6 +536,98 @@ export function isFormulaContribution(entity: DrupalNode): entity is FormulaCont
   return entity.type === 'node--formula_contribution';
 }
 
+// ─── Acupuncture Point ────────────────────────────────────────────────────────
+
+export type PointSpecialProperty =
+  | 'yuan_source'
+  | 'luo_connecting'
+  | 'xi_cleft'
+  | 'command_point'
+  | 'influential_point'
+  | 'five_element_wood'
+  | 'five_element_fire'
+  | 'five_element_earth'
+  | 'five_element_metal'
+  | 'five_element_water'
+  | 'confluent_point'
+  | 'alarm_mu'
+  | 'back_shu'
+  | 'window_of_sky'
+  | 'sea_of_blood'
+  | 'lower_sea';
+
+export type NeedlingAngle = 'perpendicular' | 'oblique' | 'transverse';
+
+export interface AcupointEntity extends DrupalNode {
+  type: 'node--acupuncture_point';
+
+  // Identity
+  field_point_code?: string;            // e.g. "ST 36"
+  field_point_chinese_name?: string;    // e.g. "足三里"
+  field_point_pinyin_name?: string;     // e.g. "Zu San Li"
+
+  // Location
+  field_location_description?: string;  // Prose anatomical location
+  field_location_anatomical?: string;   // Anatomical landmark
+
+  // Needling technique
+  field_needling_depth?: string;        // e.g. "1–2 cun"
+  field_needling_angle?: NeedlingAngle;
+  field_needling_method?: string;
+  field_moxa_suitable?: boolean;
+  field_moxa_cones?: number;
+  field_press_needle_suitable?: boolean;
+
+  // Clinical content (same DrupalTextField shape as FormulaEntity)
+  field_actions?: DrupalTextField;
+  field_indications?: DrupalTextField;
+  field_contraindications?: DrupalTextField;
+  field_classical_notes?: DrupalTextField;
+  field_clinical_notes?: DrupalTextField;
+  field_combinations?: DrupalTextField;
+
+  // Special point categories
+  field_special_properties?: PointSpecialProperty[];
+  field_five_element?: 'wood' | 'fire' | 'earth' | 'metal' | 'water';
+
+  // Meridian taxonomy reference
+  field_meridian?: {
+    id: string;
+    type: string;
+    name?: string;
+    description?: string;
+  };
+  field_meridian_number?: number;
+
+  // Cross-references
+  field_related_conditions?: Array<{ id: string; type: string; title?: string }>;
+  field_related_herbs?: Array<{ id: string; type: string; title?: string; field_herb_pinyin_name?: string }>;
+  field_related_formulas?: Array<{ id: string; type: string; title?: string }>;
+
+  // Decision-making fields (mirrors HerbEntity)
+  field_popularity?: 'staple' | 'common' | 'specialty' | 'rare';
+  field_editors_pick?: boolean;
+  field_beginner_friendly?: boolean;
+}
+
+export function isAcupointEntity(entity: DrupalNode): entity is AcupointEntity {
+  return entity.type === 'node--acupuncture_point';
+}
+
+// Lightweight list item used on the /points listing page
+export interface AcupointListItem {
+  id: string;
+  title: string;
+  pointCode: string;
+  pinyinName?: string;
+  chineseName?: string;
+  meridianName?: string;
+  specialProperties?: PointSpecialProperty[];
+  popularity?: string;
+  editorsPick?: boolean;
+  beginnerFriendly?: boolean;
+}
+
 export interface DrupalJsonApiResponse<T = DrupalNode> {
   data: T | T[];
   included?: DrupalNode[];

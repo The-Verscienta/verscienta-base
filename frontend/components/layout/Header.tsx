@@ -70,6 +70,7 @@ export function Header() {
     { href: '/symptom-checker', label: 'Symptom Checker', highlight: true },
     { href: '/herbs', label: 'Herbs' },
     { href: '/formulas', label: 'Formulas' },
+    { href: '/points', label: 'Points' },
     { href: '/modalities', label: 'Modalities' },
     { href: '/conditions', label: 'Conditions' },
   ];

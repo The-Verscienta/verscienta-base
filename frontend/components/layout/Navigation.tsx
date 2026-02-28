@@ -19,6 +19,7 @@ const defaultItems: NavItem[] = [
   { href: '/', label: 'Home' },
   { href: '/herbs', label: 'Herbs' },
   { href: '/formulas', label: 'Formulas' },
+  { href: '/points', label: 'Points' },
   { href: '/modalities', label: 'Modalities' },
   { href: '/conditions', label: 'Conditions' },
   { href: '/practitioners', label: 'Practitioners' },
