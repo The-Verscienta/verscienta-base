@@ -586,11 +586,12 @@ Research date: 2026-02-27. Compared Verscienta against meandqi.com (504 herbs, 3
   - Types + display already done in formula detail hero (source · dynasty · author · year joined with ·)
   - Backend script: `setup-formula-source-citations.sh` adds the 3 string fields to formula
 
-- [ ] **Pattern differentiation engine in Symptom Checker**
-  - Currently uses Grok AI for freeform analysis
-  - Enhancement: structured output that maps symptoms → TCM patterns → recommended formulas + points
-  - Requires TCM Patterns database to be populated first
-  - Could be a Grok prompt enhancement that returns structured JSON with pattern matches
+- [x] **Pattern differentiation engine in Symptom Checker**
+  - Grok prompt updated to return structured `tcmPatterns` array alongside freeform analysis
+  - Each pattern: English name, Hanzi, Pinyin, match reason, key symptoms, suggested formulas + points
+  - Symptom checker UI shows amber pattern cards; fetches `/api/patterns` to resolve UUIDs for deep links
+  - Falls back to `/patterns` listing link if pattern not found in DB
+  - 2 new tests in `grok.test.ts` (tcmPatterns returned, system prompt verified)
 
 - [ ] **E-commerce / practitioner product integration**
   - meandqi.com links to herb/formula products for sale

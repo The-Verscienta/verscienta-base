@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Link from 'next/link';
 import { Breadcrumbs } from '@/components/ui/Breadcrumbs';
 import {
   PageWrapper,
@@ -11,18 +12,21 @@ import {
   Tag,
   BackLink,
 } from '@/components/ui/DesignSystem';
+import type { TcmPatternMatch } from '@/lib/grok';
 
 export default function SymptomCheckerPage() {
   const [symptoms, setSymptoms] = useState('');
   const [loading, setLoading] = useState(false);
   const [results, setResults] = useState<any>(null);
   const [error, setError] = useState('');
+  const [patternLookup, setPatternLookup] = useState<Record<string, string>>({});
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
     setLoading(true);
     setResults(null);
+    setPatternLookup({});
 
     try {
       const response = await fetch('/api/grok/symptom-analysis', {
@@ -40,6 +44,20 @@ export default function SymptomCheckerPage() {
       }
 
       setResults(data);
+
+      // Fetch our patterns DB to get IDs for deep linking
+      if (data.tcmPatterns?.length > 0) {
+        fetch('/api/patterns?pageSize=200')
+          .then(r => r.json())
+          .then(({ patterns }) => {
+            const lookup: Record<string, string> = {};
+            patterns?.forEach((p: { id: string; title: string }) => {
+              lookup[p.title.toLowerCase()] = p.id;
+            });
+            setPatternLookup(lookup);
+          })
+          .catch(() => {}); // graceful degradation — cards still show without deep links
+      }
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An error occurred');
     } finally {
@@ -84,7 +102,7 @@ export default function SymptomCheckerPage() {
 
             <p className="text-lg md:text-xl text-gray-600 dark:text-earth-300 leading-relaxed">
               Describe your symptoms and get personalized holistic health recommendations
-              powered by Grok AI.
+              powered by Grok AI — including TCM pattern differentiation.
             </p>
           </div>
         </div>
@@ -171,6 +189,79 @@ export default function SymptomCheckerPage() {
                     {results.analysis || 'No analysis available'}
                   </p>
                 </div>
+
+                {/* TCM Pattern Differentiation */}
+                {results.tcmPatterns && results.tcmPatterns.length > 0 && (
+                  <div>
+                    <div className="flex items-center gap-2 mb-2">
+                      <svg className="w-5 h-5 text-amber-600 dark:text-amber-400 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                      </svg>
+                      <h3 className="font-serif text-xl font-bold text-gray-800 dark:text-earth-100">
+                        TCM Pattern Differentiation
+                      </h3>
+                    </div>
+                    <p className="text-sm text-gray-600 dark:text-earth-400 mb-4">
+                      These Traditional Chinese Medicine patterns may underlie your symptoms:
+                    </p>
+                    <div className="grid md:grid-cols-2 gap-4">
+                      {results.tcmPatterns.map((pattern: TcmPatternMatch, idx: number) => {
+                        const patternId = patternLookup[pattern.patternName?.toLowerCase() ?? ''];
+                        const cardInner = (
+                          <div className="h-full border border-amber-200 dark:border-amber-800/50 rounded-xl p-4 bg-amber-50/50 dark:bg-amber-950/20 hover:shadow-md hover:border-amber-300 dark:hover:border-amber-700 transition">
+                            <h4 className="font-bold text-gray-800 dark:text-earth-100 text-base mb-1">
+                              {pattern.patternName}
+                            </h4>
+                            {(pattern.chineseName || pattern.pinyinName) && (
+                              <p className="text-sm text-amber-700 dark:text-amber-400 font-serif mb-2">
+                                {pattern.chineseName}
+                                {pattern.chineseName && pattern.pinyinName && ' · '}
+                                {pattern.pinyinName && <span className="italic">{pattern.pinyinName}</span>}
+                              </p>
+                            )}
+                            <p className="text-sm text-gray-600 dark:text-earth-300 mb-3 leading-relaxed">
+                              {pattern.matchReason}
+                            </p>
+                            {pattern.keySymptoms?.length > 0 && (
+                              <div className="flex flex-wrap gap-1.5 mb-3">
+                                {pattern.keySymptoms.map((sym, i) => (
+                                  <span key={i} className="text-xs bg-amber-100 dark:bg-amber-900/40 text-amber-700 dark:text-amber-300 px-2 py-0.5 rounded-full">
+                                    {sym}
+                                  </span>
+                                ))}
+                              </div>
+                            )}
+                            {pattern.suggestedFormulas && pattern.suggestedFormulas.length > 0 && (
+                              <div className="mb-2 text-xs">
+                                <span className="font-semibold text-gray-500 dark:text-earth-400 uppercase tracking-wide">Formulas: </span>
+                                <span className="text-gray-600 dark:text-earth-300">{pattern.suggestedFormulas.join(', ')}</span>
+                              </div>
+                            )}
+                            {pattern.suggestedPoints && pattern.suggestedPoints.length > 0 && (
+                              <div className="mb-3 text-xs">
+                                <span className="font-semibold text-gray-500 dark:text-earth-400 uppercase tracking-wide">Points: </span>
+                                <span className="text-gray-600 dark:text-earth-300 font-mono">{pattern.suggestedPoints.join(', ')}</span>
+                              </div>
+                            )}
+                            <div className="text-amber-600 dark:text-amber-500 text-sm font-medium">
+                              {patternId ? 'Explore Pattern →' : 'Browse All Patterns →'}
+                            </div>
+                          </div>
+                        );
+
+                        return patternId ? (
+                          <Link key={idx} href={`/patterns/${patternId}`} className="block">
+                            {cardInner}
+                          </Link>
+                        ) : (
+                          <Link key={idx} href="/patterns" className="block">
+                            {cardInner}
+                          </Link>
+                        );
+                      })}
+                    </div>
+                  </div>
+                )}
 
                 {results.recommendations && (
                   <div>

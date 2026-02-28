@@ -109,6 +109,59 @@ describe('lib/grok', () => {
       expect(result.disclaimer).toBeTruthy();
     });
 
+    it('returns tcmPatterns when present in response', async () => {
+      const { analyzeSymptoms } = loadModule();
+
+      const jsonResponse = JSON.stringify({
+        analysis: 'Insomnia and fatigue suggest Qi deficiency',
+        tcmPatterns: [
+          {
+            patternName: 'Heart Blood Deficiency',
+            chineseName: '心血虚',
+            pinyinName: 'Xīn Xuè Xū',
+            matchReason: 'Insomnia and palpitations indicate insufficient Blood nourishing the Heart.',
+            keySymptoms: ['insomnia', 'palpitations'],
+            suggestedFormulas: ['Gui Pi Tang'],
+            suggestedPoints: ['HT 7', 'SP 6'],
+          },
+        ],
+        recommendations: { modalities: ['Acupuncture'], herbs: ['Suan Zao Ren'] },
+        disclaimer: 'Consult a doctor.',
+      });
+      mockGrokResponse(jsonResponse);
+
+      const result = await analyzeSymptoms({ symptoms: 'insomnia and fatigue' });
+
+      expect(result.tcmPatterns).toHaveLength(1);
+      expect(result.tcmPatterns![0].patternName).toBe('Heart Blood Deficiency');
+      expect(result.tcmPatterns![0].chineseName).toBe('心血虚');
+      expect(result.tcmPatterns![0].keySymptoms).toContain('insomnia');
+      expect(result.tcmPatterns![0].suggestedFormulas).toContain('Gui Pi Tang');
+      expect(result.tcmPatterns![0].suggestedPoints).toContain('HT 7');
+    });
+
+    it('system prompt requests TCM pattern differentiation', async () => {
+      const { analyzeSymptoms } = loadModule();
+
+      const jsonResponse = JSON.stringify({
+        analysis: 'test',
+        tcmPatterns: [],
+        recommendations: { modalities: [], herbs: [] },
+        disclaimer: 'disclaimer',
+      });
+      mockGrokResponse(jsonResponse);
+
+      await analyzeSymptoms({ symptoms: 'test symptoms' });
+
+      const body = JSON.parse(mockFetch.mock.calls[0][1].body);
+      const systemMessage = body.messages[0].content;
+      expect(systemMessage).toContain('TCM pattern');
+      expect(systemMessage).toContain('tcmPatterns');
+      expect(systemMessage).toContain('patternName');
+      expect(systemMessage).toContain('suggestedFormulas');
+      expect(systemMessage).toContain('suggestedPoints');
+    });
+
     it('includes context in the prompt when provided', async () => {
       const { analyzeSymptoms } = loadModule();
 

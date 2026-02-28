@@ -16,8 +16,19 @@ export interface SymptomAnalysisRequest {
   };
 }
 
+export interface TcmPatternMatch {
+  patternName: string;
+  chineseName?: string;
+  pinyinName?: string;
+  matchReason: string;
+  keySymptoms: string[];
+  suggestedFormulas?: string[];
+  suggestedPoints?: string[];
+}
+
 export interface SymptomAnalysisResponse {
   analysis: string;
+  tcmPatterns?: TcmPatternMatch[];
   recommendations: {
     modalities: string[];
     herbs: string[];
@@ -70,7 +81,7 @@ export async function analyzeSymptoms(
     throw new Error('XAI_API_KEY is not configured');
   }
 
-  const systemPrompt = `You are a holistic health advisor assistant. Analyze the user's symptoms and provide recommendations for holistic treatments, modalities, and herbs.
+  const systemPrompt = `You are a holistic health advisor assistant with expertise in Traditional Chinese Medicine (TCM). Analyze the user's symptoms and provide both Western holistic recommendations and TCM pattern differentiation.
 
 IMPORTANT:
 - Always include a medical disclaimer
@@ -81,10 +92,31 @@ IMPORTANT:
 - Be empathetic and supportive
 - Never diagnose medical conditions
 - Always recommend consulting healthcare professionals for serious symptoms
+- Identify 2-4 possible TCM patterns/syndromes that match the symptoms
+
+For each TCM pattern provide:
+- patternName: English name (e.g. "Heart Blood Deficiency")
+- chineseName: Hanzi characters (e.g. "心血虚")
+- pinyinName: Romanized pronunciation with tone marks (e.g. "Xīn Xuè Xū")
+- matchReason: 1-2 sentences explaining why this pattern fits the symptoms
+- keySymptoms: 2-4 specific symptom keywords that match this pattern
+- suggestedFormulas: 2-3 classical herbal formula names in Pinyin
+- suggestedPoints: 2-3 acupuncture point codes (e.g. "HT 7", "SP 6", "LV 3")
 
 Format your response as JSON with this structure:
 {
   "analysis": "Brief analysis of symptoms",
+  "tcmPatterns": [
+    {
+      "patternName": "Heart Blood Deficiency",
+      "chineseName": "心血虚",
+      "pinyinName": "Xīn Xuè Xū",
+      "matchReason": "The insomnia and palpitations suggest insufficient Blood to nourish the Heart shen.",
+      "keySymptoms": ["insomnia", "palpitations", "pale complexion"],
+      "suggestedFormulas": ["Gui Pi Tang", "Tian Wang Bu Xin Dan"],
+      "suggestedPoints": ["HT 7", "SP 6", "PC 6"]
+    }
+  ],
   "recommendations": {
     "modalities": ["modality1", "modality2"],
     "herbs": ["herb1", "herb2"]
@@ -127,7 +159,7 @@ Please provide holistic health recommendations.`;
           { role: 'user', content: userPrompt },
         ],
         temperature: 0.7,
-        max_tokens: 1500,
+        max_tokens: 2000,
       }),
     });
 
