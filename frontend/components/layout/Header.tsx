@@ -72,6 +72,7 @@ export function Header() {
     { href: '/formulas', label: 'Formulas' },
     { href: '/points', label: 'Points' },
     { href: '/patterns', label: 'Patterns' },
+    { href: '/concepts', label: 'Concepts' },
     { href: '/modalities', label: 'Modalities' },
     { href: '/conditions', label: 'Conditions' },
   ];

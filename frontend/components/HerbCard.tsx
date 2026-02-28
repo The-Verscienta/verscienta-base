@@ -2,6 +2,7 @@
 import { useEffect, useState } from 'react';
 import { drupal } from '@/lib/drupal';
 import { popularityMap, getFieldConfig } from '@/lib/decision-field-maps';
+import { herbDisplayName } from '@/lib/drupal-helpers';
 
 interface HerbCardProps {
   herbId: string;
@@ -47,7 +48,7 @@ export function HerbCard({
 
   return (
     <div className={`herb-card ${className}`}>
-      <h3 className="text-xl font-bold">{herb.field_herb_pinyin_name ? `${herb.title} (${herb.field_herb_pinyin_name})` : herb.title}</h3>
+      <h3 className="text-xl font-bold">{herbDisplayName(herb.title, herb.field_herb_pinyin_name, herb.field_herb_chinese_name)}</h3>
       
       {herb.field_scientific_name && (
         <p className="italic text-gray-600 dark:text-earth-300">{herb.field_scientific_name}</p>

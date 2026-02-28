@@ -62,7 +62,10 @@ export function FormulaCard({
             )}
           </div>
 
-          <h2 className="text-xl font-bold text-gray-800 dark:text-earth-100 mb-2">{formula.title}</h2>
+          <h2 className="text-xl font-bold text-gray-800 dark:text-earth-100 mb-1">{formula.title}</h2>
+          {formula.field_formula_chinese_name && (
+            <p className="text-sm text-earth-500 dark:text-earth-400 font-serif mb-2">{formula.field_formula_chinese_name}</p>
+          )}
 
           {description && (
             <p className="text-sm text-gray-600 dark:text-earth-300 mb-4 line-clamp-2">{description}...</p>
@@ -147,7 +150,10 @@ export function FormulaCard({
         </span>
       </div>
 
-      <h2 className="text-lg font-bold text-gray-800 dark:text-earth-100 mb-2">{formula.title}</h2>
+      <h2 className="text-lg font-bold text-gray-800 dark:text-earth-100 mb-1">{formula.title}</h2>
+      {formula.field_formula_chinese_name && (
+        <p className="text-sm text-earth-500 dark:text-earth-400 font-serif mb-1">{formula.field_formula_chinese_name}</p>
+      )}
 
       {description && (
         <p className="text-sm text-gray-600 dark:text-earth-300 mb-4 line-clamp-2">{description}...</p>

@@ -198,6 +198,9 @@ export interface HerbEntity extends DrupalNode {
   field_best_season?: 'spring' | 'summer' | 'autumn' | 'winter' | 'year_round';
   field_evidence_strength?: 'strong' | 'moderate' | 'preliminary' | 'traditional_only';
   field_editors_pick?: boolean;
+
+  // Herb Pairings
+  field_herb_pairings?: HerbPairing[];
 }
 
 export interface ModalityEntity extends DrupalNode {
@@ -372,6 +375,7 @@ export interface HerbIngredient {
   type: string;
   title: string;
   field_herb_pinyin_name?: string;
+  field_herb_chinese_name?: string;
   field_quantity: number;
   field_unit: string;
   field_percentage?: number;
@@ -433,6 +437,9 @@ export interface FormulaEntity extends DrupalNode {
   field_actions?: DrupalTextField;
   field_indications?: DrupalTextField;
   field_contraindications?: DrupalTextField;
+
+  // Formula Modifications (加减)
+  field_jia_jian?: FormulaModification[];
 }
 
 // TCM Database Entities
@@ -795,6 +802,59 @@ export interface TcmPatternEntity extends DrupalNode {
 
 export function isTcmPatternEntity(entity: DrupalNode): entity is TcmPatternEntity {
   return entity.type === 'node--tcm_pattern';
+}
+
+// ─── Herb Pairings ────────────────────────────────────────────────────────────
+
+export interface HerbPairing {
+  id: string;
+  type: string;
+  field_partner_herb?: { id: string; type: string; title?: string; field_herb_pinyin_name?: string; field_herb_chinese_name?: string };
+  field_synergistic_action?: DrupalTextField;
+  field_example_formula?: { id: string; type: string; title?: string };
+}
+
+// ─── Formula Modifications (加减) ─────────────────────────────────────────────
+
+export type JiaJianAction = 'add' | 'remove' | 'increase' | 'decrease';
+
+export interface FormulaModification {
+  id: string;
+  type: string;
+  field_modification_condition?: string;
+  field_modification_action?: JiaJianAction;
+  field_modification_herb?: { id: string; type: string; title?: string; field_herb_pinyin_name?: string };
+  field_modification_amount?: string;
+  field_modification_note?: DrupalTextField;
+}
+
+// ─── TCM Concepts ─────────────────────────────────────────────────────────────
+
+export interface TcmConceptEntity extends DrupalNode {
+  type: 'node--tcm_concept';
+  field_concept_chinese_name?: string;
+  field_concept_pinyin_name?: string;
+  field_concept_category?: { id: string; type: string; name?: string };
+  field_clinical_relevance?: DrupalTextField;
+  field_related_patterns?: Array<{ id: string; type: string; title?: string }>;
+  field_related_herbs?: Array<{ id: string; type: string; title?: string; field_herb_pinyin_name?: string }>;
+  field_related_formulas?: Array<{ id: string; type: string; title?: string }>;
+  field_editors_pick?: boolean;
+  field_popularity?: 'staple' | 'common' | 'specialty' | 'rare';
+}
+
+export function isTcmConceptEntity(entity: DrupalNode): entity is TcmConceptEntity {
+  return entity.type === 'node--tcm_concept';
+}
+
+export interface TcmConceptListItem {
+  id: string;
+  title: string;
+  chineseName?: string;
+  pinyinName?: string;
+  category?: string;
+  popularity?: string;
+  editorsPick?: boolean;
 }
 
 export interface TcmPatternListItem {

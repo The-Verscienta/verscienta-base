@@ -13,6 +13,7 @@ import { GroupedIngredientsList } from '@/components/formula';
 import { HerbRoleBadge } from '@/components/formula/HerbRoleBadge';
 import { FormulaFamilySkeleton, SimilarFormulasSkeleton, ContributionsSkeleton, FormulaNetworkSkeleton } from '@/components/formula/LoadingSkeletons';
 import { getTextValue, hasTextContent, herbDisplayName } from '@/lib/drupal-helpers';
+import { JiaJianSection } from '@/components/formula/JiaJianSection';
 import {
   PageWrapper,
   LeafPattern,
@@ -86,7 +87,7 @@ async function getFormula(id: string): Promise<FormulaEntity | null> {
   try {
     const drupalUrl = process.env.NEXT_PUBLIC_DRUPAL_BASE_URL || 'https://backend.ddev.site';
     const params = new URLSearchParams({
-      include: 'field_herb_ingredients,field_herb_ingredients.field_herb_reference,field_conditions',
+      include: 'field_herb_ingredients,field_herb_ingredients.field_herb_reference,field_conditions,field_jia_jian,field_jia_jian.field_modification_herb',
     });
 
     const response = await fetch(
@@ -130,6 +131,7 @@ async function getFormula(id: string): Promise<FormulaEntity | null> {
           type: herbData?.type || 'node--herb',
           title: herbData?.attributes?.title || paragraph.attributes?.field_herb_name || 'Herb',
           field_herb_pinyin_name: herbData?.attributes?.field_herb_pinyin_name || undefined,
+          field_herb_chinese_name: herbData?.attributes?.field_herb_chinese_name || undefined,
           field_quantity: parseFloat(paragraph.attributes?.field_quantity) || 0,
           field_unit: paragraph.attributes?.field_unit || 'g',
           field_percentage: paragraph.attributes?.field_percentage
@@ -152,6 +154,33 @@ async function getFormula(id: string): Promise<FormulaEntity | null> {
         type: ref.type,
         title: condition?.attributes?.title,
       });
+    }
+
+    // Process jia jian modifications (paragraphs)
+    const jiaJian: FormulaEntity['field_jia_jian'] = [];
+    const jiaJianRefs = data.relationships?.field_jia_jian?.data || [];
+    for (const ref of jiaJianRefs) {
+      const para = includedMap.get(ref.id);
+      if (para) {
+        const herbRef = para.relationships?.field_modification_herb?.data;
+        const herbData = herbRef ? includedMap.get(herbRef.id) : null;
+        jiaJian.push({
+          id: para.id,
+          type: para.type,
+          field_modification_condition: para.attributes?.field_modification_condition || undefined,
+          field_modification_action: para.attributes?.field_modification_action || undefined,
+          field_modification_herb: herbData
+            ? {
+                id: herbData.id,
+                type: herbData.type,
+                title: herbData.attributes?.title,
+                field_herb_pinyin_name: herbData.attributes?.field_herb_pinyin_name,
+              }
+            : (herbRef ? { id: herbRef.id, type: herbRef.type } : undefined),
+          field_modification_amount: para.attributes?.field_modification_amount || undefined,
+          field_modification_note: para.attributes?.field_modification_note || undefined,
+        });
+      }
     }
 
     return {
@@ -190,6 +219,7 @@ async function getFormula(id: string): Promise<FormulaEntity | null> {
       field_actions: data.attributes?.field_actions,
       field_indications: data.attributes?.field_indications,
       field_contraindications: data.attributes?.field_contraindications,
+      field_jia_jian: jiaJian,
     };
   } catch (error) {
     console.error('Failed to fetch formula:', error);
@@ -509,7 +539,7 @@ export default async function FormulaDetailPage({ params }: FormulaDetailProps) 
                           <tr key={idx} className="border-b border-sage-200 dark:border-earth-700">
                             <td className="py-2 px-2">
                               <Link href={`/herbs/${ingredient.id}`} className="text-earth-700 dark:text-earth-400 hover:text-gray-900 dark:hover:text-earth-200 hover:underline font-medium">
-                                {herbDisplayName(ingredient.title || 'Herb', ingredient.field_herb_pinyin_name)}
+                                {herbDisplayName(ingredient.title || 'Herb', ingredient.field_herb_pinyin_name, ingredient.field_herb_chinese_name)}
                               </Link>
                             </td>
                             <td className="py-2 px-2">
@@ -591,6 +621,8 @@ export default async function FormulaDetailPage({ params }: FormulaDetailProps) 
             )}
           </div>
         </Section>
+
+        <JiaJianSection modifications={formula.field_jia_jian ?? []} />
 
         <Suspense fallback={<ContributionsSkeleton />}>
           <ContributionsSection formulaId={id} formulaTitle={name} />

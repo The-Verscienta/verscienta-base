@@ -21,6 +21,7 @@ const defaultItems: NavItem[] = [
   { href: '/formulas', label: 'Formulas' },
   { href: '/points', label: 'Points' },
   { href: '/patterns', label: 'Patterns' },
+  { href: '/concepts', label: 'Concepts' },
   { href: '/modalities', label: 'Modalities' },
   { href: '/conditions', label: 'Conditions' },
   { href: '/practitioners', label: 'Practitioners' },

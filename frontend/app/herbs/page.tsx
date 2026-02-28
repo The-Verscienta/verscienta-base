@@ -51,6 +51,7 @@ interface Herb {
   field_scientific_name?: string;
   field_common_names?: string[];
   field_herb_pinyin_name?: string;
+  field_herb_chinese_name?: string;
   field_primary_actions?: string[];
   field_tcm_temperature?: string;
   field_popularity?: string;
@@ -114,6 +115,7 @@ function getHerbData(herb: Herb) {
     id: herb.id,
     title: herb.title || herb.attributes?.title || 'Unnamed Herb',
     pinyinName: herb.field_herb_pinyin_name || (herb.attributes as any)?.field_herb_pinyin_name,
+    chineseName: herb.field_herb_chinese_name || (herb.attributes as any)?.field_herb_chinese_name,
     scientificName: herb.field_scientific_name || herb.attributes?.field_scientific_name,
     commonNames: herb.field_common_names || herb.attributes?.field_common_names || [],
     primaryActions: herb.field_primary_actions || [],
@@ -305,7 +307,7 @@ export default async function HerbsPage({ searchParams }: PageProps) {
                               &#9733; Pick
                             </span>
                           </div>
-                          <h3 className="font-serif text-lg font-bold text-gray-800 dark:text-earth-100 mb-1 group-hover:text-sage-700 transition-colors">{herbDisplayName(data.title, data.pinyinName)}</h3>
+                          <h3 className="font-serif text-lg font-bold text-gray-800 dark:text-earth-100 mb-1 group-hover:text-sage-700 transition-colors">{herbDisplayName(data.title, data.pinyinName, data.chineseName)}</h3>
                           {data.scientificName && <p className="text-sm italic text-sage-600 dark:text-sage-400 mb-2">{data.scientificName}</p>}
                           {data.summary && <p className="text-sm text-gray-600 dark:text-earth-300 line-clamp-2">{data.summary}...</p>}
                           <div className="mt-3 flex flex-wrap gap-1.5">
@@ -377,7 +379,7 @@ export default async function HerbsPage({ searchParams }: PageProps) {
                     {/* Card Body */}
                     <div className="p-5">
                       <h2 className="font-serif text-lg font-bold text-gray-800 dark:text-earth-100 mb-1 group-hover:text-sage-700 transition-colors">
-                        {herbDisplayName(data.title, data.pinyinName)}
+                        {herbDisplayName(data.title, data.pinyinName, data.chineseName)}
                       </h2>
 
                       {data.scientificName && (
