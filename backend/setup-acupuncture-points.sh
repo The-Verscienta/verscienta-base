@@ -9,9 +9,9 @@
 # Prerequisites: Drupal is running with Drush available.
 
 set -euo pipefail
-cd /var/www/html
+cd "$(dirname "$0")"
 
-DRUSH="vendor/bin/drush"
+DRUSH="${DRUSH:-vendor/bin/drush}"
 
 echo "=== Verscienta: Acupuncture Points Setup ==="
 echo ""
@@ -21,7 +21,7 @@ echo ""
 # ─────────────────────────────────────────────────────────────────────────────
 echo "[1/6] Creating 'meridian' taxonomy vocabulary..."
 
-$DRUSH php:eval "
+"$DRUSH" php:eval "
   use Drupal\taxonomy\Entity\Vocabulary;
   if (!Vocabulary::load('meridian')) {
     Vocabulary::create([
@@ -36,7 +36,7 @@ $DRUSH php:eval "
 "
 
 # Seed the 15 standard meridians
-$DRUSH php:eval "
+"$DRUSH" php:eval "
   use Drupal\taxonomy\Entity\Term;
   \$meridians = [
     'Lung', 'Large Intestine', 'Stomach', 'Spleen',
@@ -63,7 +63,7 @@ $DRUSH php:eval "
 echo ""
 echo "[2/6] Creating 'acupuncture_point' content type..."
 
-$DRUSH php:eval "
+"$DRUSH" php:eval "
   use Drupal\node\Entity\NodeType;
   if (!NodeType::load('acupuncture_point')) {
     NodeType::create([
@@ -87,7 +87,7 @@ $DRUSH php:eval "
 echo ""
 echo "[3/6] Adding identity and classification fields..."
 
-$DRUSH php:eval "
+"$DRUSH" php:eval "
   use Drupal\field\Entity\FieldStorageConfig;
   use Drupal\field\Entity\FieldConfig;
 
@@ -121,7 +121,7 @@ $DRUSH php:eval "
 "
 
 # Meridian entity reference
-$DRUSH php:eval "
+"$DRUSH" php:eval "
   use Drupal\field\Entity\FieldStorageConfig;
   use Drupal\field\Entity\FieldConfig;
 
@@ -152,7 +152,7 @@ $DRUSH php:eval "
 "
 
 # Meridian number (integer)
-$DRUSH php:eval "
+"$DRUSH" php:eval "
   use Drupal\field\Entity\FieldStorageConfig;
   use Drupal\field\Entity\FieldConfig;
 
@@ -182,7 +182,7 @@ $DRUSH php:eval "
 echo ""
 echo "[4/6] Adding location and needling fields..."
 
-$DRUSH php:eval "
+"$DRUSH" php:eval "
   use Drupal\field\Entity\FieldStorageConfig;
   use Drupal\field\Entity\FieldConfig;
 
@@ -286,7 +286,7 @@ $DRUSH php:eval "
 echo ""
 echo "[5/6] Adding clinical data fields..."
 
-$DRUSH php:eval "
+"$DRUSH" php:eval "
   use Drupal\field\Entity\FieldStorageConfig;
   use Drupal\field\Entity\FieldConfig;
 
@@ -406,6 +406,34 @@ $DRUSH php:eval "
     }
   }
 
+  // Five Element classification
+  if (!FieldStorageConfig::loadByName('node', 'field_five_element')) {
+    FieldStorageConfig::create([
+      'field_name'  => 'field_five_element',
+      'entity_type' => 'node',
+      'type'        => 'list_string',
+      'cardinality' => 1,
+      'settings'    => [
+        'allowed_values' => [
+          'wood'  => 'Wood',
+          'fire'  => 'Fire',
+          'earth' => 'Earth',
+          'metal' => 'Metal',
+          'water' => 'Water',
+        ],
+      ],
+    ])->save();
+  }
+  if (!FieldConfig::loadByName('node', 'acupuncture_point', 'field_five_element')) {
+    FieldConfig::create([
+      'field_name'  => 'field_five_element',
+      'entity_type' => 'node',
+      'bundle'      => 'acupuncture_point',
+      'label'       => 'Five Element',
+    ])->save();
+    echo 'Created field: field_five_element' . PHP_EOL;
+  }
+
   // Cross-reference entity references (multi-value)
   \$refs = [
     'field_related_conditions' => ['target_type' => 'node', 'target_bundles' => ['condition' => 'condition'], 'label' => 'Related Conditions'],
@@ -447,7 +475,7 @@ $DRUSH php:eval "
 echo ""
 echo "[6/6] Enabling JSON:API for acupuncture_point and meridian..."
 
-$DRUSH php:eval "
+"$DRUSH" php:eval "
   // Ensure json_api_extras or core json:api is exposing the new type.
   // Core JSON:API auto-exposes all entity types by default.
   // If using jsonapi_extras, we need to enable the resource type.
@@ -491,7 +519,7 @@ $DRUSH php:eval "
 "
 
 # Rebuild caches so new content type and fields are recognised
-$DRUSH cache:rebuild
+"$DRUSH" cache:rebuild
 
 echo ""
 echo "=== Setup complete! ==="

@@ -318,19 +318,10 @@ class PerenualSyncService implements PerenualSyncServiceInterface {
             }
           }
 
-          $result = $this->importPlant($perenualId);
-
-          if ($result) {
-            if ($existingNode) {
-              $stats['updated']++;
-            }
-            else {
-              $stats['imported']++;
-            }
-          }
+          $this->importPlant($perenualId);
 
           if ($progressCallback) {
-            $progressCallback($stats);
+            $progressCallback($this->getStats());
           }
         }
       }
@@ -344,7 +335,7 @@ class PerenualSyncService implements PerenualSyncServiceInterface {
 
     $this->state->set('perenual_sync.last_sync', time());
 
-    return $stats;
+    return $this->getStats();
   }
 
   /**
@@ -506,11 +497,6 @@ class PerenualSyncService implements PerenualSyncServiceInterface {
    *   TRUE if the field exists, FALSE otherwise.
    */
   protected function fieldExists(string $fieldName): bool {
-    $fieldDefinitions = $this->entityTypeManager
-      ->getStorage('node')
-      ->getEntityType()
-      ->get('field_definitions') ?? [];
-
     // Try to load field config.
     $fieldConfig = $this->entityTypeManager
       ->getStorage('field_config')

@@ -99,15 +99,21 @@ export function sanitizeHtml(html: string): string {
   // Remove style tags and their content
   sanitized = sanitized.replace(/<style\b[^<]*(?:(?!<\/style>)<[^<]*)*<\/style>/gi, '');
 
-  // Remove on* event handlers
+  // Remove on* event handlers (quoted and unquoted values)
   sanitized = sanitized.replace(/\s+on\w+\s*=\s*["'][^"']*["']/gi, '');
-  sanitized = sanitized.replace(/\s+on\w+\s*=\s*[^\s>]+/gi, '');
+  sanitized = sanitized.replace(/\s+on\w+\s*=\s*[^\s>"']+/gi, '');
 
-  // Remove javascript: URLs
+  // Remove javascript: URLs everywhere (not just in href/src)
+  sanitized = sanitized.replace(/javascript\s*:/gi, '');
+
+  // Remove javascript: in href/src attributes specifically
   sanitized = sanitized.replace(/href\s*=\s*["']?\s*javascript:[^"'>\s]*/gi, 'href="#"');
   sanitized = sanitized.replace(/src\s*=\s*["']?\s*javascript:[^"'>\s]*/gi, '');
 
-  // Remove data: URLs in src (except for small images)
+  // Remove data: URLs in src/href attributes
+  sanitized = sanitized.replace(/(src|href)\s*=\s*["']?\s*data\s*:/gi, '$1=');
+
+  // Remove data: URLs in src (except for small images) — additional safety
   sanitized = sanitized.replace(/src\s*=\s*["']?\s*data:(?!image\/(?:png|jpeg|gif|webp);base64,)[^"'>\s]*/gi, '');
 
   // Remove vbscript: URLs

@@ -1,8 +1,13 @@
 import { AuthTokens, DrupalUser } from './drupal';
 
-const DRUPAL_BASE_URL = process.env.NEXT_PUBLIC_DRUPAL_BASE_URL!;
-const CLIENT_ID = process.env.DRUPAL_CLIENT_ID!;
-const CLIENT_SECRET = process.env.DRUPAL_CLIENT_SECRET!;
+const DRUPAL_BASE_URL = process.env.NEXT_PUBLIC_DRUPAL_BASE_URL || '';
+const CLIENT_ID = process.env.DRUPAL_CLIENT_ID || '';
+const CLIENT_SECRET = process.env.DRUPAL_CLIENT_SECRET || '';
+
+// Warn at startup if OAuth credentials are missing (auth features will fail)
+if (typeof window === 'undefined' && (!CLIENT_ID || !CLIENT_SECRET)) {
+  console.warn('[auth] DRUPAL_CLIENT_ID or DRUPAL_CLIENT_SECRET not set — OAuth disabled');
+}
 
 /**
  * Authenticate user with Drupal OAuth

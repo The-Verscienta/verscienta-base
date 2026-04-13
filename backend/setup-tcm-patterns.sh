@@ -9,9 +9,9 @@
 # Prerequisites: Drupal is running with Drush available.
 
 set -euo pipefail
-cd /var/www/html
+cd "$(dirname "$0")"
 
-DRUSH="vendor/bin/drush"
+DRUSH="${DRUSH:-vendor/bin/drush}"
 
 echo "=== Verscienta: TCM Patterns Setup ==="
 echo ""
@@ -21,7 +21,7 @@ echo ""
 # ─────────────────────────────────────────────────────────────────────────────
 echo "[1/6] Creating 'organ_system' taxonomy vocabulary..."
 
-$DRUSH php:eval "
+"$DRUSH" php:eval "
   use Drupal\taxonomy\Entity\Vocabulary;
   if (!Vocabulary::load('organ_system')) {
     Vocabulary::create([
@@ -36,7 +36,7 @@ $DRUSH php:eval "
 "
 
 # Seed the 14 organ systems
-$DRUSH php:eval "
+"$DRUSH" php:eval "
   use Drupal\taxonomy\Entity\Term;
   \$organs = [
     'Spleen', 'Liver', 'Heart', 'Kidney', 'Lung', 'Pericardium',
@@ -62,7 +62,7 @@ $DRUSH php:eval "
 echo ""
 echo "[2/6] Creating 'tcm_pattern' content type..."
 
-$DRUSH php:eval "
+"$DRUSH" php:eval "
   use Drupal\node\Entity\NodeType;
   if (!NodeType::load('tcm_pattern')) {
     NodeType::create([
@@ -86,7 +86,7 @@ $DRUSH php:eval "
 echo ""
 echo "[3/6] Adding identity and classification fields..."
 
-$DRUSH php:eval "
+"$DRUSH" php:eval "
   use Drupal\field\Entity\FieldStorageConfig;
   use Drupal\field\Entity\FieldConfig;
 
@@ -117,7 +117,7 @@ $DRUSH php:eval "
 "
 
 # Organ system entity reference (single)
-$DRUSH php:eval "
+"$DRUSH" php:eval "
   use Drupal\field\Entity\FieldStorageConfig;
   use Drupal\field\Entity\FieldConfig;
 
@@ -148,7 +148,7 @@ $DRUSH php:eval "
 "
 
 # List fields: category, temperature, popularity
-$DRUSH php:eval "
+"$DRUSH" php:eval "
   use Drupal\field\Entity\FieldStorageConfig;
   use Drupal\field\Entity\FieldConfig;
 
@@ -225,7 +225,7 @@ $DRUSH php:eval "
 echo ""
 echo "[4/6] Adding clinical text fields..."
 
-$DRUSH php:eval "
+"$DRUSH" php:eval "
   use Drupal\field\Entity\FieldStorageConfig;
   use Drupal\field\Entity\FieldConfig;
 
@@ -265,7 +265,7 @@ $DRUSH php:eval "
 echo ""
 echo "[5/6] Adding cross-reference fields..."
 
-$DRUSH php:eval "
+"$DRUSH" php:eval "
   use Drupal\field\Entity\FieldStorageConfig;
   use Drupal\field\Entity\FieldConfig;
 
@@ -311,7 +311,7 @@ $DRUSH php:eval "
 echo ""
 echo "[6/6] Enabling JSON:API for tcm_pattern and organ_system..."
 
-$DRUSH php:eval "
+"$DRUSH" php:eval "
   if (\Drupal::moduleHandler()->moduleExists('jsonapi_extras')) {
     \$config_factory = \Drupal::configFactory();
 
@@ -342,7 +342,7 @@ $DRUSH php:eval "
   }
 "
 
-$DRUSH cache:rebuild
+"$DRUSH" cache:rebuild
 
 echo ""
 echo "=== Setup complete! ==="

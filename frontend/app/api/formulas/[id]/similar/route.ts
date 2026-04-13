@@ -1,3 +1,9 @@
+/**
+ * Similar-formula discovery (ingredient + proportion similarity).
+ *
+ * At scale, consider precomputing top-K neighbors per formula in Drupal (cron)
+ * or an external index so this route does not O(n) scan on every cold cache.
+ */
 import { NextRequest, NextResponse } from 'next/server';
 import { checkRateLimit, getClientIdentifier, RATE_LIMITS, createRateLimitHeaders } from '@/lib/rate-limit';
 import { findSimilarFormulas, type FormulaSimilarityResult } from '@/lib/formula-similarity';
@@ -144,7 +150,8 @@ async function getCachedSimilarities(
   minSimilarity: number,
   maxResults: number
 ): Promise<FormulaSimilarityResult[]> {
-  const cacheKey = `similarities:${formulaId}:${minSimilarity}:${maxResults}`;
+  // Bump cache generation when similarity algorithm changes (role weights, min shared herbs, tiers).
+  const cacheKey = `similarities:v4:${formulaId}:${minSimilarity}:${maxResults}`;
 
   return cachedFetch(cacheKey, async () => {
     const sourceFormula = allFormulas.find(f => f.id === formulaId);
@@ -153,7 +160,12 @@ async function getCachedSimilarities(
       return [];
     }
 
-    return findSimilarFormulas(sourceFormula, allFormulas, { minSimilarity, maxResults });
+    return findSimilarFormulas(sourceFormula, allFormulas, {
+      minSimilarity,
+      maxResults,
+      minSharedHerbs: 2,
+      useRoleWeights: true,
+    });
   }, CACHE_TTL.SIMILARITIES);
 }
 
@@ -183,7 +195,7 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
   try {
     const url = new URL(request.url);
     const minSimilarity = parseInt(url.searchParams.get('minSimilarity') || '10', 10);
-    const maxResults = parseInt(url.searchParams.get('maxResults') || '5', 10);
+    const maxResults = Math.min(20, parseInt(url.searchParams.get('maxResults') || '8', 10));
 
     // Fetch all formulas (cached)
     const allFormulas = await fetchAllFormulas();

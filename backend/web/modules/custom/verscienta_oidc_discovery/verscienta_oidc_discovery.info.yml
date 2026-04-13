@@ -1,0 +1,7 @@
+name: Verscienta OIDC Discovery
+type: module
+description: 'Provides OpenID Connect discovery endpoint (/.well-known/openid-configuration), custom claims, and front-channel logout for SSO across Verscienta apps.'
+package: Custom
+core_version_requirement: ^11
+dependencies:
+  - simple_oauth:simple_oauth

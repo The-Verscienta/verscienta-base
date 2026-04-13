@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { useAuth } from '@/hooks/useAuth';
+import { apiFetch } from '@/lib/api-client';
 import type { ContributionType, HerbModification } from '@/types/drupal';
 import { HerbModificationListEditor } from './HerbModificationEditor';
 import { formulaContributionSchema, formatZodErrors } from '@/lib/validation';
@@ -67,7 +68,7 @@ export function ContributionForm({
     setIsSubmitting(true);
 
     try {
-      const response = await fetch(`/api/formulas/${formulaId}/contributions`, {
+      const response = await apiFetch(`/api/formulas/${formulaId}/contributions`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

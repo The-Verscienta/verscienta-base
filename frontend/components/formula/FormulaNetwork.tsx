@@ -37,9 +37,21 @@ export function FormulaNetwork({ formulaId }: FormulaNetworkProps) {
     });
   }, []);
 
-  if (loading || !data || data.nodes.length < 3) return null;
+  const [width, setWidth] = useState(600);
+  useEffect(() => {
+    if (containerRef.current) {
+      setWidth(containerRef.current.clientWidth);
+    }
+    const handleResize = () => {
+      if (containerRef.current) {
+        setWidth(containerRef.current.clientWidth);
+      }
+    };
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
-  const width = containerRef.current?.clientWidth || 600;
+  if (loading || !data || data.nodes.length < 3) return null;
 
   const graphData = {
     nodes: data.nodes.map((n: NetworkNode) => ({

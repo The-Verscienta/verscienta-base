@@ -1,24 +1,20 @@
 # PowerShell script to copy files to WSL DDEV location
 # Run this in PowerShell: .\copy-to-wsl.ps1
 
-$SOURCE = "C:\Users\pf1\OneDrive\Documents\GitHub\verscienta-drupal"
+$SOURCE = $PSScriptRoot
 $WSL_DEST = "\\wsl.localhost\DDEV\home\pf1"
 
 Write-Host "📋 Copying files to WSL DDEV location..." -ForegroundColor Cyan
 
 # Create directories in WSL
 Write-Host "Creating directories..." -ForegroundColor Yellow
-New-Item -ItemType Directory -Force -Path "$WSL_DEST\backend\web\modules\custom\holistic_hub" | Out-Null
+New-Item -ItemType Directory -Force -Path "$WSL_DEST\backend" | Out-Null
 New-Item -ItemType Directory -Force -Path "$WSL_DEST\frontend" | Out-Null
 
 # Copy backend files
 Write-Host "Copying backend files..." -ForegroundColor Yellow
 Copy-Item "$SOURCE\backend\composer.json" -Destination "$WSL_DEST\backend\" -Force
 Copy-Item "$SOURCE\backend\Dockerfile" -Destination "$WSL_DEST\backend\" -Force
-Copy-Item "$SOURCE\backend\setup-content-types.sh" -Destination "$WSL_DEST\backend\" -Force
-
-# Copy custom module
-Copy-Item "$SOURCE\backend\web\modules\custom\holistic_hub\holistic_hub.info.yml" -Destination "$WSL_DEST\backend\web\modules\custom\holistic_hub\" -Force -ErrorAction SilentlyContinue
 
 # Copy frontend files
 Write-Host "Copying frontend files..." -ForegroundColor Yellow
@@ -49,12 +45,13 @@ if (Test-Path "$SOURCE\frontend\public") {
     Copy-Item "$SOURCE\frontend\public" -Destination "$WSL_DEST\frontend\" -Recurse -Force
 }
 
-# Copy documentation
+# Copy documentation (root README + full docs tree)
 Write-Host "Copying documentation..." -ForegroundColor Yellow
 Copy-Item "$SOURCE\README.md" -Destination "$WSL_DEST\" -Force
-Copy-Item "$SOURCE\TIMELINE.md" -Destination "$WSL_DEST\" -Force
-Copy-Item "$SOURCE\SETUP.md" -Destination "$WSL_DEST\" -Force
-Copy-Item "$SOURCE\AFTER-DDEV-INSTALL.md" -Destination "$WSL_DEST\" -Force
+if (Test-Path "$SOURCE\docs") {
+    New-Item -ItemType Directory -Force -Path "$WSL_DEST\docs" | Out-Null
+    Copy-Item "$SOURCE\docs\*" -Destination "$WSL_DEST\docs\" -Recurse -Force
+}
 
 # Copy .gitignore if exists
 if (Test-Path "$SOURCE\.gitignore") {
@@ -62,7 +59,9 @@ if (Test-Path "$SOURCE\.gitignore") {
 }
 
 # Copy docker-compose.yml
-Copy-Item "$SOURCE\docker-compose.yml" -Destination "$WSL_DEST\" -Force
+if (Test-Path "$SOURCE\docker-compose.yml") {
+    Copy-Item "$SOURCE\docker-compose.yml" -Destination "$WSL_DEST\" -Force
+}
 
 Write-Host "✅ Files copied successfully!" -ForegroundColor Green
 Write-Host ""
@@ -70,4 +69,3 @@ Write-Host "Next steps:" -ForegroundColor Cyan
 Write-Host "1. Open WSL terminal: wsl -d DDEV" -ForegroundColor White
 Write-Host "2. Navigate: cd /home/pf1/backend" -ForegroundColor White
 Write-Host "3. Check DDEV: ddev describe" -ForegroundColor White
-Write-Host "4. Run setup: ddev exec bash setup-content-types.sh" -ForegroundColor White

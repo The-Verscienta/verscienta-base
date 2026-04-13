@@ -77,12 +77,14 @@ export async function POST(request: NextRequest) {
 
     // For now, log the booking (without PII) and return success
     // In production, this would create a Drupal entity or send an email
-    console.log('Booking request received:', {
-      practitionerId: data.practitionerId,
-      preferredTime: data.preferredTime,
-      visitType: data.visitType,
-      timestamp: new Date().toISOString(),
-    });
+    if (process.env.NODE_ENV === 'development') {
+      console.log('Booking request received:', {
+        practitionerId: data.practitionerId,
+        preferredTime: data.preferredTime,
+        visitType: data.visitType,
+        timestamp: new Date().toISOString(),
+      });
+    }
 
     return NextResponse.json(
       {

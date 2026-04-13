@@ -22,6 +22,7 @@ class CloudflareApiClient implements CloudflareApiClientInterface {
   protected ?string $apiToken = null;
   protected ?string $accountId = null;
   protected ?string $accountHash = null;
+  protected ?string $zoneId = null;
   protected bool $credentialsInitialized = false;
 
   /**
@@ -103,6 +104,13 @@ class CloudflareApiClient implements CloudflareApiClientInterface {
     $this->apiToken = $apiTokenValue;
     $this->accountId = $accountIdValue;
     $this->accountHash = $accountHashValue;
+
+    $zoneIdKeyId = $config->get('cloudflare_zone_id');
+    if ($zoneIdKeyId) {
+      $zoneIdKey = $this->keyRepository->getKey($zoneIdKeyId);
+      $this->zoneId = $zoneIdKey ? $zoneIdKey->getKeyValue() : null;
+    }
+
     $this->credentialsInitialized = true;
     
     $this->logger->info('Cloudflare credentials initialized successfully');
@@ -200,6 +208,7 @@ class CloudflareApiClient implements CloudflareApiClientInterface {
    * {@inheritdoc}
    */
   public function deleteImage(string $id): bool {
+    $this->ensureCredentials();
     $url = self::API_BASE_URL . "/accounts/{$this->accountId}/images/v1/{$id}";
     
     try {
@@ -263,6 +272,7 @@ class CloudflareApiClient implements CloudflareApiClientInterface {
    * {@inheritdoc}
    */
   public function listImages(int $page = 1, int $perPage = 100): array {
+    $this->ensureCredentials();
     $url = self::API_BASE_URL . "/accounts/{$this->accountId}/images/v1";
     
     try {
@@ -398,8 +408,9 @@ class CloudflareApiClient implements CloudflareApiClientInterface {
    * {@inheritdoc}
    */
   public function purgeCache(string $id): bool {
+    $this->ensureCredentials();
     try {
-      $url = self::API_BASE_URL . "/zones/{$this->accountId}/purge_cache";
+      $url = self::API_BASE_URL . "/zones/{$this->zoneId}/purge_cache";
       
       $response = $this->httpClient->request('POST', $url, [
         RequestOptions::HEADERS => [

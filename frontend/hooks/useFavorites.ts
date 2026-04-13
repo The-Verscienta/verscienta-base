@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 
 export type FavoriteEntityType = 'herb' | 'formula' | 'condition' | 'modality' | 'practitioner';
 
@@ -97,9 +97,10 @@ export function useFavorites() {
       .sort((a, b) => new Date(b.savedAt).getTime() - new Date(a.savedAt).getTime());
   }, [favorites]);
 
-  const allFavorites = Object.values(favorites).sort(
-    (a, b) => new Date(b.savedAt).getTime() - new Date(a.savedAt).getTime()
-  );
+  const allFavorites = useMemo(() =>
+    Object.values(favorites).sort(
+      (a, b) => new Date(b.savedAt).getTime() - new Date(a.savedAt).getTime()
+    ), [favorites]);
 
   return {
     favorites: allFavorites,

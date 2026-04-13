@@ -71,14 +71,22 @@ function parseCookies(cookieHeader: string): Record<string, string> {
  * Constant-time string comparison to prevent timing attacks
  */
 function timingSafeEqual(a: string, b: string): boolean {
-  if (a.length !== b.length) {
+  const bufA = Buffer.from(a);
+  const bufB = Buffer.from(b);
+  if (bufA.length !== bufB.length) {
+    // Pad shorter buffer to prevent length leakage
+    const maxLen = Math.max(bufA.length, bufB.length);
+    const paddedA = Buffer.alloc(maxLen);
+    const paddedB = Buffer.alloc(maxLen);
+    bufA.copy(paddedA);
+    bufB.copy(paddedB);
+    // Always compare, but result includes length mismatch
+    const { timingSafeEqual: cryptoEqual } = require('crypto');
+    cryptoEqual(paddedA, paddedB);
     return false;
   }
-  let result = 0;
-  for (let i = 0; i < a.length; i++) {
-    result |= a.charCodeAt(i) ^ b.charCodeAt(i);
-  }
-  return result === 0;
+  const { timingSafeEqual: cryptoEqual } = require('crypto');
+  return cryptoEqual(bufA, bufB);
 }
 
 // Export constants for use in middleware and client code

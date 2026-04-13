@@ -9,7 +9,7 @@ services:
 
   trefle_sync.image_handler:
     class: Drupal\trefle_sync\TrefleImageHandler
-    arguments: ['@file_system', '@entity_type.manager', '@logger.factory', '@file.repository']
+    arguments: ['@file_system', '@entity_type.manager', '@logger.factory', '@file.repository', '@http_client']
 
   trefle_sync.service:
     class: Drupal\trefle_sync\TrefleSyncService

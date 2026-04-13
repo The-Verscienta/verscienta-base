@@ -7,6 +7,7 @@ namespace Drupal\cloudflare_media_offload\Controller;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Queue\QueueFactory;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -18,26 +19,33 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 class WebhookController extends ControllerBase {
 
   /**
-   * The logger.
-   */
-  protected LoggerInterface $logger;
-
-  /**
    * Constructs a new WebhookController.
    *
    * @param \Psr\Log\LoggerInterface $logger
    *   The logger.
+   * @param \Drupal\Core\Config\ConfigFactoryInterface $configFactory
+   *   The config factory.
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
+   *   The entity type manager.
+   * @param \Drupal\Core\Queue\QueueFactory $queueFactory
+   *   The queue factory.
    */
-  public function __construct(LoggerInterface $logger) {
-    $this->logger = $logger;
-  }
+  public function __construct(
+    protected LoggerInterface $logger,
+    protected ConfigFactoryInterface $configFactory,
+    protected EntityTypeManagerInterface $entityTypeManager,
+    protected QueueFactory $queueFactory,
+  ) {}
 
   /**
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container): self {
     return new self(
-      $container->get('logger.channel.cloudflare_media_offload')
+      $container->get('logger.channel.cloudflare_media_offload'),
+      $container->get('config.factory'),
+      $container->get('entity_type.manager'),
+      $container->get('queue')
     );
   }
 
@@ -51,7 +59,7 @@ class WebhookController extends ControllerBase {
    *   The response.
    */
   public function handle(Request $request): JsonResponse {
-    $config = \Drupal::config('cloudflare_media_offload.settings');
+    $config = $this->configFactory->get('cloudflare_media_offload.settings');
     $webhook_secret = $config->get('webhook_secret');
     
     // If no webhook secret is configured, reject the request
@@ -124,7 +132,7 @@ class WebhookController extends ControllerBase {
     ]);
 
     // Find media entities with this Cloudflare ID
-    $media_storage = \Drupal::entityTypeManager()->getStorage('media');
+    $media_storage = $this->entityTypeManager->getStorage('media');
     $query = $media_storage->getQuery()
       ->condition('status', 1)
       ->accessCheck(FALSE);
@@ -150,7 +158,7 @@ class WebhookController extends ControllerBase {
         ]);
         
         // Add to retry queue
-        $queue = \Drupal::queue('cloudflare_upload_retry');
+        $queue = $this->queueFactory->get('cloudflare_upload_retry');
         $queue->createItem([
           'image_id' => $image_id,
           'error' => $error_message,

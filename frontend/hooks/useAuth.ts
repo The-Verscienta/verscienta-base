@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 
 export interface User {
   id: string;
@@ -19,11 +19,7 @@ export function useAuth() {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    checkAuth();
-  }, []);
-
-  const checkAuth = async () => {
+  const checkAuth = useCallback(async () => {
     try {
       const response = await fetch('/api/auth/me');
 
@@ -39,9 +35,13 @@ export function useAuth() {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
-  const logout = async () => {
+  useEffect(() => {
+    checkAuth();
+  }, [checkAuth]);
+
+  const logout = useCallback(async () => {
     try {
       await fetch('/api/auth/logout', { method: 'POST' });
       setUser(null);
@@ -49,7 +49,7 @@ export function useAuth() {
     } catch (error) {
       console.error('Logout failed:', error);
     }
-  };
+  }, []);
 
   return {
     user,

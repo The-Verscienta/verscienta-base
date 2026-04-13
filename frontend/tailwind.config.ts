@@ -1,4 +1,7 @@
 import type { Config } from 'tailwindcss';
+import typography from '@tailwindcss/typography';
+import forms from '@tailwindcss/forms';
+import tailwindColorRefs from './styles/generated/tailwind-color-refs.json';
 
 const config: Config = {
   content: [
@@ -9,80 +12,9 @@ const config: Config = {
   darkMode: 'class',
   theme: {
     extend: {
+      /** Primitive palettes — CSS variables from Style Dictionary (`npm run tokens:build`) */
       colors: {
-        // Earth tones (Primary Brand)
-        earth: {
-          50: '#f5f8f5',
-          100: '#e6ede6',
-          200: '#cdd9cd',
-          300: '#adbfad',
-          400: '#7a9a7a',
-          500: '#5f7d5f',
-          600: '#577256',  // Primary
-          700: '#4d6a4d',
-          800: '#3d5a3d',
-          900: '#2d4a2d',
-          950: '#1a2e1a',
-        },
-        // Sage (Secondary)
-        sage: {
-          50: '#f3f9f4',
-          100: '#e7f3e9',
-          200: '#c8dbcd',
-          300: '#a9c2b1',
-          400: '#8aaa95',
-          500: '#6b9279',
-          600: '#527a5f',  // Primary sage
-          700: '#426650',
-          800: '#365340',
-          900: '#2a4030',
-          950: '#1e2d20',
-        },
-        // TCM Red (Traditional Chinese Medicine accent)
-        tcm: {
-          50: '#fff5f5',
-          100: '#ffe5e6',
-          200: '#ffccce',
-          300: '#ff9aa0',
-          400: '#ff6770',
-          500: '#d63031',
-          600: '#c1272d',  // Traditional Chinese red
-          700: '#a01f23',
-          800: '#7f1a1d',
-          900: '#651618',
-        },
-        // Gold (Premium/Verified)
-        gold: {
-          50: '#faf4ed',
-          100: '#f5e9d8',
-          200: '#ead3b0',
-          300: '#dfbd88',
-          400: '#e0b589',
-          500: '#d4a574',
-          600: '#c8955f',
-          700: '#855f30',
-          800: '#85602e',
-          900: '#644817',
-        },
-        // Cream (Warm backgrounds)
-        cream: {
-          50: '#fffef9',
-          100: '#fefcf3',
-          200: '#faf6e8',
-          300: '#f5edd8',
-          400: '#efe4c8',
-        },
-        // Warm (Warnings, TCM hot)
-        warm: {
-          50: '#fef7f6',
-          100: '#fee2e2',
-          200: '#fecaca',
-          300: '#fca5a5',
-          400: '#f87171',
-          500: '#c25b56',
-          600: '#dc2626',
-          700: '#991b1b',
-        },
+        ...tailwindColorRefs,
       },
       fontFamily: {
         sans: ['Source Sans 3', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'sans-serif'],
@@ -198,8 +130,8 @@ const config: Config = {
     },
   },
   plugins: [
-    require('@tailwindcss/typography'),
-    require('@tailwindcss/forms'),
+    typography,
+    forms,
   ],
 };
 

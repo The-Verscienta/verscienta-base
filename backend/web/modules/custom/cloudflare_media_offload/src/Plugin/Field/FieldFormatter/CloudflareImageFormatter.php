@@ -174,7 +174,7 @@ class CloudflareImageFormatter extends ImageFormatter {
       else {
         $image_url = $this->imageStyleStorage->load($image_style_setting)
           ? $this->imageStyleStorage->load($image_style_setting)->buildUrl($image_uri)
-          : file_url_transform_relative(file_create_url($image_uri));
+          : \Drupal::service('file_url_generator')->generateString($image_uri);
       }
 
       $item = $items[$delta];
@@ -208,7 +208,7 @@ class CloudflareImageFormatter extends ImageFormatter {
       if (isset($link_file)) {
         $file_url = str_starts_with($image_uri, 'cloudflare://') 
           ? $image_url 
-          : file_url_transform_relative(file_create_url($image_uri));
+          : \Drupal::service('file_url_generator')->generateString($image_uri);
         $elements[$delta]['#url'] = $file_url;
       }
     }

@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import { apiFetch } from '@/lib/api-client';
 import { Breadcrumbs } from '@/components/ui/Breadcrumbs';
 import {
   PageWrapper,
@@ -117,7 +118,7 @@ export default function HerbDrugInteractionsPage() {
     setResults(null);
 
     try {
-      const response = await fetch('/api/grok/herb-drug-check', {
+      const response = await apiFetch('/api/grok/herb-drug-check', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ medications }),

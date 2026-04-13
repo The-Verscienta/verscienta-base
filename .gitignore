@@ -19,6 +19,7 @@ backend/.ddev
 
 # Next.js
 frontend/.next/
+frontend/storybook-static/
 frontend/out/
 frontend/build/
 frontend/dist/
@@ -52,7 +53,7 @@ coverage/
 tmp/
 temp/
 
-./claude
+.claude
 
 # TCM ingestion data files (downloaded CSVs)
 scripts/tcm-ingest/data/*.csv
@@ -62,3 +63,6 @@ scripts/tcm-ingest/data/*.tsv
 scripts/tcm-ingest/logs/
 scripts/tcm-ingest/.venv/
 scripts/tcm-ingest/.env
+
+# Windows download zone metadata (alternate data stream marker files)
+*Zone.Identifier

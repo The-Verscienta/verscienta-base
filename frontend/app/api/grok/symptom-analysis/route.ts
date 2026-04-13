@@ -66,13 +66,15 @@ export async function POST(request: NextRequest) {
       context,
     });
 
-    // Log anonymized request (for analytics)
-    console.log('Symptom analysis completed:', {
-      timestamp: new Date().toISOString(),
-      symptomsLength: symptoms.length,
-      hasFollowUps: !!followUpAnswers,
-      hasContext: !!context,
-    });
+    // Log anonymized request (for analytics, dev only)
+    if (process.env.NODE_ENV === 'development') {
+      console.log('Symptom analysis completed:', {
+        timestamp: new Date().toISOString(),
+        symptomsLength: symptoms.length,
+        hasFollowUps: !!followUpAnswers,
+        hasContext: !!context,
+      });
+    }
 
     return NextResponse.json(
       {
@@ -105,7 +107,7 @@ export async function OPTIONS(request: NextRequest) {
   return new NextResponse(null, {
     status: 200,
     headers: {
-      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Origin': process.env.NEXT_PUBLIC_APP_URL || 'https://verscienta.com',
       'Access-Control-Allow-Methods': 'POST, OPTIONS',
       'Access-Control-Allow-Headers': 'Content-Type',
     },

@@ -33,15 +33,17 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Log feedback — in production this would write to a database
-    console.log('[SymbolicFeedback]', JSON.stringify({
-      timestamp: new Date().toISOString(),
-      clientId: identifier,
-      query,
-      result,
-      rating,
-      comment: comment || null,
-    }));
+    // Log feedback — in production this should write to a database
+    if (process.env.NODE_ENV === 'development') {
+      console.log('[SymbolicFeedback]', JSON.stringify({
+        timestamp: new Date().toISOString(),
+        clientId: identifier,
+        query,
+        result,
+        rating,
+        comment: comment || null,
+      }));
+    }
 
     return NextResponse.json(
       { success: true },

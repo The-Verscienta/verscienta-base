@@ -1,6 +1,6 @@
 # Production docker-compose — uses pre-built images from GHCR.
 # For Coolify deployments, configure services individually in the Coolify UI
-# (see COOLIFY-DEPLOYMENT.md). This file is for self-hosted VPS deployments
+# (see docs/COOLIFY-DEPLOYMENT.md). This file is for self-hosted VPS deployments
 # behind a reverse proxy, or for smoke-testing production images locally.
 #
 # Usage:
@@ -57,6 +57,7 @@ services:
       SYMPY_SERVICE_URL: ${SYMPY_SERVICE_URL:-http://sympy-compute:8000}
       SYMPY_API_KEY: ${SYMPY_API_KEY}
       CSRF_SECRET: ${CSRF_SECRET}
+      NEXT_PUBLIC_DRUPAL_BASE_URL: ${NEXT_PUBLIC_DRUPAL_BASE_URL}
     healthcheck:
       test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://127.0.0.1:3000/"]
       interval: 30s

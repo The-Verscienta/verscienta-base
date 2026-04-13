@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Drupal\cloudflare_media_offload\Form;
 
 use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\Core\Entity\EntityTypeBundleInfoInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
@@ -30,6 +31,7 @@ class MigrationForm extends FormBase {
     protected ConfigFactoryInterface $configFactory,
     protected EntityTypeManagerInterface $entityTypeManager,
     protected CloudflareApiClientInterface $apiClient,
+    protected EntityTypeBundleInfoInterface $bundleInfo,
   ) {}
 
   /**
@@ -39,7 +41,8 @@ class MigrationForm extends FormBase {
     return new self(
       $container->get('config.factory'),
       $container->get('entity_type.manager'),
-      $container->get('cloudflare_media_offload.api_client')
+      $container->get('cloudflare_media_offload.api_client'),
+      $container->get('entity_type.bundle.info')
     );
   }
 
@@ -107,7 +110,7 @@ class MigrationForm extends FormBase {
 
     $bundle_options = [];
     foreach ($enabled_bundles as $bundle_id) {
-      $bundle_info = $this->entityTypeManager->getBundleInfo('media');
+      $bundle_info = $this->bundleInfo->getBundleInfo('media');
       if (isset($bundle_info[$bundle_id])) {
         $bundle_options[$bundle_id] = $bundle_info[$bundle_id]['label'];
       }
@@ -196,7 +199,7 @@ class MigrationForm extends FormBase {
       $local_count = $total - $cloudflare_count;
       $total_local += $local_count;
 
-      $bundle_info = $this->entityTypeManager->getBundleInfo('media');
+      $bundle_info = $this->bundleInfo->getBundleInfo('media');
       $bundle_label = $bundle_info[$bundle]['label'] ?? $bundle;
 
       $rows[] = [

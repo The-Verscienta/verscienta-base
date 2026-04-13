@@ -9,6 +9,7 @@ use Drupal\Core\File\FileSystemInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\file\FileRepositoryInterface;
 use Drupal\node\NodeInterface;
+use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Exception\GuzzleException;
 use Psr\Log\LoggerInterface;
 
@@ -65,6 +66,7 @@ class PerenualImageHandler {
     protected EntityTypeManagerInterface $entityTypeManager,
     LoggerChannelFactoryInterface $loggerFactory,
     protected FileRepositoryInterface $fileRepository,
+    protected ClientInterface $httpClient,
   ) {
     $this->logger = $loggerFactory->get('perenual_sync');
   }
@@ -254,8 +256,7 @@ class PerenualImageHandler {
       }
 
       // Download the image.
-      $client = \Drupal::httpClient();
-      $response = $client->get($url, [
+      $response = $this->httpClient->get($url, [
         'timeout' => 30,
         'headers' => [
           'User-Agent' => 'Drupal Perenual Sync Module',
@@ -326,6 +327,12 @@ class PerenualImageHandler {
     }
 
     $host = strtolower($parsed['host']);
+
+    // Check against allowed hosts.
+    if (!in_array($host, self::ALLOWED_HOSTS, true)) {
+      $this->logger->warning('Image URL from non-allowed host: @host', ['@host' => $host]);
+      return FALSE;
+    }
 
     // Block localhost and loopback.
     if (in_array($host, ['localhost', '127.0.0.1', '::1'], TRUE)) {

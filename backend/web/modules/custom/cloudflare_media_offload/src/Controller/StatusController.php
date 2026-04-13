@@ -7,6 +7,7 @@ namespace Drupal\cloudflare_media_offload\Controller;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Database\Connection;
+use Drupal\Core\Entity\EntityTypeBundleInfoInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Queue\QueueFactory;
 use Drupal\cloudflare_media_offload\Service\CloudflareApiClientInterface;
@@ -37,6 +38,7 @@ class StatusController extends ControllerBase {
     protected QueueFactory $queueFactory,
     protected Connection $database,
     protected CloudflareApiClientInterface $apiClient,
+    protected EntityTypeBundleInfoInterface $bundleInfo,
   ) {
     $this->configFactory = $configFactory;
   }
@@ -50,7 +52,8 @@ class StatusController extends ControllerBase {
       $container->get('entity_type.manager'),
       $container->get('queue'),
       $container->get('database'),
-      $container->get('cloudflare_media_offload.api_client')
+      $container->get('cloudflare_media_offload.api_client'),
+      $container->get('entity_type.bundle.info')
     );
   }
 
@@ -155,7 +158,7 @@ class StatusController extends ControllerBase {
     ];
 
     if (!empty($enabled_bundles)) {
-      $bundle_info = $this->entityTypeManager->getBundleInfo('media');
+      $bundle_info = $this->bundleInfo->getBundleInfo('media');
       $items = [];
       foreach ($enabled_bundles as $bundle_id) {
         $items[] = $bundle_info[$bundle_id]['label'] ?? $bundle_id;

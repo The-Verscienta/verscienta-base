@@ -199,14 +199,14 @@ export function HerbModificationListEditor({
   };
 
   const handleAdd = () => {
-    onChange([...modifications, { action: 'add', rationale: '' }]);
+    onChange([...modifications, { action: 'add' as const, rationale: '' }]);
   };
 
   return (
     <div className="space-y-4">
       {modifications.map((mod, index) => (
         <HerbModificationEditor
-          key={index}
+          key={`mod-${index}-${mod.action || ''}-${mod.herb_id || ''}`}
           modification={mod}
           onChange={(updated) => handleModificationChange(index, updated)}
           onRemove={() => handleRemove(index)}

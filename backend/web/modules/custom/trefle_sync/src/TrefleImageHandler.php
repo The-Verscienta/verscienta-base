@@ -9,6 +9,7 @@ use Drupal\Core\File\FileSystemInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\file\FileRepositoryInterface;
 use Drupal\node\NodeInterface;
+use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Exception\GuzzleException;
 use Psr\Log\LoggerInterface;
 
@@ -56,6 +57,7 @@ class TrefleImageHandler {
     protected EntityTypeManagerInterface $entityTypeManager,
     LoggerChannelFactoryInterface $loggerFactory,
     protected FileRepositoryInterface $fileRepository,
+    protected ClientInterface $httpClient,
   ) {
     $this->logger = $loggerFactory->get('trefle_sync');
   }
@@ -263,8 +265,7 @@ class TrefleImageHandler {
       }
 
       // Download the image.
-      $client = \Drupal::httpClient();
-      $response = $client->get($url, [
+      $response = $this->httpClient->get($url, [
         'timeout' => 30,
         'headers' => [
           'User-Agent' => 'Drupal Trefle Sync Module',

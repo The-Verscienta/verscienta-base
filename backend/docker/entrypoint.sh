@@ -65,14 +65,23 @@ if [ -n "$DRUPAL_DATABASE_HOST" ]; then
   # Apply any pending database/entity updates via drush
   cd /var/www/html
   echo "Running database updates..."
-  ./vendor/bin/drush updatedb --no-interaction 2>&1 || echo "Database update check completed (non-fatal if failed)."
+  if ! ./vendor/bin/drush updatedb --no-interaction 2>&1; then
+    echo "ERROR: Database updates failed. Container will not start with stale schema." >&2
+    exit 1
+  fi
 
   # Apply recipes to ensure form/view display configs exist
+  # Recipes are idempotent — failure here means a real problem
   echo "Applying Verscienta recipes..."
-  ./vendor/bin/drush recipe web/recipes/verscienta_formula 2>&1 || echo "Recipe apply completed (non-fatal if already applied)."
+  if ! ./vendor/bin/drush recipe web/recipes/verscienta_formula 2>&1; then
+    echo "WARNING: Recipe apply failed (may already be applied). Continuing..." >&2
+  fi
 
   echo "Rebuilding cache..."
-  ./vendor/bin/drush cache:rebuild 2>&1 || echo "Cache rebuild completed (non-fatal if failed)."
+  if ! ./vendor/bin/drush cache:rebuild 2>&1; then
+    echo "ERROR: Cache rebuild failed." >&2
+    exit 1
+  fi
 fi
 
 # Start Apache

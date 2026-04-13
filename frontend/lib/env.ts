@@ -10,7 +10,6 @@ import { z } from 'zod';
 // Server-side environment variables (not exposed to browser)
 const serverEnvSchema = z.object({
   // Drupal backend configuration
-  DRUPAL_BASE_URL: z.string().url().default('http://localhost:8080'),
   DRUPAL_CLIENT_ID: z.string().min(1).optional(),
   DRUPAL_CLIENT_SECRET: z.string().min(1).optional(),
 
@@ -22,6 +21,9 @@ const serverEnvSchema = z.object({
 
   // Cloudflare Turnstile (CAPTCHA)
   TURNSTILE_SECRET_KEY: z.string().min(1).optional(),
+
+  // CSRF Protection
+  CSRF_SECRET: z.string().min(1).optional(),
 
   // Node environment
   NODE_ENV: z.enum(['development', 'production', 'test']).default('development'),
@@ -156,7 +158,7 @@ export function logEnvSummary(): void {
 
   console.log('Environment Configuration:');
   console.log(`  NODE_ENV: ${server.NODE_ENV}`);
-  console.log(`  DRUPAL_BASE_URL: ${server.DRUPAL_BASE_URL}`);
+  console.log(`  DRUPAL_BASE_URL: ${process.env.NEXT_PUBLIC_DRUPAL_BASE_URL || 'Not configured'}`);
   console.log(`  Drupal OAuth: ${server.DRUPAL_CLIENT_ID ? 'Configured' : 'Not configured'}`);
   console.log(`  xAI API: ${server.XAI_API_KEY ? 'Configured' : 'Not configured'}`);
   console.log(`  Redis: ${server.REDIS_URL ? 'Configured' : 'Not configured'}`);

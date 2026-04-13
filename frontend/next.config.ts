@@ -47,14 +47,15 @@ const nextConfig: NextConfig = {
   // Enable compression
   compress: true,
 
-  // Environment variables available at runtime
+  // Only public (non-secret) env vars in the build config.
+  // Server-side secrets (DRUPAL_CLIENT_SECRET, XAI_API_KEY, etc.) are read
+  // from process.env at runtime — never baked into the build.
   env: {
     NEXT_PUBLIC_DRUPAL_BASE_URL: process.env.NEXT_PUBLIC_DRUPAL_BASE_URL || 'http://localhost:8080',
-    DRUPAL_CLIENT_ID: process.env.DRUPAL_CLIENT_ID || '',
-    DRUPAL_CLIENT_SECRET: process.env.DRUPAL_CLIENT_SECRET || '',
-    XAI_API_KEY: process.env.XAI_API_KEY || '',
-    REDIS_URL: process.env.REDIS_URL || 'redis://localhost:6379',
   },
+
+  // Disable source maps in production to avoid leaking source code
+  productionBrowserSourceMaps: false,
 
   // Type checking and linting
   typescript: {

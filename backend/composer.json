@@ -49,7 +49,7 @@
         "drupal/jsonapi_extras": "^3.26",
         "drupal/media_library_form_element": "^2.1",
         "drupal/paragraphs": "^1.19",
-        "drupal/project_browser": "@beta",
+        "drupal/project_browser": "^2.1",
         "drupal/recipe_installer_kit": "^1-alpha6@alpha",
         "drupal/search_api": "^1.39",
         "drupal/simple_oauth": "^6.0",

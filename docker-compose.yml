@@ -1,17 +1,22 @@
-version: '3.8'
-
 services:
-  postgres:
-    image: postgres:17.5-alpine
-    container_name: verscienta_postgres
+  db:
+    image: mariadb:11
+    container_name: verscienta_db
     environment:
-      POSTGRES_DB: verscienta_health
-      POSTGRES_USER: drupal_user
-      POSTGRES_PASSWORD: drupal_password
-    ports:
-      - "5432:5432"
+      MYSQL_DATABASE: ${DRUPAL_DATABASE_NAME:-verscienta_drupal}
+      MYSQL_USER: ${DRUPAL_DATABASE_USER:-drupal_user}
+      MYSQL_PASSWORD: ${DRUPAL_DATABASE_PASSWORD:-drupal_password}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-root_password}
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - db_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 10s
+      timeout: 5s
+      start_period: 30s
+      retries: 5
+    ports:
+      - "3306:3306"
     networks:
       - verscienta_network
 
@@ -31,10 +36,13 @@ services:
       dockerfile: Dockerfile
     container_name: verscienta_drupal
     depends_on:
-      - redis
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_started
     environment:
-      DRUPAL_DATABASE_HOST: ${DRUPAL_DATABASE_HOST:-localhost}
-      DRUPAL_DATABASE_PORT: ${DRUPAL_DATABASE_PORT:-3306}
+      DRUPAL_DATABASE_HOST: db
+      DRUPAL_DATABASE_PORT: "3306"
       DRUPAL_DATABASE_NAME: ${DRUPAL_DATABASE_NAME:-verscienta_drupal}
       DRUPAL_DATABASE_USER: ${DRUPAL_DATABASE_USER:-drupal_user}
       DRUPAL_DATABASE_PASSWORD: ${DRUPAL_DATABASE_PASSWORD:-drupal_password}
@@ -75,7 +83,7 @@ services:
       - verscienta_network
 
 volumes:
-  postgres_data:
+  db_data:
   redis_data:
   drupal_files:
   dragonfly_data:

@@ -2,7 +2,7 @@ import { algoliasearch, SearchClient } from 'algoliasearch';
 
 // Initialize Algolia client only if credentials are available
 const appId = process.env.NEXT_PUBLIC_ALGOLIA_APP_ID;
-const apiKey = process.env.NEXT_PUBLIC_ALGOLIA_SEARCH_API_KEY;
+const apiKey = process.env.NEXT_PUBLIC_ALGOLIA_SEARCH_KEY;
 
 // Create a mock search client when credentials are missing
 const createMockSearchClient = (): SearchClient => ({

@@ -34,8 +34,10 @@ async function getCondition(id: string) {
   try {
     const condition = await drupal.getResource<ConditionEntity>('node--condition', id, {
       params: {
-        include: 'field_related_patterns',
+        include: 'field_related_patterns,field_modalities,field_related_herbs',
         'fields[node--tcm_pattern]': 'id,title,field_pattern_name_chinese,field_pattern_name_pinyin',
+        'fields[node--modality]': 'id,title,body',
+        'fields[node--herb]': 'id,title',
       },
     });
     return condition;

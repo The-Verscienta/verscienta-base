@@ -13,36 +13,31 @@ use Drupal\node\NodeInterface;
 /**
  * Implements hook_entity_presave().
  *
- * Geocode practitioner and clinic addresses using OpenStreetMap Nominatim API.
+ * Queue geocoding for practitioner and clinic addresses instead of doing it
+ * synchronously, to avoid blocking entity saves on external API calls.
  */
 function holistic_hub_entity_presave(EntityInterface $entity) {
   // Only process practitioner and clinic nodes.
   if ($entity instanceof NodeInterface && in_array($entity->bundle(), ['practitioner', 'clinic'])) {
     // Check if address fields exist and geocoding hasn't been done.
     if ($entity->hasField('field_address') && !$entity->get('field_address')->isEmpty()) {
-      // Build full address from available fields.
-      $parts = [];
-      $parts[] = $entity->get('field_address')->value;
-      if ($entity->hasField('field_city') && !$entity->get('field_city')->isEmpty()) {
-        $parts[] = $entity->get('field_city')->value;
-      }
-      if ($entity->hasField('field_state') && !$entity->get('field_state')->isEmpty()) {
-        $parts[] = $entity->get('field_state')->value;
-      }
-      if ($entity->hasField('field_zip') && !$entity->get('field_zip')->isEmpty()) {
-        $parts[] = $entity->get('field_zip')->value;
-      }
-      $address = implode(', ', $parts);
-
-      // Geocode the address if latitude/longitude fields are empty.
+      // Queue geocoding if latitude/longitude fields are empty.
       if ($entity->hasField('field_latitude') && $entity->hasField('field_longitude')) {
         if ($entity->get('field_latitude')->isEmpty() || $entity->get('field_longitude')->isEmpty()) {
-          $coordinates = holistic_hub_geocode_address($address);
-
-          if ($coordinates) {
-            $entity->set('field_latitude', $coordinates['lat']);
-            $entity->set('field_longitude', $coordinates['lon']);
-          }
+          // Queue the geocoding for after the entity is saved.
+          // We use drupal_register_shutdown_function to ensure the entity
+          // has an ID before queuing.
+          $entity_type_id = $entity->getEntityTypeId();
+          $bundle = $entity->bundle();
+          drupal_register_shutdown_function(function () use ($entity_type_id, $entity, $bundle) {
+            $entity_id = $entity->id();
+            if ($entity_id) {
+              \Drupal::queue('holistic_hub_geocode')->createItem([
+                'entity_type' => $entity_type_id,
+                'entity_id' => $entity_id,
+              ]);
+            }
+          });
         }
       }
     }

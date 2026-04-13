@@ -92,11 +92,20 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
           field_status: item.attributes?.field_contribution_status || 'approved',
           field_clinical_note: typeof clinicalNote === 'object' ? clinicalNote?.value : clinicalNote,
           field_context: typeof context === 'object' ? context?.value : context,
-          field_modifications: modifications
-            ? (typeof modifications === 'object' && modifications?.value
-                ? JSON.parse(modifications.value)
-                : (typeof modifications === 'string' ? JSON.parse(modifications) : modifications))
-            : undefined,
+          field_modifications: (() => {
+            if (!modifications) return undefined;
+            try {
+              if (typeof modifications === 'object' && modifications?.value) {
+                return JSON.parse(modifications.value);
+              }
+              if (typeof modifications === 'string') {
+                return JSON.parse(modifications);
+              }
+              return modifications;
+            } catch {
+              return undefined;
+            }
+          })(),
           uid: {
             id: userId || '',
             name: userData?.attributes?.name || 'Anonymous',

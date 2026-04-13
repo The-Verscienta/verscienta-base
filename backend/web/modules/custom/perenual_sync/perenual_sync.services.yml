@@ -9,7 +9,7 @@ services:
 
   perenual_sync.image_handler:
     class: Drupal\perenual_sync\PerenualImageHandler
-    arguments: ['@file_system', '@entity_type.manager', '@logger.factory', '@file.repository']
+    arguments: ['@file_system', '@entity_type.manager', '@logger.factory', '@file.repository', '@http_client']
 
   perenual_sync.service:
     class: Drupal\perenual_sync\PerenualSyncService

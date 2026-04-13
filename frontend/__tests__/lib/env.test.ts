@@ -23,12 +23,10 @@ describe('lib/env', () => {
 
       const env = validateServerEnv();
       expect(env.NODE_ENV).toBe('development');
-      expect(env.DRUPAL_BASE_URL).toBe('http://localhost:8080');
     });
 
     it('accepts valid fully-configured env', () => {
       process.env.NODE_ENV = 'production';
-      process.env.DRUPAL_BASE_URL = 'https://drupal.example.com';
       process.env.DRUPAL_CLIENT_ID = 'client-id';
       process.env.DRUPAL_CLIENT_SECRET = 'secret';
       process.env.XAI_API_KEY = 'xai-key';
@@ -37,20 +35,19 @@ describe('lib/env', () => {
       const { validateServerEnv } = loadModule();
 
       const env = validateServerEnv();
-      expect(env.DRUPAL_BASE_URL).toBe('https://drupal.example.com');
       expect(env.DRUPAL_CLIENT_ID).toBe('client-id');
       expect(env.XAI_API_KEY).toBe('xai-key');
     });
 
     it('warns but continues in development mode with invalid env', () => {
       process.env.NODE_ENV = 'development';
-      process.env.DRUPAL_BASE_URL = 'not-a-url';
+      process.env.REDIS_URL = 'not-a-url';
       const consoleSpy = jest.spyOn(console, 'warn').mockImplementation();
       jest.spyOn(console, 'error').mockImplementation();
       const { validateServerEnv } = loadModule();
 
       const env = validateServerEnv();
-      expect(env.DRUPAL_BASE_URL).toBe('http://localhost:8080'); // fell back to default
+      expect(env.REDIS_URL).toBeUndefined(); // fell back to default (optional field)
       expect(consoleSpy).toHaveBeenCalledWith(
         expect.stringContaining('Continuing with default values')
       );
@@ -61,7 +58,7 @@ describe('lib/env', () => {
 
     it('throws in production mode with invalid env', () => {
       process.env.NODE_ENV = 'production';
-      process.env.DRUPAL_BASE_URL = 'not-a-url';
+      process.env.REDIS_URL = 'not-a-url';
       jest.spyOn(console, 'error').mockImplementation();
       const { validateServerEnv } = loadModule();
 

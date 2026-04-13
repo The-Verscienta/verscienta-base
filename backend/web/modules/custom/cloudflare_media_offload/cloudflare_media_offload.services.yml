@@ -18,6 +18,8 @@ services:
   cloudflare_media_offload.media_subscriber:
     class: Drupal\cloudflare_media_offload\EventSubscriber\MediaEntitySubscriber
     arguments: ['@config.factory', '@cloudflare_media_offload.api_client', '@queue', '@logger.channel.cloudflare_media_offload', '@cloudflare_media_offload.image_validator']
+    tags:
+      - { name: event_subscriber }
 
   cloudflare_media_offload.stream_wrapper:
     class: Drupal\cloudflare_media_offload\StreamWrapper\CloudflareStream

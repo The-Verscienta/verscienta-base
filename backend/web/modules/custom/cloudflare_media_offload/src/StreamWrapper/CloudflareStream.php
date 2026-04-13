@@ -259,24 +259,25 @@ class CloudflareStream implements StreamWrapperInterface {
       // Create a stat array compatible with PHP's stat()
       // Use current time if we don't have metadata
       $current_time = time();
+      $size = $metadata['size'] ?? 1024;
+      $mtime = isset($metadata['uploaded']) ? strtotime($metadata['uploaded']) : $current_time;
       $stat = [
-        'dev' => 0,
-        'ino' => 0,
-        'mode' => 0100444, // Regular file, readable
-        'nlink' => 0,
-        'uid' => 0,
-        'gid' => 0,
-        'rdev' => 0,
-        'size' => $metadata['size'] ?? 1024, // Default size if unknown
-        'atime' => isset($metadata['uploaded']) ? strtotime($metadata['uploaded']) : $current_time,
-        'mtime' => isset($metadata['uploaded']) ? strtotime($metadata['uploaded']) : $current_time,
-        'ctime' => isset($metadata['uploaded']) ? strtotime($metadata['uploaded']) : $current_time,
-        'blksize' => 0,
-        'blocks' => 0,
+        0 => 0, 'dev' => 0,
+        1 => 0, 'ino' => 0,
+        2 => 0100644, 'mode' => 0100644,
+        3 => 0, 'nlink' => 0,
+        4 => 0, 'uid' => 0,
+        5 => 0, 'gid' => 0,
+        6 => 0, 'rdev' => 0,
+        7 => $size, 'size' => $size,
+        8 => $mtime, 'atime' => $mtime,
+        9 => $mtime, 'mtime' => $mtime,
+        10 => $mtime, 'ctime' => $mtime,
+        11 => -1, 'blksize' => -1,
+        12 => -1, 'blocks' => -1,
       ];
-      
-      // Add numeric keys for compatibility
-      return array_values($stat) + $stat;
+
+      return $stat;
     }
     catch (\Exception $e) {
       \Drupal::logger('cloudflare_media_offload')->warning('Failed to stat @uri: @message', [

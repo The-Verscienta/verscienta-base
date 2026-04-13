@@ -105,7 +105,7 @@ class TrefleRateLimiter {
   public function waitForAvailability(int $maxWait = 60): bool {
     $waited = 0;
     while (!$this->canMakeRequest() && $waited < $maxWait) {
-      $sleepTime = min(1, $this->getSecondsUntilReset());
+      $sleepTime = max(1, $this->getSecondsUntilReset());
       sleep($sleepTime);
       $waited += $sleepTime;
     }

@@ -210,7 +210,15 @@ parameters:
     # Allowed origins - update for production
     # Development: localhost:3000 (Next.js dev server)
     # Add your production frontend URL here
-    allowedOrigins: ['http://localhost:3000', 'https://localhost:3000', '*']
+    allowedOrigins:
+      - 'http://localhost:3000'
+      - 'https://localhost:3000'
+      - 'http://localhost:4000'
+      - 'http://localhost:4001'
+      - 'http://localhost:5173'
+      - 'https://verscienta.com'
+      - 'https://erp.verscienta.com'
+      - 'https://cms.verscienta.com'
     allowedOriginsPatterns: []
     # Expose headers needed by the frontend
     exposedHeaders: ['Content-Type', 'X-Drupal-Cache', 'X-Request-Id']
