@@ -1,0 +1,65 @@
+/**
+ * Do not edit directly, this file was auto-generated.
+ */
+
+:root {
+  --color-earth-50: #f5f8f5;
+  --color-earth-100: #e6ede6;
+  --color-earth-200: #cdd9cd;
+  --color-earth-300: #adbfad;
+  --color-earth-400: #7a9a7a;
+  --color-earth-500: #5f7d5f;
+  --color-earth-600: #577256;
+  --color-earth-700: #4d6a4d;
+  --color-earth-800: #3d5a3d;
+  --color-earth-900: #2d4a2d;
+  --color-earth-950: #1a2e1a;
+  --color-sage-50: #f3f9f4;
+  --color-sage-100: #e7f3e9;
+  --color-sage-200: #c8dbcd;
+  --color-sage-300: #a9c2b1;
+  --color-sage-400: #8aaa95;
+  --color-sage-500: #6b9279;
+  --color-sage-600: #527a5f;
+  --color-sage-700: #426650;
+  --color-sage-800: #365340;
+  --color-sage-900: #2a4030;
+  --color-sage-950: #1e2d20;
+  --color-tcm-50: #fff5f5;
+  --color-tcm-100: #ffe5e6;
+  --color-tcm-200: #ffccce;
+  --color-tcm-300: #ff9aa0;
+  --color-tcm-400: #ff6770;
+  --color-tcm-500: #d63031;
+  --color-tcm-600: #c1272d;
+  --color-tcm-700: #a01f23;
+  --color-tcm-800: #7f1a1d;
+  --color-tcm-900: #651618;
+  --color-gold-50: #faf4ed;
+  --color-gold-100: #f5e9d8;
+  --color-gold-200: #ead3b0;
+  --color-gold-300: #dfbd88;
+  --color-gold-400: #e0b589;
+  --color-gold-500: #d4a574;
+  --color-gold-600: #c8955f;
+  --color-gold-700: #855f30;
+  --color-gold-800: #85602e;
+  --color-gold-900: #644817;
+  --color-cream-50: #fffef9;
+  --color-cream-100: #fefcf3;
+  --color-cream-200: #faf6e8;
+  --color-cream-300: #f5edd8;
+  --color-cream-400: #efe4c8;
+  --color-warm-50: #fef7f6;
+  --color-warm-100: #fee2e2;
+  --color-warm-200: #fecaca;
+  --color-warm-300: #fca5a5;
+  --color-warm-400: #f87171;
+  --color-warm-500: #c25b56;
+  --color-warm-600: #dc2626;
+  --color-warm-700: #991b1b;
+  --color-status-success: #10b981;
+  --color-status-warning: #f59e0b;
+  --color-status-danger: #ef4444;
+  --color-status-info: #3b82f6;
+}

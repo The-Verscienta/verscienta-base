@@ -1,0 +1,9 @@
+langcode: en
+status: true
+dependencies: {  }
+id: formula_modification
+label: 'Formula Modification'
+icon_uuid: null
+icon_default: null
+behavior_plugins: {  }
+description: 'A single 加减 modification (condition, action, herb, amount, note).'

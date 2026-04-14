@@ -112,13 +112,13 @@ export function FormulaFamily({ formulaId }: FormulaFamilyProps) {
           </svg>
         </div>
         <div>
-          <h2 className="text-xl font-bold text-gray-900 dark:text-earth-100">Formula Family</h2>
+          <h2 className="text-xl font-bold text-gray-900 dark:text-earth-100">Formula variants &amp; lineage</h2>
           <p className="text-sm text-gray-500 dark:text-earth-400">
             {data.parent && data.children.length > 0
-              ? 'Part of a lineage — derived from a parent and has variations'
+              ? 'Structured in Drupal as parent/child formulas (classical base plus documented modifications).'
               : data.parent
-              ? 'Derived from a classical base formula'
-              : `${data.children.length} variation${data.children.length !== 1 ? 's' : ''} of this formula`}
+              ? 'This entry is recorded as a modification or derivative of a parent formula.'
+              : `${data.children.length} recorded variation${data.children.length !== 1 ? 's' : ''} built on this formula`}
           </p>
         </div>
       </div>

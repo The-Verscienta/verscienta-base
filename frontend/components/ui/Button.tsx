@@ -1,6 +1,13 @@
 import { ButtonProps } from '@/types/components';
 import { forwardRef } from 'react';
 
+/** Documented in Storybook — keep in sync with `Button.stories.tsx`. */
+export const BUTTON_VARIANTS = ['primary', 'secondary', 'outline', 'ghost', 'danger'] as const;
+export type ButtonVariant = (typeof BUTTON_VARIANTS)[number];
+
+export const BUTTON_SIZES = ['sm', 'md', 'lg'] as const;
+export type ButtonSize = (typeof BUTTON_SIZES)[number];
+
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
   (
     {
@@ -42,6 +49,9 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         type={type}
         onClick={onClick}
         disabled={disabled || loading}
+        aria-busy={loading || undefined}
+        data-variant={variant}
+        data-size={size}
         className={combinedStyles}
       >
         {loading && (

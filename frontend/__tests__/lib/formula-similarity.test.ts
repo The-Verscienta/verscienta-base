@@ -197,6 +197,15 @@ describe('findSimilarFormulas', () => {
     expect(identical).toBeDefined();
     expect(identical!.sharedHerbCount).toBe(2);
     expect(identical!.totalHerbsInComparison).toBe(2);
+    expect(identical!.matchTier).toBe('strong');
+  });
+
+  it('tags moderate tier below strong threshold', () => {
+    const results = findSimilarFormulas(sourceFormula, allFormulas, { minSimilarity: 5, maxResults: 10 });
+    const moderate = results.find((r) => r.matchTier === 'moderate');
+    if (moderate) {
+      expect(moderate.similarityScore).toBeLessThan(42);
+    }
   });
 });
 

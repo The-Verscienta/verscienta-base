@@ -15,6 +15,11 @@ import { FormulaFamilySkeleton, SimilarFormulasSkeleton, ContributionsSkeleton, 
 import { getTextValue, hasTextContent, herbDisplayName } from '@/lib/drupal-helpers';
 import { JiaJianSection } from '@/components/formula/JiaJianSection';
 import {
+  CuratedRelatedFormulasSection,
+  OverlappingConditionFormulasSection,
+} from '@/components/formula/FormulaDiscoverySections';
+import { fetchFormulasSharingConditions } from '@/lib/drupal-related-formulas';
+import {
   PageWrapper,
   LeafPattern,
   Section,
@@ -87,7 +92,10 @@ async function getFormula(id: string): Promise<FormulaEntity | null> {
   try {
     const drupalUrl = process.env.NEXT_PUBLIC_DRUPAL_BASE_URL || 'https://backend.ddev.site';
     const params = new URLSearchParams({
-      include: 'field_herb_ingredients,field_herb_ingredients.field_herb_reference,field_conditions,field_jia_jian,field_jia_jian.field_modification_herb',
+      include:
+        'field_herb_ingredients,field_herb_ingredients.field_herb_reference,' +
+        'field_conditions,field_related_formulas,' +
+        'field_jia_jian,field_jia_jian.field_modification_herb',
     });
 
     const response = await fetch(
@@ -156,6 +164,22 @@ async function getFormula(id: string): Promise<FormulaEntity | null> {
       });
     }
 
+    const relatedFormulas: NonNullable<FormulaEntity['field_related_formulas']> = [];
+    const relatedRefsRaw = data.relationships?.field_related_formulas?.data;
+    const relatedRefs = Array.isArray(relatedRefsRaw)
+      ? relatedRefsRaw
+      : relatedRefsRaw
+        ? [relatedRefsRaw]
+        : [];
+    for (const ref of relatedRefs) {
+      const node = includedMap.get(ref.id);
+      relatedFormulas.push({
+        id: ref.id,
+        type: ref.type,
+        title: node?.attributes?.title,
+      });
+    }
+
     // Process jia jian modifications (paragraphs)
     const jiaJian: FormulaEntity['field_jia_jian'] = [];
     const jiaJianRefs = data.relationships?.field_jia_jian?.data || [];
@@ -201,6 +225,7 @@ async function getFormula(id: string): Promise<FormulaEntity | null> {
       field_use_cases: data.attributes?.field_use_cases,
       field_herb_ingredients: herbIngredients,
       field_conditions: conditions,
+      field_related_formulas: relatedFormulas.length > 0 ? relatedFormulas : undefined,
       field_formula_popularity: data.attributes?.field_formula_popularity,
       field_preparation_difficulty: data.attributes?.field_preparation_difficulty,
       field_available_premade: data.attributes?.field_available_premade,
@@ -272,6 +297,16 @@ export default async function FormulaDetailPage({ params }: FormulaDetailProps) 
         return sum + qty;
       }, 0) ?? 0);
   const weightUnit = formula.field_total_weight_unit || 'g';
+
+  const drupalBase = process.env.NEXT_PUBLIC_DRUPAL_BASE_URL || '';
+  const overlappingFormulas =
+    formula.field_conditions && formula.field_conditions.length > 0
+      ? await fetchFormulasSharingConditions(
+          drupalBase,
+          id,
+          formula.field_conditions.map((c) => c.id)
+        )
+      : [];
 
   return (
     <PageWrapper>
@@ -420,6 +455,10 @@ export default async function FormulaDetailPage({ params }: FormulaDetailProps) 
               ))}
             </div>
           </Section>
+        )}
+
+        {formula.field_related_formulas && formula.field_related_formulas.length > 0 && (
+          <CuratedRelatedFormulasSection formulas={formula.field_related_formulas} />
         )}
 
         {/* Biomedical Cross-References */}
@@ -576,8 +615,13 @@ export default async function FormulaDetailPage({ params }: FormulaDetailProps) 
           <FormulaFamily formulaId={id} />
         </Suspense>
 
+        <OverlappingConditionFormulasSection
+          currentFormulaId={id}
+          related={overlappingFormulas}
+        />
+
         <Suspense fallback={<SimilarFormulasSkeleton />}>
-          <SimilarFormulas formulaId={id} minSimilarity={10} maxResults={5} />
+          <SimilarFormulas formulaId={id} minSimilarity={10} maxResults={10} />
         </Suspense>
 
         <Suspense fallback={<FormulaNetworkSkeleton />}>

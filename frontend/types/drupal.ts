@@ -418,6 +418,12 @@ export interface FormulaEntity extends DrupalNode {
     type: string;
     title?: string;
   }[];
+  /** Curated cross-links to other formula nodes (editorial) */
+  field_related_formulas?: Array<{
+    id: string;
+    type: string;
+    title?: string;
+  }>;
 
   // Decision-Making Fields
   field_formula_popularity?: 'classic_staple' | 'commonly_prescribed' | 'specialty' | 'historical_rare';

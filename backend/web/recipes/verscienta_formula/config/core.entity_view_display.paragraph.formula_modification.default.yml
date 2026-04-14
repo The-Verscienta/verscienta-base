@@ -1,0 +1,60 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.formula_modification.field_modification_action
+    - field.field.paragraph.formula_modification.field_modification_amount
+    - field.field.paragraph.formula_modification.field_modification_condition
+    - field.field.paragraph.formula_modification.field_modification_herb
+    - field.field.paragraph.formula_modification.field_modification_note
+    - paragraphs.paragraphs_type.formula_modification
+  module:
+    - core
+    - options
+    - text
+id: paragraph.formula_modification.default
+targetEntityType: paragraph
+bundle: formula_modification
+mode: default
+content:
+  field_modification_action:
+    type: list_default
+    weight: 1
+    region: content
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+  field_modification_amount:
+    type: string
+    weight: 4
+    region: content
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+  field_modification_condition:
+    type: string
+    weight: 0
+    region: content
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+  field_modification_herb:
+    type: entity_reference_label
+    weight: 2
+    region: content
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+  field_modification_note:
+    type: text_default
+    weight: 5
+    region: content
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+hidden:
+  created: true
+  uid: true

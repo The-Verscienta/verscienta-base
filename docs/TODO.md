@@ -449,7 +449,7 @@ Script: `/backend/scripts/setup-taxonomies.sh`
 - [x] Create `.github/workflows/lint.yml` - Run linting + type checking
 - [x] Create `.github/workflows/deploy-frontend.yml` - lint+test gate → build GHCR image → trigger Coolify
 - [x] Create `.github/workflows/deploy-backend.yml` - build Drupal + SymPy GHCR images → trigger Coolify
-- [ ] Configure environment secrets in GitHub (see COOLIFY-DEPLOYMENT.md for secret names)
+- [ ] Configure environment secrets in GitHub (see `docs/COOLIFY-DEPLOYMENT.md` for secret names)
 
 ### 9.2 Frontend Deployment
 

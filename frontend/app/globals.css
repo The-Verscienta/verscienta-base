@@ -1,51 +1,13 @@
+/* Design tokens — built from design-tokens/ via Style Dictionary (npm run tokens:build) */
+@import "../styles/generated/primitives.css";
+@import "../styles/generated/semantic.css";
+
 @import "tailwindcss";
 @config "../tailwind.config.ts";
 
 @layer base {
   :root {
-    /* Color Tokens */
-    --color-earth-950: #1a2e1a;
-    --color-earth-900: #2d4a2d;
-    --color-earth-800: #3d5a3d;
-    --color-earth-700: #4d6a4d;
-    --color-earth-600: #5d7a5d;
-    --color-earth-500: #5f7d5f;
-    --color-earth-400: #7a9a7a;
-    --color-earth-300: #adbfad;
-    --color-earth-200: #cdd9cd;
-    --color-earth-100: #e6ede6;
-    --color-earth-50: #f5f8f5;
-
-    --color-sage-950: #1e2d20;
-    --color-sage-900: #2a4030;
-    --color-sage-800: #365340;
-    --color-sage-700: #426650;
-    --color-sage-600: #527a5f;
-    --color-sage-500: #6b9279;
-    --color-sage-400: #8aaa95;
-    --color-sage-300: #a9c2b1;
-    --color-sage-200: #c8dbcd;
-    --color-sage-100: #e7f3e9;
-    --color-sage-50: #f3f9f4;
-
-    --color-tcm-red-600: #c1272d;
-    --color-tcm-red-500: #d63031;
-    --color-tcm-red-100: #ffe5e6;
-
-    --color-gold-600: #d4a574;
-    --color-gold-500: #e0b589;
-    --color-gold-100: #faf4ed;
-
-    /* Semantic Theme Tokens — Light */
-    --surface: #ffffff;
-    --surface-elevated: #ffffff;
-    --surface-sunken: #f5f8f5;
-    --text-primary: #111827;
-    --text-secondary: #4b5563;
-    --text-tertiary: #9ca3af;
-    --text-brand: #527a5f;
-    --border-default: #cdd9cd;
-    --border-subtle: #e6ede6;
+    color-scheme: light;
 
     /* Spacing */
     --space-xs: 0.25rem;
@@ -77,18 +39,8 @@
     --transition-slow: 300ms cubic-bezier(0.4, 0, 0.2, 1);
   }
 
-  /* Semantic Theme Tokens — Dark ("Refined Apothecary at Night") */
+  /* Dark theme — semantic colors come from semantic.css; shadows stay tuned for depth on dark surfaces */
   .dark {
-    --surface: #1a2e1a;
-    --surface-elevated: #243324;
-    --surface-sunken: #132013;
-    --text-primary: #e6ede6;
-    --text-secondary: #adbfad;
-    --text-tertiary: #7a9a7a;
-    --text-brand: #8aaa95;
-    --border-default: #3d5a3d;
-    --border-subtle: #2d4a2d;
-
     --shadow-soft: 0 2px 8px rgba(0, 0, 0, 0.2), 0 1px 2px rgba(0, 0, 0, 0.3);
     --shadow-float: 0 8px 16px rgba(0, 0, 0, 0.3), 0 4px 8px rgba(0, 0, 0, 0.2);
     --shadow-earth: 0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -2px rgba(0, 0, 0, 0.2);
@@ -114,7 +66,7 @@
   }
 
   body {
-    @apply font-sans text-base bg-white;
+    @apply font-sans text-base;
     color: var(--text-primary);
     background-color: var(--surface);
     line-height: 1.5;

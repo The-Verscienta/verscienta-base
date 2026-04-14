@@ -1,0 +1,20 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_modification_action
+    - paragraphs.paragraphs_type.formula_modification
+  module:
+    - options
+id: paragraph.formula_modification.field_modification_action
+field_name: field_modification_action
+entity_type: paragraph
+bundle: formula_modification
+label: Action
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: list_string

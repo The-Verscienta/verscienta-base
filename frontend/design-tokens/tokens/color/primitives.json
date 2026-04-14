@@ -1,0 +1,77 @@
+{
+  "color": {
+    "earth": {
+      "50": { "value": "#f5f8f5", "type": "color", "description": "Primary brand — off-white green" },
+      "100": { "value": "#e6ede6", "type": "color" },
+      "200": { "value": "#cdd9cd", "type": "color" },
+      "300": { "value": "#adbfad", "type": "color" },
+      "400": { "value": "#7a9a7a", "type": "color" },
+      "500": { "value": "#5f7d5f", "type": "color" },
+      "600": { "value": "#577256", "type": "color", "description": "Primary interactive" },
+      "700": { "value": "#4d6a4d", "type": "color" },
+      "800": { "value": "#3d5a3d", "type": "color" },
+      "900": { "value": "#2d4a2d", "type": "color" },
+      "950": { "value": "#1a2e1a", "type": "color" }
+    },
+    "sage": {
+      "50": { "value": "#f3f9f4", "type": "color" },
+      "100": { "value": "#e7f3e9", "type": "color" },
+      "200": { "value": "#c8dbcd", "type": "color" },
+      "300": { "value": "#a9c2b1", "type": "color" },
+      "400": { "value": "#8aaa95", "type": "color" },
+      "500": { "value": "#6b9279", "type": "color" },
+      "600": { "value": "#527a5f", "type": "color", "description": "Secondary interactive" },
+      "700": { "value": "#426650", "type": "color" },
+      "800": { "value": "#365340", "type": "color" },
+      "900": { "value": "#2a4030", "type": "color" },
+      "950": { "value": "#1e2d20", "type": "color" }
+    },
+    "tcm": {
+      "50": { "value": "#fff5f5", "type": "color" },
+      "100": { "value": "#ffe5e6", "type": "color" },
+      "200": { "value": "#ffccce", "type": "color" },
+      "300": { "value": "#ff9aa0", "type": "color" },
+      "400": { "value": "#ff6770", "type": "color" },
+      "500": { "value": "#d63031", "type": "color" },
+      "600": { "value": "#c1272d", "type": "color", "description": "Traditional Chinese red" },
+      "700": { "value": "#a01f23", "type": "color" },
+      "800": { "value": "#7f1a1d", "type": "color" },
+      "900": { "value": "#651618", "type": "color" }
+    },
+    "gold": {
+      "50": { "value": "#faf4ed", "type": "color" },
+      "100": { "value": "#f5e9d8", "type": "color" },
+      "200": { "value": "#ead3b0", "type": "color" },
+      "300": { "value": "#dfbd88", "type": "color" },
+      "400": { "value": "#e0b589", "type": "color" },
+      "500": { "value": "#d4a574", "type": "color" },
+      "600": { "value": "#c8955f", "type": "color" },
+      "700": { "value": "#855f30", "type": "color" },
+      "800": { "value": "#85602e", "type": "color" },
+      "900": { "value": "#644817", "type": "color" }
+    },
+    "cream": {
+      "50": { "value": "#fffef9", "type": "color" },
+      "100": { "value": "#fefcf3", "type": "color" },
+      "200": { "value": "#faf6e8", "type": "color" },
+      "300": { "value": "#f5edd8", "type": "color" },
+      "400": { "value": "#efe4c8", "type": "color" }
+    },
+    "warm": {
+      "50": { "value": "#fef7f6", "type": "color" },
+      "100": { "value": "#fee2e2", "type": "color" },
+      "200": { "value": "#fecaca", "type": "color" },
+      "300": { "value": "#fca5a5", "type": "color" },
+      "400": { "value": "#f87171", "type": "color" },
+      "500": { "value": "#c25b56", "type": "color" },
+      "600": { "value": "#dc2626", "type": "color" },
+      "700": { "value": "#991b1b", "type": "color" }
+    },
+    "status": {
+      "success": { "value": "#10b981", "type": "color" },
+      "warning": { "value": "#f59e0b", "type": "color" },
+      "danger": { "value": "#ef4444", "type": "color" },
+      "info": { "value": "#3b82f6", "type": "color" }
+    }
+  }
+}

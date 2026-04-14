@@ -13,6 +13,12 @@ import {
   BackLink,
 } from '@/components/ui/DesignSystem';
 import type { TcmPatternMatch } from '@/lib/grok';
+import { apiFetch } from '@/lib/api-client';
+import {
+  buildFormulaIdLookup,
+  resolveFormulaIdExactThenFuzzy,
+  type FormulaLookupInput,
+} from '@/lib/formula-name-match';
 
 export default function SymptomCheckerPage() {
   const [symptoms, setSymptoms] = useState('');
@@ -20,6 +26,8 @@ export default function SymptomCheckerPage() {
   const [results, setResults] = useState<any>(null);
   const [error, setError] = useState('');
   const [patternLookup, setPatternLookup] = useState<Record<string, string>>({});
+  const [formulaLookup, setFormulaLookup] = useState<Map<string, string>>(new Map());
+  const [formulaRows, setFormulaRows] = useState<FormulaLookupInput[]>([]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -27,13 +35,12 @@ export default function SymptomCheckerPage() {
     setLoading(true);
     setResults(null);
     setPatternLookup({});
+    setFormulaLookup(new Map());
+    setFormulaRows([]);
 
     try {
-      const response = await fetch('/api/grok/symptom-analysis', {
+      const response = await apiFetch('/api/grok/symptom-analysis', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
         body: JSON.stringify({ symptoms }),
       });
 
@@ -45,16 +52,21 @@ export default function SymptomCheckerPage() {
 
       setResults(data);
 
-      // Fetch our patterns DB to get IDs for deep linking
+      // Match TCM patterns + formulas to Drupal IDs for deep links
       if (data.tcmPatterns?.length > 0) {
-        fetch('/api/patterns?pageSize=200')
-          .then(r => r.json())
-          .then(({ patterns }) => {
+        Promise.all([
+          fetch('/api/patterns?pageSize=200').then(r => r.json()),
+          fetch('/api/formulas').then(r => r.json()),
+        ])
+          .then(([patternsData, formulasData]) => {
             const lookup: Record<string, string> = {};
-            patterns?.forEach((p: { id: string; title: string }) => {
+            patternsData.patterns?.forEach((p: { id: string; title: string }) => {
               lookup[p.title.toLowerCase()] = p.id;
             });
             setPatternLookup(lookup);
+            const rows: FormulaLookupInput[] = formulasData.formulas ?? [];
+            setFormulaRows(rows);
+            setFormulaLookup(buildFormulaIdLookup(rows));
           })
           .catch(() => {}); // graceful degradation — cards still show without deep links
       }
@@ -234,7 +246,31 @@ export default function SymptomCheckerPage() {
                             {pattern.suggestedFormulas && pattern.suggestedFormulas.length > 0 && (
                               <div className="mb-2 text-xs">
                                 <span className="font-semibold text-gray-500 dark:text-earth-400 uppercase tracking-wide">Formulas: </span>
-                                <span className="text-gray-600 dark:text-earth-300">{pattern.suggestedFormulas.join(', ')}</span>
+                                <span className="text-gray-600 dark:text-earth-300">
+                                  {pattern.suggestedFormulas.map((formulaName, fi) => {
+                                    const formulaId = resolveFormulaIdExactThenFuzzy(
+                                      formulaName,
+                                      formulaLookup,
+                                      formulaRows
+                                    );
+                                    const isLast = fi === pattern.suggestedFormulas!.length - 1;
+                                    return (
+                                      <span key={`${formulaName}-${fi}`}>
+                                        {formulaId ? (
+                                          <Link
+                                            href={`/formulas/${formulaId}`}
+                                            className="text-sage-700 dark:text-sage-400 hover:text-sage-900 dark:hover:text-sage-200 underline underline-offset-2 font-medium"
+                                          >
+                                            {formulaName}
+                                          </Link>
+                                        ) : (
+                                          formulaName
+                                        )}
+                                        {!isLast ? ', ' : ''}
+                                      </span>
+                                    );
+                                  })}
+                                </span>
                               </div>
                             )}
                             {pattern.suggestedPoints && pattern.suggestedPoints.length > 0 && (

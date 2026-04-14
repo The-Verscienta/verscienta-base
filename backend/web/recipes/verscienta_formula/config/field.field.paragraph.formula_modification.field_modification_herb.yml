@@ -1,0 +1,27 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_modification_herb
+    - paragraphs.paragraphs_type.formula_modification
+id: paragraph.formula_modification.field_modification_herb
+field_name: field_modification_herb
+entity_type: paragraph
+bundle: formula_modification
+label: Herb
+description: ''
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:node'
+  handler_settings:
+    target_bundles:
+      herb: herb
+    sort:
+      field: title
+      direction: ASC
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

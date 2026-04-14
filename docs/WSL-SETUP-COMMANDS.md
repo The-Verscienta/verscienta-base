@@ -135,12 +135,12 @@ Access:
 
 ## Step 9: Create Content Types
 
-Follow the guide in `/home/pf1/AFTER-DDEV-INSTALL.md`
+Follow the guide in `docs/AFTER-DDEV-INSTALL.md` (from the repository root).
 
 Or manually via Drupal admin:
 1. Go to **Structure > Content types > Add content type**
 2. Create each type (Herbs, Modalities, Conditions, etc.)
-3. Add fields as specified in AFTER-DDEV-INSTALL.md
+3. Add fields as specified in `docs/AFTER-DDEV-INSTALL.md`
 
 ## Useful DDEV Commands
 
@@ -226,9 +226,9 @@ ddev exec chmod -R 755 /var/www/html/web/sites/default/files
 ## Next Steps
 
 After setup is complete, refer to:
-- **AFTER-DDEV-INSTALL.md** - Detailed content type creation and Plasmic integration
-- **TIMELINE.md** - Full 8-week development roadmap
-- **README.md** - Project overview and features
+- **`docs/AFTER-DDEV-INSTALL.md`** — Detailed content type creation and Plasmic integration
+- **`docs/TIMELINE.md`** — Full 8-week development roadmap
+- **`docs/README.md`** — Project overview and features (repository root `README.md` is the short index)
 
 ## Quick Test
 
