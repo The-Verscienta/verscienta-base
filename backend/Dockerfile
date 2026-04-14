@@ -43,6 +43,12 @@ RUN composer install --no-dev --optimize-autoloader --no-interaction --no-script
 # Copy application code
 COPY . .
 
+# Verify recipe directory was included in the build context
+RUN echo "=== Build-time recipe check ===" \
+    && ls web/recipes/verscienta_formula/recipe.yml 2>/dev/null \
+       && echo "Recipe directory: OK" \
+       || echo "WARNING: web/recipes/verscienta_formula/recipe.yml NOT FOUND in image"
+
 # Run composer scripts after copying all files
 RUN composer run-script post-update-cmd || true
 
@@ -123,5 +129,10 @@ COPY docker/entrypoint.sh /usr/local/bin/docker-entrypoint.sh
 RUN chmod +x /usr/local/bin/docker-entrypoint.sh
 
 EXPOSE 80
+
+# Healthcheck: give the entrypoint time to finish (database migrations, cache rebuild)
+# before declaring the container unhealthy. Coolify respects HEALTHCHECK if set.
+HEALTHCHECK --interval=10s --timeout=5s --start-period=90s --retries=5 \
+  CMD curl -sf http://localhost/user/login || exit 1
 
 ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]

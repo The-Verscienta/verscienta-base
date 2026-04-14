@@ -73,8 +73,16 @@ if [ -n "$DRUPAL_DATABASE_HOST" ]; then
   # Apply recipes to ensure form/view display configs exist
   # Recipes are idempotent — failure here means a real problem
   echo "Applying Verscienta recipes..."
-  if ! ./vendor/bin/drush recipe web/recipes/verscienta_formula 2>&1; then
-    echo "WARNING: Recipe apply failed (may already be applied). Continuing..." >&2
+  RECIPE_DIR="web/recipes/verscienta_formula"
+  if [ -d "$RECIPE_DIR" ]; then
+    echo "Recipe directory found: $(ls "$RECIPE_DIR")"
+    if ! ./vendor/bin/drush recipe "$RECIPE_DIR" 2>&1; then
+      echo "WARNING: Recipe apply failed (may already be applied). Continuing..." >&2
+    fi
+  else
+    echo "WARNING: Recipe directory '$RECIPE_DIR' not found in image. Listing web/recipes/:" >&2
+    ls -la web/recipes/ 2>&1 || echo "  web/recipes/ does not exist" >&2
+    echo "WARNING: Skipping recipe apply. The formula content type must already exist in the database." >&2
   fi
 
   echo "Rebuilding cache..."
