@@ -64,25 +64,27 @@ if [ -n "$DRUPAL_DATABASE_HOST" ]; then
 
   # Apply any pending database/entity updates via drush
   cd /var/www/html
+
+  # Clean up stale action configs BEFORE updatedb to suppress plugin-not-found errors
+  echo "Cleaning stale action configs..."
+  ./vendor/bin/drush config:delete system.action.node_purge_action 2>/dev/null || true
+  ./vendor/bin/drush config:delete system.action.node_restore_action 2>/dev/null || true
+
   echo "Running database updates..."
   if ! ./vendor/bin/drush updatedb --no-interaction 2>&1; then
     echo "ERROR: Database updates failed. Container will not start with stale schema." >&2
     exit 1
   fi
 
-  # Clean up stale action configs that reference removed plugins
-  ./vendor/bin/drush config:delete system.action.node_purge_action 2>/dev/null || true
-  ./vendor/bin/drush config:delete system.action.node_restore_action 2>/dev/null || true
-
-  # Apply recipes to ensure form/view display configs exist
-  # Drush resolves recipe paths relative to the Drupal root (web/), not the project root,
-  # so use "recipes/..." not "web/recipes/..."
-  echo "Applying Verscienta recipes..."
+  # Apply recipes only if the formula content type doesn't exist yet.
+  # Once applied, the recipe is not re-run — config may have diverged intentionally.
   RECIPE_DIR="/var/www/html/web/recipes/verscienta_formula"
-  if [ -d "$RECIPE_DIR" ]; then
-    echo "Recipe directory found at $RECIPE_DIR"
+  if ./vendor/bin/drush config:get node.type.formula name 2>/dev/null | grep -q 'formula'; then
+    echo "Formula content type already exists — skipping recipe apply."
+  elif [ -d "$RECIPE_DIR" ]; then
+    echo "Applying Verscienta formula recipe..."
     if ! ./vendor/bin/drush recipe "$RECIPE_DIR" 2>&1; then
-      echo "WARNING: Recipe apply failed (may already be applied). Continuing..." >&2
+      echo "WARNING: Recipe apply failed. Continuing..." >&2
     fi
   else
     echo "WARNING: Recipe directory not found at $RECIPE_DIR" >&2
