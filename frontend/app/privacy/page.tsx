@@ -33,7 +33,7 @@ export default function PrivacyPage() {
           <section className="mb-8">
             <h2 className="text-2xl font-serif font-bold text-gray-800 dark:text-earth-100 mb-4">Introduction</h2>
             <p className="text-gray-700 dark:text-earth-200 leading-relaxed">
-              Verscienta Health ("we," "our," or "us") is committed to protecting your privacy.
+              Verscienta Health (&quot;we,&quot; &quot;our,&quot; or &quot;us&quot;) is committed to protecting your privacy.
               This Privacy Policy explains how we collect, use, disclose, and safeguard your
               information when you visit our website and use our services.
             </p>
@@ -130,7 +130,7 @@ export default function PrivacyPage() {
           </section>
 
           <section className="mb-8">
-            <h2 className="text-2xl font-serif font-bold text-gray-800 dark:text-earth-100 mb-4">Children's Privacy</h2>
+            <h2 className="text-2xl font-serif font-bold text-gray-800 dark:text-earth-100 mb-4">Children&apos;s Privacy</h2>
             <p className="text-gray-700 dark:text-earth-200 leading-relaxed">
               Our services are not directed to individuals under the age of 18. We do not
               knowingly collect personal information from children. If you believe we have
@@ -142,8 +142,8 @@ export default function PrivacyPage() {
             <h2 className="text-2xl font-serif font-bold text-gray-800 dark:text-earth-100 mb-4">Changes to This Policy</h2>
             <p className="text-gray-700 dark:text-earth-200 leading-relaxed">
               We may update this Privacy Policy from time to time. We will notify you of any
-              changes by posting the new Privacy Policy on this page and updating the "Last
-              updated" date.
+              changes by posting the new Privacy Policy on this page and updating the &quot;Last
+              updated&quot; date.
             </p>
           </section>
 

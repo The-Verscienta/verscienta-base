@@ -149,7 +149,7 @@ function ResetPasswordForm() {
           Create New Password
         </h2>
         <p className="text-gray-600 dark:text-earth-300">
-          Enter your new password below. Make sure it's strong and secure.
+          Enter your new password below. Make sure it&apos;s strong and secure.
         </p>
       </div>
 

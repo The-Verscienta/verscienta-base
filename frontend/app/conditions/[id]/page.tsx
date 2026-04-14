@@ -359,7 +359,7 @@ export default async function ConditionDetailPage({ params }: ConditionDetailPro
                 Dietary Considerations
               </h3>
               <p className="text-sm">
-                A whole-foods, nutrient-dense diet can support the body's natural healing processes.
+                A whole-foods, nutrient-dense diet can support the body&apos;s natural healing processes.
                 Consider consulting with a nutritionist for personalized guidance.
               </p>
             </div>

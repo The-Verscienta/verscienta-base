@@ -285,7 +285,7 @@ export default function LoginPage() {
           </div>
 
           <p className="text-center mt-8 text-gray-600 dark:text-earth-300">
-            Don't have an account?{' '}
+            Don&apos;t have an account?{' '}
             <Link href="/register" className="text-earth-600 dark:text-sage-400 hover:text-gray-800 dark:hover:text-sage-300 font-semibold">
               Create one free
             </Link>

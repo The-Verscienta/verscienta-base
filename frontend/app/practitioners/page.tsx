@@ -497,7 +497,7 @@ export default async function PractitionersPage({ searchParams }: PageProps) {
             <h3 className="font-semibold text-sage-800 mb-1">Finding the Right Practitioner</h3>
             <p className="text-sm text-gray-600">
               Browse practitioner profiles to find specialists in your preferred modalities.
-              Check their qualifications, experience, and whether they're accepting new patients
+              Check their qualifications, experience, and whether they&apos;re accepting new patients
               before reaching out to schedule a consultation.
             </p>
           </div>

@@ -237,7 +237,7 @@ export default function FAQPage() {
           Still have questions?
         </h2>
         <p className="mb-6 opacity-90">
-          Can't find what you're looking for? We're here to help.
+          Can&apos;t find what you&apos;re looking for? We&apos;re here to help.
         </p>
         <Link
           href="/contact"

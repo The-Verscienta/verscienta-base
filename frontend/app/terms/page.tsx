@@ -33,7 +33,7 @@ export default function TermsPage() {
           <section className="mb-8">
             <h2 className="text-2xl font-serif font-bold text-gray-800 dark:text-earth-100 mb-4">Agreement to Terms</h2>
             <p className="text-gray-700 dark:text-earth-200 leading-relaxed">
-              By accessing or using Verscienta Health ("the Service"), you agree to be bound
+              By accessing or using Verscienta Health (&quot;the Service&quot;), you agree to be bound
               by these Terms of Service. If you do not agree to these terms, please do not
               use our Service.
             </p>
@@ -134,7 +134,7 @@ export default function TermsPage() {
           <section className="mb-8">
             <h2 className="text-2xl font-serif font-bold text-gray-800 dark:text-earth-100 mb-4">Disclaimer of Warranties</h2>
             <p className="text-gray-700 dark:text-earth-200 leading-relaxed">
-              The Service is provided "as is" and "as available" without warranties of any kind,
+              The Service is provided &quot;as is&quot; and &quot;as available&quot; without warranties of any kind,
               either express or implied, including but not limited to warranties of merchantability,
               fitness for a particular purpose, and non-infringement.
             </p>

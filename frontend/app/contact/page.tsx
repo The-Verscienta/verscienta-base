@@ -70,7 +70,7 @@ export default function ContactPage() {
           </h1>
 
           <p className="text-xl md:text-2xl text-gray-600 dark:text-earth-300 max-w-2xl mx-auto leading-relaxed">
-            Have questions or feedback? We'd love to hear from you.
+            Have questions or feedback? We&apos;d love to hear from you.
           </p>
         </div>
       </div>
@@ -170,7 +170,7 @@ export default function ContactPage() {
                     Message Sent Successfully!
                   </h3>
                   <p className="text-gray-600 dark:text-earth-300 mb-6 leading-relaxed">
-                    Thank you for reaching out. We'll get back to you within 24-48 hours.
+                    Thank you for reaching out. We&apos;ll get back to you within 24-48 hours.
                   </p>
                   <button
                     onClick={() => setStatus('idle')}

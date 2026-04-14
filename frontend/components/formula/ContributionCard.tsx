@@ -46,7 +46,7 @@ function ModificationDisplay({ modification }: { modification: HerbModification 
           </div>
           {modification.function && (
             <p className="text-sm text-gray-600 mt-1 italic dark:text-earth-300">
-              "{modification.function}"
+              &quot;{modification.function}&quot;
             </p>
           )}
           <p className="text-sm text-gray-700 mt-2 dark:text-earth-200">
@@ -93,7 +93,7 @@ export function ContributionCard({ contribution }: ContributionCardProps) {
       {isClinicalNote && contribution.field_clinical_note && (
         <div className="prose prose-sm max-w-none">
           <p className="text-gray-700 whitespace-pre-wrap dark:text-earth-200">
-            "{contribution.field_clinical_note}"
+            &quot;{contribution.field_clinical_note}&quot;
           </p>
         </div>
       )}
