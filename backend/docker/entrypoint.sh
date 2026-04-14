@@ -70,19 +70,22 @@ if [ -n "$DRUPAL_DATABASE_HOST" ]; then
     exit 1
   fi
 
+  # Clean up stale action configs that reference removed plugins
+  ./vendor/bin/drush config:delete system.action.node_purge_action 2>/dev/null || true
+  ./vendor/bin/drush config:delete system.action.node_restore_action 2>/dev/null || true
+
   # Apply recipes to ensure form/view display configs exist
-  # Recipes are idempotent — failure here means a real problem
+  # Drush resolves recipe paths relative to the Drupal root (web/), not the project root,
+  # so use "recipes/..." not "web/recipes/..."
   echo "Applying Verscienta recipes..."
-  RECIPE_DIR="web/recipes/verscienta_formula"
+  RECIPE_DIR="/var/www/html/web/recipes/verscienta_formula"
   if [ -d "$RECIPE_DIR" ]; then
-    echo "Recipe directory found: $(ls "$RECIPE_DIR")"
+    echo "Recipe directory found at $RECIPE_DIR"
     if ! ./vendor/bin/drush recipe "$RECIPE_DIR" 2>&1; then
       echo "WARNING: Recipe apply failed (may already be applied). Continuing..." >&2
     fi
   else
-    echo "WARNING: Recipe directory '$RECIPE_DIR' not found in image. Listing web/recipes/:" >&2
-    ls -la web/recipes/ 2>&1 || echo "  web/recipes/ does not exist" >&2
-    echo "WARNING: Skipping recipe apply. The formula content type must already exist in the database." >&2
+    echo "WARNING: Recipe directory not found at $RECIPE_DIR" >&2
   fi
 
   echo "Rebuilding cache..."
