@@ -111,9 +111,18 @@ if [ -n "$DRUPAL_DATABASE_HOST" ]; then
     echo "WARNING: Recipe directory not found at $RECIPE_DIR" >&2
   fi
 
-  # Uninstall obsolete extensions (Drupal marks these as must-remove)
-  echo "Uninstalling obsolete extensions..."
-  ./vendor/bin/drush pm:uninstall auto_updates_extensions --no-interaction 2>/dev/null || true
+  # Uninstall deprecated and obsolete extensions on every start.
+  # - auto_updates_extensions: obsolete (Drupal says "immediately uninstall")
+  # - field_layout: deprecated core module (removed in Drupal 12)
+  # - ai_content_suggestions, ai_logging: deprecated AI submodules, not used
+  # drush pm:uninstall is idempotent — safe to run when already uninstalled.
+  echo "Uninstalling deprecated/obsolete extensions..."
+  ./vendor/bin/drush pm:uninstall \
+    auto_updates_extensions \
+    field_layout \
+    ai_content_suggestions \
+    ai_logging \
+    --no-interaction 2>/dev/null || true
 
   echo "Rebuilding cache..."
   if ! ./vendor/bin/drush cache:rebuild 2>&1; then
