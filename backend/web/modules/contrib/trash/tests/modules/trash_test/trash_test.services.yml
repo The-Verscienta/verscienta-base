@@ -1,5 +1,0 @@
-services:
-  _defaults:
-    autoconfigure: true
-    autowire: true
-  Drupal\trash_test\EventSubscriber\TrashTestEventSubscriber: ~
