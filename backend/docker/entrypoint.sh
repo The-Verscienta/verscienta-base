@@ -42,16 +42,16 @@ chown -R www-data:www-data /var/www/html/private
 
 # Ensure private directory has the Drupal-required .htaccess (SA-CORE-2013-003)
 PRIVATE_HTACCESS="/var/www/html/private/.htaccess"
-if [ ! -f "$PRIVATE_HTACCESS" ] || ! grep -q "Drupal_Security_Do_Not_Remove_See_SA_2006_006" "$PRIVATE_HTACCESS" 2>/dev/null; then
+if [ ! -f "$PRIVATE_HTACCESS" ] || ! grep -q "Drupal_Security_Do_Not_Remove_See_SA_2013_003" "$PRIVATE_HTACCESS" 2>/dev/null; then
   cat > "$PRIVATE_HTACCESS" << 'HTEOF'
 # Turn off all options we don't need.
 Options -Indexes -ExecCGI -Includes -IncludesNOExec
 
 # Set the catch-all handler to prevent scripts from being executed.
-SetHandler Drupal_Security_Do_Not_Remove_See_SA_2006_006
+SetHandler Drupal_Security_Do_Not_Remove_See_SA_2013_003
 <Files *>
   # Override the handler again if we're run later in the evaluation list.
-  SetHandler Drupal_Security_Do_Not_Remove_See_SA_2006_006
+  SetHandler Drupal_Security_Do_Not_Remove_See_SA_2013_003
 </Files>
 
 # If we know how to do it safely, disable the PHP engine entirely.
@@ -59,6 +59,7 @@ SetHandler Drupal_Security_Do_Not_Remove_See_SA_2006_006
   php_flag engine off
 </IfModule>
 HTEOF
+  chown www-data:www-data "$PRIVATE_HTACCESS"
 fi
 
 # Ensure config sync directory exists

@@ -185,7 +185,7 @@ RUN mkdir -p /var/www/html/web/sites/default/files \
 RUN mkdir -p /var/www/html/private \
     && chown -R www-data:www-data /var/www/html/private \
     && chmod -R 775 /var/www/html/private \
-    && printf '# Turn off all options we do not need.\nOptions -Indexes -ExecCGI -Includes -IncludesNOExec\n\n# Set the catch-all handler to prevent scripts from being executed.\nSetHandler Drupal_Security_Do_Not_Remove_See_SA_2006_006\n<Files *>\n  SetHandler Drupal_Security_Do_Not_Remove_See_SA_2006_006\n</Files>\n\n# Disable the PHP engine entirely.\n<IfModule mod_php.c>\n  php_flag engine off\n</IfModule>\n' > /var/www/html/private/.htaccess
+    && printf '# Turn off all options we do not need.\nOptions -Indexes -ExecCGI -Includes -IncludesNOExec\n\n# Set the catch-all handler to prevent scripts from being executed.\nSetHandler Drupal_Security_Do_Not_Remove_See_SA_2013_003\n<Files *>\n  SetHandler Drupal_Security_Do_Not_Remove_See_SA_2013_003\n</Files>\n\n# Disable the PHP engine entirely.\n<IfModule mod_php.c>\n  php_flag engine off\n</IfModule>\n' > /var/www/html/private/.htaccess
 
 # Apache configuration
 RUN echo '<VirtualHost *:80>\n\
