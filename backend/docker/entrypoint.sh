@@ -40,6 +40,27 @@ chown -R www-data:www-data "${SETTINGS_DIR}/files"
 mkdir -p /var/www/html/private
 chown -R www-data:www-data /var/www/html/private
 
+# Ensure private directory has the Drupal-required .htaccess (SA-CORE-2013-003)
+PRIVATE_HTACCESS="/var/www/html/private/.htaccess"
+if [ ! -f "$PRIVATE_HTACCESS" ] || ! grep -q "Drupal_Security_Do_Not_Remove_See_SA_2006_006" "$PRIVATE_HTACCESS" 2>/dev/null; then
+  cat > "$PRIVATE_HTACCESS" << 'HTEOF'
+# Turn off all options we don't need.
+Options -Indexes -ExecCGI -Includes -IncludesNOExec
+
+# Set the catch-all handler to prevent scripts from being executed.
+SetHandler Drupal_Security_Do_Not_Remove_See_SA_2006_006
+<Files *>
+  # Override the handler again if we're run later in the evaluation list.
+  SetHandler Drupal_Security_Do_Not_Remove_See_SA_2006_006
+</Files>
+
+# If we know how to do it safely, disable the PHP engine entirely.
+<IfModule mod_php.c>
+  php_flag engine off
+</IfModule>
+HTEOF
+fi
+
 # Ensure config sync directory exists
 mkdir -p /var/www/html/config/sync
 
@@ -89,6 +110,10 @@ if [ -n "$DRUPAL_DATABASE_HOST" ]; then
   else
     echo "WARNING: Recipe directory not found at $RECIPE_DIR" >&2
   fi
+
+  # Uninstall obsolete extensions (Drupal marks these as must-remove)
+  echo "Uninstalling obsolete extensions..."
+  ./vendor/bin/drush pm:uninstall auto_updates_extensions --no-interaction 2>/dev/null || true
 
   echo "Rebuilding cache..."
   if ! ./vendor/bin/drush cache:rebuild 2>&1; then
