@@ -95,6 +95,10 @@ if [ -n "$DRUPAL_DATABASE_HOST" ]; then
     echo "ERROR: Cache rebuild failed." >&2
     exit 1
   fi
+
+  # Fix ownership of files created by drush (runs as root) so Apache (www-data)
+  # can read/write the compiled service container and Twig cache in files/php/.
+  chown -R www-data:www-data "${SETTINGS_DIR}/files"
 fi
 
 # Start Apache

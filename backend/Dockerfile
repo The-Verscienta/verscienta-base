@@ -131,8 +131,10 @@ RUN chmod +x /usr/local/bin/docker-entrypoint.sh
 EXPOSE 80
 
 # Healthcheck: give the entrypoint time to finish (database migrations, cache rebuild)
-# before declaring the container unhealthy. Coolify respects HEALTHCHECK if set.
-HEALTHCHECK --interval=10s --timeout=5s --start-period=90s --retries=5 \
-  CMD curl -sf http://localhost/user/login || exit 1
+# before declaring the container unhealthy.
+# NOTE: Coolify may override these settings. If deploys fail with "unhealthy",
+# increase start period and retries in Coolify's service healthcheck settings.
+HEALTHCHECK --interval=10s --timeout=5s --start-period=120s --retries=8 \
+  CMD curl -sf -o /dev/null http://localhost/user/login || exit 1
 
 ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
