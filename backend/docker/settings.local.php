@@ -36,6 +36,12 @@ if (getenv('TRUSTED_HOST_PATTERNS')) {
   $settings['trusted_host_patterns'] = explode(',', getenv('TRUSTED_HOST_PATTERNS'));
 }
 
+// Reverse proxy settings (Coolify / Traefik / nginx)
+// Drupal must trust forwarded headers to detect the correct scheme and host.
+$settings['reverse_proxy'] = TRUE;
+$settings['reverse_proxy_addresses'] = ['0.0.0.0/0'];
+$settings['reverse_proxy_header'] = 'X-Forwarded-For';
+
 // Config sync directory
 $settings['config_sync_directory'] = '../config/sync';
 
