@@ -1,0 +1,130 @@
+/* Import generated design tokens */
+@import "./generated/primitives.css";
+@import "./generated/semantic.css";
+
+/* Tailwind CSS 4 — CSS-first configuration */
+@import "tailwindcss";
+
+/*
+ * Register custom colors with Tailwind's @theme directive.
+ * This maps our CSS variables to Tailwind utility classes
+ * like bg-earth-500, text-sage-600, etc.
+ */
+@theme {
+  /* Earth tones (primary green) */
+  --color-earth-50: var(--color-earth-50);
+  --color-earth-100: var(--color-earth-100);
+  --color-earth-200: var(--color-earth-200);
+  --color-earth-300: var(--color-earth-300);
+  --color-earth-400: var(--color-earth-400);
+  --color-earth-500: var(--color-earth-500);
+  --color-earth-600: var(--color-earth-600);
+  --color-earth-700: var(--color-earth-700);
+  --color-earth-800: var(--color-earth-800);
+  --color-earth-900: var(--color-earth-900);
+  --color-earth-950: var(--color-earth-950);
+
+  /* Sage (secondary green) */
+  --color-sage-50: var(--color-sage-50);
+  --color-sage-100: var(--color-sage-100);
+  --color-sage-200: var(--color-sage-200);
+  --color-sage-300: var(--color-sage-300);
+  --color-sage-400: var(--color-sage-400);
+  --color-sage-500: var(--color-sage-500);
+  --color-sage-600: var(--color-sage-600);
+  --color-sage-700: var(--color-sage-700);
+  --color-sage-800: var(--color-sage-800);
+  --color-sage-900: var(--color-sage-900);
+  --color-sage-950: var(--color-sage-950);
+
+  /* TCM red */
+  --color-tcm-50: var(--color-tcm-50);
+  --color-tcm-100: var(--color-tcm-100);
+  --color-tcm-200: var(--color-tcm-200);
+  --color-tcm-300: var(--color-tcm-300);
+  --color-tcm-400: var(--color-tcm-400);
+  --color-tcm-500: var(--color-tcm-500);
+  --color-tcm-600: var(--color-tcm-600);
+  --color-tcm-700: var(--color-tcm-700);
+  --color-tcm-800: var(--color-tcm-800);
+  --color-tcm-900: var(--color-tcm-900);
+
+  /* Gold accent */
+  --color-gold-50: var(--color-gold-50);
+  --color-gold-100: var(--color-gold-100);
+  --color-gold-200: var(--color-gold-200);
+  --color-gold-300: var(--color-gold-300);
+  --color-gold-400: var(--color-gold-400);
+  --color-gold-500: var(--color-gold-500);
+  --color-gold-600: var(--color-gold-600);
+  --color-gold-700: var(--color-gold-700);
+  --color-gold-800: var(--color-gold-800);
+  --color-gold-900: var(--color-gold-900);
+
+  /* Cream */
+  --color-cream-50: var(--color-cream-50);
+  --color-cream-100: var(--color-cream-100);
+  --color-cream-200: var(--color-cream-200);
+  --color-cream-300: var(--color-cream-300);
+  --color-cream-400: var(--color-cream-400);
+
+  /* Warm */
+  --color-warm-50: var(--color-warm-50);
+  --color-warm-100: var(--color-warm-100);
+  --color-warm-200: var(--color-warm-200);
+  --color-warm-300: var(--color-warm-300);
+  --color-warm-400: var(--color-warm-400);
+  --color-warm-500: var(--color-warm-500);
+  --color-warm-600: var(--color-warm-600);
+  --color-warm-700: var(--color-warm-700);
+
+  /* Fonts */
+  --font-sans: "Source Sans 3", system-ui, sans-serif;
+  --font-serif: "Crimson Pro", Georgia, serif;
+  --font-mono: "JetBrains Mono", monospace;
+}
+
+/* ─── Base Styles ──────────────────────────────────────────────────────────── */
+
+body {
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-serif);
+}
+
+.font-chinese {
+  font-family: "Noto Serif SC", serif;
+}
+
+/* Prose styling for rich text content */
+.prose a {
+  color: var(--color-sage-600);
+}
+
+.prose a:hover {
+  color: var(--color-sage-800);
+}
+
+/* Dark mode prose */
+.dark .prose {
+  color: var(--color-earth-200);
+}
+
+.dark .prose a {
+  color: var(--color-sage-400);
+}
+
+.dark .prose strong {
+  color: var(--color-earth-100);
+}
+
+.dark .prose h1,
+.dark .prose h2,
+.dark .prose h3,
+.dark .prose h4 {
+  color: var(--color-earth-100);
+}

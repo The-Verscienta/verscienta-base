@@ -1,108 +1,334 @@
 ---
 /**
- * Homepage — hero, search, featured sections.
- * Minimal version; full port in Phase 5.
+ * Homepage — full port of the original Next.js design.
+ * Sections: Hero + Search, Features, TCM, Stats, Testimonials, CTA, Disclaimer.
  */
 import ContentLayout from "@/layouts/ContentLayout.astro";
 ---
 
 <ContentLayout
-  title="Verscienta Health — Herb Database & TCM Resource"
-  description="Comprehensive herb database integrating Traditional Chinese Medicine and Western herbalism with modern research, AI symptom checker, and dosage tools."
+  title="Verscienta Health — Your Guide to Holistic Wellness"
+  description="Explore traditional herbal remedies, holistic healing modalities, and receive personalized wellness recommendations powered by AI."
 >
-  <!-- Hero Section -->
-  <section class="relative overflow-hidden bg-gradient-to-br from-earth-50 via-sage-50/50 to-cream-100 dark:from-earth-950 dark:via-earth-900/50 dark:to-earth-950 border-b border-sage-200/50 dark:border-earth-700">
-    <div class="absolute top-20 left-10 w-64 h-64 bg-sage-300/20 rounded-full blur-3xl"></div>
-    <div class="absolute bottom-10 right-20 w-48 h-48 bg-earth-300/15 rounded-full blur-3xl"></div>
+  <!-- ═══ Hero Section ═══ -->
+  <section class="relative overflow-hidden py-16 md:py-24 lg:py-32">
+    <!-- Background -->
+    <div class="absolute inset-0 bg-gradient-to-br from-earth-100 via-sage-50 to-cream-100 dark:from-earth-950 dark:via-sage-950 dark:to-earth-900"></div>
 
-    <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 md:py-28">
-      <div class="max-w-3xl">
-        <h1 class="font-serif text-5xl md:text-6xl lg:text-7xl font-bold text-gray-900 dark:text-earth-100 mb-6 leading-tight">
-          Ancient Wisdom,<br />
-          <span class="text-sage-600 dark:text-sage-400">Modern Science</span>
-        </h1>
+    <!-- Botanical pattern -->
+    <div class="absolute inset-0 opacity-[0.04]" style="background-image: url(\"data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M50 10c0 20-15 40-15 60s15 20 15 20 15 0 15-20-15-40-15-60z' fill='%23527a5f'/%3E%3C/svg%3E\"); background-size: 80px 80px;"></div>
 
-        <p class="text-xl md:text-2xl text-gray-600 dark:text-earth-300 leading-relaxed mb-8">
-          Explore our comprehensive database of medicinal herbs, traditional formulas,
-          and holistic health modalities — backed by research and rooted in tradition.
-        </p>
+    <!-- Decorative blurs -->
+    <div class="absolute -top-32 -right-32 w-96 h-96 bg-sage-200/30 dark:bg-sage-800/15 rounded-full blur-3xl"></div>
+    <div class="absolute -bottom-32 -left-32 w-80 h-80 bg-earth-200/30 dark:bg-earth-800/15 rounded-full blur-3xl"></div>
+    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gold-100/20 dark:bg-gold-800/15 rounded-full blur-3xl"></div>
 
-        <div class="flex flex-wrap gap-4">
-          <a
-            href="/herbs"
-            class="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-sage-600 to-earth-600 text-white font-medium rounded-xl shadow-lg hover:shadow-xl transition-all hover:scale-105"
-          >
-            <span>Explore Herbs</span>
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+    <div class="relative max-w-6xl mx-auto px-4 text-center">
+      <!-- Eyebrow -->
+      <div class="inline-flex items-center gap-2 bg-white/70 dark:bg-earth-900/70 backdrop-blur-sm px-5 py-2.5 rounded-full border border-earth-200/50 dark:border-earth-700/50 shadow-sm mb-8">
+        <span class="relative w-2 h-2">
+          <span class="absolute inset-0 bg-sage-500 rounded-full animate-ping opacity-75"></span>
+          <span class="relative block w-2 h-2 bg-sage-500 rounded-full"></span>
+        </span>
+        <span class="text-sm font-medium text-earth-700 dark:text-earth-300 tracking-wide">Bridging Ancient Wisdom & Modern Science</span>
+      </div>
+
+      <h1 class="font-serif text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold text-gray-900 dark:text-earth-100 mb-8 tracking-tight leading-[1.05]">
+        Your Guide to
+        <span class="block mt-2 bg-gradient-to-r from-sage-600 via-earth-600 to-sage-700 bg-clip-text text-transparent">Holistic Wellness</span>
+      </h1>
+
+      <p class="text-xl md:text-2xl text-gray-600 dark:text-earth-300 max-w-3xl mx-auto mb-10 leading-relaxed">
+        Explore traditional herbal remedies, holistic healing modalities, and receive
+        personalized wellness recommendations powered by AI.
+      </p>
+
+      <!-- Search Bar -->
+      <div class="max-w-2xl mx-auto mb-12">
+        <form action="/search" method="GET" class="relative">
+          <div class="flex items-center bg-white dark:bg-earth-800 rounded-2xl border-2 border-earth-200 dark:border-earth-600 shadow-lg focus-within:border-sage-500 focus-within:ring-4 focus-within:ring-sage-500/10 transition-all">
+            <svg class="w-5 h-5 text-gray-400 ml-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
             </svg>
-          </a>
+            <input
+              type="search"
+              name="q"
+              placeholder="Search herbs, modalities, conditions..."
+              class="flex-1 px-4 py-4 bg-transparent text-gray-900 dark:text-earth-100 placeholder-gray-400 dark:placeholder-earth-500 outline-none text-lg"
+            />
+            <button type="submit" class="mr-2 px-6 py-2.5 bg-sage-600 hover:bg-sage-700 text-white font-medium rounded-xl transition-colors">
+              Search
+            </button>
+          </div>
+        </form>
 
-          <a
-            href="/symptom-checker"
-            class="inline-flex items-center gap-2 px-6 py-3 bg-white dark:bg-earth-800 text-earth-700 dark:text-earth-200 font-medium rounded-xl border border-earth-200 dark:border-earth-600 shadow-sm hover:shadow-md transition-all"
-          >
-            <span>AI Symptom Checker</span>
-          </a>
+        <!-- Quick tags -->
+        <div class="flex flex-wrap justify-center gap-2 mt-4">
+          {["Fatigue", "Stress Relief", "Digestive Health", "Sleep Support", "Immune Boost"].map(tag => (
+            <a href={`/search?q=${encodeURIComponent(tag)}`} class="px-3 py-1.5 text-sm bg-white/60 dark:bg-earth-800/60 backdrop-blur-sm text-earth-700 dark:text-earth-300 rounded-full border border-earth-200/50 dark:border-earth-700/50 hover:bg-white dark:hover:bg-earth-800 transition">
+              {tag}
+            </a>
+          ))}
+        </div>
+      </div>
+
+      <!-- CTA Buttons -->
+      <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        <a href="/symptom-checker" class="group relative inline-flex items-center justify-center gap-3 bg-gradient-to-r from-earth-700 to-sage-700 hover:from-earth-800 hover:to-sage-800 text-white px-8 py-4 rounded-xl font-semibold text-lg shadow-lg shadow-earth-900/20 transition-all hover:-translate-y-0.5 overflow-hidden">
+          <span class="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700"></span>
+          <svg class="w-5 h-5 relative" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" /></svg>
+          <span class="relative">Try Symptom Checker</span>
+          <svg class="w-4 h-4 transition-transform group-hover:translate-x-1 relative" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
+        </a>
+        <a href="/practitioners" class="group inline-flex items-center justify-center gap-3 bg-white/80 dark:bg-earth-900/80 backdrop-blur-sm hover:bg-white dark:hover:bg-earth-900 text-earth-700 dark:text-earth-200 px-8 py-4 rounded-xl font-semibold text-lg border-2 border-earth-200 dark:border-earth-700 hover:border-sage-400 transition-all hover:-translate-y-0.5 shadow-sm hover:shadow-md">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
+          Find Practitioners
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ Features Section ═══ -->
+  <section class="py-16 md:py-24 relative">
+    <div class="max-w-6xl mx-auto px-4">
+      <div class="text-center mb-16">
+        <div class="inline-flex items-center gap-2 text-sage-600 dark:text-sage-400 text-sm font-semibold tracking-wider uppercase mb-4">
+          <span class="w-8 h-px bg-sage-300 dark:bg-sage-700"></span>
+          Our Platform
+          <span class="w-8 h-px bg-sage-300 dark:bg-sage-700"></span>
+        </div>
+        <h2 class="font-serif text-4xl md:text-5xl font-bold text-gray-900 dark:text-earth-100 mb-6">
+          Comprehensive Health <span class="bg-gradient-to-r from-earth-600 to-sage-600 bg-clip-text text-transparent">Resources</span>
+        </h2>
+        <p class="text-xl text-gray-600 dark:text-earth-300 max-w-3xl mx-auto leading-relaxed">
+          Explore our extensive database covering traditional Chinese medicine,
+          Western herbalism, and various holistic healing modalities.
+        </p>
+      </div>
+
+      <div class="grid md:grid-cols-3 gap-8">
+        <!-- Materia Medica -->
+        <a href="/herbs" class="group relative bg-white dark:bg-earth-900 rounded-2xl border border-gray-100 dark:border-earth-700 shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden">
+          <div class="absolute inset-0 bg-gradient-to-br from-sage-500/0 to-sage-500/0 group-hover:from-sage-500/5 group-hover:to-sage-500/10 transition-all duration-300"></div>
+          <div class="relative p-8">
+            <div class="w-16 h-16 bg-gradient-to-br from-sage-100 to-earth-100 dark:from-sage-900/50 dark:to-earth-900/50 rounded-2xl flex items-center justify-center text-3xl mb-6 group-hover:scale-110 transition-transform shadow-sm">🌿</div>
+            <h3 class="font-serif text-xl font-bold text-gray-800 dark:text-earth-100 mb-3 group-hover:text-sage-700 transition-colors">Materia Medica</h3>
+            <p class="text-gray-600 dark:text-earth-300 text-sm leading-relaxed mb-4">Comprehensive botanical information covering TCM properties, active constituents, therapeutic uses, dosages, and safety guidelines for hundreds of medicinal herbs.</p>
+            <div class="flex flex-wrap gap-2 mb-4">
+              {["TCM Properties", "Active Compounds", "Safety Data"].map(tag => (
+                <span class="text-xs px-2.5 py-1 rounded-full bg-sage-100 dark:bg-sage-900/30 text-sage-700 dark:text-sage-300 border border-sage-200 dark:border-sage-800">{tag}</span>
+              ))}
+            </div>
+            <span class="inline-flex items-center gap-2 text-sage-600 dark:text-sage-400 font-medium text-sm group-hover:gap-3 transition-all">
+              Explore Herbs →
+            </span>
+          </div>
+        </a>
+
+        <!-- Healing Modalities -->
+        <a href="/modalities" class="group relative bg-white dark:bg-earth-900 rounded-2xl border border-gray-100 dark:border-earth-700 shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden">
+          <div class="absolute inset-0 bg-gradient-to-br from-earth-500/0 to-earth-500/0 group-hover:from-earth-500/5 group-hover:to-earth-500/10 transition-all duration-300"></div>
+          <div class="relative p-8">
+            <div class="w-16 h-16 bg-gradient-to-br from-earth-100 to-gold-100 dark:from-earth-900/50 dark:to-gold-900/30 rounded-2xl flex items-center justify-center text-3xl mb-6 group-hover:scale-110 transition-transform shadow-sm">☯️</div>
+            <h3 class="font-serif text-xl font-bold text-gray-800 dark:text-earth-100 mb-3 group-hover:text-sage-700 transition-colors">Healing Modalities</h3>
+            <p class="text-gray-600 dark:text-earth-300 text-sm leading-relaxed mb-4">Explore diverse holistic health practices from acupuncture and yoga to Reiki and Ayurveda, with detailed information on benefits, techniques, and applications.</p>
+            <div class="flex flex-wrap gap-2 mb-4">
+              {["Acupuncture", "Yoga", "Ayurveda"].map(tag => (
+                <span class="text-xs px-2.5 py-1 rounded-full bg-earth-100 dark:bg-earth-800 text-earth-700 dark:text-earth-300 border border-earth-200 dark:border-earth-700">{tag}</span>
+              ))}
+            </div>
+            <span class="inline-flex items-center gap-2 text-sage-600 dark:text-sage-400 font-medium text-sm group-hover:gap-3 transition-all">
+              Explore Modalities →
+            </span>
+          </div>
+        </a>
+
+        <!-- AI Analysis -->
+        <a href="/symptom-checker" class="group relative bg-white dark:bg-earth-900 rounded-2xl border border-gray-100 dark:border-earth-700 shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden">
+          <div class="absolute inset-0 bg-gradient-to-br from-gold-500/0 to-gold-500/0 group-hover:from-gold-500/5 group-hover:to-gold-500/10 transition-all duration-300"></div>
+          <div class="relative p-8">
+            <div class="absolute top-4 right-4">
+              <span class="inline-flex items-center gap-1 px-2.5 py-1 bg-gradient-to-r from-gold-400 to-gold-500 text-white text-xs font-bold rounded-full shadow-sm">
+                ✦ AI Powered
+              </span>
+            </div>
+            <div class="w-16 h-16 bg-gradient-to-br from-gold-100 to-amber-100 dark:from-gold-900/30 dark:to-amber-900/30 rounded-2xl flex items-center justify-center text-3xl mb-6 group-hover:scale-110 transition-transform shadow-sm">🤖</div>
+            <h3 class="font-serif text-xl font-bold text-gray-800 dark:text-earth-100 mb-3 group-hover:text-sage-700 transition-colors">AI-Powered Analysis</h3>
+            <p class="text-gray-600 dark:text-earth-300 text-sm leading-relaxed mb-4">Get personalized wellness recommendations based on your symptoms using advanced AI technology that considers your unique health profile.</p>
+            <div class="flex flex-wrap gap-2 mb-4">
+              {["Smart Analysis", "Personalized", "Evidence-Based"].map(tag => (
+                <span class="text-xs px-2.5 py-1 rounded-full bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-300 border border-amber-200 dark:border-amber-800">{tag}</span>
+              ))}
+            </div>
+            <span class="inline-flex items-center gap-2 text-gold-600 font-medium text-sm group-hover:gap-3 transition-all">
+              Try Symptom Checker →
+            </span>
+          </div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ TCM Section ═══ -->
+  <section class="py-16 md:py-24 relative overflow-hidden">
+    <div class="absolute inset-0 bg-gradient-to-br from-amber-50 via-orange-50/50 to-red-50/30 dark:from-amber-950/30 dark:via-orange-950/20 dark:to-red-950/20"></div>
+    <div class="absolute inset-0 opacity-[0.03]" style="background-image: url(\"data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='20' cy='20' r='15' fill='none' stroke='%23c1272d' stroke-width='0.5'/%3E%3Cpath d='M20 5c0 7.5-7.5 15-7.5 22.5S20 35 20 35s7.5 0 7.5-7.5S20 12.5 20 5z' fill='%23c1272d' opacity='0.3'/%3E%3C/svg%3E\"); background-size: 40px 40px;"></div>
+
+    <div class="relative max-w-6xl mx-auto px-4">
+      <div class="text-center mb-16">
+        <span class="text-5xl block mb-6">☯️</span>
+        <h2 class="font-serif text-4xl md:text-5xl font-bold text-amber-900 dark:text-amber-200 mb-6">Traditional Chinese Medicine</h2>
+        <p class="text-xl text-amber-800 dark:text-amber-300 max-w-3xl mx-auto">Honoring thousands of years of healing wisdom with modern scientific understanding.</p>
+      </div>
+
+      <div class="grid md:grid-cols-2 gap-8">
+        <div class="bg-white/60 dark:bg-earth-900/60 backdrop-blur-sm rounded-2xl border border-amber-200/50 dark:border-amber-800/30 p-8">
+          <h3 class="font-serif text-xl font-bold text-amber-900 dark:text-amber-200 mb-4 flex items-center gap-3">🏮 TCM Herb Database</h3>
+          <p class="text-amber-800 dark:text-amber-300 mb-6">Complete information on traditional Chinese herbs including taste properties, temperature qualities, meridian affinities, and classical formulas.</p>
+          <ul class="space-y-3">
+            {["Five Tastes & Temperatures (味 Wèi / 性 Xìng)", "Meridian Channel Associations (經絡 Jīngluò)", "Classical Formula Combinations"].map(item => (
+              <li class="flex items-start gap-3 text-amber-900 dark:text-amber-200">
+                <svg class="w-5 h-5 text-tcm-600 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" /></svg>
+                <span class="text-sm">{item}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+        <div class="bg-white/60 dark:bg-earth-900/60 backdrop-blur-sm rounded-2xl border border-amber-200/50 dark:border-amber-800/30 p-8">
+          <h3 class="font-serif text-xl font-bold text-amber-900 dark:text-amber-200 mb-4 flex items-center gap-3">🔬 Modern Scientific Research</h3>
+          <p class="text-amber-800 dark:text-amber-300 mb-6">Bridging traditional knowledge with contemporary pharmacological research and clinical studies to validate efficacy and safety.</p>
+          <ul class="space-y-3">
+            {["Active Constituent Analysis", "Clinical Trial Data", "Safety & Interaction Studies"].map(item => (
+              <li class="flex items-start gap-3 text-amber-900 dark:text-amber-200">
+                <svg class="w-5 h-5 text-earth-600 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" /></svg>
+                <span class="text-sm">{item}</span>
+              </li>
+            ))}
+          </ul>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Quick Stats -->
-  <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-    <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
-      {[
-        { label: "Medicinal Herbs", value: "500+", icon: "🌿" },
-        { label: "TCM Formulas", value: "200+", icon: "📜" },
-        { label: "Health Conditions", value: "150+", icon: "🩺" },
-        { label: "Healing Modalities", value: "30+", icon: "🧘" },
-      ].map(({ label, value, icon }) => (
-        <div class="bg-white dark:bg-earth-900 rounded-xl shadow-sm border border-gray-100 dark:border-earth-700 p-6 text-center">
-          <div class="text-3xl mb-2">{icon}</div>
-          <div class="font-serif text-2xl font-bold text-earth-800 dark:text-earth-100">{value}</div>
-          <div class="text-sm text-gray-600 dark:text-earth-400">{label}</div>
-        </div>
-      ))}
+  <!-- ═══ Stats Banner ═══ -->
+  <section class="py-16 md:py-24 relative overflow-hidden">
+    <div class="absolute inset-0 bg-gradient-to-r from-earth-700 via-earth-800 to-sage-800"></div>
+    <div class="absolute inset-0 opacity-10" style="background-image: url(\"data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 5c-2 10-10 18-20 20 10 2 18 10 20 20 2-10 10-18 20-20-10-2-18-10-20-20z' fill='%23ffffff'/%3E%3C/svg%3E\"); background-size: 60px 60px;"></div>
+    <div class="absolute top-0 right-0 w-96 h-96 bg-sage-400/10 rounded-full blur-3xl"></div>
+    <div class="absolute bottom-0 left-0 w-80 h-80 bg-gold-400/10 rounded-full blur-3xl"></div>
+
+    <div class="relative max-w-6xl mx-auto px-4">
+      <div class="text-center mb-12">
+        <h3 class="font-serif text-2xl md:text-3xl font-bold text-white mb-3">Trusted by Wellness Seekers Worldwide</h3>
+        <p class="text-earth-200">Our growing database of natural healing wisdom</p>
+      </div>
+
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8">
+        {[
+          { value: "500+", label: "Medicinal Herbs", icon: "🌿" },
+          { value: "50+", label: "Health Modalities", icon: "☯️" },
+          { value: "200+", label: "Classical Formulas", icon: "📜" },
+          { value: "1000+", label: "Practitioners", icon: "👨‍⚕️" },
+        ].map(stat => (
+          <div class="bg-white/10 backdrop-blur-sm rounded-2xl border border-white/10 p-6 text-center hover:bg-white/15 transition-all duration-300">
+            <span class="text-3xl md:text-4xl mb-3 block">{stat.icon}</span>
+            <div class="text-3xl md:text-4xl font-bold text-white font-serif mb-1">{stat.value}</div>
+            <div class="text-sm text-earth-200">{stat.label}</div>
+          </div>
+        ))}
+      </div>
     </div>
   </section>
 
-  <!-- Features Grid -->
-  <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16">
-    <h2 class="font-serif text-3xl font-bold text-gray-900 dark:text-earth-100 mb-8 text-center">
-      What You Can Do
-    </h2>
+  <!-- ═══ Testimonials ═══ -->
+  <section class="py-16 md:py-24 relative overflow-hidden">
+    <div class="absolute inset-0 bg-gradient-to-b from-cream-50 to-white dark:from-earth-950 dark:to-earth-900"></div>
 
-    <div class="grid md:grid-cols-3 gap-6">
-      <a href="/symptom-checker" class="group bg-white dark:bg-earth-900 rounded-xl shadow-sm border border-gray-100 dark:border-earth-700 p-6 hover:shadow-lg transition-all">
-        <div class="w-12 h-12 bg-sage-100 dark:bg-earth-800 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-          <span class="text-2xl">🔍</span>
+    <div class="relative max-w-6xl mx-auto px-4">
+      <div class="text-center mb-16">
+        <div class="inline-flex items-center gap-2 text-sage-600 dark:text-sage-400 text-sm font-semibold tracking-wider uppercase mb-4">
+          <span class="w-8 h-px bg-sage-300 dark:bg-sage-700"></span>
+          What People Say
+          <span class="w-8 h-px bg-sage-300 dark:bg-sage-700"></span>
         </div>
-        <h3 class="font-serif text-xl font-bold text-gray-900 dark:text-earth-100 mb-2">AI Symptom Checker</h3>
-        <p class="text-sm text-gray-600 dark:text-earth-400">
-          Describe your symptoms and get TCM pattern analysis with herb and modality recommendations.
-        </p>
-      </a>
+        <h2 class="font-serif text-4xl md:text-5xl font-bold text-gray-900 dark:text-earth-100 mb-6">
+          Stories of <span class="bg-gradient-to-r from-sage-600 to-earth-600 bg-clip-text text-transparent">Healing</span>
+        </h2>
+        <p class="text-xl text-gray-600 dark:text-earth-300 max-w-2xl mx-auto">Discover how holistic approaches have transformed lives</p>
+      </div>
 
-      <a href="/tools/herb-drug-interactions" class="group bg-white dark:bg-earth-900 rounded-xl shadow-sm border border-gray-100 dark:border-earth-700 p-6 hover:shadow-lg transition-all">
-        <div class="w-12 h-12 bg-sage-100 dark:bg-earth-800 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-          <span class="text-2xl">💊</span>
-        </div>
-        <h3 class="font-serif text-xl font-bold text-gray-900 dark:text-earth-100 mb-2">Drug Interaction Checker</h3>
-        <p class="text-sm text-gray-600 dark:text-earth-400">
-          Check potential interactions between herbs and pharmaceutical medications.
-        </p>
-      </a>
+      <div class="grid md:grid-cols-3 gap-8">
+        {[
+          { quote: "The herb database helped me understand my TCM prescriptions better. The integration of traditional wisdom with scientific research is exactly what I was looking for.", author: "Sarah M.", role: "Wellness Enthusiast", initials: "SM" },
+          { quote: "As a practitioner, I recommend this platform to all my patients. The comprehensive information on herb interactions and safety is invaluable.", author: "Dr. James Chen", role: "Licensed Acupuncturist", initials: "JC", featured: true },
+          { quote: "The symptom checker gave me insights I never expected. It helped me have a much more informed conversation with my healthcare provider.", author: "Maria K.", role: "Health-Conscious Mom", initials: "MK" },
+        ].map(t => (
+          <div class={`bg-white dark:bg-earth-900 rounded-2xl p-8 shadow-sm border ${t.featured ? "border-sage-200 dark:border-sage-800 ring-1 ring-sage-100 dark:ring-sage-900" : "border-gray-100 dark:border-earth-700"}`}>
+            <svg class="w-8 h-8 text-sage-300 dark:text-sage-700 mb-4" fill="currentColor" viewBox="0 0 24 24"><path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z" /></svg>
+            <p class="text-gray-700 dark:text-earth-200 leading-relaxed mb-6 italic">"{t.quote}"</p>
+            <div class="flex items-center gap-3">
+              <div class={`w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold text-white ${t.featured ? "bg-gradient-to-br from-sage-500 to-earth-600" : "bg-gradient-to-br from-earth-400 to-earth-600"}`}>{t.initials}</div>
+              <div>
+                <div class="font-semibold text-gray-900 dark:text-earth-100 text-sm">{t.author}</div>
+                <div class="text-xs text-gray-500 dark:text-earth-400">{t.role}</div>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
 
-      <a href="/search" class="group bg-white dark:bg-earth-900 rounded-xl shadow-sm border border-gray-100 dark:border-earth-700 p-6 hover:shadow-lg transition-all">
-        <div class="w-12 h-12 bg-sage-100 dark:bg-earth-800 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-          <span class="text-2xl">📚</span>
+  <!-- ═══ CTA Section ═══ -->
+  <section class="py-16 md:py-24">
+    <div class="max-w-4xl mx-auto px-4">
+      <div class="relative overflow-hidden bg-gradient-to-br from-earth-800 via-earth-700 to-sage-800 text-white rounded-3xl p-12 md:p-16 text-center shadow-2xl">
+        <div class="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full blur-3xl"></div>
+        <div class="absolute bottom-0 left-0 w-48 h-48 bg-sage-400/10 rounded-full blur-3xl"></div>
+        <div class="absolute top-8 left-8 opacity-20">
+          <svg viewBox="0 0 60 60" class="w-12 h-12"><path d="M30 5c-2 10-10 18-20 20 10 2 18 10 20 20 2-10 10-18 20-20-10-2-18-10-20-20z" fill="currentColor"/></svg>
         </div>
-        <h3 class="font-serif text-xl font-bold text-gray-900 dark:text-earth-100 mb-2">Search Database</h3>
-        <p class="text-sm text-gray-600 dark:text-earth-400">
-          Search across herbs, formulas, conditions, and practitioners with faceted filtering.
-        </p>
-      </a>
+        <div class="absolute bottom-8 right-8 opacity-20">
+          <svg viewBox="0 0 60 60" class="w-16 h-16"><path d="M30 5c-2 10-10 18-20 20 10 2 18 10 20 20 2-10 10-18 20-20-10-2-18-10-20-20z" fill="currentColor"/></svg>
+        </div>
+
+        <div class="relative">
+          <h2 class="font-serif text-4xl md:text-5xl font-bold mb-6">
+            Ready to Start Your <br class="hidden sm:block" />Wellness Journey?
+          </h2>
+          <p class="text-xl md:text-2xl mb-10 opacity-90 max-w-2xl mx-auto leading-relaxed">
+            Discover holistic approaches to health tailored to your unique needs,
+            backed by both ancient wisdom and modern science.
+          </p>
+          <div class="flex flex-col sm:flex-row gap-4 justify-center">
+            <a href="/symptom-checker" class="group inline-flex items-center justify-center gap-3 bg-white text-gray-800 px-8 py-4 rounded-xl font-semibold text-lg shadow-lg hover:bg-earth-50 transition-all hover:-translate-y-0.5">
+              Get Started Now
+              <svg class="w-5 h-5 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" /></svg>
+            </a>
+            <a href="/practitioners" class="inline-flex items-center justify-center gap-3 bg-transparent border-2 border-white/50 text-white px-8 py-4 rounded-xl font-semibold text-lg hover:bg-white/10 hover:border-white transition-all">
+              Find a Practitioner
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ Disclaimer ═══ -->
+  <section class="pb-20">
+    <div class="max-w-4xl mx-auto px-4">
+      <div class="bg-amber-50 dark:bg-earth-900 border border-amber-200 dark:border-earth-700 rounded-2xl p-6 md:p-8 flex gap-4">
+        <svg class="w-6 h-6 text-amber-600 dark:text-amber-400 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd" /></svg>
+        <div>
+          <h3 class="font-serif text-lg font-bold text-amber-800 dark:text-amber-300 mb-2">Important Disclaimer</h3>
+          <p class="text-sm text-amber-700 dark:text-amber-400 leading-relaxed">
+            The information provided on this website is for educational purposes only and is not
+            intended to replace professional medical advice, diagnosis, or treatment. Always seek
+            the advice of your physician or qualified healthcare provider with any questions you
+            may have regarding a medical condition.
+          </p>
+        </div>
+      </div>
     </div>
   </section>
 </ContentLayout>

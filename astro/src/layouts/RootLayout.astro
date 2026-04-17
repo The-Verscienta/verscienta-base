@@ -62,32 +62,9 @@ const canonicalUrl = new URL(Astro.url.pathname, siteUrl).href;
       })();
     </script>
 
-    <!-- Global styles -->
+    <!-- Global styles (Tailwind + design tokens + custom theme) -->
     <style is:global>
-      @import "../styles/generated/primitives.css";
-      @import "../styles/generated/semantic.css";
-      @import "tailwindcss";
-
-      :root {
-        --font-sans: "Source Sans 3", system-ui, sans-serif;
-        --font-serif: "Crimson Pro", Georgia, serif;
-        --font-mono: "JetBrains Mono", monospace;
-        --font-chinese: "Noto Serif SC", serif;
-      }
-
-      body {
-        font-family: var(--font-sans);
-        -webkit-font-smoothing: antialiased;
-        -moz-osx-font-smoothing: grayscale;
-      }
-
-      h1, h2, h3, h4, h5, h6 {
-        font-family: var(--font-serif);
-      }
-
-      .font-chinese {
-        font-family: var(--font-chinese);
-      }
+      @import "../styles/global.css";
     </style>
   </head>
 
