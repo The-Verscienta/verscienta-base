@@ -26,8 +26,11 @@ function slug(str) {
   return str.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
 }
 
+const delay = (ms) => new Promise((r) => setTimeout(r, ms));
+
 async function seedCollection(collection, tree, parentId = null) {
   for (const [name, children] of Object.entries(tree)) {
+    await delay(100); // Avoid Directus rate limiter
     let item;
     try {
       item = await client.request(
