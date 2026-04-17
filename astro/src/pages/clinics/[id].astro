@@ -1,0 +1,17 @@
+---
+import ContentLayout from "@/layouts/ContentLayout.astro";
+import Breadcrumbs from "@/components/ui/Breadcrumbs.astro";
+const { id } = Astro.params;
+---
+<ContentLayout title="Clinic — Verscienta Health">
+  <section class="bg-gradient-to-br from-earth-50 via-sage-50/50 to-cream-100 dark:from-earth-950 dark:via-earth-900/50 dark:to-earth-950 border-b border-sage-200/50 dark:border-earth-700">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Clinics", href: "/clinics" }, { label: `Clinic ${id}` }]} class="mb-4" />
+      <h1 class="font-serif text-4xl font-bold text-gray-900 dark:text-earth-100">Clinic</h1>
+    </div>
+  </section>
+  <div class="max-w-3xl mx-auto px-4 py-12 text-center">
+    <p class="text-gray-600 dark:text-earth-300 mb-4">Clinic details will be available once listings are populated.</p>
+    <a href="/clinics" class="text-sage-600 hover:underline">← Back to Clinics</a>
+  </div>
+</ContentLayout>

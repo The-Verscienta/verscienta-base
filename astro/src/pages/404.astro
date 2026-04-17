@@ -1,0 +1,35 @@
+---
+import ContentLayout from "@/layouts/ContentLayout.astro";
+---
+<ContentLayout title="Page Not Found — Verscienta Health">
+  <div class="min-h-[60vh] flex items-center justify-center py-16">
+    <div class="max-w-lg px-4 text-center">
+      <!-- Decorative leaf -->
+      <div class="relative inline-block mb-8">
+        <svg viewBox="0 0 120 120" class="w-32 h-32 text-sage-300 dark:text-sage-700 opacity-60">
+          <path d="M60 10c-6 20-24 32-24 48a24 24 0 0048 0c0-16-18-28-24-48z" fill="currentColor" />
+          <path d="M60 22v48M52 34c4 4 8 12 8 20M68 34c-4 4-8 12-8 20" stroke="white" stroke-width="2" stroke-linecap="round" stroke-opacity="0.4" fill="none" />
+        </svg>
+        <span class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 font-serif text-5xl font-bold text-earth-600 dark:text-earth-300">404</span>
+      </div>
+
+      <h1 class="font-serif text-3xl md:text-4xl font-bold text-gray-900 dark:text-earth-100 mb-4">Page Not Found</h1>
+      <p class="text-lg text-gray-600 dark:text-earth-300 mb-8">
+        The page you're looking for has wandered off the path. It may have been moved, renamed, or may not exist.
+      </p>
+
+      <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        <a href="/" class="inline-flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-sage-600 to-earth-600 text-white font-medium rounded-xl shadow-lg hover:shadow-xl transition-all hover:-translate-y-0.5">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" /></svg>
+          Go Home
+        </a>
+        <a href="/herbs" class="inline-flex items-center justify-center gap-2 px-6 py-3 bg-white dark:bg-earth-800 text-earth-700 dark:text-earth-200 font-medium rounded-xl border-2 border-earth-200 dark:border-earth-600 hover:border-sage-400 transition-all">
+          🌿 Browse Herbs
+        </a>
+        <a href="/search" class="inline-flex items-center justify-center gap-2 px-6 py-3 bg-white dark:bg-earth-800 text-earth-700 dark:text-earth-200 font-medium rounded-xl border-2 border-earth-200 dark:border-earth-600 hover:border-sage-400 transition-all">
+          🔍 Search
+        </a>
+      </div>
+    </div>
+  </div>
+</ContentLayout>

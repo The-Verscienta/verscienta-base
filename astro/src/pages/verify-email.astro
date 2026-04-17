@@ -1,0 +1,39 @@
+---
+import ContentLayout from "@/layouts/ContentLayout.astro";
+const token = Astro.url.searchParams.get("token");
+---
+<ContentLayout title="Verify Email — Verscienta Health" description="Verify your email address.">
+  <div class="min-h-[60vh] flex items-center justify-center py-16">
+    <div class="w-full max-w-md px-4 text-center">
+      {token ? (
+        <div class="bg-white dark:bg-earth-900 rounded-xl border border-gray-100 dark:border-earth-700 p-8 shadow-sm">
+          <div class="text-5xl mb-4">✉️</div>
+          <h1 class="font-serif text-2xl font-bold text-gray-900 dark:text-earth-100 mb-2">Verifying Your Email</h1>
+          <p class="text-gray-600 dark:text-earth-300 mb-6">Please wait while we verify your email address...</p>
+          <script define:vars={{ token }}>
+            fetch(`/api/auth/verify-email?token=${token}`)
+              .then(r => r.json())
+              .then(data => {
+                if (data.success) {
+                  document.getElementById('verify-status').innerHTML = '<div class="text-green-600 font-medium">Email verified! You can now <a href="/login" class="underline">sign in</a>.</div>';
+                } else {
+                  document.getElementById('verify-status').innerHTML = '<div class="text-red-600">' + (data.error || 'Verification failed.') + '</div>';
+                }
+              })
+              .catch(() => {
+                document.getElementById('verify-status').innerHTML = '<div class="text-red-600">Verification failed. Please try again.</div>';
+              });
+          </script>
+          <div id="verify-status"><div class="animate-pulse text-gray-400">Verifying...</div></div>
+        </div>
+      ) : (
+        <div class="bg-white dark:bg-earth-900 rounded-xl border border-gray-100 dark:border-earth-700 p-8 shadow-sm">
+          <div class="text-5xl mb-4">📧</div>
+          <h1 class="font-serif text-2xl font-bold text-gray-900 dark:text-earth-100 mb-2">Check Your Email</h1>
+          <p class="text-gray-600 dark:text-earth-300">We've sent a verification link to your email address. Click the link to verify your account.</p>
+          <a href="/login" class="inline-block mt-6 px-4 py-2 bg-sage-600 text-white rounded-lg hover:bg-sage-700 transition">Go to Login</a>
+        </div>
+      )}
+    </div>
+  </div>
+</ContentLayout>

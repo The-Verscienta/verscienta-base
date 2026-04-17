@@ -1,0 +1,17 @@
+---
+import ContentLayout from "@/layouts/ContentLayout.astro";
+import Breadcrumbs from "@/components/ui/Breadcrumbs.astro";
+const { id } = Astro.params;
+---
+<ContentLayout title="TCM Pattern — Verscienta Health">
+  <section class="bg-gradient-to-br from-amber-50 via-orange-50/50 to-red-50/30 dark:from-amber-950/30 dark:via-orange-950/20 dark:to-red-950/20 border-b border-amber-200/50 dark:border-amber-800/30">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
+      <Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Patterns", href: "/patterns" }, { label: `Pattern ${id}` }]} class="mb-4" />
+      <h1 class="font-serif text-4xl md:text-5xl font-bold text-amber-900 dark:text-amber-200 mb-4">TCM Pattern</h1>
+      <p class="text-lg text-amber-800 dark:text-amber-300">Pattern details will be available once content is populated.</p>
+    </div>
+  </section>
+  <div class="max-w-3xl mx-auto px-4 py-12 text-center">
+    <a href="/patterns" class="text-sage-600 hover:underline">← Back to Patterns</a>
+  </div>
+</ContentLayout>
