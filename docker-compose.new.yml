@@ -28,9 +28,9 @@ services:
 
       CACHE_ENABLED: "true"
       CACHE_STORE: redis
-      CACHE_REDIS_HOST: redis
-      CACHE_REDIS_PORT: "6379"
       CACHE_AUTO_PURGE: "true"
+
+      REDIS: "redis://redis:6379"
 
       CORS_ENABLED: "true"
       CORS_ORIGIN: "https://verscienta.com,https://api.verscienta.com"
@@ -38,7 +38,6 @@ services:
 
       RATE_LIMITER_ENABLED: "true"
       RATE_LIMITER_STORE: redis
-      RATE_LIMITER_REDIS_HOST: redis
 
       PUBLIC_URL: https://api.verscienta.com
       LOG_LEVEL: warn

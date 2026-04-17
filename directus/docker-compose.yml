@@ -21,10 +21,11 @@ services:
 
       CACHE_ENABLED: "true"
       CACHE_STORE: redis
-      CACHE_REDIS_HOST: redis
-      CACHE_REDIS_PORT: "6379"
       CACHE_AUTO_PURGE: "true"
       CACHE_TTL: "5m"
+
+      # Directus 11 uses a single REDIS connection URL for all Redis services
+      REDIS: "redis://redis:6379"
 
       CORS_ENABLED: "true"
       CORS_ORIGIN: "http://localhost:4321,http://localhost:3000,https://verscienta.com"
@@ -32,8 +33,6 @@ services:
 
       RATE_LIMITER_ENABLED: "true"
       RATE_LIMITER_STORE: redis
-      RATE_LIMITER_REDIS_HOST: redis
-      RATE_LIMITER_REDIS_PORT: "6379"
 
       PUBLIC_URL: ${DIRECTUS_PUBLIC_URL:-http://localhost:8055}
       LOG_LEVEL: ${LOG_LEVEL:-info}
