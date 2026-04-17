@@ -36,7 +36,7 @@ if (!TREFLE_KEY) { console.error("TREFLE_API_KEY required"); process.exit(1); }
 if (!DIRECTUS_TOKEN) { console.error("DIRECTUS_TOKEN required"); process.exit(1); }
 
 const directus = createDirectus(DIRECTUS_URL).with(staticToken(DIRECTUS_TOKEN)).with(rest());
-const limiter = new RateLimiter(120, 60000); // 120 req/min
+const limiter = new RateLimiter(55, 60000); // 55 req/min (safe margin under 60 limit)
 
 const stats = { processed: 0, created: 0, updated: 0, skipped: 0, errors: 0, images: 0 };
 
@@ -232,7 +232,14 @@ async function main() {
     try {
       const result = await getPlants(page);
       const plants = result.data || [];
-      const meta = result.links?.last ? parseInt(new URL(result.links.last).searchParams.get("page") || "1") : page;
+      // Trefle returns relative links like "/api/v1/plants?page=100" — need a base URL
+      let meta = page;
+      if (result.links?.last) {
+        try {
+          const lastUrl = new URL(result.links.last, "https://trefle.io");
+          meta = parseInt(lastUrl.searchParams.get("page") || "1");
+        } catch { /* ignore parse errors */ }
+      }
 
       if (totalPages === Infinity && meta > 0) {
         totalPages = meta;
