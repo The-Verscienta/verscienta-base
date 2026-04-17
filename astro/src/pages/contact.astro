@@ -1,0 +1,58 @@
+---
+/**
+ * Contact page — static shell with interactive form (React island in Phase 6).
+ */
+import ContentLayout from "@/layouts/ContentLayout.astro";
+---
+
+<ContentLayout title="Contact Us — Verscienta Health" description="Get in touch with the Verscienta Health team.">
+  <section class="relative overflow-hidden bg-gradient-to-br from-earth-50 via-sage-50/50 to-cream-100 dark:from-earth-950 dark:via-earth-900/50 dark:to-earth-950 border-b border-sage-200/50 dark:border-earth-700">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+      <h1 class="font-serif text-4xl md:text-5xl font-bold text-gray-900 dark:text-earth-100 mb-4">Contact Us</h1>
+      <p class="text-xl text-gray-600 dark:text-earth-300">Have a question or feedback? We'd love to hear from you.</p>
+    </div>
+  </section>
+
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+    <div class="grid md:grid-cols-3 gap-8">
+      <!-- Contact Info -->
+      <div class="space-y-6">
+        <div>
+          <h3 class="font-serif text-lg font-bold text-gray-900 dark:text-earth-100 mb-2">Email</h3>
+          <a href="mailto:info@verscienta.com" class="text-sage-600 dark:text-sage-400 hover:underline">info@verscienta.com</a>
+        </div>
+        <div>
+          <h3 class="font-serif text-lg font-bold text-gray-900 dark:text-earth-100 mb-2">Response Time</h3>
+          <p class="text-sm text-gray-600 dark:text-earth-400">We typically respond within 1-2 business days.</p>
+        </div>
+      </div>
+
+      <!-- Contact Form placeholder -->
+      <div class="md:col-span-2 bg-white dark:bg-earth-900 rounded-xl border border-gray-100 dark:border-earth-700 p-6">
+        <h2 class="font-serif text-2xl font-bold text-gray-900 dark:text-earth-100 mb-6">Send a Message</h2>
+        <!-- TODO Phase 6: Replace with <ContactForm client:load /> React island -->
+        <form class="space-y-4" data-astro-contact-form>
+          <div>
+            <label for="name" class="block text-sm font-medium text-gray-700 dark:text-earth-300 mb-1">Name</label>
+            <input type="text" id="name" name="name" required class="w-full px-4 py-2 border border-gray-200 dark:border-earth-600 rounded-lg bg-white dark:bg-earth-800 text-gray-900 dark:text-earth-100 focus:ring-2 focus:ring-sage-500 focus:border-sage-500" />
+          </div>
+          <div>
+            <label for="email" class="block text-sm font-medium text-gray-700 dark:text-earth-300 mb-1">Email</label>
+            <input type="email" id="email" name="email" required class="w-full px-4 py-2 border border-gray-200 dark:border-earth-600 rounded-lg bg-white dark:bg-earth-800 text-gray-900 dark:text-earth-100 focus:ring-2 focus:ring-sage-500 focus:border-sage-500" />
+          </div>
+          <div>
+            <label for="subject" class="block text-sm font-medium text-gray-700 dark:text-earth-300 mb-1">Subject</label>
+            <input type="text" id="subject" name="subject" required class="w-full px-4 py-2 border border-gray-200 dark:border-earth-600 rounded-lg bg-white dark:bg-earth-800 text-gray-900 dark:text-earth-100 focus:ring-2 focus:ring-sage-500 focus:border-sage-500" />
+          </div>
+          <div>
+            <label for="message" class="block text-sm font-medium text-gray-700 dark:text-earth-300 mb-1">Message</label>
+            <textarea id="message" name="message" rows="5" required class="w-full px-4 py-2 border border-gray-200 dark:border-earth-600 rounded-lg bg-white dark:bg-earth-800 text-gray-900 dark:text-earth-100 focus:ring-2 focus:ring-sage-500 focus:border-sage-500"></textarea>
+          </div>
+          <button type="submit" class="px-6 py-3 bg-gradient-to-r from-sage-600 to-earth-600 text-white font-medium rounded-xl shadow hover:shadow-lg transition-all">
+            Send Message
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</ContentLayout>

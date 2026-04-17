@@ -1,0 +1,26 @@
+---
+import ContentLayout from "@/layouts/ContentLayout.astro";
+import { directus, readItems, readItem } from "@/lib/directus";
+const { id } = Astro.params;
+let modality: any = null;
+try {
+  const bySlug = await directus.request(readItems("modalities", { filter: { slug: { _eq: id } }, fields: ["*", "conditions.conditions_id.id", "conditions.conditions_id.title", "conditions.conditions_id.slug"], limit: 1 }));
+  modality = bySlug?.[0] || null;
+  if (!modality && /^\d+$/.test(id!)) modality = await directus.request(readItem("modalities", parseInt(id!), { fields: ["*", "conditions.conditions_id.*"] }));
+} catch (e) { console.error(e); }
+if (!modality) return Astro.redirect("/404");
+---
+<ContentLayout title={`${modality.title} — Verscienta Health`} description={`Learn about ${modality.title}: benefits, techniques, and conditions it addresses.`}>
+  <section class="bg-gradient-to-br from-earth-50 via-sage-50/50 to-cream-100 dark:from-earth-950 dark:via-earth-900/50 dark:to-earth-950 border-b border-sage-200/50 dark:border-earth-700">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
+      <nav class="text-sm text-gray-500 dark:text-earth-400 mb-4"><a href="/" class="hover:text-sage-600">Home</a> / <a href="/modalities" class="hover:text-sage-600">Modalities</a> / <span class="text-gray-900 dark:text-earth-100">{modality.title}</span></nav>
+      <h1 class="font-serif text-4xl md:text-5xl font-bold text-gray-900 dark:text-earth-100 mb-4">{modality.title}</h1>
+      {modality.excels_at?.length > 0 && <div class="flex flex-wrap gap-2">{modality.excels_at.map((e:string) => <span class="px-3 py-1 rounded-full bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 text-sm">{e}</span>)}</div>}
+    </div>
+  </section>
+  <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+    {modality.description && <section><h2 class="font-serif text-2xl font-bold text-gray-900 dark:text-earth-100 mb-4">About</h2><div class="prose prose-earth dark:prose-invert max-w-none" set:html={modality.description} /></section>}
+    {modality.benefits && <section><h2 class="font-serif text-2xl font-bold text-gray-900 dark:text-earth-100 mb-4">Benefits</h2><div class="prose prose-earth dark:prose-invert max-w-none" set:html={modality.benefits} /></section>}
+    {modality.conditions?.length > 0 && <section><h2 class="font-serif text-2xl font-bold text-gray-900 dark:text-earth-100 mb-4">Conditions Addressed</h2><div class="flex flex-wrap gap-2">{modality.conditions.map((c:any) => <a href={`/conditions/${c.conditions_id?.slug || c.conditions_id?.id}`} class="px-3 py-1.5 rounded-full bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 text-sm hover:bg-blue-200 transition">{c.conditions_id?.title}</a>)}</div></section>}
+  </div>
+</ContentLayout>

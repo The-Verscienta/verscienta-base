@@ -1,0 +1,64 @@
+---
+/**
+ * Symptom Checker — Astro shell page with React island.
+ * The SymptomChecker component is ported from frontend/app/symptom-checker/page.tsx
+ * and kept as a React island since it has heavy interactivity (form, AI calls, results).
+ */
+import ContentLayout from "@/layouts/ContentLayout.astro";
+// TODO Phase 6: import SymptomChecker from "@/components/SymptomChecker";
+---
+
+<ContentLayout
+  title="AI Symptom Checker — Verscienta Health"
+  description="Describe your symptoms and receive TCM pattern analysis with personalized herb and modality recommendations."
+>
+  <section class="relative overflow-hidden bg-gradient-to-br from-earth-50 via-sage-50/50 to-cream-100 dark:from-earth-950 dark:via-earth-900/50 dark:to-earth-950 border-b border-sage-200/50 dark:border-earth-700">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
+      <div class="max-w-2xl">
+        <div class="flex items-center gap-3 mb-4">
+          <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-sage-500 to-earth-600 flex items-center justify-center shadow-lg">
+            <span class="text-xl">🔍</span>
+          </div>
+          <span class="text-sage-600 font-medium tracking-wide uppercase text-sm">AI-Powered Analysis</span>
+        </div>
+        <h1 class="font-serif text-4xl md:text-5xl font-bold text-gray-900 dark:text-earth-100 mb-4">Symptom Checker</h1>
+        <p class="text-lg text-gray-600 dark:text-earth-300">
+          Describe your symptoms and receive TCM pattern analysis with personalized recommendations for herbs, formulas, and healing modalities.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <!-- Disclaimer -->
+    <div class="bg-amber-50 dark:bg-earth-900 border border-amber-200 dark:border-earth-700 rounded-xl p-4 mb-8">
+      <p class="text-sm text-amber-700 dark:text-amber-400">
+        <strong>Important:</strong> This tool provides educational guidance only. It does not diagnose conditions or replace professional medical advice. Always consult a qualified healthcare provider.
+      </p>
+    </div>
+
+    <!-- React island placeholder -->
+    <!-- TODO Phase 6: <SymptomChecker client:load /> -->
+    <div class="bg-white dark:bg-earth-900 rounded-xl border border-gray-100 dark:border-earth-700 p-6">
+      <div class="space-y-4">
+        <div>
+          <label for="symptoms" class="block text-sm font-medium text-gray-700 dark:text-earth-300 mb-2">Describe your symptoms</label>
+          <textarea
+            id="symptoms"
+            rows="5"
+            placeholder="e.g., I've been experiencing fatigue, difficulty sleeping, and occasional heart palpitations for the past two weeks..."
+            class="w-full px-4 py-3 border border-gray-200 dark:border-earth-600 rounded-xl bg-white dark:bg-earth-800 text-gray-900 dark:text-earth-100 focus:ring-2 focus:ring-sage-500 focus:border-sage-500 placeholder-gray-400 dark:placeholder-earth-500"
+          ></textarea>
+          <p class="text-xs text-gray-500 dark:text-earth-400 mt-1">Minimum 10 characters. Include duration, severity, and any patterns you've noticed.</p>
+        </div>
+        <button
+          type="button"
+          class="w-full px-6 py-3 bg-gradient-to-r from-sage-600 to-earth-600 text-white font-medium rounded-xl shadow-lg hover:shadow-xl transition-all"
+          onclick="alert('The full symptom checker will be available when the React component is ported in Phase 6.')"
+        >
+          Analyze Symptoms
+        </button>
+      </div>
+    </div>
+  </div>
+</ContentLayout>

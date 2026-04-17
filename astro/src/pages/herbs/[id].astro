@@ -1,0 +1,357 @@
+---
+/**
+ * Herb detail page — server-rendered with all O2M children from Directus.
+ * Replaces frontend/app/herbs/[id]/page.tsx.
+ */
+import ContentLayout from "@/layouts/ContentLayout.astro";
+import { directus, readItems, readItem } from "@/lib/directus";
+
+const { id } = Astro.params;
+
+let herb: any = null;
+
+try {
+  // Try by slug first, then by ID
+  const bySlug = await directus.request(
+    readItems("herbs", {
+      filter: { slug: { _eq: id } },
+      fields: [
+        "*",
+        "clinical_studies.*",
+        "drug_interactions.*",
+        "dosages.*",
+        "constituents.*",
+        "preparations.*",
+        "historical_texts.*",
+        "practitioner_notes.*",
+        "case_studies.*", "case_studies.condition_id.title",
+        "references.*",
+        "images.*", "images.file.*",
+        "conditions_treated.conditions_id.id", "conditions_treated.conditions_id.title", "conditions_treated.conditions_id.slug",
+        "related_species.related_herbs_id.id", "related_species.related_herbs_id.title", "related_species.related_herbs_id.slug",
+        "tags.herb_tags_id.id", "tags.herb_tags_id.name", "tags.herb_tags_id.slug",
+        "tcm_category_tags.tcm_categories_id.id", "tcm_category_tags.tcm_categories_id.name",
+      ],
+      limit: 1,
+    })
+  );
+  herb = bySlug?.[0] || null;
+
+  // Fallback: try by numeric ID
+  if (!herb && /^\d+$/.test(id!)) {
+    herb = await directus.request(
+      readItem("herbs", parseInt(id!), {
+        fields: [
+          "*",
+          "clinical_studies.*",
+          "drug_interactions.*",
+          "dosages.*",
+          "constituents.*",
+          "preparations.*",
+          "historical_texts.*",
+          "practitioner_notes.*",
+          "case_studies.*", "case_studies.condition_id.title",
+          "references.*",
+          "images.*", "images.file.*",
+          "conditions_treated.conditions_id.id", "conditions_treated.conditions_id.title", "conditions_treated.conditions_id.slug",
+          "tags.herb_tags_id.id", "tags.herb_tags_id.name",
+        ],
+      })
+    );
+  }
+} catch (e) {
+  console.error("Error fetching herb:", e);
+}
+
+if (!herb) {
+  return Astro.redirect("/404");
+}
+
+const directusUrl = import.meta.env.PUBLIC_DIRECTUS_URL;
+const title = `${herb.title} (${herb.scientific_name || ""}) — Verscienta Health`;
+---
+
+<ContentLayout title={title} description={`Comprehensive information about ${herb.title} including TCM properties, clinical studies, dosage, and safety data.`}>
+  <!-- Hero -->
+  <section class="relative overflow-hidden bg-gradient-to-br from-earth-50 via-sage-50/50 to-cream-100 dark:from-earth-950 dark:via-earth-900/50 dark:to-earth-950 border-b border-sage-200/50 dark:border-earth-700">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
+      <nav class="text-sm text-gray-500 dark:text-earth-400 mb-4">
+        <a href="/" class="hover:text-sage-600">Home</a> / <a href="/herbs" class="hover:text-sage-600">Herbs</a> / <span class="text-gray-900 dark:text-earth-100">{herb.title}</span>
+      </nav>
+      <div class="flex flex-col md:flex-row gap-8">
+        <div class="flex-1">
+          <h1 class="font-serif text-4xl md:text-5xl font-bold text-gray-900 dark:text-earth-100 mb-2">{herb.title}</h1>
+          {herb.scientific_name && <p class="text-xl italic text-sage-600 dark:text-sage-400 mb-4">{herb.scientific_name}</p>}
+          {herb.family && <p class="text-sm text-gray-600 dark:text-earth-400">Family: <span class="font-medium">{herb.family}</span></p>}
+
+          {/* Common names */}
+          {herb.common_names?.length > 0 && (
+            <div class="flex flex-wrap gap-2 mt-4">
+              {herb.common_names.map((cn: any) => (
+                <span class="text-sm px-3 py-1 rounded-full bg-sage-100 dark:bg-earth-800 text-sage-700 dark:text-sage-300">
+                  {cn.name || cn} {cn.language ? `(${cn.language})` : ""}
+                </span>
+              ))}
+            </div>
+          )}
+        </div>
+
+        {/* Primary image */}
+        {herb.images?.[0]?.file && (
+          <div class="w-full md:w-80 aspect-square rounded-xl overflow-hidden shadow-lg">
+            <img
+              src={`${directusUrl}/assets/${typeof herb.images[0].file === "object" ? herb.images[0].file.id : herb.images[0].file}?width=640&height=640&fit=cover&format=webp`}
+              alt={herb.images[0].caption || herb.title}
+              class="w-full h-full object-cover"
+            />
+          </div>
+        )}
+      </div>
+    </div>
+  </section>
+
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div class="grid lg:grid-cols-3 gap-8">
+      <!-- Main content -->
+      <div class="lg:col-span-2 space-y-12">
+
+        {/* TCM Properties */}
+        {(herb.tcm_taste?.length || herb.tcm_temperature || herb.tcm_meridians?.length || herb.tcm_functions) && (
+          <section>
+            <h2 class="font-serif text-2xl font-bold text-gray-900 dark:text-earth-100 mb-4 flex items-center gap-2">☯ TCM Properties</h2>
+            <div class="bg-white dark:bg-earth-900 rounded-xl border border-gray-100 dark:border-earth-700 p-6 space-y-4">
+              {herb.tcm_temperature && <div><span class="text-sm font-medium text-gray-500 dark:text-earth-400">Temperature:</span> <span class="ml-2 font-medium">{herb.tcm_temperature}</span></div>}
+              {herb.tcm_taste?.length > 0 && <div><span class="text-sm font-medium text-gray-500 dark:text-earth-400">Taste:</span> <span class="ml-2">{herb.tcm_taste.join(", ")}</span></div>}
+              {herb.tcm_meridians?.length > 0 && <div><span class="text-sm font-medium text-gray-500 dark:text-earth-400">Meridians:</span> <span class="ml-2">{herb.tcm_meridians.join(", ")}</span></div>}
+              {herb.tcm_functions && <div><span class="text-sm font-medium text-gray-500 dark:text-earth-400">Functions:</span> <div class="mt-1 prose prose-sm dark:prose-invert" set:html={herb.tcm_functions} /></div>}
+            </div>
+          </section>
+        )}
+
+        {/* Therapeutic Uses */}
+        {herb.therapeutic_uses && (
+          <section>
+            <h2 class="font-serif text-2xl font-bold text-gray-900 dark:text-earth-100 mb-4">Therapeutic Uses</h2>
+            <div class="prose prose-earth dark:prose-invert max-w-none" set:html={herb.therapeutic_uses} />
+          </section>
+        )}
+
+        {/* Active Constituents (O2M) */}
+        {herb.constituents?.length > 0 && (
+          <section>
+            <h2 class="font-serif text-2xl font-bold text-gray-900 dark:text-earth-100 mb-4">Active Constituents</h2>
+            <div class="space-y-3">
+              {herb.constituents.map((c: any) => (
+                <div class="bg-white dark:bg-earth-900 rounded-lg border border-gray-100 dark:border-earth-700 p-4">
+                  <div class="flex items-center justify-between">
+                    <h3 class="font-medium text-gray-900 dark:text-earth-100">{c.name}</h3>
+                    {c.chemical_class && <span class="text-xs px-2 py-0.5 rounded-full bg-sage-100 dark:bg-earth-800 text-sage-700 dark:text-sage-300">{c.chemical_class}</span>}
+                  </div>
+                  {c.concentration && <p class="text-sm text-gray-500 dark:text-earth-400 mt-1">Concentration: {c.concentration}</p>}
+                  {c.effects && <div class="text-sm text-gray-600 dark:text-earth-300 mt-2 prose prose-sm dark:prose-invert" set:html={c.effects} />}
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
+
+        {/* Drug Interactions (O2M) */}
+        {herb.drug_interactions?.length > 0 && (
+          <section>
+            <h2 class="font-serif text-2xl font-bold text-gray-900 dark:text-earth-100 mb-4">⚠ Drug Interactions</h2>
+            <div class="space-y-3">
+              {herb.drug_interactions.map((di: any) => (
+                <div class={`rounded-lg border p-4 ${di.severity === "Contraindicated" || di.interaction_type === "Major" ? "bg-red-50 dark:bg-red-950/20 border-red-200 dark:border-red-800" : "bg-amber-50 dark:bg-amber-950/20 border-amber-200 dark:border-amber-800"}`}>
+                  <div class="flex items-center justify-between">
+                    <h3 class="font-medium text-gray-900 dark:text-earth-100">{di.drug_name}</h3>
+                    <span class={`text-xs px-2 py-0.5 rounded-full font-medium ${di.interaction_type === "Major" ? "bg-red-100 text-red-700" : di.interaction_type === "Moderate" ? "bg-amber-100 text-amber-700" : "bg-green-100 text-green-700"}`}>{di.interaction_type || "Unknown"}</span>
+                  </div>
+                  {di.mechanism && <div class="text-sm text-gray-600 dark:text-earth-300 mt-2 prose prose-sm dark:prose-invert" set:html={di.mechanism} />}
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
+
+        {/* Dosage (O2M) */}
+        {herb.dosages?.length > 0 && (
+          <section>
+            <h2 class="font-serif text-2xl font-bold text-gray-900 dark:text-earth-100 mb-4">Dosage</h2>
+            <div class="overflow-x-auto">
+              <table class="w-full text-sm">
+                <thead><tr class="border-b border-gray-200 dark:border-earth-700">
+                  <th class="text-left py-2 font-medium text-gray-500 dark:text-earth-400">Form</th>
+                  <th class="text-left py-2 font-medium text-gray-500 dark:text-earth-400">Amount</th>
+                  <th class="text-left py-2 font-medium text-gray-500 dark:text-earth-400">Frequency</th>
+                  <th class="text-left py-2 font-medium text-gray-500 dark:text-earth-400">Notes</th>
+                </tr></thead>
+                <tbody>
+                  {herb.dosages.map((d: any) => (
+                    <tr class="border-b border-gray-100 dark:border-earth-800">
+                      <td class="py-2 text-gray-900 dark:text-earth-100">{d.form}</td>
+                      <td class="py-2 text-gray-600 dark:text-earth-300">{d.amount || "—"}</td>
+                      <td class="py-2 text-gray-600 dark:text-earth-300">{d.frequency || "—"}</td>
+                      <td class="py-2 text-gray-600 dark:text-earth-300">{d.notes ? <span set:html={d.notes} /> : "—"}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </section>
+        )}
+
+        {/* Clinical Studies (O2M) */}
+        {herb.clinical_studies?.length > 0 && (
+          <section>
+            <h2 class="font-serif text-2xl font-bold text-gray-900 dark:text-earth-100 mb-4">Clinical Studies</h2>
+            <div class="space-y-4">
+              {herb.clinical_studies.map((s: any) => (
+                <div class="bg-white dark:bg-earth-900 rounded-lg border border-gray-100 dark:border-earth-700 p-4">
+                  <h3 class="font-medium text-gray-900 dark:text-earth-100">{s.title}</h3>
+                  <div class="flex flex-wrap gap-2 mt-1 text-xs text-gray-500 dark:text-earth-400">
+                    {s.authors && <span>{s.authors}</span>}
+                    {s.year && <span>({s.year})</span>}
+                    {s.journal && <span class="italic">{s.journal}</span>}
+                    {s.study_type && <span class="px-2 py-0.5 rounded-full bg-sage-100 dark:bg-earth-800 text-sage-700 dark:text-sage-300">{s.study_type}</span>}
+                  </div>
+                  {s.summary && <div class="text-sm text-gray-600 dark:text-earth-300 mt-2 prose prose-sm dark:prose-invert" set:html={s.summary} />}
+                  {s.doi && <a href={`https://doi.org/${s.doi}`} target="_blank" rel="noopener" class="text-xs text-sage-600 hover:underline mt-2 inline-block">DOI: {s.doi}</a>}
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
+
+        {/* Preparations (O2M) */}
+        {herb.preparations?.length > 0 && (
+          <section>
+            <h2 class="font-serif text-2xl font-bold text-gray-900 dark:text-earth-100 mb-4">Preparation Methods</h2>
+            <div class="space-y-4">
+              {herb.preparations.map((p: any) => (
+                <div class="bg-white dark:bg-earth-900 rounded-lg border border-gray-100 dark:border-earth-700 p-4">
+                  <h3 class="font-medium text-gray-900 dark:text-earth-100">{p.method}</h3>
+                  {p.instructions && <div class="text-sm text-gray-600 dark:text-earth-300 mt-2 prose prose-sm dark:prose-invert" set:html={p.instructions} />}
+                  <div class="flex gap-4 mt-2 text-xs text-gray-500 dark:text-earth-400">
+                    {p.time && <span>Time: {p.time}</span>}
+                    {p.shelf_life && <span>Shelf life: {p.shelf_life}</span>}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
+
+        {/* Safety: Toxicity (flattened) */}
+        {herb.toxicity_level && herb.toxicity_level !== "none_known" && (
+          <section>
+            <h2 class="font-serif text-2xl font-bold text-gray-900 dark:text-earth-100 mb-4">⚠ Toxicity Information</h2>
+            <div class="bg-amber-50 dark:bg-amber-950/20 rounded-xl border border-amber-200 dark:border-amber-800 p-6 space-y-3">
+              <div><span class="text-sm font-medium text-amber-700 dark:text-amber-400">Level:</span> <span class="ml-2 font-medium capitalize">{herb.toxicity_level}</span></div>
+              {herb.toxicity_compounds && <div><span class="text-sm font-medium text-amber-700 dark:text-amber-400">Toxic compounds:</span> <span class="ml-2">{herb.toxicity_compounds}</span></div>}
+              {herb.toxicity_symptoms && <div><span class="text-sm font-medium text-amber-700 dark:text-amber-400">Symptoms:</span> <div class="mt-1 prose prose-sm dark:prose-invert" set:html={herb.toxicity_symptoms} /></div>}
+              {herb.toxicity_treatment && <div><span class="text-sm font-medium text-amber-700 dark:text-amber-400">Treatment:</span> <div class="mt-1 prose prose-sm dark:prose-invert" set:html={herb.toxicity_treatment} /></div>}
+            </div>
+          </section>
+        )}
+
+        {/* Historical Texts (O2M) */}
+        {herb.historical_texts?.length > 0 && (
+          <section>
+            <h2 class="font-serif text-2xl font-bold text-gray-900 dark:text-earth-100 mb-4">📜 Historical References</h2>
+            <div class="space-y-3">
+              {herb.historical_texts.map((ht: any) => (
+                <div class="bg-white dark:bg-earth-900 rounded-lg border border-gray-100 dark:border-earth-700 p-4">
+                  <h3 class="font-medium text-gray-900 dark:text-earth-100">{ht.source_name}</h3>
+                  <div class="text-xs text-gray-500 dark:text-earth-400 mt-1">{[ht.author, ht.era, ht.tradition].filter(Boolean).join(" · ")}</div>
+                  {ht.excerpt && <div class="text-sm text-gray-600 dark:text-earth-300 mt-2 prose prose-sm dark:prose-invert italic" set:html={ht.excerpt} />}
+                  {ht.translation && <div class="text-sm text-gray-600 dark:text-earth-300 mt-2 prose prose-sm dark:prose-invert" set:html={ht.translation} />}
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
+
+        {/* References (O2M) */}
+        {herb.references?.length > 0 && (
+          <section>
+            <h2 class="font-serif text-2xl font-bold text-gray-900 dark:text-earth-100 mb-4">References</h2>
+            <ol class="list-decimal list-inside space-y-2 text-sm text-gray-600 dark:text-earth-300">
+              {herb.references.map((ref: any) => (
+                <li>
+                  {ref.authors && <span>{ref.authors}. </span>}
+                  <span class="font-medium text-gray-900 dark:text-earth-100">{ref.title}</span>
+                  {ref.publication && <span class="italic">. {ref.publication}</span>}
+                  {ref.year && <span> ({ref.year})</span>}
+                  {ref.doi && <a href={`https://doi.org/${ref.doi}`} target="_blank" rel="noopener" class="text-sage-600 hover:underline ml-1">[DOI]</a>}
+                  {ref.url && !ref.doi && <a href={ref.url} target="_blank" rel="noopener" class="text-sage-600 hover:underline ml-1">[Link]</a>}
+                </li>
+              ))}
+            </ol>
+          </section>
+        )}
+      </div>
+
+      <!-- Sidebar -->
+      <aside class="space-y-6">
+        {/* Quick facts card */}
+        <div class="bg-white dark:bg-earth-900 rounded-xl border border-gray-100 dark:border-earth-700 p-6 sticky top-24">
+          <h3 class="font-serif text-lg font-bold text-gray-900 dark:text-earth-100 mb-4">Quick Facts</h3>
+          <dl class="space-y-3 text-sm">
+            {herb.plant_type && <div><dt class="text-gray-500 dark:text-earth-400">Type</dt><dd class="font-medium capitalize">{herb.plant_type}</dd></div>}
+            {herb.parts_used?.length > 0 && <div><dt class="text-gray-500 dark:text-earth-400">Parts Used</dt><dd class="font-medium">{herb.parts_used.join(", ")}</dd></div>}
+            {herb.conservation_status && <div><dt class="text-gray-500 dark:text-earth-400">Conservation</dt><dd class="font-medium capitalize">{herb.conservation_status.replace(/_/g, " ")}</dd></div>}
+            {herb.western_properties?.length > 0 && <div><dt class="text-gray-500 dark:text-earth-400">Western Actions</dt><dd class="flex flex-wrap gap-1 mt-1">{herb.western_properties.map((p: string) => <span class="text-xs px-2 py-0.5 rounded-full bg-sage-100 dark:bg-earth-800 text-sage-700 dark:text-sage-300 capitalize">{p}</span>)}</dd></div>}
+            {herb.dosage_forms?.length > 0 && <div><dt class="text-gray-500 dark:text-earth-400">Available Forms</dt><dd class="font-medium capitalize">{herb.dosage_forms.join(", ")}</dd></div>}
+          </dl>
+
+          {/* Conditions treated */}
+          {herb.conditions_treated?.length > 0 && (
+            <div class="mt-6 pt-6 border-t border-gray-100 dark:border-earth-700">
+              <h4 class="text-sm font-semibold text-gray-500 dark:text-earth-400 uppercase tracking-wide mb-2">Conditions Treated</h4>
+              <div class="flex flex-wrap gap-1">
+                {herb.conditions_treated.map((ct: any) => (
+                  <a href={`/conditions/${ct.conditions_id?.slug || ct.conditions_id?.id}`} class="text-xs px-2 py-1 rounded-full bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 hover:bg-blue-200 transition">
+                    {ct.conditions_id?.title}
+                  </a>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Tags */}
+          {herb.tags?.length > 0 && (
+            <div class="mt-6 pt-6 border-t border-gray-100 dark:border-earth-700">
+              <h4 class="text-sm font-semibold text-gray-500 dark:text-earth-400 uppercase tracking-wide mb-2">Tags</h4>
+              <div class="flex flex-wrap gap-1">
+                {herb.tags.map((t: any) => (
+                  <span class="text-xs px-2 py-0.5 rounded-full bg-gray-100 dark:bg-earth-800 text-gray-600 dark:text-earth-300">{t.herb_tags_id?.name}</span>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Related species */}
+          {herb.related_species?.length > 0 && (
+            <div class="mt-6 pt-6 border-t border-gray-100 dark:border-earth-700">
+              <h4 class="text-sm font-semibold text-gray-500 dark:text-earth-400 uppercase tracking-wide mb-2">Related Species</h4>
+              <ul class="space-y-1">
+                {herb.related_species.map((rs: any) => (
+                  <li><a href={`/herbs/${rs.related_herbs_id?.slug || rs.related_herbs_id?.id}`} class="text-sm text-sage-600 dark:text-sage-400 hover:underline">{rs.related_herbs_id?.title}</a></li>
+                ))}
+              </ul>
+            </div>
+          )}
+        </div>
+      </aside>
+    </div>
+  </div>
+
+  <!-- Disclaimer -->
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-8">
+    <div class="bg-amber-50 dark:bg-earth-900 border border-amber-200 dark:border-earth-700 rounded-xl p-4 text-center">
+      <p class="text-xs text-amber-700 dark:text-amber-400">
+        This information is for educational purposes only. Consult a healthcare provider before using any herbal remedy.
+      </p>
+    </div>
+  </div>
+</ContentLayout>

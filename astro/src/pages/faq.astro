@@ -1,0 +1,73 @@
+---
+/**
+ * FAQ page — static content with interactive accordion (enhanced with JS).
+ */
+import ContentLayout from "@/layouts/ContentLayout.astro";
+
+const faqs = [
+  { q: "What is Verscienta Health?", a: "Verscienta Health is a comprehensive database bridging Traditional Chinese Medicine (TCM), Western herbalism, and modern scientific research. We provide searchable, evidence-based information about medicinal herbs, formulas, and holistic health modalities.", category: "General" },
+  { q: "Is the information on this site medical advice?", a: "No. All information is for educational purposes only. Always consult a qualified healthcare provider before starting any herbal supplement or treatment. Our AI symptom checker provides general wellness guidance, not diagnoses.", category: "General" },
+  { q: "How does the AI Symptom Checker work?", a: "The symptom checker uses AI to analyze your described symptoms and identify potential TCM patterns (syndromes). It suggests relevant herbs, modalities, and formulas based on traditional TCM pattern differentiation. It is not a diagnostic tool.", category: "Tools" },
+  { q: "What is TCM pattern differentiation?", a: "Pattern differentiation (辨证论治, biàn zhèng lùn zhì) is the core diagnostic method in Traditional Chinese Medicine. It identifies the underlying pattern of disharmony causing symptoms, rather than treating symptoms in isolation.", category: "TCM" },
+  { q: "Can I use herbs alongside pharmaceutical medications?", a: "Some herbs can interact with medications. Always use our Drug Interaction Checker and consult your healthcare provider before combining herbs with any medication. Safety is our top priority.", category: "Safety" },
+  { q: "How accurate is the herb database?", a: "Our database is compiled from peer-reviewed research, pharmacopoeias (Chinese and Western), and traditional texts. Each entry undergoes review and includes source citations. However, herbal medicine research is evolving, and we update entries regularly.", category: "Data" },
+  { q: "What do jun/chen/zuo/shi mean in formulas?", a: "These are the four roles herbs play in a TCM formula: Jun (Chief) is the main therapeutic herb, Chen (Deputy) enhances the chief, Zuo (Assistant) addresses secondary symptoms or reduces side effects, and Shi (Envoy) directs the formula to the target area.", category: "TCM" },
+  { q: "Is this site free to use?", a: "Yes, Verscienta Health is free for all users. We believe holistic health education should be accessible to everyone.", category: "General" },
+];
+
+const categories = [...new Set(faqs.map(f => f.category))];
+---
+
+<ContentLayout title="FAQ — Verscienta Health" description="Frequently asked questions about Verscienta Health, TCM, and herbal medicine.">
+  <section class="relative overflow-hidden bg-gradient-to-br from-earth-50 via-sage-50/50 to-cream-100 dark:from-earth-950 dark:via-earth-900/50 dark:to-earth-950 border-b border-sage-200/50 dark:border-earth-700">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+      <h1 class="font-serif text-4xl md:text-5xl font-bold text-gray-900 dark:text-earth-100 mb-4">Frequently Asked Questions</h1>
+      <p class="text-xl text-gray-600 dark:text-earth-300">Find answers to common questions about Verscienta Health and herbal medicine.</p>
+    </div>
+  </section>
+
+  <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+    <!-- Category tabs -->
+    <div class="flex flex-wrap gap-2 mb-8">
+      <button class="px-4 py-2 rounded-full text-sm font-medium bg-sage-600 text-white" data-faq-filter="all">All</button>
+      {categories.map(cat => (
+        <button class="px-4 py-2 rounded-full text-sm font-medium bg-white dark:bg-earth-800 text-gray-700 dark:text-earth-200 border border-gray-200 dark:border-earth-600 hover:bg-sage-50 dark:hover:bg-earth-700 transition" data-faq-filter={cat}>{cat}</button>
+      ))}
+    </div>
+
+    <!-- FAQ items -->
+    <div class="space-y-4" id="faq-list">
+      {faqs.map((faq, i) => (
+        <details class="group bg-white dark:bg-earth-900 rounded-xl border border-gray-100 dark:border-earth-700 overflow-hidden" data-faq-category={faq.category}>
+          <summary class="flex items-center justify-between p-5 cursor-pointer hover:bg-sage-50 dark:hover:bg-earth-800 transition">
+            <span class="font-medium text-gray-900 dark:text-earth-100 pr-4">{faq.q}</span>
+            <svg class="w-5 h-5 text-gray-400 dark:text-earth-500 flex-shrink-0 transition-transform group-open:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+            </svg>
+          </summary>
+          <div class="px-5 pb-5 text-gray-600 dark:text-earth-300 text-sm leading-relaxed border-t border-gray-100 dark:border-earth-700 pt-4">
+            {faq.a}
+          </div>
+        </details>
+      ))}
+    </div>
+  </div>
+
+  <!-- Simple filter script (no React needed) -->
+  <script>
+    document.querySelectorAll('[data-faq-filter]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const filter = (btn as HTMLElement).dataset.faqFilter;
+        document.querySelectorAll('[data-faq-filter]').forEach(b => {
+          b.className = b === btn
+            ? 'px-4 py-2 rounded-full text-sm font-medium bg-sage-600 text-white'
+            : 'px-4 py-2 rounded-full text-sm font-medium bg-white dark:bg-earth-800 text-gray-700 dark:text-earth-200 border border-gray-200 dark:border-earth-600 hover:bg-sage-50 dark:hover:bg-earth-700 transition';
+        });
+        document.querySelectorAll('[data-faq-category]').forEach(item => {
+          const el = item as HTMLElement;
+          el.style.display = (filter === 'all' || el.dataset.faqCategory === filter) ? '' : 'none';
+        });
+      });
+    });
+  </script>
+</ContentLayout>

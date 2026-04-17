@@ -1,0 +1,50 @@
+---
+import ContentLayout from "@/layouts/ContentLayout.astro";
+import { directus, readItems } from "@/lib/directus";
+
+const page = parseInt(Astro.url.searchParams.get("page") || "1");
+const limit = 12;
+const offset = (page - 1) * limit;
+
+let formulas: any[] = [];
+try {
+  formulas = await directus.request(readItems("formulas", {
+    fields: ["id", "title", "slug", "chinese_name", "pinyin_name", "description", "use_cases", "classic_source", "source_dynasty",
+      "ingredients.herb_id.title", "ingredients.role"],
+    sort: ["title"],
+    limit, offset,
+  })) as any;
+} catch (e) { console.error("Error fetching formulas:", e); }
+---
+
+<ContentLayout title="Formula Library — Verscienta Health" description="Traditional herbal formulas with ingredients, roles, and modifications.">
+  <section class="bg-gradient-to-br from-earth-50 via-sage-50/50 to-cream-100 dark:from-earth-950 dark:via-earth-900/50 dark:to-earth-950 border-b border-sage-200/50 dark:border-earth-700">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
+      <span class="text-sage-600 font-medium tracking-wide uppercase text-sm">Formula Library</span>
+      <h1 class="font-serif text-4xl md:text-5xl font-bold text-gray-900 dark:text-earth-100 mb-4 mt-2">Herbal Formulas</h1>
+      <p class="text-lg text-gray-600 dark:text-earth-300">Traditional formulas combining multiple herbs in specific roles and proportions.</p>
+    </div>
+  </section>
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      {formulas.map((f: any) => (
+        <a href={`/formulas/${f.slug || f.id}`} class="group bg-white dark:bg-earth-900 rounded-xl shadow-sm border border-gray-100 dark:border-earth-700 hover:shadow-lg transition-all p-6">
+          <h2 class="font-serif text-lg font-bold text-gray-900 dark:text-earth-100 group-hover:text-sage-600 transition-colors">{f.title}</h2>
+          {f.chinese_name && <p class="text-sm font-chinese text-gray-500 dark:text-earth-400">{f.chinese_name} {f.pinyin_name && `(${f.pinyin_name})`}</p>}
+          {f.classic_source && <p class="text-xs text-sage-600 dark:text-sage-400 mt-1">Source: {f.classic_source}</p>}
+          {f.ingredients?.length > 0 && (
+            <div class="flex flex-wrap gap-1 mt-3">
+              {f.ingredients.slice(0, 4).map((ing: any) => (
+                <span class={`text-xs px-2 py-0.5 rounded-full ${ing.role === "chief" ? "bg-amber-100 text-amber-700" : "bg-sage-100 text-sage-700"}`}>
+                  {ing.herb_id?.title || "Herb"}
+                </span>
+              ))}
+              {f.ingredients.length > 4 && <span class="text-xs text-gray-400">+{f.ingredients.length - 4}</span>}
+            </div>
+          )}
+        </a>
+      ))}
+    </div>
+    {formulas.length === 0 && <div class="text-center py-16"><p class="text-gray-600 dark:text-earth-400">No formulas found.</p></div>}
+  </div>
+</ContentLayout>

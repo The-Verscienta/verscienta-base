@@ -1,0 +1,27 @@
+---
+import ContentLayout from "@/layouts/ContentLayout.astro";
+import { directus, readItems } from "@/lib/directus";
+let practitioners: any[] = [];
+try { practitioners = await directus.request(readItems("practitioners", { fields: ["id","title","slug","practice_type","bio","address"], sort: ["-date_created"], limit: 50 })) as any; } catch (e) { console.error(e); }
+---
+<ContentLayout title="Practitioners — Verscienta Health" description="Find holistic health practitioners near you.">
+  <section class="bg-gradient-to-br from-earth-50 via-sage-50/50 to-cream-100 dark:from-earth-950 dark:via-earth-900/50 dark:to-earth-950 border-b border-sage-200/50 dark:border-earth-700">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
+      <span class="text-sage-600 font-medium tracking-wide uppercase text-sm">Practitioner Directory</span>
+      <h1 class="font-serif text-4xl md:text-5xl font-bold text-gray-900 dark:text-earth-100 mb-4 mt-2">Practitioners</h1>
+      <p class="text-lg text-gray-600 dark:text-earth-300">Connect with holistic health practitioners in your area.</p>
+    </div>
+  </section>
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      {practitioners.map((p: any) => (
+        <a href={`/practitioners/${p.slug || p.id}`} class="group bg-white dark:bg-earth-900 rounded-xl shadow-sm border border-gray-100 dark:border-earth-700 hover:shadow-lg transition-all p-6">
+          <h2 class="font-serif text-lg font-bold text-gray-900 dark:text-earth-100 group-hover:text-sage-600 transition-colors">{p.title}</h2>
+          {p.practice_type && <span class="text-xs px-2 py-0.5 rounded-full bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-300 capitalize">{p.practice_type}</span>}
+          {p.address && <p class="text-sm text-gray-500 dark:text-earth-400 mt-2 flex items-center gap-1"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a2 2 0 01-2.828 0l-4.243-4.243a8 8 0 1111.314 0z"/></svg>{p.address}</p>}
+        </a>
+      ))}
+    </div>
+    {practitioners.length === 0 && <div class="text-center py-16"><p class="text-gray-600 dark:text-earth-400">No practitioners found.</p></div>}
+  </div>
+</ContentLayout>

@@ -1,0 +1,108 @@
+---
+/**
+ * Content Layout — wraps pages with header and footer.
+ * Use this for all standard pages.
+ */
+import RootLayout from "./RootLayout.astro";
+
+interface Props {
+  title?: string;
+  description?: string;
+  ogImage?: string;
+}
+
+const { title, description, ogImage } = Astro.props;
+---
+
+<RootLayout title={title} description={description} ogImage={ogImage}>
+  <!-- Header (React island for interactivity) -->
+  <Fragment slot="header">
+    <!-- TODO Phase 6: Port Header component as React island -->
+    <header class="sticky top-0 z-50 bg-white/90 dark:bg-earth-950/90 backdrop-blur-md border-b border-sage-200/50 dark:border-earth-700">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex items-center justify-between h-16">
+          <a href="/" class="flex items-center gap-2">
+            <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-sage-500 to-earth-600 flex items-center justify-center">
+              <svg class="w-5 h-5 text-white" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.94-.49-7-3.85-7-7.93 0-.62.08-1.22.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/>
+              </svg>
+            </div>
+            <span class="font-serif text-xl font-bold text-earth-800 dark:text-earth-100">Verscienta</span>
+          </a>
+
+          <nav class="hidden md:flex items-center gap-6">
+            <a href="/herbs" class="text-sm text-gray-600 dark:text-earth-300 hover:text-earth-600 dark:hover:text-earth-100 transition">Herbs</a>
+            <a href="/formulas" class="text-sm text-gray-600 dark:text-earth-300 hover:text-earth-600 dark:hover:text-earth-100 transition">Formulas</a>
+            <a href="/conditions" class="text-sm text-gray-600 dark:text-earth-300 hover:text-earth-600 dark:hover:text-earth-100 transition">Conditions</a>
+            <a href="/modalities" class="text-sm text-gray-600 dark:text-earth-300 hover:text-earth-600 dark:hover:text-earth-100 transition">Modalities</a>
+            <a href="/symptom-checker" class="text-sm font-medium text-sage-600 hover:text-sage-800 dark:text-sage-400 dark:hover:text-sage-300 transition">Symptom Checker</a>
+            <a href="/search" class="text-sm text-gray-600 dark:text-earth-300 hover:text-earth-600 dark:hover:text-earth-100 transition">Search</a>
+          </nav>
+        </div>
+      </div>
+    </header>
+  </Fragment>
+
+  <!-- Page content -->
+  <slot />
+
+  <!-- Footer -->
+  <Fragment slot="footer">
+    <footer class="border-t border-sage-200/50 dark:border-earth-700 bg-earth-50 dark:bg-earth-950 mt-16">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+          <!-- Brand -->
+          <div>
+            <span class="font-serif text-lg font-bold text-earth-800 dark:text-earth-100">Verscienta Health</span>
+            <p class="mt-2 text-sm text-gray-600 dark:text-earth-400">
+              Bridging traditional wisdom and modern science for holistic health.
+            </p>
+          </div>
+
+          <!-- Explore -->
+          <div>
+            <h3 class="text-sm font-semibold text-gray-900 dark:text-earth-100 uppercase tracking-wide mb-3">Explore</h3>
+            <ul class="space-y-2">
+              <li><a href="/herbs" class="text-sm text-gray-600 dark:text-earth-400 hover:text-earth-600 dark:hover:text-earth-200 transition">Herbs</a></li>
+              <li><a href="/formulas" class="text-sm text-gray-600 dark:text-earth-400 hover:text-earth-600 dark:hover:text-earth-200 transition">Formulas</a></li>
+              <li><a href="/conditions" class="text-sm text-gray-600 dark:text-earth-400 hover:text-earth-600 dark:hover:text-earth-200 transition">Conditions</a></li>
+              <li><a href="/modalities" class="text-sm text-gray-600 dark:text-earth-400 hover:text-earth-600 dark:hover:text-earth-200 transition">Modalities</a></li>
+            </ul>
+          </div>
+
+          <!-- Tools -->
+          <div>
+            <h3 class="text-sm font-semibold text-gray-900 dark:text-earth-100 uppercase tracking-wide mb-3">Tools</h3>
+            <ul class="space-y-2">
+              <li><a href="/symptom-checker" class="text-sm text-gray-600 dark:text-earth-400 hover:text-earth-600 dark:hover:text-earth-200 transition">Symptom Checker</a></li>
+              <li><a href="/tools/herb-drug-interactions" class="text-sm text-gray-600 dark:text-earth-400 hover:text-earth-600 dark:hover:text-earth-200 transition">Drug Interaction Checker</a></li>
+              <li><a href="/search" class="text-sm text-gray-600 dark:text-earth-400 hover:text-earth-600 dark:hover:text-earth-200 transition">Search</a></li>
+            </ul>
+          </div>
+
+          <!-- Legal -->
+          <div>
+            <h3 class="text-sm font-semibold text-gray-900 dark:text-earth-100 uppercase tracking-wide mb-3">Legal</h3>
+            <ul class="space-y-2">
+              <li><a href="/about" class="text-sm text-gray-600 dark:text-earth-400 hover:text-earth-600 dark:hover:text-earth-200 transition">About</a></li>
+              <li><a href="/privacy" class="text-sm text-gray-600 dark:text-earth-400 hover:text-earth-600 dark:hover:text-earth-200 transition">Privacy Policy</a></li>
+              <li><a href="/terms" class="text-sm text-gray-600 dark:text-earth-400 hover:text-earth-600 dark:hover:text-earth-200 transition">Terms of Service</a></li>
+              <li><a href="/contact" class="text-sm text-gray-600 dark:text-earth-400 hover:text-earth-600 dark:hover:text-earth-200 transition">Contact</a></li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Disclaimer -->
+        <div class="mt-8 pt-8 border-t border-sage-200/50 dark:border-earth-700">
+          <p class="text-xs text-gray-500 dark:text-earth-500 text-center">
+            The information on this site is for educational purposes only and is not intended to replace professional medical advice.
+            Always consult a qualified healthcare provider before starting any herbal supplement or treatment.
+          </p>
+          <p class="text-xs text-gray-400 dark:text-earth-600 text-center mt-2">
+            &copy; {new Date().getFullYear()} Verscienta Health. All rights reserved.
+          </p>
+        </div>
+      </div>
+    </footer>
+  </Fragment>
+</RootLayout>

@@ -1,0 +1,149 @@
+---
+/**
+ * Herbs listing page — server-rendered with Directus data.
+ * Replaces frontend/app/herbs/page.tsx.
+ */
+import ContentLayout from "@/layouts/ContentLayout.astro";
+import { directus, readItems } from "@/lib/directus";
+
+const page = parseInt(Astro.url.searchParams.get("page") || "1");
+const sort = Astro.url.searchParams.get("sort") || "title";
+const limit = 12;
+const offset = (page - 1) * limit;
+
+const sortMap: Record<string, string[]> = {
+  "a-z": ["title"],
+  "z-a": ["-title"],
+  newest: ["-date_created"],
+  oldest: ["date_created"],
+};
+
+let herbs: any[] = [];
+let total = 0;
+
+try {
+  herbs = await directus.request(
+    readItems("herbs", {
+      fields: [
+        "id", "title", "slug", "scientific_name", "common_names",
+        "plant_type", "tcm_temperature", "tcm_taste", "parts_used",
+        "conservation_status", "peer_review_status",
+        "images.file", "images.caption",
+      ],
+      sort: sortMap[sort] || ["title"],
+      limit,
+      offset,
+      meta: "total_count",
+    })
+  ) as any;
+
+  // If meta is returned separately, extract total
+  total = (herbs as any)?.meta?.total_count || herbs.length;
+  if (Array.isArray(herbs)) {
+    // herbs is already the array
+  }
+} catch (e) {
+  console.error("Error fetching herbs:", e);
+}
+
+const totalPages = Math.ceil(total / limit);
+const directusUrl = import.meta.env.PUBLIC_DIRECTUS_URL;
+---
+
+<ContentLayout
+  title="Herb Database — Verscienta Health"
+  description="Browse our comprehensive database of 500+ medicinal herbs with TCM properties, Western actions, and clinical research."
+>
+  <!-- Hero -->
+  <section class="relative overflow-hidden bg-gradient-to-br from-earth-50 via-sage-50/50 to-cream-100 dark:from-earth-950 dark:via-earth-900/50 dark:to-earth-950 border-b border-sage-200/50 dark:border-earth-700">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
+      <div class="max-w-2xl">
+        <span class="text-sage-600 font-medium tracking-wide uppercase text-sm">Herb Database</span>
+        <h1 class="font-serif text-4xl md:text-5xl font-bold text-gray-900 dark:text-earth-100 mb-4 mt-2">Medicinal Herbs</h1>
+        <p class="text-lg text-gray-600 dark:text-earth-300">
+          Explore herbs from TCM and Western traditions with detailed properties, safety data, and clinical evidence.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <!-- Sort controls -->
+    <div class="flex items-center justify-between mb-8">
+      <p class="text-sm text-gray-600 dark:text-earth-400">
+        {total > 0 ? `Showing ${offset + 1}–${Math.min(offset + limit, total)} of ${total} herbs` : "No herbs found"}
+      </p>
+      <div class="flex gap-2">
+        {["a-z", "z-a", "newest", "oldest"].map(s => (
+          <a
+            href={`/herbs?sort=${s}&page=1`}
+            class={`px-3 py-1.5 rounded-lg text-sm transition ${sort === s ? "bg-sage-600 text-white" : "bg-white dark:bg-earth-800 text-gray-700 dark:text-earth-200 border border-gray-200 dark:border-earth-600 hover:bg-sage-50 dark:hover:bg-earth-700"}`}
+          >
+            {s === "a-z" ? "A → Z" : s === "z-a" ? "Z → A" : s === "newest" ? "Newest" : "Oldest"}
+          </a>
+        ))}
+      </div>
+    </div>
+
+    <!-- Herb Grid -->
+    <div class="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+      {herbs.map((herb: any) => (
+        <a href={`/herbs/${herb.slug || herb.id}`} class="group bg-white dark:bg-earth-900 rounded-xl shadow-sm border border-gray-100 dark:border-earth-700 hover:shadow-lg transition-all overflow-hidden">
+          {herb.images?.[0]?.file && (
+            <div class="aspect-[4/3] overflow-hidden bg-sage-50 dark:bg-earth-800">
+              <img
+                src={`${directusUrl}/assets/${herb.images[0].file}?width=400&height=300&fit=cover&format=webp`}
+                alt={herb.images[0].caption || herb.title}
+                class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                loading="lazy"
+              />
+            </div>
+          )}
+          <div class="p-4">
+            <h2 class="font-serif text-lg font-bold text-gray-900 dark:text-earth-100 group-hover:text-sage-600 dark:group-hover:text-sage-400 transition-colors line-clamp-1">
+              {herb.title}
+            </h2>
+            {herb.scientific_name && (
+              <p class="text-sm italic text-sage-600 dark:text-sage-400 mt-0.5">{herb.scientific_name}</p>
+            )}
+            <div class="flex flex-wrap gap-1 mt-2">
+              {herb.tcm_temperature && (
+                <span class="text-xs px-2 py-0.5 rounded-full bg-sage-100 dark:bg-earth-800 text-sage-700 dark:text-sage-300">{herb.tcm_temperature}</span>
+              )}
+              {(herb.tcm_taste || []).slice(0, 2).map((taste: string) => (
+                <span class="text-xs px-2 py-0.5 rounded-full bg-earth-100 dark:bg-earth-800 text-earth-700 dark:text-earth-300">{taste}</span>
+              ))}
+            </div>
+          </div>
+        </a>
+      ))}
+    </div>
+
+    {herbs.length === 0 && (
+      <div class="text-center py-16">
+        <p class="text-2xl mb-2">🌿</p>
+        <p class="text-gray-600 dark:text-earth-400">No herbs found. Check back soon as we populate the database.</p>
+      </div>
+    )}
+
+    <!-- Pagination -->
+    {totalPages > 1 && (
+      <nav class="flex justify-center gap-2 mt-12">
+        {page > 1 && (
+          <a href={`/herbs?sort=${sort}&page=${page - 1}`} class="px-4 py-2 rounded-lg text-gray-700 dark:text-earth-200 hover:bg-sage-100 dark:hover:bg-earth-800 transition">‹ Prev</a>
+        )}
+        {Array.from({ length: totalPages }, (_, i) => i + 1).slice(Math.max(0, page - 3), page + 2).map(p => (
+          <a
+            href={`/herbs?sort=${sort}&page=${p}`}
+            class={`px-4 py-2 rounded-lg transition ${p === page ? "bg-sage-600 text-white" : "text-gray-700 dark:text-earth-200 hover:bg-sage-100 dark:hover:bg-earth-800"}`}
+          >
+            {p}
+          </a>
+        ))}
+        {page < totalPages && (
+          <a href={`/herbs?sort=${sort}&page=${page + 1}`} class="px-4 py-2 rounded-lg text-gray-700 dark:text-earth-200 hover:bg-sage-100 dark:hover:bg-earth-800 transition">Next ›</a>
+        )}
+      </nav>
+    )}
+  </div>
+</ContentLayout>

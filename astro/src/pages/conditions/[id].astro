@@ -1,0 +1,29 @@
+---
+import ContentLayout from "@/layouts/ContentLayout.astro";
+import { directus, readItems, readItem } from "@/lib/directus";
+const { id } = Astro.params;
+let condition: any = null;
+try {
+  const bySlug = await directus.request(readItems("conditions", { filter: { slug: { _eq: id } }, fields: ["*"], limit: 1 }));
+  condition = bySlug?.[0] || null;
+  if (!condition && /^\d+$/.test(id!)) condition = await directus.request(readItem("conditions", parseInt(id!), { fields: ["*"] }));
+} catch (e) { console.error(e); }
+if (!condition) return Astro.redirect("/404");
+---
+<ContentLayout title={`${condition.title} — Verscienta Health`} description={`Information about ${condition.title} including symptoms, holistic treatments, and TCM approaches.`}>
+  <section class="bg-gradient-to-br from-earth-50 via-sage-50/50 to-cream-100 dark:from-earth-950 dark:via-earth-900/50 dark:to-earth-950 border-b border-sage-200/50 dark:border-earth-700">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
+      <nav class="text-sm text-gray-500 dark:text-earth-400 mb-4"><a href="/" class="hover:text-sage-600">Home</a> / <a href="/conditions" class="hover:text-sage-600">Conditions</a> / <span class="text-gray-900 dark:text-earth-100">{condition.title}</span></nav>
+      <h1 class="font-serif text-4xl md:text-5xl font-bold text-gray-900 dark:text-earth-100 mb-4">{condition.title}</h1>
+      {condition.severity && <span class={`text-sm px-3 py-1 rounded-full ${condition.severity === "severe" ? "bg-red-100 text-red-700" : "bg-amber-100 text-amber-700"}`}>{condition.severity} severity</span>}
+    </div>
+  </section>
+  <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+    {condition.symptoms?.length > 0 && <section><h2 class="font-serif text-2xl font-bold text-gray-900 dark:text-earth-100 mb-4">Symptoms</h2><div class="flex flex-wrap gap-2">{condition.symptoms.map((s:string) => <span class="px-3 py-1.5 rounded-full bg-sage-100 dark:bg-earth-800 text-sage-700 dark:text-sage-300 text-sm">{s}</span>)}</div></section>}
+    {condition.description && <section><h2 class="font-serif text-2xl font-bold text-gray-900 dark:text-earth-100 mb-4">Overview</h2><div class="prose prose-earth dark:prose-invert max-w-none" set:html={condition.description} /></section>}
+    <div class="bg-sage-50 dark:bg-earth-900 rounded-xl border border-sage-200 dark:border-earth-700 p-6 text-center">
+      <p class="text-sm text-gray-600 dark:text-earth-300 mb-3">Looking for holistic approaches?</p>
+      <a href="/symptom-checker" class="inline-flex items-center gap-2 px-4 py-2 bg-sage-600 text-white rounded-lg hover:bg-sage-700 transition">Try the AI Symptom Checker</a>
+    </div>
+  </div>
+</ContentLayout>

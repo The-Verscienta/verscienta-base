@@ -1,0 +1,53 @@
+---
+/**
+ * Search page — Astro shell with React InstantSearch island.
+ * Uses MeiliSearch via the @meilisearch/instant-meilisearch adapter.
+ * The react-instantsearch UI is nearly identical to the Algolia version.
+ */
+import ContentLayout from "@/layouts/ContentLayout.astro";
+// TODO Phase 6: import SearchUI from "@/components/SearchUI";
+---
+
+<ContentLayout title="Search — Verscienta Health" description="Search herbs, formulas, conditions, modalities, and practitioners.">
+  <section class="relative overflow-hidden bg-gradient-to-br from-earth-50 via-sage-50/50 to-cream-100 dark:from-earth-950 dark:via-earth-900/50 dark:to-earth-950 border-b border-sage-200/50 dark:border-earth-700">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
+      <h1 class="font-serif text-4xl md:text-5xl font-bold text-gray-900 dark:text-earth-100 mb-4">Search</h1>
+      <p class="text-lg text-gray-600 dark:text-earth-300">Find herbs, modalities, conditions, practitioners, and formulas in our comprehensive database.</p>
+    </div>
+  </section>
+
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <!-- TODO Phase 6: <SearchUI client:load /> -->
+    <!-- Placeholder search form (server-side search via /api/search) -->
+    <form action="/search" method="GET" class="max-w-2xl mb-8">
+      <div class="relative">
+        <input
+          type="search"
+          name="q"
+          placeholder="Search for herbs, modalities, conditions..."
+          value={Astro.url.searchParams.get("q") || ""}
+          class="w-full pl-12 pr-4 py-4 text-lg border-2 border-earth-200 dark:border-earth-600 rounded-xl focus:border-earth-500 focus:ring-2 focus:ring-earth-500/20 focus:outline-none bg-white dark:bg-earth-800 dark:text-earth-100 shadow-sm"
+        />
+        <svg class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+        </svg>
+      </div>
+    </form>
+
+    <!-- Browse categories -->
+    <div class="grid grid-cols-2 md:grid-cols-5 gap-4">
+      {[
+        { href: "/herbs", icon: "🌿", label: "Herbs" },
+        { href: "/formulas", icon: "📜", label: "Formulas" },
+        { href: "/conditions", icon: "🩺", label: "Conditions" },
+        { href: "/modalities", icon: "🧘", label: "Modalities" },
+        { href: "/practitioners", icon: "👨‍⚕️", label: "Practitioners" },
+      ].map(({ href, icon, label }) => (
+        <a href={href} class="flex items-center gap-3 p-4 bg-white dark:bg-earth-900 rounded-xl border border-gray-100 dark:border-earth-700 hover:shadow-md transition">
+          <span class="text-2xl">{icon}</span>
+          <span class="font-medium text-gray-700 dark:text-earth-200">{label}</span>
+        </a>
+      ))}
+    </div>
+  </div>
+</ContentLayout>

@@ -1,0 +1,115 @@
+services:
+  directus:
+    image: directus/directus:11
+    container_name: verscienta_directus
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_started
+    environment:
+      SECRET: ${DIRECTUS_SECRET:-change-me-to-a-secure-random-value}
+      ADMIN_EMAIL: ${DIRECTUS_ADMIN_EMAIL:-admin@verscienta.com}
+      ADMIN_PASSWORD: ${DIRECTUS_ADMIN_PASSWORD:-changeme}
+
+      DB_CLIENT: mysql
+      DB_HOST: db
+      DB_PORT: "3306"
+      DB_DATABASE: ${DB_DATABASE:-verscienta_directus}
+      DB_USER: ${DB_USER:-directus}
+      DB_PASSWORD: ${DB_PASSWORD:-directus}
+
+      CACHE_ENABLED: "true"
+      CACHE_STORE: redis
+      CACHE_REDIS_HOST: redis
+      CACHE_REDIS_PORT: "6379"
+      CACHE_AUTO_PURGE: "true"
+      CACHE_TTL: "5m"
+
+      CORS_ENABLED: "true"
+      CORS_ORIGIN: "http://localhost:4321,http://localhost:3000,https://verscienta.com"
+      CORS_CREDENTIALS: "true"
+
+      RATE_LIMITER_ENABLED: "true"
+      RATE_LIMITER_STORE: redis
+      RATE_LIMITER_REDIS_HOST: redis
+      RATE_LIMITER_REDIS_PORT: "6379"
+
+      PUBLIC_URL: ${DIRECTUS_PUBLIC_URL:-http://localhost:8055}
+      LOG_LEVEL: ${LOG_LEVEL:-info}
+
+      STORAGE_LOCATIONS: local
+      STORAGE_LOCAL_DRIVER: local
+      STORAGE_LOCAL_ROOT: /directus/uploads
+
+      # MeiliSearch sync (used by the hook extension)
+      MEILI_URL: http://meilisearch:7700
+      MEILI_MASTER_KEY: ${MEILI_MASTER_KEY:-change-me-master-key}
+    ports:
+      - "8055:8055"
+    volumes:
+      - directus_uploads:/directus/uploads
+      - directus_extensions:/directus/extensions
+    networks:
+      - verscienta_network
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost:8055/server/health || exit 1"]
+      interval: 15s
+      timeout: 5s
+      start_period: 30s
+      retries: 5
+
+  db:
+    image: mariadb:11
+    container_name: verscienta_directus_db
+    environment:
+      MYSQL_DATABASE: ${DB_DATABASE:-verscienta_directus}
+      MYSQL_USER: ${DB_USER:-directus}
+      MYSQL_PASSWORD: ${DB_PASSWORD:-directus}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-root_password}
+    volumes:
+      - db_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 10s
+      timeout: 5s
+      start_period: 30s
+      retries: 5
+    ports:
+      - "3307:3306"
+    networks:
+      - verscienta_network
+
+  redis:
+    image: redis:7-alpine
+    container_name: verscienta_directus_redis
+    ports:
+      - "6380:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - verscienta_network
+
+  meilisearch:
+    image: getmeili/meilisearch:v1.12
+    container_name: verscienta_meilisearch
+    environment:
+      MEILI_MASTER_KEY: ${MEILI_MASTER_KEY:-change-me-master-key}
+      MEILI_ENV: ${MEILI_ENV:-development}
+    volumes:
+      - meili_data:/meili_data
+    ports:
+      - "7700:7700"
+    networks:
+      - verscienta_network
+
+volumes:
+  db_data:
+  redis_data:
+  directus_uploads:
+  directus_extensions:
+  meili_data:
+
+networks:
+  verscienta_network:
+    driver: bridge

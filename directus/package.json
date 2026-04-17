@@ -1,0 +1,21 @@
+{
+  "name": "verscienta-directus",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Verscienta Health - Directus backend",
+  "scripts": {
+    "schema:create": "node scripts/create-schema.mjs",
+    "schema:snapshot": "npx directus schema snapshot ./snapshots/latest.yaml",
+    "schema:apply": "npx directus schema apply ./snapshots/latest.yaml",
+    "seed:taxonomies": "node scripts/seed-taxonomies.mjs",
+    "search:setup": "node scripts/setup-meilisearch.mjs",
+    "search:sync": "node scripts/sync-to-meilisearch.mjs",
+    "setup": "npm run schema:create && npm run seed:taxonomies && npm run search:setup && npm run schema:snapshot",
+    "reindex": "npm run search:sync"
+  },
+  "dependencies": {
+    "@directus/sdk": "^18.0.0",
+    "meilisearch": "^0.44.0"
+  }
+}

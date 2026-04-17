@@ -1,0 +1,19 @@
+---
+/**
+ * Favorites page — uses localStorage (client-side only).
+ * TODO Phase 6: <FavoritesView client:load /> React island
+ */
+import ContentLayout from "@/layouts/ContentLayout.astro";
+---
+
+<ContentLayout title="Favorites — Verscienta Health" description="Your saved herbs, formulas, and more.">
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+    <h1 class="font-serif text-3xl font-bold text-gray-900 dark:text-earth-100 mb-8">Your Favorites</h1>
+    <!-- TODO Phase 6: <FavoritesView client:load /> -->
+    <div class="bg-white dark:bg-earth-900 rounded-xl border border-gray-100 dark:border-earth-700 p-8 text-center">
+      <div class="text-4xl mb-4">⭐</div>
+      <p class="text-gray-600 dark:text-earth-300 mb-2">Favorites will be available when the React component is ported in Phase 6.</p>
+      <p class="text-sm text-gray-500 dark:text-earth-400">Your favorites are stored locally in your browser.</p>
+    </div>
+  </div>
+</ContentLayout>

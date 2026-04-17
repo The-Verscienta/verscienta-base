@@ -1,0 +1,113 @@
+---
+/**
+ * Root Layout — HTML shell, fonts, theme, global styles.
+ * Replaces frontend/app/layout.tsx.
+ */
+
+interface Props {
+  title?: string;
+  description?: string;
+  ogImage?: string;
+}
+
+const {
+  title = "Verscienta Health",
+  description = "Comprehensive herb database integrating Traditional Chinese Medicine and Western herbalism with modern research.",
+  ogImage = "/og-image.png",
+} = Astro.props;
+
+const siteUrl = import.meta.env.PUBLIC_SITE_URL || "https://verscienta.com";
+const canonicalUrl = new URL(Astro.url.pathname, siteUrl).href;
+---
+
+<!doctype html>
+<html lang="en" class="scroll-smooth">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="generator" content={Astro.generator} />
+
+    <!-- SEO -->
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonicalUrl} />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={`${siteUrl}${ogImage}`} />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+    <!-- Fonts (preconnect + load) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,400;0,600;0,700;1,400&family=Source+Sans+3:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Noto+Serif+SC:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Theme detection (runs before paint to prevent flash) -->
+    <script is:inline>
+      (function () {
+        const stored = localStorage.getItem("verscienta_theme");
+        const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+        if (stored === "dark" || (!stored && prefersDark)) {
+          document.documentElement.classList.add("dark");
+        }
+      })();
+    </script>
+
+    <!-- Global styles -->
+    <style is:global>
+      @import "../styles/generated/primitives.css";
+      @import "../styles/generated/semantic.css";
+      @import "tailwindcss";
+
+      :root {
+        --font-sans: "Source Sans 3", system-ui, sans-serif;
+        --font-serif: "Crimson Pro", Georgia, serif;
+        --font-mono: "JetBrains Mono", monospace;
+        --font-chinese: "Noto Serif SC", serif;
+      }
+
+      body {
+        font-family: var(--font-sans);
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+      }
+
+      h1, h2, h3, h4, h5, h6 {
+        font-family: var(--font-serif);
+      }
+
+      .font-chinese {
+        font-family: var(--font-chinese);
+      }
+    </style>
+  </head>
+
+  <body
+    class="min-h-screen bg-gradient-to-br from-earth-50 to-sage-50 dark:from-earth-950 dark:to-sage-950 text-gray-900 dark:text-earth-100 transition-colors"
+  >
+    <!-- Skip to content (accessibility) -->
+    <a
+      href="#main-content"
+      class="sr-only focus:not-sr-only focus:absolute focus:z-50 focus:p-4 focus:bg-white focus:text-earth-900"
+    >
+      Skip to content
+    </a>
+
+    <slot name="header" />
+
+    <main id="main-content">
+      <slot />
+    </main>
+
+    <slot name="footer" />
+  </body>
+</html>

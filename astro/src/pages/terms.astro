@@ -1,0 +1,28 @@
+---
+import ContentLayout from "@/layouts/ContentLayout.astro";
+---
+
+<ContentLayout title="Terms of Service — Verscienta Health" description="Terms and conditions for using Verscienta Health.">
+  <section class="bg-gradient-to-br from-earth-50 via-sage-50/50 to-cream-100 dark:from-earth-950 dark:via-earth-900/50 dark:to-earth-950 border-b border-sage-200/50 dark:border-earth-700">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+      <h1 class="font-serif text-4xl md:text-5xl font-bold text-gray-900 dark:text-earth-100 mb-4">Terms of Service</h1>
+      <p class="text-gray-600 dark:text-earth-300">Last updated: {new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</p>
+    </div>
+  </section>
+  <article class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-16 prose prose-earth dark:prose-invert max-w-none">
+    <h2>Acceptance of Terms</h2>
+    <p>By accessing Verscienta Health, you agree to these Terms of Service. If you do not agree, please do not use our services.</p>
+    <h2>Medical Disclaimer</h2>
+    <p>All information on this site is for educational purposes only and does not constitute medical advice. Never disregard professional medical advice or delay seeking treatment because of information found on this site. Always consult a qualified healthcare provider.</p>
+    <h2>Use of AI Features</h2>
+    <p>Our AI symptom checker and drug interaction tools provide general educational guidance only. They do not diagnose conditions, prescribe treatments, or replace professional medical judgment. Results should always be discussed with your healthcare provider.</p>
+    <h2>User Accounts</h2>
+    <p>You are responsible for maintaining the security of your account credentials. You agree to provide accurate information and notify us of any unauthorized access.</p>
+    <h2>Intellectual Property</h2>
+    <p>Content on Verscienta Health, including text, images, and data compilations, is protected by copyright. You may use it for personal, non-commercial purposes. Commercial use requires written permission.</p>
+    <h2>Limitation of Liability</h2>
+    <p>Verscienta Health is provided "as is" without warranties. We are not liable for any harm resulting from the use of information on this site, including adverse reactions to herbs or supplements.</p>
+    <h2>Contact</h2>
+    <p>For questions about these terms, contact us at <a href="mailto:legal@verscienta.com">legal@verscienta.com</a>.</p>
+  </article>
+</ContentLayout>

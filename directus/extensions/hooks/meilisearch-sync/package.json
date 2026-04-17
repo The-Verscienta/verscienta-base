@@ -1,0 +1,13 @@
+{
+  "name": "directus-hook-meilisearch-sync",
+  "version": "1.0.0",
+  "type": "module",
+  "directus:extension": {
+    "type": "hook",
+    "path": "index.js",
+    "host": "^11.0.0"
+  },
+  "dependencies": {
+    "meilisearch": "^0.44.0"
+  }
+}

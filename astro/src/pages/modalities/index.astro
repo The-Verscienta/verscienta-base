@@ -1,0 +1,27 @@
+---
+import ContentLayout from "@/layouts/ContentLayout.astro";
+import { directus, readItems } from "@/lib/directus";
+let modalities: any[] = [];
+try { modalities = await directus.request(readItems("modalities", { fields: ["id","title","slug","excels_at","benefits","description"], sort: ["title"], limit: -1 })) as any; } catch (e) { console.error(e); }
+---
+<ContentLayout title="Healing Modalities — Verscienta Health" description="Holistic healing practices from acupuncture to yoga therapy.">
+  <section class="bg-gradient-to-br from-earth-50 via-sage-50/50 to-cream-100 dark:from-earth-950 dark:via-earth-900/50 dark:to-earth-950 border-b border-sage-200/50 dark:border-earth-700">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
+      <span class="text-sage-600 font-medium tracking-wide uppercase text-sm">Healing Modalities</span>
+      <h1 class="font-serif text-4xl md:text-5xl font-bold text-gray-900 dark:text-earth-100 mb-4 mt-2">Modalities</h1>
+      <p class="text-lg text-gray-600 dark:text-earth-300">Discover holistic healing practices for mind, body, and spirit.</p>
+    </div>
+  </section>
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      {modalities.map((m: any) => (
+        <a href={`/modalities/${m.slug || m.id}`} class="group bg-white dark:bg-earth-900 rounded-xl shadow-sm border border-gray-100 dark:border-earth-700 hover:shadow-lg transition-all p-6">
+          <h2 class="font-serif text-lg font-bold text-gray-900 dark:text-earth-100 group-hover:text-sage-600 transition-colors mb-2">{m.title}</h2>
+          {m.excels_at?.length > 0 && <div class="flex flex-wrap gap-1 mb-3">{m.excels_at.slice(0,3).map((e:string) => <span class="text-xs px-2 py-0.5 rounded-full bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300">{e}</span>)}</div>}
+          {m.description && <p class="text-sm text-gray-600 dark:text-earth-300 line-clamp-3" set:html={m.description.replace(/<[^>]*>/g,'').slice(0,150)} />}
+        </a>
+      ))}
+    </div>
+    {modalities.length === 0 && <div class="text-center py-16"><p class="text-gray-600 dark:text-earth-400">No modalities found.</p></div>}
+  </div>
+</ContentLayout>

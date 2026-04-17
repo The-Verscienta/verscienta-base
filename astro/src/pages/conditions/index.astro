@@ -1,0 +1,29 @@
+---
+import ContentLayout from "@/layouts/ContentLayout.astro";
+import { directus, readItems } from "@/lib/directus";
+let conditions: any[] = [];
+try { conditions = await directus.request(readItems("conditions", { fields: ["id","title","slug","symptoms","severity","description"], sort: ["title"], limit: -1 })) as any; } catch (e) { console.error(e); }
+---
+<ContentLayout title="Health Conditions — Verscienta Health" description="Browse health conditions with herb and modality recommendations.">
+  <section class="bg-gradient-to-br from-earth-50 via-sage-50/50 to-cream-100 dark:from-earth-950 dark:via-earth-900/50 dark:to-earth-950 border-b border-sage-200/50 dark:border-earth-700">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
+      <span class="text-sage-600 font-medium tracking-wide uppercase text-sm">Health Conditions</span>
+      <h1 class="font-serif text-4xl md:text-5xl font-bold text-gray-900 dark:text-earth-100 mb-4 mt-2">Conditions</h1>
+      <p class="text-lg text-gray-600 dark:text-earth-300">Health conditions with holistic treatment approaches.</p>
+    </div>
+  </section>
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div class="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+      {conditions.map((c: any) => (
+        <a href={`/conditions/${c.slug || c.id}`} class="group bg-white dark:bg-earth-900 rounded-xl shadow-sm border border-gray-100 dark:border-earth-700 hover:shadow-lg transition-all p-5">
+          <div class="flex items-start justify-between mb-2">
+            <h2 class="font-serif text-lg font-bold text-gray-900 dark:text-earth-100 group-hover:text-sage-600 transition-colors">{c.title}</h2>
+            {c.severity && <span class={`text-xs px-2 py-0.5 rounded-full flex-shrink-0 ${c.severity === "severe" || c.severity === "critical" ? "bg-red-100 text-red-700" : c.severity === "moderate" ? "bg-amber-100 text-amber-700" : "bg-green-100 text-green-700"}`}>{c.severity}</span>}
+          </div>
+          {c.symptoms?.length > 0 && <div class="flex flex-wrap gap-1 mt-2">{c.symptoms.slice(0,3).map((s:string) => <span class="text-xs px-2 py-0.5 rounded-full bg-sage-100 dark:bg-earth-800 text-sage-700 dark:text-sage-300">{s}</span>)}</div>}
+        </a>
+      ))}
+    </div>
+    {conditions.length === 0 && <div class="text-center py-16"><p class="text-gray-600 dark:text-earth-400">No conditions found.</p></div>}
+  </div>
+</ContentLayout>

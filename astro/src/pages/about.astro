@@ -1,0 +1,62 @@
+---
+import ContentLayout from "@/layouts/ContentLayout.astro";
+---
+
+<ContentLayout
+  title="About Verscienta Health"
+  description="Learn about our mission to bridge traditional herbal medicine and modern scientific research."
+>
+  <!-- Hero -->
+  <section class="relative overflow-hidden bg-gradient-to-br from-earth-50 via-sage-50/50 to-cream-100 dark:from-earth-950 dark:via-earth-900/50 dark:to-earth-950 border-b border-sage-200/50 dark:border-earth-700">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-20">
+      <div class="max-w-3xl">
+        <h1 class="font-serif text-4xl md:text-5xl font-bold text-gray-900 dark:text-earth-100 mb-4">About Verscienta</h1>
+        <p class="text-xl text-gray-600 dark:text-earth-300">
+          Bridging ancient wisdom and modern science for holistic health education.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+    <!-- Mission -->
+    <section class="mb-16">
+      <h2 class="font-serif text-3xl font-bold text-gray-900 dark:text-earth-100 mb-6">Our Mission</h2>
+      <p class="text-lg text-gray-600 dark:text-earth-300 leading-relaxed mb-4">
+        Verscienta Health is dedicated to making traditional herbal medicine knowledge accessible, searchable, and verifiable. We integrate Traditional Chinese Medicine (TCM), Western herbalism, and modern pharmacological research into a single, comprehensive platform.
+      </p>
+      <p class="text-lg text-gray-600 dark:text-earth-300 leading-relaxed">
+        Our database combines centuries of traditional knowledge with contemporary scientific evidence, helping practitioners, students, and health-conscious individuals make informed decisions about herbal medicine.
+      </p>
+    </section>
+
+    <!-- What We Offer -->
+    <section class="mb-16">
+      <h2 class="font-serif text-3xl font-bold text-gray-900 dark:text-earth-100 mb-6">What We Offer</h2>
+      <div class="grid md:grid-cols-2 gap-6">
+        {[
+          { icon: "🌿", title: "Herb Database", desc: "500+ medicinal herbs with TCM properties, Western actions, clinical studies, and safety data." },
+          { icon: "📜", title: "Formula Library", desc: "Traditional formulas with ingredient roles (jun/chen/zuo/shi), modifications, and clinical notes." },
+          { icon: "🔍", title: "AI Symptom Checker", desc: "TCM pattern differentiation powered by AI, with personalized herb and modality recommendations." },
+          { icon: "💊", title: "Drug Interaction Checker", desc: "Check potential interactions between herbs and pharmaceutical medications." },
+          { icon: "🧘", title: "Modality Guide", desc: "Comprehensive guide to holistic healing modalities from acupuncture to yoga therapy." },
+          { icon: "📊", title: "Research Integration", desc: "Clinical studies, pharmacological data, and evidence-based safety information." },
+        ].map(({ icon, title, desc }) => (
+          <div class="bg-white dark:bg-earth-900 rounded-xl border border-gray-100 dark:border-earth-700 p-6">
+            <div class="text-3xl mb-3">{icon}</div>
+            <h3 class="font-serif text-xl font-bold text-gray-900 dark:text-earth-100 mb-2">{title}</h3>
+            <p class="text-sm text-gray-600 dark:text-earth-400">{desc}</p>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <!-- Disclaimer -->
+    <section class="bg-amber-50 dark:bg-earth-900 border border-amber-200 dark:border-earth-700 rounded-xl p-6">
+      <h3 class="font-serif text-lg font-bold text-amber-800 dark:text-amber-300 mb-2">Medical Disclaimer</h3>
+      <p class="text-sm text-amber-700 dark:text-amber-400">
+        The information provided on Verscienta Health is for educational purposes only and should not be considered medical advice. Always consult a qualified healthcare provider before beginning any herbal supplement, treatment, or making changes to your healthcare regimen.
+      </p>
+    </section>
+  </div>
+</ContentLayout>
