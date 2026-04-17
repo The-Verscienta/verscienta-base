@@ -17,28 +17,84 @@ const { title, description, ogImage } = Astro.props;
 <RootLayout title={title} description={description} ogImage={ogImage}>
   <!-- Header (React island for interactivity) -->
   <Fragment slot="header">
-    <!-- TODO Phase 6: Port Header component as React island -->
-    <header class="sticky top-0 z-50 bg-white/90 dark:bg-earth-950/90 backdrop-blur-md border-b border-sage-200/50 dark:border-earth-700">
+    <header class="sticky top-0 z-50 bg-gradient-to-r from-earth-800 via-earth-700 to-sage-800 dark:from-earth-900 dark:via-earth-850 dark:to-sage-900 shadow-lg shadow-earth-900/20">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex items-center justify-between h-16">
-          <a href="/" class="flex items-center gap-2">
-            <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-sage-500 to-earth-600 flex items-center justify-center">
-              <svg class="w-5 h-5 text-white" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.94-.49-7-3.85-7-7.93 0-.62.08-1.22.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/>
-              </svg>
+        <div class="flex items-center justify-between h-14">
+          <!-- Logo -->
+          <a href="/" class="flex items-center gap-2.5 flex-shrink-0">
+            <svg viewBox="0 0 40 40" class="w-9 h-9" fill="none">
+              <defs>
+                <linearGradient id="lg1" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#a9c2b1" />
+                  <stop offset="50%" stop-color="#6b9279" />
+                  <stop offset="100%" stop-color="#426650" />
+                </linearGradient>
+                <linearGradient id="lg2" x1="0%" y1="100%" x2="100%" y2="0%">
+                  <stop offset="0%" stop-color="#d4a574" />
+                  <stop offset="100%" stop-color="#e0b589" />
+                </linearGradient>
+              </defs>
+              <path d="M20 4c-3 10-12 16-12 24a12 12 0 0024 0c0-8-9-14-12-24z" fill="url(#lg1)" />
+              <path d="M20 10v20M16 16c2 2 4 6 4 10M24 16c-2 2-4 6-4 10" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-opacity="0.6" />
+              <circle cx="20" cy="34" r="2" fill="url(#lg2)" />
+            </svg>
+            <div class="hidden sm:block">
+              <span class="font-serif text-lg font-bold text-white leading-none">Verscienta</span>
+              <span class="block text-[10px] text-earth-300 tracking-wider uppercase">Holistic Health</span>
             </div>
-            <span class="font-serif text-xl font-bold text-earth-800 dark:text-earth-100">Verscienta</span>
           </a>
 
-          <nav class="hidden md:flex items-center gap-6">
-            <a href="/herbs" class="text-sm text-gray-600 dark:text-earth-300 hover:text-earth-600 dark:hover:text-earth-100 transition">Herbs</a>
-            <a href="/formulas" class="text-sm text-gray-600 dark:text-earth-300 hover:text-earth-600 dark:hover:text-earth-100 transition">Formulas</a>
-            <a href="/conditions" class="text-sm text-gray-600 dark:text-earth-300 hover:text-earth-600 dark:hover:text-earth-100 transition">Conditions</a>
-            <a href="/modalities" class="text-sm text-gray-600 dark:text-earth-300 hover:text-earth-600 dark:hover:text-earth-100 transition">Modalities</a>
-            <a href="/symptom-checker" class="text-sm font-medium text-sage-600 hover:text-sage-800 dark:text-sage-400 dark:hover:text-sage-300 transition">Symptom Checker</a>
-            <a href="/search" class="text-sm text-gray-600 dark:text-earth-300 hover:text-earth-600 dark:hover:text-earth-100 transition">Search</a>
+          <!-- Primary nav — highlighted tools + content links -->
+          <nav class="hidden lg:flex items-center gap-1">
+            <!-- Highlighted tools -->
+            <a href="/symptom-checker" class="px-3 py-1.5 text-sm font-medium bg-sage-600/80 hover:bg-sage-600 text-white rounded-lg transition">Symptom Checker</a>
+            <a href="/tools/herb-drug-interactions" class="px-3 py-1.5 text-sm font-medium bg-earth-600/60 hover:bg-earth-600 text-white rounded-lg transition">Drug Checker</a>
+
+            <span class="w-px h-5 bg-white/20 mx-2"></span>
+
+            <!-- Content links -->
+            <a href="/herbs" class="px-2.5 py-1.5 text-sm text-earth-200 hover:text-white hover:bg-white/10 rounded-lg transition">Herbs</a>
+            <a href="/formulas" class="px-2.5 py-1.5 text-sm text-earth-200 hover:text-white hover:bg-white/10 rounded-lg transition">Formulas</a>
+            <a href="/points" class="px-2.5 py-1.5 text-sm text-earth-200 hover:text-white hover:bg-white/10 rounded-lg transition">Points</a>
+            <a href="/patterns" class="px-2.5 py-1.5 text-sm text-earth-200 hover:text-white hover:bg-white/10 rounded-lg transition">Patterns</a>
+            <a href="/concepts" class="px-2.5 py-1.5 text-sm text-earth-200 hover:text-white hover:bg-white/10 rounded-lg transition">Concepts</a>
+            <a href="/modalities" class="px-2.5 py-1.5 text-sm text-earth-200 hover:text-white hover:bg-white/10 rounded-lg transition">Modalities</a>
+            <a href="/conditions" class="px-2.5 py-1.5 text-sm text-earth-200 hover:text-white hover:bg-white/10 rounded-lg transition">Conditions</a>
+
+            <span class="w-px h-5 bg-white/20 mx-2"></span>
+
+            <!-- Utility links -->
+            <a href="/search" class="p-2 text-earth-300 hover:text-white hover:bg-white/10 rounded-lg transition" title="Search">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
+            </a>
+            <a href="/login" class="px-3 py-1.5 text-sm text-earth-200 hover:text-white hover:bg-white/10 rounded-lg transition">Login</a>
           </nav>
+
+          <!-- Mobile menu button -->
+          <button class="lg:hidden p-2 text-earth-200 hover:text-white" aria-label="Menu" onclick="document.getElementById('mobile-nav').classList.toggle('hidden')">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" /></svg>
+          </button>
         </div>
+
+        <!-- Mobile nav -->
+        <nav id="mobile-nav" class="hidden lg:hidden pb-4 border-t border-white/10 mt-2 pt-3">
+          <div class="flex flex-col gap-1">
+            <a href="/symptom-checker" class="px-3 py-2 text-sm font-medium text-white bg-sage-600/50 rounded-lg">Symptom Checker</a>
+            <a href="/tools/herb-drug-interactions" class="px-3 py-2 text-sm font-medium text-white bg-earth-600/40 rounded-lg">Drug Checker</a>
+            <div class="h-px bg-white/10 my-1"></div>
+            <a href="/herbs" class="px-3 py-2 text-sm text-earth-200 hover:bg-white/10 rounded-lg">Herbs</a>
+            <a href="/formulas" class="px-3 py-2 text-sm text-earth-200 hover:bg-white/10 rounded-lg">Formulas</a>
+            <a href="/points" class="px-3 py-2 text-sm text-earth-200 hover:bg-white/10 rounded-lg">Points</a>
+            <a href="/patterns" class="px-3 py-2 text-sm text-earth-200 hover:bg-white/10 rounded-lg">Patterns</a>
+            <a href="/concepts" class="px-3 py-2 text-sm text-earth-200 hover:bg-white/10 rounded-lg">Concepts</a>
+            <a href="/modalities" class="px-3 py-2 text-sm text-earth-200 hover:bg-white/10 rounded-lg">Modalities</a>
+            <a href="/conditions" class="px-3 py-2 text-sm text-earth-200 hover:bg-white/10 rounded-lg">Conditions</a>
+            <div class="h-px bg-white/10 my-1"></div>
+            <a href="/practitioners" class="px-3 py-2 text-sm text-earth-200 hover:bg-white/10 rounded-lg">Find Practitioners</a>
+            <a href="/search" class="px-3 py-2 text-sm text-earth-200 hover:bg-white/10 rounded-lg">Search</a>
+            <a href="/login" class="px-3 py-2 text-sm text-earth-200 hover:bg-white/10 rounded-lg">Login</a>
+          </div>
+        </nav>
       </div>
     </header>
   </Fragment>
