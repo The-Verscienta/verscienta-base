@@ -1,14 +1,19 @@
 import { defineConfig } from "astro/config";
 import react from "@astrojs/react";
-import cloudflare from "@astrojs/cloudflare";
+import node from "@astrojs/node";
+
+// Local dev + default builds: use Node adapter
+// CI/CD Cloudflare builds: set ASTRO_ADAPTER=cloudflare
+let adapter = node({ mode: "standalone" });
+
+if (process.env.ASTRO_ADAPTER === "cloudflare") {
+  const cloudflare = (await import("@astrojs/cloudflare")).default;
+  adapter = cloudflare({ platformProxy: { enabled: true } });
+}
 
 export default defineConfig({
   output: "server",
-  adapter: cloudflare({
-    platformProxy: {
-      enabled: true,
-    },
-  }),
+  adapter,
   integrations: [react()],
   vite: {
     css: {

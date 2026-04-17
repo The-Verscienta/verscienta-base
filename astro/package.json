@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "astro dev",
     "build": "npm run tokens:build && astro build",
+    "build:cloudflare": "npm run tokens:build && ASTRO_ADAPTER=cloudflare astro build",
     "preview": "astro preview",
     "check": "astro check",
     "tokens:build": "style-dictionary build --config style-dictionary.config.mjs",
@@ -18,7 +19,7 @@
   "dependencies": {
     "astro": "^5.0.0",
     "@astrojs/react": "^4.0.0",
-    "@astrojs/cloudflare": "^12.0.0",
+    "@astrojs/node": "^9.0.0",
     "@directus/sdk": "^18.0.0",
     "@meilisearch/instant-meilisearch": "^0.21.0",
     "meilisearch": "^0.44.0",
@@ -45,5 +46,8 @@
     "vitest": "^3.0.0",
     "@playwright/test": "^1.49.0",
     "eslint": "^9.0.0"
+  },
+  "optionalDependencies": {
+    "@astrojs/cloudflare": "^12.0.0"
   }
 }
