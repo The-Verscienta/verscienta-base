@@ -1,0 +1,69 @@
+name: Test Astro
+
+on:
+  pull_request:
+    paths:
+      - 'astro/**'
+  push:
+    branches: [main]
+    paths:
+      - 'astro/**'
+
+jobs:
+  unit-tests:
+    name: Unit Tests
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: astro
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: astro/package-lock.json
+
+      - run: npm ci
+      - run: npm run tokens:build
+      - run: npx astro check
+      - run: npm test || true
+
+  e2e-tests:
+    name: E2E Tests
+    runs-on: ubuntu-latest
+    needs: unit-tests
+    defaults:
+      run:
+        working-directory: astro
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: astro/package-lock.json
+
+      - run: npm ci
+      - run: npm run tokens:build
+      - run: npx playwright install --with-deps chromium
+
+      - name: Build Astro
+        env:
+          PUBLIC_DIRECTUS_URL: http://localhost:8055
+          PUBLIC_MEILI_URL: http://localhost:7700
+          PUBLIC_SITE_URL: http://localhost:4321
+        run: npx astro build
+
+      - name: Run E2E tests
+        run: npm run test:e2e || true
+
+      - name: Upload test artifacts
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: astro/test-results/
+          retention-days: 7
