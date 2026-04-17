@@ -1,0 +1,71 @@
+---
+/**
+ * Section — reusable content section with variant styling.
+ * Ported from the Section component in DesignSystem.tsx.
+ */
+interface Props {
+  id?: string;
+  title?: string;
+  subtitle?: string;
+  icon?: string;
+  variant?: "default" | "warning" | "tcm" | "cultural" | "feature" | "card" | "botanical";
+  class?: string;
+}
+
+const { id, title, subtitle, icon, variant = "default", class: className = "" } = Astro.props;
+
+const variantStyles: Record<string, { container: string; title: string; subtitle: string }> = {
+  default: {
+    container: "bg-white dark:bg-earth-900 border-earth-200 dark:border-earth-700",
+    title: "text-gray-900 dark:text-earth-100",
+    subtitle: "text-gray-600 dark:text-earth-300",
+  },
+  warning: {
+    container: "bg-gradient-to-br from-red-50 to-orange-50 dark:from-red-950/30 dark:to-orange-950/20 border-red-200 dark:border-red-800",
+    title: "text-red-800 dark:text-red-200",
+    subtitle: "text-red-700 dark:text-red-300",
+  },
+  tcm: {
+    container: "bg-gradient-to-br from-amber-50 via-orange-50/50 to-red-50/30 dark:from-amber-950/30 dark:via-orange-950/20 dark:to-red-950/20 border-amber-300 dark:border-amber-800",
+    title: "text-amber-900 dark:text-amber-200",
+    subtitle: "text-amber-800 dark:text-amber-300",
+  },
+  cultural: {
+    container: "bg-gradient-to-br from-sage-50 to-earth-50 dark:from-sage-950/30 dark:to-earth-950/30 border-sage-300 dark:border-sage-800",
+    title: "text-gray-900 dark:text-earth-100",
+    subtitle: "text-gray-600 dark:text-earth-300",
+  },
+  feature: {
+    container: "bg-gradient-to-br from-earth-50 to-sage-50 dark:from-earth-900 dark:to-sage-900/50 border-earth-200 dark:border-earth-700",
+    title: "text-gray-900 dark:text-earth-100",
+    subtitle: "text-gray-600 dark:text-earth-300",
+  },
+  card: {
+    container: "bg-white dark:bg-earth-900 border-earth-100 dark:border-earth-700 shadow-sm",
+    title: "text-gray-900 dark:text-earth-100",
+    subtitle: "text-gray-600 dark:text-earth-300",
+  },
+  botanical: {
+    container: "bg-gradient-to-br from-cream-50 to-sage-50/30 dark:from-earth-900 dark:to-sage-950/30 border-sage-200 dark:border-sage-800",
+    title: "text-gray-900 dark:text-earth-100",
+    subtitle: "text-gray-600 dark:text-earth-300",
+  },
+};
+
+const styles = variantStyles[variant];
+---
+
+<section id={id} class={`border rounded-2xl p-6 md:p-8 scroll-mt-24 ${styles.container} ${className}`}>
+  {title && (
+    <div class="mb-6">
+      <h2 class={`font-serif text-2xl md:text-3xl font-bold flex items-center gap-3 ${styles.title}`}>
+        {icon && <span class="text-2xl">{icon}</span>}
+        {title}
+      </h2>
+      {subtitle && (
+        <p class={`text-lg mt-2 ${styles.subtitle}`}>{subtitle}</p>
+      )}
+    </div>
+  )}
+  <slot />
+</section>

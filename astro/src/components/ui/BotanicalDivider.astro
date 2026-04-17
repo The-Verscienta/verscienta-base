@@ -1,0 +1,28 @@
+---
+/**
+ * BotanicalDivider — decorative botanical separator between sections.
+ */
+interface Props {
+  class?: string;
+}
+
+const { class: className = "" } = Astro.props;
+---
+
+<div class={`flex items-center justify-center py-6 ${className}`}>
+  <svg viewBox="0 0 200 24" class="w-48 h-6 text-earth-300 dark:text-earth-600" fill="currentColor">
+    <!-- Left vine -->
+    <path d="M0 12h70" stroke="currentColor" stroke-width="0.5" fill="none" />
+    <circle cx="10" cy="12" r="1.5" opacity="0.3" />
+    <circle cx="30" cy="12" r="1" opacity="0.2" />
+    <!-- Center leaf -->
+    <path d="M90 4c-2 4-6 6-6 10s4 6 6 6 6-2 6-6-4-6-6-10z" opacity="0.4" />
+    <path d="M100 12c0 4 4 6 6 10 2-4 6-6 6-10s-4-6-6-6-6 2-6 6z" opacity="0.3" />
+    <!-- Central circle -->
+    <circle cx="100" cy="12" r="3" opacity="0.5" />
+    <!-- Right vine -->
+    <path d="M130 12h70" stroke="currentColor" stroke-width="0.5" fill="none" />
+    <circle cx="170" cy="12" r="1" opacity="0.2" />
+    <circle cx="190" cy="12" r="1.5" opacity="0.3" />
+  </svg>
+</div>

@@ -4,6 +4,12 @@
  * Replaces frontend/app/herbs/[id]/page.tsx.
  */
 import ContentLayout from "@/layouts/ContentLayout.astro";
+import Section from "@/components/ui/Section.astro";
+import Tag from "@/components/ui/Tag.astro";
+import DisclaimerBox from "@/components/ui/DisclaimerBox.astro";
+import BotanicalDivider from "@/components/ui/BotanicalDivider.astro";
+import Breadcrumbs from "@/components/ui/Breadcrumbs.astro";
+import BackLink from "@/components/ui/BackLink.astro";
 import { directus, readItems, readItem } from "@/lib/directus";
 
 const { id } = Astro.params;
@@ -75,9 +81,7 @@ const title = `${herb.title} (${herb.scientific_name || ""}) — Verscienta Heal
   <!-- Hero -->
   <section class="relative overflow-hidden bg-gradient-to-br from-earth-50 via-sage-50/50 to-cream-100 dark:from-earth-950 dark:via-earth-900/50 dark:to-earth-950 border-b border-sage-200/50 dark:border-earth-700">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
-      <nav class="text-sm text-gray-500 dark:text-earth-400 mb-4">
-        <a href="/" class="hover:text-sage-600">Home</a> / <a href="/herbs" class="hover:text-sage-600">Herbs</a> / <span class="text-gray-900 dark:text-earth-100">{herb.title}</span>
-      </nav>
+      <Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Herbs", href: "/herbs" }, { label: herb.title }]} class="mb-4" />
       <div class="flex flex-col md:flex-row gap-8">
         <div class="flex-1">
           <h1 class="font-serif text-4xl md:text-5xl font-bold text-gray-900 dark:text-earth-100 mb-2">{herb.title}</h1>
@@ -117,7 +121,7 @@ const title = `${herb.title} (${herb.scientific_name || ""}) — Verscienta Heal
 
         {/* TCM Properties */}
         {(herb.tcm_taste?.length || herb.tcm_temperature || herb.tcm_meridians?.length || herb.tcm_functions) && (
-          <section>
+          <section id="tcm" class="scroll-mt-24">
             <h2 class="font-serif text-2xl font-bold text-gray-900 dark:text-earth-100 mb-4 flex items-center gap-2">☯ TCM Properties</h2>
             <div class="bg-white dark:bg-earth-900 rounded-xl border border-gray-100 dark:border-earth-700 p-6 space-y-4">
               {herb.tcm_temperature && <div><span class="text-sm font-medium text-gray-500 dark:text-earth-400">Temperature:</span> <span class="ml-2 font-medium">{herb.tcm_temperature}</span></div>}
@@ -130,7 +134,7 @@ const title = `${herb.title} (${herb.scientific_name || ""}) — Verscienta Heal
 
         {/* Therapeutic Uses */}
         {herb.therapeutic_uses && (
-          <section>
+          <section id="therapeutic" class="scroll-mt-24">
             <h2 class="font-serif text-2xl font-bold text-gray-900 dark:text-earth-100 mb-4">Therapeutic Uses</h2>
             <div class="prose prose-earth dark:prose-invert max-w-none" set:html={herb.therapeutic_uses} />
           </section>
@@ -138,7 +142,7 @@ const title = `${herb.title} (${herb.scientific_name || ""}) — Verscienta Heal
 
         {/* Active Constituents (O2M) */}
         {herb.constituents?.length > 0 && (
-          <section>
+          <section id="constituents" class="scroll-mt-24">
             <h2 class="font-serif text-2xl font-bold text-gray-900 dark:text-earth-100 mb-4">Active Constituents</h2>
             <div class="space-y-3">
               {herb.constituents.map((c: any) => (
@@ -157,7 +161,7 @@ const title = `${herb.title} (${herb.scientific_name || ""}) — Verscienta Heal
 
         {/* Drug Interactions (O2M) */}
         {herb.drug_interactions?.length > 0 && (
-          <section>
+          <section id="interactions" class="scroll-mt-24">
             <h2 class="font-serif text-2xl font-bold text-gray-900 dark:text-earth-100 mb-4">⚠ Drug Interactions</h2>
             <div class="space-y-3">
               {herb.drug_interactions.map((di: any) => (
@@ -175,7 +179,7 @@ const title = `${herb.title} (${herb.scientific_name || ""}) — Verscienta Heal
 
         {/* Dosage (O2M) */}
         {herb.dosages?.length > 0 && (
-          <section>
+          <section id="dosage" class="scroll-mt-24">
             <h2 class="font-serif text-2xl font-bold text-gray-900 dark:text-earth-100 mb-4">Dosage</h2>
             <div class="overflow-x-auto">
               <table class="w-full text-sm">
@@ -202,7 +206,7 @@ const title = `${herb.title} (${herb.scientific_name || ""}) — Verscienta Heal
 
         {/* Clinical Studies (O2M) */}
         {herb.clinical_studies?.length > 0 && (
-          <section>
+          <section id="studies" class="scroll-mt-24">
             <h2 class="font-serif text-2xl font-bold text-gray-900 dark:text-earth-100 mb-4">Clinical Studies</h2>
             <div class="space-y-4">
               {herb.clinical_studies.map((s: any) => (
@@ -224,7 +228,7 @@ const title = `${herb.title} (${herb.scientific_name || ""}) — Verscienta Heal
 
         {/* Preparations (O2M) */}
         {herb.preparations?.length > 0 && (
-          <section>
+          <section id="preparations" class="scroll-mt-24">
             <h2 class="font-serif text-2xl font-bold text-gray-900 dark:text-earth-100 mb-4">Preparation Methods</h2>
             <div class="space-y-4">
               {herb.preparations.map((p: any) => (
@@ -243,7 +247,7 @@ const title = `${herb.title} (${herb.scientific_name || ""}) — Verscienta Heal
 
         {/* Safety: Toxicity (flattened) */}
         {herb.toxicity_level && herb.toxicity_level !== "none_known" && (
-          <section>
+          <section id="toxicity" class="scroll-mt-24">
             <h2 class="font-serif text-2xl font-bold text-gray-900 dark:text-earth-100 mb-4">⚠ Toxicity Information</h2>
             <div class="bg-amber-50 dark:bg-amber-950/20 rounded-xl border border-amber-200 dark:border-amber-800 p-6 space-y-3">
               <div><span class="text-sm font-medium text-amber-700 dark:text-amber-400">Level:</span> <span class="ml-2 font-medium capitalize">{herb.toxicity_level}</span></div>
@@ -256,7 +260,7 @@ const title = `${herb.title} (${herb.scientific_name || ""}) — Verscienta Heal
 
         {/* Historical Texts (O2M) */}
         {herb.historical_texts?.length > 0 && (
-          <section>
+          <section id="history" class="scroll-mt-24">
             <h2 class="font-serif text-2xl font-bold text-gray-900 dark:text-earth-100 mb-4">📜 Historical References</h2>
             <div class="space-y-3">
               {herb.historical_texts.map((ht: any) => (
@@ -273,7 +277,7 @@ const title = `${herb.title} (${herb.scientific_name || ""}) — Verscienta Heal
 
         {/* References (O2M) */}
         {herb.references?.length > 0 && (
-          <section>
+          <section id="references" class="scroll-mt-24">
             <h2 class="font-serif text-2xl font-bold text-gray-900 dark:text-earth-100 mb-4">References</h2>
             <ol class="list-decimal list-inside space-y-2 text-sm text-gray-600 dark:text-earth-300">
               {herb.references.map((ref: any) => (
@@ -293,8 +297,25 @@ const title = `${herb.title} (${herb.scientific_name || ""}) — Verscienta Heal
 
       <!-- Sidebar -->
       <aside class="space-y-6">
+        {/* Table of Contents */}
+        <div class="bg-white/80 dark:bg-earth-900/80 backdrop-blur-sm rounded-2xl border border-earth-100 dark:border-earth-700 p-6 sticky top-20">
+          <h3 class="text-xs font-bold text-gray-500 dark:text-earth-400 uppercase tracking-widest mb-3">On This Page</h3>
+          <nav class="space-y-0.5 text-sm">
+            {(herb.tcm_taste?.length || herb.tcm_temperature) && <a href="#tcm" class="block py-1.5 px-3 text-gray-600 dark:text-earth-300 hover:bg-earth-50 dark:hover:bg-earth-800 rounded-lg transition">TCM Properties</a>}
+            {herb.therapeutic_uses && <a href="#therapeutic" class="block py-1.5 px-3 text-gray-600 dark:text-earth-300 hover:bg-earth-50 dark:hover:bg-earth-800 rounded-lg transition">Therapeutic Uses</a>}
+            {herb.constituents?.length > 0 && <a href="#constituents" class="block py-1.5 px-3 text-gray-600 dark:text-earth-300 hover:bg-earth-50 dark:hover:bg-earth-800 rounded-lg transition">Active Constituents</a>}
+            {herb.drug_interactions?.length > 0 && <a href="#interactions" class="block py-1.5 px-3 text-gray-600 dark:text-earth-300 hover:bg-earth-50 dark:hover:bg-earth-800 rounded-lg transition">Drug Interactions</a>}
+            {herb.dosages?.length > 0 && <a href="#dosage" class="block py-1.5 px-3 text-gray-600 dark:text-earth-300 hover:bg-earth-50 dark:hover:bg-earth-800 rounded-lg transition">Dosage</a>}
+            {herb.clinical_studies?.length > 0 && <a href="#studies" class="block py-1.5 px-3 text-gray-600 dark:text-earth-300 hover:bg-earth-50 dark:hover:bg-earth-800 rounded-lg transition">Clinical Studies</a>}
+            {herb.preparations?.length > 0 && <a href="#preparations" class="block py-1.5 px-3 text-gray-600 dark:text-earth-300 hover:bg-earth-50 dark:hover:bg-earth-800 rounded-lg transition">Preparation</a>}
+            {herb.toxicity_level && herb.toxicity_level !== "none_known" && <a href="#toxicity" class="block py-1.5 px-3 text-gray-600 dark:text-earth-300 hover:bg-earth-50 dark:hover:bg-earth-800 rounded-lg transition">Toxicity</a>}
+            {herb.historical_texts?.length > 0 && <a href="#history" class="block py-1.5 px-3 text-gray-600 dark:text-earth-300 hover:bg-earth-50 dark:hover:bg-earth-800 rounded-lg transition">Historical Refs</a>}
+            {herb.references?.length > 0 && <a href="#references" class="block py-1.5 px-3 text-gray-600 dark:text-earth-300 hover:bg-earth-50 dark:hover:bg-earth-800 rounded-lg transition">References</a>}
+          </nav>
+        </div>
+
         {/* Quick facts card */}
-        <div class="bg-white dark:bg-earth-900 rounded-xl border border-gray-100 dark:border-earth-700 p-6 sticky top-24">
+        <div class="bg-white dark:bg-earth-900 rounded-xl border border-gray-100 dark:border-earth-700 p-6">
           <h3 class="font-serif text-lg font-bold text-gray-900 dark:text-earth-100 mb-4">Quick Facts</h3>
           <dl class="space-y-3 text-sm">
             {herb.plant_type && <div><dt class="text-gray-500 dark:text-earth-400">Type</dt><dd class="font-medium capitalize">{herb.plant_type}</dd></div>}
@@ -346,12 +367,12 @@ const title = `${herb.title} (${herb.scientific_name || ""}) — Verscienta Heal
     </div>
   </div>
 
-  <!-- Disclaimer -->
+  <!-- Disclaimer + Back Link -->
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-8">
-    <div class="bg-amber-50 dark:bg-earth-900 border border-amber-200 dark:border-earth-700 rounded-xl p-4 text-center">
-      <p class="text-xs text-amber-700 dark:text-amber-400">
-        This information is for educational purposes only. Consult a healthcare provider before using any herbal remedy.
-      </p>
-    </div>
+    <BotanicalDivider />
+    <DisclaimerBox>
+      <p>This information is for educational purposes only and is not intended to replace professional medical advice. Always consult a qualified healthcare provider before using any herbal remedy, especially if you are pregnant, nursing, or taking medications.</p>
+    </DisclaimerBox>
+    <BackLink href="/herbs" label="Back to Herb Database" />
   </div>
 </ContentLayout>
