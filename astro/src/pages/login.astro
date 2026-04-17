@@ -1,9 +1,9 @@
 ---
 /**
- * Login page — Astro shell with interactive form.
- * TODO Phase 6: Port as React island with Zod validation, password toggle, etc.
+ * Login page — Astro shell with React LoginForm island.
  */
 import ContentLayout from "@/layouts/ContentLayout.astro";
+import LoginForm from "@/components/auth/LoginForm";
 ---
 
 <ContentLayout title="Login — Verscienta Health" description="Sign in to your Verscienta Health account.">
@@ -15,23 +15,7 @@ import ContentLayout from "@/layouts/ContentLayout.astro";
       </div>
 
       <div class="bg-white dark:bg-earth-900 rounded-xl border border-gray-100 dark:border-earth-700 p-6 shadow-sm">
-        <!-- TODO Phase 6: <LoginForm client:load /> -->
-        <form class="space-y-4" id="login-form">
-          <div>
-            <label for="email" class="block text-sm font-medium text-gray-700 dark:text-earth-300 mb-1">Email</label>
-            <input type="email" id="email" name="email" required autocomplete="email" class="w-full px-4 py-2.5 border border-gray-200 dark:border-earth-600 rounded-lg bg-white dark:bg-earth-800 text-gray-900 dark:text-earth-100 focus:ring-2 focus:ring-sage-500" />
-          </div>
-          <div>
-            <label for="password" class="block text-sm font-medium text-gray-700 dark:text-earth-300 mb-1">Password</label>
-            <input type="password" id="password" name="password" required autocomplete="current-password" class="w-full px-4 py-2.5 border border-gray-200 dark:border-earth-600 rounded-lg bg-white dark:bg-earth-800 text-gray-900 dark:text-earth-100 focus:ring-2 focus:ring-sage-500" />
-          </div>
-          <button type="submit" class="w-full px-6 py-3 bg-gradient-to-r from-sage-600 to-earth-600 text-white font-medium rounded-xl shadow hover:shadow-lg transition-all">Sign In</button>
-        </form>
-        <div class="mt-4 text-center text-sm">
-          <a href="/forgot-password" class="text-sage-600 dark:text-sage-400 hover:underline">Forgot password?</a>
-          <span class="mx-2 text-gray-300 dark:text-earth-600">|</span>
-          <a href="/register" class="text-sage-600 dark:text-sage-400 hover:underline">Create account</a>
-        </div>
+        <LoginForm client:load />
       </div>
     </div>
   </div>

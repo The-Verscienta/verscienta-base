@@ -5,7 +5,7 @@
  * and kept as a React island since it has heavy interactivity (form, AI calls, results).
  */
 import ContentLayout from "@/layouts/ContentLayout.astro";
-// TODO Phase 6: import SymptomChecker from "@/components/SymptomChecker";
+import SymptomChecker from "@/components/SymptomChecker";
 ---
 
 <ContentLayout
@@ -37,28 +37,6 @@ import ContentLayout from "@/layouts/ContentLayout.astro";
       </p>
     </div>
 
-    <!-- React island placeholder -->
-    <!-- TODO Phase 6: <SymptomChecker client:load /> -->
-    <div class="bg-white dark:bg-earth-900 rounded-xl border border-gray-100 dark:border-earth-700 p-6">
-      <div class="space-y-4">
-        <div>
-          <label for="symptoms" class="block text-sm font-medium text-gray-700 dark:text-earth-300 mb-2">Describe your symptoms</label>
-          <textarea
-            id="symptoms"
-            rows="5"
-            placeholder="e.g., I've been experiencing fatigue, difficulty sleeping, and occasional heart palpitations for the past two weeks..."
-            class="w-full px-4 py-3 border border-gray-200 dark:border-earth-600 rounded-xl bg-white dark:bg-earth-800 text-gray-900 dark:text-earth-100 focus:ring-2 focus:ring-sage-500 focus:border-sage-500 placeholder-gray-400 dark:placeholder-earth-500"
-          ></textarea>
-          <p class="text-xs text-gray-500 dark:text-earth-400 mt-1">Minimum 10 characters. Include duration, severity, and any patterns you've noticed.</p>
-        </div>
-        <button
-          type="button"
-          class="w-full px-6 py-3 bg-gradient-to-r from-sage-600 to-earth-600 text-white font-medium rounded-xl shadow-lg hover:shadow-xl transition-all"
-          onclick="alert('The full symptom checker will be available when the React component is ported in Phase 6.')"
-        >
-          Analyze Symptoms
-        </button>
-      </div>
-    </div>
+    <SymptomChecker client:load />
   </div>
 </ContentLayout>
