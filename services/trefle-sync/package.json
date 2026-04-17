@@ -1,0 +1,16 @@
+{
+  "name": "verscienta-trefle-sync",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Standalone Trefle.io sync service for Verscienta Health (replaces Drupal trefle_sync module)",
+  "scripts": {
+    "sync": "node src/index.mjs",
+    "search": "node src/search.mjs",
+    "test-connection": "node src/test-connection.mjs",
+    "stats": "node src/stats.mjs"
+  },
+  "dependencies": {
+    "@directus/sdk": "^18.0.0"
+  }
+}

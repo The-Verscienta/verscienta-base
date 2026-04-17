@@ -1,0 +1,16 @@
+{
+  "name": "verscienta-perenual-sync",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Standalone Perenual.com sync service for Verscienta Health (replaces Drupal perenual_sync module)",
+  "scripts": {
+    "sync": "node src/index.mjs",
+    "search": "node src/search.mjs",
+    "enrich": "node src/enrich.mjs",
+    "test-connection": "node src/test-connection.mjs"
+  },
+  "dependencies": {
+    "@directus/sdk": "^18.0.0"
+  }
+}
