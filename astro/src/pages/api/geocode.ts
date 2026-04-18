@@ -17,7 +17,7 @@ export const GET: APIRoute = async ({ url }) => {
     });
   }
 
-  const apiKey = import.meta.env.GEOAPIFY_API_KEY;
+  const apiKey = import.meta.env.GEOAPIFY_API_KEY || process.env.GEOAPIFY_API_KEY;
   if (!apiKey) {
     console.error("GEOAPIFY_API_KEY not set");
     return new Response(JSON.stringify({ result: null, error: "Geocoding not configured" }), {
