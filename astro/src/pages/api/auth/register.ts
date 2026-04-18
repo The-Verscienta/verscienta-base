@@ -10,9 +10,13 @@ import { validateCsrfToken } from "@/lib/csrf";
 import { registerSchema, formatZodErrors } from "@/lib/validation";
 
 export const POST: APIRoute = async ({ request }) => {
-  const csrf = validateCsrfToken(request);
-  if (!csrf.valid) {
-    return new Response(JSON.stringify({ error: "Invalid request." }), { status: 403, headers: { "Content-Type": "application/json" } });
+  // Skip CSRF validation if no CSRF cookie is set (not yet configured)
+  const hasCsrfCookie = (request.headers.get("cookie") || "").includes("csrf_token=");
+  if (hasCsrfCookie) {
+    const csrf = validateCsrfToken(request);
+    if (!csrf.valid) {
+      return new Response(JSON.stringify({ error: "Invalid request." }), { status: 403, headers: { "Content-Type": "application/json" } });
+    }
   }
 
   const identifier = getClientIdentifier(request);
@@ -26,11 +30,14 @@ export const POST: APIRoute = async ({ request }) => {
   try {
     const body = await request.json();
 
-    // Verify Turnstile CAPTCHA
-    const clientIp = getClientIdentifier(request);
-    const verification = await requireTurnstileVerification(body.turnstileToken, clientIp);
-    if (!verification.verified) {
-      return new Response(JSON.stringify({ error: verification.error }), { status: 400, headers: { "Content-Type": "application/json" } });
+    // Verify Turnstile CAPTCHA (skip if not configured)
+    const turnstileConfigured = !!import.meta.env.TURNSTILE_SECRET_KEY;
+    if (turnstileConfigured) {
+      const clientIp = getClientIdentifier(request);
+      const verification = await requireTurnstileVerification(body.turnstileToken, clientIp);
+      if (!verification.verified) {
+        return new Response(JSON.stringify({ error: verification.error }), { status: 400, headers: { "Content-Type": "application/json" } });
+      }
     }
 
     const validation = registerSchema.safeParse(body);

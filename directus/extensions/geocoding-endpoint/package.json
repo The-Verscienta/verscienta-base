@@ -1,9 +1,9 @@
 {
-  "name": "directus-hook-geocoding",
-  "version": "2.0.0",
+  "name": "directus-endpoint-geocoding",
+  "version": "1.0.0",
   "type": "module",
   "directus:extension": {
-    "type": "hook",
+    "type": "endpoint",
     "path": "index.js",
     "source": "index.js",
     "host": "^11.0.0"

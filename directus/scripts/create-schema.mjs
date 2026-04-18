@@ -304,7 +304,7 @@ async function createPrimaryCollections() {
   await safeCreateField("practitioners", { field: "slug", type: "string", meta: { interface: "input" }, schema: { is_unique: true } });
   await safeCreateField("practitioners", { field: "practice_type", type: "string", meta: { interface: "select-dropdown", options: { choices: choices(["TCM", "Western Herbalism", "Naturopathy", "Ayurveda", "Integrative", "Other"]) } }, schema: {} });
   await safeCreateField("practitioners", { field: "bio", type: "text", meta: { interface: "input-rich-text-html" }, schema: {} });
-  await safeCreateField("practitioners", { field: "address", type: "text", meta: { interface: "input-multiline" }, schema: {} });
+  await safeCreateField("practitioners", { field: "address", type: "text", meta: { interface: "address-autocomplete", options: { latitudeField: "latitude", longitudeField: "longitude" } }, schema: {} });
   await safeCreateField("practitioners", { field: "latitude", type: "decimal", meta: { interface: "input", width: "half" }, schema: {} });
   await safeCreateField("practitioners", { field: "longitude", type: "decimal", meta: { interface: "input", width: "half" }, schema: {} });
 
@@ -375,8 +375,8 @@ async function createO2MCollections() {
   // Helper to create a standard O2M child collection
   async function createChildCollection(name, parentCollection, icon, note, fields) {
     await safeCreateCollection({ collection: name, meta: { icon, note, hidden: false }, schema: {} });
-    // FK to parent
-    await safeCreateField(name, { field: `${parentCollection.slice(0, -1)}_id`, type: "integer", meta: { interface: "select-dropdown-m2o", hidden: true }, schema: {} });
+    // FK to parent (visible so items can be created directly, not just from the parent O2M)
+    await safeCreateField(name, { field: `${parentCollection.slice(0, -1)}_id`, type: "integer", meta: { interface: "select-dropdown-m2o", hidden: false }, schema: {} });
     await safeCreateRelation({
       collection: name,
       field: `${parentCollection.slice(0, -1)}_id`,

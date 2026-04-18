@@ -1,9 +1,9 @@
 {
-  "name": "directus-hook-geocoding",
-  "version": "2.0.0",
+  "name": "directus-interface-address-autocomplete",
+  "version": "1.0.0",
   "type": "module",
   "directus:extension": {
-    "type": "hook",
+    "type": "interface",
     "path": "index.js",
     "source": "index.js",
     "host": "^11.0.0"

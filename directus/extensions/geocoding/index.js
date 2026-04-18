@@ -1,45 +1,50 @@
 /**
- * Directus Hook: Geocoding for Practitioners
+ * Directus Hook: Geocoding for Practitioners via Geoapify
  *
- * Replaces the Drupal holistic_hub module.
- * On practitioner create/update, if address is present and lat/lon are empty,
- * geocodes via OpenStreetMap Nominatim and fills the coordinates.
+ * On practitioner create/update, if address is present and lat/lon are empty
+ * (or address changed), geocodes via Geoapify and fills the coordinates.
  *
- * No external dependencies — uses native fetch + Nominatim free API.
+ * Environment variables:
+ *   GEOAPIFY_API_KEY  (required)
  */
 
-export default ({ action }, { logger }) => {
-  const NOMINATIM_URL = "https://nominatim.openstreetmap.org/search";
-  const USER_AGENT = "Verscienta Health Application";
+export default ({ action }, { env, logger }) => {
+  const API_KEY = env.GEOAPIFY_API_KEY;
+
+  if (!API_KEY) {
+    logger.warn("Geocoding disabled: GEOAPIFY_API_KEY not set");
+    return;
+  }
 
   /**
-   * Geocode an address via Nominatim
+   * Geocode an address via Geoapify Geocoding API
    */
   async function geocodeAddress(address) {
     const params = new URLSearchParams({
-      q: address,
+      text: address,
+      apiKey: API_KEY,
       format: "json",
       limit: "1",
     });
 
-    const res = await fetch(`${NOMINATIM_URL}?${params}`, {
-      headers: { "User-Agent": USER_AGENT },
-    });
+    const res = await fetch(`https://api.geoapify.com/v1/geocode/search?${params}`);
 
     if (!res.ok) {
-      logger.warn(`Nominatim returned ${res.status} for address: ${address}`);
+      logger.warn(`Geoapify returned ${res.status} for address: ${address}`);
       return null;
     }
 
-    const results = await res.json();
-    if (!results || results.length === 0) {
+    const data = await res.json();
+    if (!data.results || data.results.length === 0) {
       logger.info(`No geocoding results for: ${address}`);
       return null;
     }
 
+    const result = data.results[0];
     return {
-      latitude: parseFloat(results[0].lat),
-      longitude: parseFloat(results[0].lon),
+      latitude: result.lat,
+      longitude: result.lon,
+      formatted: result.formatted || address,
     };
   }
 
@@ -78,7 +83,6 @@ export default ({ action }, { logger }) => {
 
         if (!item?.address) continue;
 
-        // Re-geocode when address changes
         const coords = await geocodeAddress(item.address);
         if (!coords) continue;
 
