@@ -1,6 +1,6 @@
 services:
   directus:
-    image: directus/directus:11
+    build: .
     container_name: verscienta_directus
     depends_on:
       db:
@@ -61,7 +61,6 @@ services:
       - "8055:8055"
     volumes:
       - directus_uploads:/directus/uploads
-      - ./extensions:/directus/extensions
     networks:
       - verscienta_network
     healthcheck:
