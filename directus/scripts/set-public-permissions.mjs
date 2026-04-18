@@ -41,36 +41,72 @@ async function main() {
   }
 
   console.log("Public policy ID: " + publicPolicy.id);
+  // Fetch all existing public read permissions so we can update stale ones
+  const existingRes = await fetch(
+    DIRECTUS_URL + "/permissions?filter[policy][_eq]=" + publicPolicy.id + "&filter[action][_eq]=read&limit=-1",
+    { headers: { "Authorization": "Bearer " + TOKEN } },
+  );
+  const existingData = await existingRes.json();
+  const existingMap = new Map();
+  for (const perm of existingData.data || []) {
+    existingMap.set(perm.collection, perm);
+  }
+
   let ok = 0, fail = 0;
 
   for (const col of collections) {
     try {
-      const res = await fetch(DIRECTUS_URL + "/permissions", {
-        method: "POST",
-        headers: {
-          "Authorization": "Bearer " + TOKEN,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          policy: publicPolicy.id,
-          collection: col,
-          action: "read",
-          fields: ["*"],
-          permissions: {},
-          validation: {},
-        }),
-      });
+      const existing = existingMap.get(col);
 
-      if (res.ok) {
-        ok++;
-        console.log("  + " + col);
-      } else {
-        const err = await res.json().catch(() => ({}));
-        if (err?.errors?.[0]?.extensions?.code === "RECORD_NOT_UNIQUE") {
+      if (existing) {
+        // Check if fields already include "*"
+        const hasWildcard = Array.isArray(existing.fields) && existing.fields.includes("*");
+        if (hasWildcard) {
           ok++;
-          console.log("  = " + col + " (exists)");
+          console.log("  = " + col + " (ok)");
+        } else {
+          // Update to grant all fields
+          const patchRes = await fetch(DIRECTUS_URL + "/permissions/" + existing.id, {
+            method: "PATCH",
+            headers: {
+              "Authorization": "Bearer " + TOKEN,
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ fields: ["*"] }),
+          });
+          if (patchRes.ok) {
+            ok++;
+            console.log("  ~ " + col + " (updated fields to [*])");
+          } else {
+            fail++;
+            const err = await patchRes.json().catch(() => ({}));
+            console.log("  ! " + col + " update: " + (err?.errors?.[0]?.message || patchRes.status));
+          }
+        }
+      } else {
+        // Create new permission
+        const res = await fetch(DIRECTUS_URL + "/permissions", {
+          method: "POST",
+          headers: {
+            "Authorization": "Bearer " + TOKEN,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            policy: publicPolicy.id,
+            collection: col,
+            action: "read",
+            fields: ["*"],
+            permissions: {},
+            validation: {},
+          }),
+        });
+
+        if (res.ok) {
+          ok++;
+          console.log("  + " + col);
         } else {
           fail++;
+          const err = await res.json().catch(() => ({}));
           console.log("  ! " + col + ": " + (err?.errors?.[0]?.message || res.status));
         }
       }
