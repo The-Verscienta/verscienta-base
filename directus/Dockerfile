@@ -7,7 +7,7 @@ COPY ./snapshots /directus/snapshots
 COPY ./extensions /directus/extensions
 
 # Install extension dependencies
-RUN find /directus/extensions -name "package.json" -not -path "*/node_modules/*" -execdir sh -c 'if grep -q "dependencies" package.json; then npm install --omit=dev; fi' \;
+RUN find /directus/extensions -name "package.json" -not -path "*/node_modules/*" -exec sh -c 'cd "$(dirname "$1")" && if grep -q "dependencies" package.json; then npm install --omit=dev; fi' _ {} \;
 
 # The base image handles everything else:
 # - Node.js runtime
