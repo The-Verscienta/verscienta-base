@@ -2,8 +2,18 @@
 import ContentLayout from "@/layouts/ContentLayout.astro";
 import { directus, readItems } from "@/lib/directus";
 
-// Fetch modalities for filter dropdown
+// Fetch practitioners and modalities server-side (avoids CORS)
+let practitioners: any[] = [];
 let modalities: any[] = [];
+try {
+  practitioners = await directus.request(readItems("practitioners", {
+    fields: ["id", "title", "slug", "practice_type", "bio", "address", "latitude", "longitude",
+             "modalities.modalities_id.id", "modalities.modalities_id.title"],
+    sort: ["title"],
+    limit: 500,
+  })) as any;
+} catch (e) { console.error("Failed to load practitioners:", e); }
+
 try {
   modalities = await directus.request(readItems("modalities", { fields: ["id", "title"], sort: ["title"], limit: 100 })) as any;
 } catch (e) { console.error("Failed to load modalities:", e); }
@@ -145,11 +155,12 @@ const practiceTypes = [
     </div>
   </div>
 
-  <script>
-    const DIRECTUS_URL = (document.querySelector('meta[name="directus-url"]') as HTMLMetaElement)?.content
-      || import.meta.env?.PUBLIC_DIRECTUS_URL
-      || 'https://backend.verscienta.com';
+  <!-- Server-side data passed to client -->
+  <script is:inline define:vars={{ serverPractitioners: practitioners }}>
+    window.__PRACTITIONERS__ = serverPractitioners;
+  </script>
 
+  <script>
     const grid = document.getElementById('results-grid')!;
     const emptyState = document.getElementById('results-empty')!;
     const loadingState = document.getElementById('results-loading')!;
@@ -159,7 +170,7 @@ const practiceTypes = [
     const distanceSelect = document.getElementById('distance-select') as HTMLSelectElement;
     const modalitySelect = document.getElementById('modality-select') as HTMLSelectElement;
 
-    let allPractitioners: any[] = [];
+    let allPractitioners: any[] = (window as any).__PRACTITIONERS__ || [];
     let userLat: number | null = null;
     let userLon: number | null = null;
 
@@ -300,19 +311,7 @@ const practiceTypes = [
       }
     }
 
-    // ── Load all practitioners ──────────────────────────────────────
-    async function loadPractitioners() {
-      try {
-        const res = await fetch(`${DIRECTUS_URL}/items/practitioners?fields=id,title,slug,practice_type,bio,address,latitude,longitude,modalities.modalities_id.id,modalities.modalities_id.title&sort=title&limit=500`);
-        const data = await res.json();
-        allPractitioners = data.data || [];
-        filterAndRender();
-      } catch (e) {
-        loadingState.classList.add('hidden');
-        countEl.textContent = 'Failed to load practitioners';
-        console.error(e);
-      }
-    }
+    // ── Practitioners loaded server-side, no fetch needed ──────────
 
     // ── Event listeners ─────────────────────────────────────────────
     document.getElementById('search-form')?.addEventListener('submit', async (e) => {
@@ -374,7 +373,7 @@ const practiceTypes = [
       filterAndRender();
     });
 
-    // Initial load
-    loadPractitioners();
+    // Initial render (data already loaded server-side)
+    filterAndRender();
   </script>
 </ContentLayout>
