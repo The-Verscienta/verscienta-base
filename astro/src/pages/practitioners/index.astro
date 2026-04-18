@@ -268,9 +268,9 @@ const practiceTypes = [
         return copy;
       });
 
-      // Filter by distance
+      // Filter by distance (practitioners without coordinates are always included)
       if (maxDistance && userLat != null) {
-        filtered = filtered.filter(p => p._distance != null && p._distance <= maxDistance);
+        filtered = filtered.filter(p => p._distance == null || p._distance <= maxDistance);
       }
 
       // Filter by practice type
