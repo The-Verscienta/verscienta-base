@@ -44,6 +44,19 @@ services:
       # MeiliSearch sync (used by the hook extension)
       MEILI_URL: http://meilisearch:7700
       MEILI_MASTER_KEY: ${MEILI_MASTER_KEY:-change-me-master-key}
+
+      # Plant sync
+      TREFLE_API_KEY: ${TREFLE_API_KEY:-}
+      PERENUAL_API_KEY: ${PERENUAL_API_KEY:-}
+      SYNC_INTERVAL_MINUTES: ${SYNC_INTERVAL_MINUTES:-60}
+      SYNC_BATCH_SIZE: ${SYNC_BATCH_SIZE:-20}
+      SYNC_IMAGES: ${SYNC_IMAGES:-true}
+
+      # Cloudflare Images offload
+      CLOUDFLARE_IMAGES_TOKEN: ${CLOUDFLARE_IMAGES_TOKEN:-}
+      CLOUDFLARE_ACCOUNT_ID: ${CLOUDFLARE_ACCOUNT_ID:-}
+      CLOUDFLARE_ACCOUNT_HASH: ${CLOUDFLARE_ACCOUNT_HASH:-}
+      CLOUDFLARE_RETRY_ATTEMPTS: ${CLOUDFLARE_RETRY_ATTEMPTS:-3}
     ports:
       - "8055:8055"
     volumes:
