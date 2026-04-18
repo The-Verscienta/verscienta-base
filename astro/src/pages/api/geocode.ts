@@ -8,7 +8,7 @@
  */
 import type { APIRoute } from "astro";
 
-export const GET: APIRoute = async ({ url }) => {
+export const GET: APIRoute = async ({ url, locals }) => {
   const text = url.searchParams.get("text");
 
   if (!text || text.trim().length < 2) {
@@ -17,7 +17,10 @@ export const GET: APIRoute = async ({ url }) => {
     });
   }
 
-  const apiKey = import.meta.env.GEOAPIFY_API_KEY || process.env.GEOAPIFY_API_KEY;
+  // Cloudflare Pages: runtime env is on locals.runtime.env
+  // Node/standalone: import.meta.env or process.env
+  const cfEnv = (locals as any)?.runtime?.env;
+  const apiKey = cfEnv?.GEOAPIFY_API_KEY || import.meta.env.GEOAPIFY_API_KEY || process.env.GEOAPIFY_API_KEY;
   if (!apiKey) {
     console.error("GEOAPIFY_API_KEY not set");
     return new Response(JSON.stringify({ result: null, error: "Geocoding not configured" }), {
