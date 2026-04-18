@@ -36,6 +36,7 @@ export default ({ init, action }, { env, logger, getSchema, services }) => {
 
   init("app.after", async () => {
     logger.info(`Plant sync enabled: interval=${INTERVAL / 60000}m, batch=${BATCH_SIZE}, images=${SYNC_IMAGES}`);
+    logger.info(`Plant sync services available: ${services ? Object.keys(services).join(", ") : "NONE"}`);
 
     // Run first sync after a short delay to let Directus finish starting.
     setTimeout(() => runSync(), 10_000);
@@ -54,7 +55,7 @@ export default ({ init, action }, { env, logger, getSchema, services }) => {
     try {
       const schema = await getSchema();
       const accountability = { admin: true };
-      const { ItemsService } = services;
+      const { ItemsService, FilesService } = services;
 
       // Read sync state from import_logs.
       const logsService = new ItemsService("import_logs", { accountability, schema });
@@ -217,8 +218,8 @@ export default ({ init, action }, { env, logger, getSchema, services }) => {
           }
         } catch (e) {
           batchFailed++;
-          errors.push(`Plant ${plant.id}: ${e.message}`);
-          logger.error(`Plant sync error for ${plant.id}: ${e.message}`);
+          errors.push(`Plant ${plant.id}: ${e?.message || e}`);
+          logger.error(`Plant sync error for ${plant.id}: ${e?.message || e}`, e?.stack ? { stack: e.stack } : {});
         }
       }
 
@@ -244,7 +245,7 @@ export default ({ init, action }, { env, logger, getSchema, services }) => {
         `Plant sync page ${nextPage}: +${batchImported} new, ~${batchUpdated} updated, =${batchSkipped} skipped, !${batchFailed} failed`
       );
     } catch (e) {
-      logger.error(`Plant sync error: ${e.message}`);
+      logger.error(`Plant sync error: ${e?.message || e}`, e?.stack ? { stack: e.stack } : {});
     } finally {
       running = false;
     }
