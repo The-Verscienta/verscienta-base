@@ -103,7 +103,11 @@ export function mapTrefleToHerb(plant) {
     }
   }
 
+  // Generate a unique herb_id from the Trefle ID (e.g., "T-12345").
+  const herbId = `T-${plant.id}`;
+
   return {
+    herb_id: herbId,
     title: plant.common_name || plant.scientific_name || "Unknown Plant",
     slug: scientificName.toLowerCase().replace(/\s+/g, "-").replace(/[^a-z0-9-]/g, ""),
     trefle_id: plant.id,
