@@ -61,7 +61,7 @@ services:
       - "8055:8055"
     volumes:
       - directus_uploads:/directus/uploads
-      - directus_extensions:/directus/extensions
+      - ./extensions:/directus/extensions
     networks:
       - verscienta_network
     healthcheck:
@@ -119,7 +119,7 @@ volumes:
   db_data:
   redis_data:
   directus_uploads:
-  directus_extensions:
+
   meili_data:
 
 networks:
