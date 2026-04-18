@@ -89,16 +89,9 @@ export function mapTrefleToHerb(plant) {
   const native = plant.distribution?.native;
   let nativeRegion = null;
   if (Array.isArray(native) && native.length > 0) {
-    // Join regions but keep under 250 chars to fit varchar(255)
-    let joined = "";
-    for (const region of native) {
-      const next = joined ? joined + ", " + region : region;
-      if (next.length > 250) break;
-      joined = next;
-    }
-    nativeRegion = joined || null;
+    nativeRegion = native;
   } else if (typeof native === "string") {
-    nativeRegion = native.slice(0, 250) || null;
+    nativeRegion = [native];
   }
 
   const commonNames = [];
@@ -134,8 +127,8 @@ export function mapTrefleToHerb(plant) {
     botanical_description: buildBotanicalDescription(plant),
     contraindications: buildToxicityWarning(plant),
     parts_used: Array.isArray(plant.edible_part)
-      ? plant.edible_part.join(", ")
-      : plant.edible_part || null,
+      ? plant.edible_part
+      : plant.edible_part ? [plant.edible_part] : null,
     common_names: commonNames.length > 0 ? commonNames : null,
     peer_review_status: "draft",
   };
@@ -207,7 +200,7 @@ export function enrichWithPerenual(existing, perenual) {
   setIfEmpty("plant_type", perenual.type ? perenual.type.charAt(0).toUpperCase() + perenual.type.slice(1) : null);
 
   if (perenual.origin && Array.isArray(perenual.origin)) {
-    setIfEmpty("native_region", perenual.origin.join(", "));
+    setIfEmpty("native_region", perenual.origin);
   }
 
   if (perenual.description) {
@@ -228,7 +221,7 @@ export function enrichWithPerenual(existing, perenual) {
   if (perenual.edible_fruit) edibleParts.push("fruit");
   if (perenual.flowers) edibleParts.push("flowers");
   if (edibleParts.length > 0) {
-    setIfEmpty("parts_used", edibleParts.join(", "));
+    setIfEmpty("parts_used", edibleParts);
   }
 
   if (perenual.other_name && Array.isArray(perenual.other_name)) {
