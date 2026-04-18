@@ -21,6 +21,7 @@ export const loginSchema = z.object({
 });
 
 export const registerSchema = z.object({
+  accountType: z.enum(['patient', 'professional']).optional().default('patient'),
   email: z.string().email('Invalid email address'),
   password: z
     .string()

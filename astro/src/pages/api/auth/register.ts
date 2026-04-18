@@ -46,14 +46,48 @@ export const POST: APIRoute = async ({ request }) => {
     }
 
     const { email, password, firstName, lastName } = validation.data;
+    const accountType = body.accountType || "patient";
 
-    // Register in Directus
+    // Role IDs in Directus
+    const ROLE_IDS: Record<string, string> = {
+      patient: "2f72336d-c7d5-4c8d-a127-301f687db060",
+      professional: "78e53f15-2483-41ac-8285-5b1ec96854e2",
+    };
+
+    // Register in Directus (default role is Patient via public_registration_role)
     const user = await registerUser({
       email,
       password,
       first_name: firstName,
       last_name: lastName,
     });
+
+    // If professional, upgrade role via admin API
+    if (accountType === "professional") {
+      const DIRECTUS_URL = import.meta.env.PUBLIC_DIRECTUS_URL || "http://localhost:8055";
+      const DIRECTUS_TOKEN = import.meta.env.DIRECTUS_TOKEN;
+
+      if (DIRECTUS_TOKEN) {
+        // Find the newly created user by email
+        const findRes = await fetch(
+          `${DIRECTUS_URL}/users?filter[email][_eq]=${encodeURIComponent(email)}&fields=id`,
+          { headers: { Authorization: `Bearer ${DIRECTUS_TOKEN}` } }
+        );
+        const found = await findRes.json();
+        const userId = found?.data?.[0]?.id;
+
+        if (userId) {
+          await fetch(`${DIRECTUS_URL}/users/${userId}`, {
+            method: "PATCH",
+            headers: {
+              Authorization: `Bearer ${DIRECTUS_TOKEN}`,
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ role: ROLE_IDS.professional }),
+          });
+        }
+      }
+    }
 
     return new Response(
       JSON.stringify({ success: true, message: "Registration successful", user: { id: user.id, email: user.email } }),
