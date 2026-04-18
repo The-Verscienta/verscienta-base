@@ -76,16 +76,10 @@ export async function registerUser(userData: {
   first_name?: string;
   last_name?: string;
 }): Promise<DirectusUser> {
-  // Use admin token to create users (public /users POST is blocked by default)
-  const DIRECTUS_TOKEN = import.meta.env.DIRECTUS_TOKEN;
-  const headers: Record<string, string> = { "Content-Type": "application/json" };
-  if (DIRECTUS_TOKEN) {
-    headers["Authorization"] = `Bearer ${DIRECTUS_TOKEN}`;
-  }
-
-  const response = await fetch(`${DIRECTUS_URL}/users`, {
+  // Use Directus public registration endpoint (returns 204 No Content on success)
+  const response = await fetch(`${DIRECTUS_URL}/users/register`, {
     method: "POST",
-    headers,
+    headers: { "Content-Type": "application/json" },
     body: JSON.stringify(userData),
   });
 
@@ -94,8 +88,8 @@ export async function registerUser(userData: {
     throw new Error(error?.errors?.[0]?.message || "Registration failed");
   }
 
-  const result = await response.json();
-  return result.data;
+  // /users/register returns 204 with no body — return a minimal user object
+  return { id: "", email: userData.email } as DirectusUser;
 }
 
 /**
