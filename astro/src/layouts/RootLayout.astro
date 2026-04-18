@@ -18,7 +18,6 @@ const {
 
 const siteUrl = import.meta.env.PUBLIC_SITE_URL || "https://verscienta.com";
 const canonicalUrl = new URL(Astro.url.pathname, siteUrl).href;
-const nonce = (Astro.locals as Record<string, unknown>).nonce as string;
 ---
 
 <!doctype html>
@@ -53,7 +52,7 @@ const nonce = (Astro.locals as Record<string, unknown>).nonce as string;
     />
 
     <!-- Theme detection (runs before paint to prevent flash) -->
-    <script is:inline nonce={nonce}>
+    <script is:inline>
       (function () {
         const stored = localStorage.getItem("verscienta_theme");
         const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;

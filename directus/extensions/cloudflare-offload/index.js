@@ -15,7 +15,7 @@
 import { CloudflareImagesClient } from "./cloudflare-client.js";
 import { withRetry } from "./retry.js";
 
-export default ({ init, action, filter }, { env, logger, getSchema }) => {
+export default ({ init, action, filter }, { env, logger, getSchema, services }) => {
   const TOKEN = env.CLOUDFLARE_IMAGES_TOKEN;
   const ACCOUNT_ID = env.CLOUDFLARE_ACCOUNT_ID;
   const ACCOUNT_HASH = env.CLOUDFLARE_ACCOUNT_HASH;
@@ -31,7 +31,7 @@ export default ({ init, action, filter }, { env, logger, getSchema }) => {
   logger.info("Cloudflare Images offload enabled");
 
   // Ensure custom fields exist on directus_files.
-  init("app.after", async ({ services }) => {
+  init("app.after", async () => {
     try {
       const schema = await getSchema();
       const { FieldsService } = services;

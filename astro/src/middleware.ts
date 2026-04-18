@@ -8,49 +8,19 @@
 import { defineMiddleware } from "astro:middleware";
 import { generateCsrfToken, CSRF_COOKIE_NAME } from "./lib/csrf";
 
-export const onRequest = defineMiddleware(async ({ request, url, locals }, next) => {
-  const isProd = import.meta.env.PROD;
-
-  // Generate per-request nonce for CSP — must happen before next() so
-  // layouts can read it from Astro.locals during rendering.
-  const nonceArray = new Uint8Array(16);
-  crypto.getRandomValues(nonceArray);
-  const nonce = Array.from(nonceArray, (b) => b.toString(16).padStart(2, "0")).join("");
-  (locals as Record<string, unknown>).nonce = nonce;
-
+export const onRequest = defineMiddleware(async ({ request, url }, next) => {
   const response = await next();
+  const isProd = import.meta.env.PROD;
 
   // Generate request ID for tracing
   const requestId = crypto.randomUUID();
 
-  // ── Content Security Policy ───────────────────────────────────────────────
-  const cspDirectives = isProd
-    ? [
-        `default-src 'self'`,
-        `script-src 'self' 'nonce-${nonce}' 'strict-dynamic' https://challenges.cloudflare.com`,
-        `style-src 'self' 'unsafe-inline' https://fonts.googleapis.com`,
-        `img-src 'self' data: https: blob:`,
-        `font-src 'self' https://fonts.gstatic.com`,
-        `connect-src 'self' ${import.meta.env.PUBLIC_DIRECTUS_URL || ""} ${import.meta.env.PUBLIC_MEILI_URL || ""} https://challenges.cloudflare.com`,
-        `frame-src https://challenges.cloudflare.com`,
-        `object-src 'none'`,
-        `base-uri 'self'`,
-        `form-action 'self'`,
-      ].join("; ")
-    : [
-        `default-src 'self'`,
-        `script-src 'self' 'unsafe-inline' 'unsafe-eval'`,
-        `style-src 'self' 'unsafe-inline' https://fonts.googleapis.com`,
-        `img-src 'self' data: https: blob: http://localhost:*`,
-        `font-src 'self' https://fonts.gstatic.com`,
-        `connect-src 'self' http://localhost:* ws://localhost:*`,
-        `frame-src https://challenges.cloudflare.com`,
-      ].join("; ");
-
   // ── Security Headers ──────────────────────────────────────────────────────
+  // NOTE: CSP is now managed by Astro's experimental.csp (astro.config.mjs).
+  // Astro automatically hashes all inline/hydration scripts and sets the
+  // Content-Security-Policy header on SSR responses.
   const headers = new Headers(response.headers);
 
-  headers.set("Content-Security-Policy", cspDirectives);
   headers.set("X-Content-Type-Options", "nosniff");
   headers.set("X-Frame-Options", "DENY");
   headers.set("X-XSS-Protection", "1; mode=block");

@@ -12,7 +12,6 @@ interface Props {
 }
 
 const { title, description, ogImage } = Astro.props;
-const nonce = (Astro.locals as Record<string, unknown>).nonce as string;
 ---
 
 <RootLayout title={title} description={description} ogImage={ogImage}>
@@ -98,7 +97,7 @@ const nonce = (Astro.locals as Record<string, unknown>).nonce as string;
         </nav>
       </div>
     </header>
-    <script is:inline nonce={nonce}>
+    <script is:inline>
       document.getElementById('mobile-nav-toggle').addEventListener('click', function() {
         document.getElementById('mobile-nav').classList.toggle('hidden');
       });

@@ -29,4 +29,28 @@ export default defineConfig({
   security: {
     checkOrigin: true,
   },
+  experimental: {
+    csp: {
+      algorithm: "SHA-256",
+      scriptDirective: {
+        hashes: [],
+        resources: ["'self'", "https://challenges.cloudflare.com"],
+        strictDynamic: true,
+      },
+      styleDirective: {
+        hashes: [],
+        resources: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com"],
+      },
+      directives: [
+        "default-src 'self'",
+        "img-src 'self' data: https: blob:",
+        "font-src 'self' https://fonts.gstatic.com",
+        `connect-src 'self' ${process.env.PUBLIC_DIRECTUS_URL || ""} ${process.env.PUBLIC_MEILI_URL || ""} https://challenges.cloudflare.com`,
+        "frame-src https://challenges.cloudflare.com",
+        "object-src 'none'",
+        "base-uri 'self'",
+        "form-action 'self'",
+      ],
+    },
+  },
 });

@@ -17,7 +17,7 @@ import { PerenualClient } from "./perenual-client.js";
 import { hasPlantBenefits, mapTrefleToHerb, enrichWithPerenual } from "./field-mapper.js";
 import { extractImageUrls, importImage } from "./image-handler.js";
 
-export default ({ init, action }, { env, logger, getSchema }) => {
+export default ({ init, action }, { env, logger, getSchema, services }) => {
   const TREFLE_KEY = env.TREFLE_API_KEY;
   const PERENUAL_KEY = env.PERENUAL_API_KEY;
   const INTERVAL = (parseInt(env.SYNC_INTERVAL_MINUTES) || 60) * 60_000;
@@ -34,19 +34,17 @@ export default ({ init, action }, { env, logger, getSchema }) => {
 
   let running = false;
 
-  init("app.after", async ({ services }) => {
-    const { ItemsService } = services;
-
+  init("app.after", async () => {
     logger.info(`Plant sync enabled: interval=${INTERVAL / 60000}m, batch=${BATCH_SIZE}, images=${SYNC_IMAGES}`);
 
     // Run first sync after a short delay to let Directus finish starting.
-    setTimeout(() => runSync(services), 10_000);
+    setTimeout(() => runSync(), 10_000);
 
     // Schedule recurring syncs.
-    setInterval(() => runSync(services), INTERVAL);
+    setInterval(() => runSync(), INTERVAL);
   });
 
-  async function runSync(services) {
+  async function runSync() {
     if (running) {
       logger.info("Plant sync: previous run still active, skipping");
       return;
@@ -56,7 +54,7 @@ export default ({ init, action }, { env, logger, getSchema }) => {
     try {
       const schema = await getSchema();
       const accountability = { admin: true };
-      const { ItemsService, FilesService } = services;
+      const { ItemsService } = services;
 
       // Read sync state from import_logs.
       const logsService = new ItemsService("import_logs", { accountability, schema });
