@@ -561,6 +561,17 @@ async function createM2MRelations() {
       meta: { icon: "import_export", hidden: true },
       schema: {},
     });
+    // Create M2M alias field on parent collection so Directus knows to
+    // render the list-m2m interface (shows the related collection form
+    // on "Create New" instead of the hidden junction form).
+    await safeCreateField(collection, {
+      field,
+      type: "alias",
+      meta: {
+        interface: "list-m2m",
+        special: ["m2m"],
+      },
+    });
     // Junction FK fields
     await safeCreateField(junctionCollection, { field: junctionFieldA, type: "integer", meta: { hidden: true }, schema: {} });
     await safeCreateField(junctionCollection, { field: junctionFieldB, type: "integer", meta: { hidden: true }, schema: {} });

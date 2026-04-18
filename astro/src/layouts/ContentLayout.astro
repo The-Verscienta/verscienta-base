@@ -97,11 +97,6 @@ const { title, description, ogImage } = Astro.props;
         </nav>
       </div>
     </header>
-    <script is:inline>
-      document.getElementById('mobile-nav-toggle').addEventListener('click', function() {
-        document.getElementById('mobile-nav').classList.toggle('hidden');
-      });
-    </script>
   </Fragment>
 
   <!-- Page content -->
@@ -167,3 +162,9 @@ const { title, description, ogImage } = Astro.props;
     </footer>
   </Fragment>
 </RootLayout>
+
+<script>
+  document.getElementById('mobile-nav-toggle')?.addEventListener('click', () => {
+    document.getElementById('mobile-nav')?.classList.toggle('hidden');
+  });
+</script>
