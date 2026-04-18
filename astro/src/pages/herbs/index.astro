@@ -5,6 +5,7 @@
  */
 import ContentLayout from "@/layouts/ContentLayout.astro";
 import { directus, readItems } from "@/lib/directus";
+import { imageUrl } from "@/lib/image-url";
 
 const page = parseInt(Astro.url.searchParams.get("page") || "1");
 const sort = Astro.url.searchParams.get("sort") || "title";
@@ -92,7 +93,7 @@ const directusUrl = import.meta.env.PUBLIC_DIRECTUS_URL;
           {herb.images?.[0]?.file && (
             <div class="aspect-[4/3] overflow-hidden bg-sage-50 dark:bg-earth-800">
               <img
-                src={`${directusUrl}/assets/${herb.images[0].file}?width=400&height=300&fit=cover&format=webp`}
+                src={imageUrl(herb.images[0].file, { width: 400, height: 300 })}
                 alt={herb.images[0].caption || herb.title}
                 class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                 loading="lazy"
