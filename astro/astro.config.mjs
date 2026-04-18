@@ -34,8 +34,11 @@ export default defineConfig({
       algorithm: "SHA-256",
       scriptDirective: {
         hashes: [],
-        resources: ["'self'", "https://challenges.cloudflare.com"],
-        strictDynamic: true,
+        resources: [
+          "'self'",
+          "https://challenges.cloudflare.com",
+          "https://static.cloudflareinsights.com",
+        ],
       },
       styleDirective: {
         hashes: [],
@@ -45,7 +48,7 @@ export default defineConfig({
         "default-src 'self'",
         "img-src 'self' data: https: blob:",
         "font-src 'self' https://fonts.gstatic.com",
-        `connect-src 'self' ${process.env.PUBLIC_DIRECTUS_URL || ""} ${process.env.PUBLIC_MEILI_URL || ""} https://challenges.cloudflare.com`,
+        `connect-src 'self' ${process.env.PUBLIC_DIRECTUS_URL || ""} ${process.env.PUBLIC_MEILI_URL || ""} https://challenges.cloudflare.com https://cloudflareinsights.com`,
         "frame-src https://challenges.cloudflare.com",
         "object-src 'none'",
         "base-uri 'self'",

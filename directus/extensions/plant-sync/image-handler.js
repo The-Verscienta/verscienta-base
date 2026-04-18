@@ -59,9 +59,13 @@ export async function importImage(imageData, herbId, { ItemsService, FilesServic
     const urlPath = new URL(url).pathname;
     const filename = urlPath.split("/").pop() || `herb-${herbId}-${type}.jpg`;
 
+    // Convert buffer to a readable stream for FilesService.
+    const { Readable } = await import("node:stream");
+    const stream = Readable.from(buffer);
+
     // Import into Directus files.
     const filesService = new FilesService({ accountability, schema });
-    const fileId = await filesService.uploadOne(buffer, {
+    const fileId = await filesService.uploadOne(stream, {
       title: caption || filename,
       filename_download: filename,
       type: contentType,
