@@ -1,14 +1,12 @@
 /**
- * API Route: Geocode proxy
+ * API Route: Geocode via Geoapify
  *
- * Proxies geocoding requests to the Directus geocoding endpoint,
- * keeping the Geoapify API key server-side and avoiding CORS/CSP issues.
+ * Calls Geoapify server-side so the API key stays hidden
+ * and the browser only talks to the same origin (no CORS/CSP issues).
  *
  * GET /api/geocode?text=53216
  */
 import type { APIRoute } from "astro";
-
-const DIRECTUS_URL = import.meta.env.PUBLIC_DIRECTUS_URL || "http://localhost:8055";
 
 export const GET: APIRoute = async ({ url }) => {
   const text = url.searchParams.get("text");
@@ -19,12 +17,27 @@ export const GET: APIRoute = async ({ url }) => {
     });
   }
 
+  const apiKey = import.meta.env.GEOAPIFY_API_KEY;
+  if (!apiKey) {
+    console.error("GEOAPIFY_API_KEY not set");
+    return new Response(JSON.stringify({ result: null, error: "Geocoding not configured" }), {
+      status: 503,
+      headers: { "Content-Type": "application/json" },
+    });
+  }
+
   try {
-    const res = await fetch(
-      `${DIRECTUS_URL}/geocoding/geocode?text=${encodeURIComponent(text.trim())}`
-    );
+    const params = new URLSearchParams({
+      text: text.trim(),
+      apiKey,
+      format: "json",
+      limit: "1",
+    });
+
+    const res = await fetch(`https://api.geoapify.com/v1/geocode/search?${params}`);
 
     if (!res.ok) {
+      console.error(`Geoapify returned ${res.status}`);
       return new Response(JSON.stringify({ result: null }), {
         status: 502,
         headers: { "Content-Type": "application/json" },
@@ -32,10 +45,30 @@ export const GET: APIRoute = async ({ url }) => {
     }
 
     const data = await res.json();
-    return new Response(JSON.stringify(data), {
-      headers: { "Content-Type": "application/json" },
-    });
-  } catch {
+    const r = data.results?.[0];
+
+    if (!r) {
+      return new Response(JSON.stringify({ result: null }), {
+        headers: { "Content-Type": "application/json" },
+      });
+    }
+
+    return new Response(
+      JSON.stringify({
+        result: {
+          formatted: r.formatted,
+          lat: r.lat,
+          lon: r.lon,
+          city: r.city,
+          state: r.state,
+          country: r.country,
+          postcode: r.postcode,
+        },
+      }),
+      { headers: { "Content-Type": "application/json" } }
+    );
+  } catch (e) {
+    console.error("Geocode error:", e);
     return new Response(JSON.stringify({ result: null }), {
       status: 500,
       headers: { "Content-Type": "application/json" },
