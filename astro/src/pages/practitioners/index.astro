@@ -185,15 +185,13 @@ const practiceTypes = [
       return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
     }
 
-    // ── Geocode location text via Nominatim ─────────────────────────
+    // ── Geocode location text via server-side proxy ───────────────
     async function geocode(query: string): Promise<{ lat: number; lon: number } | null> {
       try {
-        const res = await fetch(`https://nominatim.openstreetmap.org/search?format=json&limit=1&q=${encodeURIComponent(query)}`, {
-          headers: { 'User-Agent': 'Verscienta Health App' }
-        });
+        const res = await fetch(`/api/geocode?text=${encodeURIComponent(query)}`);
         const data = await res.json();
-        if (data.length > 0) {
-          return { lat: parseFloat(data[0].lat), lon: parseFloat(data[0].lon) };
+        if (data.result) {
+          return { lat: data.result.lat, lon: data.result.lon };
         }
       } catch {}
       return null;
