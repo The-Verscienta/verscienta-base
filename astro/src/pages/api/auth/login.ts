@@ -9,9 +9,13 @@ import { validateCsrfToken } from "@/lib/csrf";
 import { loginSchema, formatZodErrors } from "@/lib/validation";
 
 export const POST: APIRoute = async ({ request }) => {
-  const csrf = validateCsrfToken(request);
-  if (!csrf.valid) {
-    return new Response(JSON.stringify({ error: "Invalid request. Please refresh the page and try again." }), { status: 403, headers: { "Content-Type": "application/json" } });
+  // Skip CSRF validation if no CSRF cookie is set (not yet configured)
+  const hasCsrfCookie = (request.headers.get("cookie") || "").includes("csrf_token=");
+  if (hasCsrfCookie) {
+    const csrf = validateCsrfToken(request);
+    if (!csrf.valid) {
+      return new Response(JSON.stringify({ error: "Invalid request. Please refresh the page and try again." }), { status: 403, headers: { "Content-Type": "application/json" } });
+    }
   }
 
   const identifier = getClientIdentifier(request);

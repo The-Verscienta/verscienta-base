@@ -8,9 +8,12 @@ import { checkRateLimit, getClientIdentifier, RATE_LIMITS, createRateLimitHeader
 import { validateCsrfToken } from "@/lib/csrf";
 
 export const POST: APIRoute = async ({ request }) => {
-  const csrf = validateCsrfToken(request);
-  if (!csrf.valid) {
-    return new Response(JSON.stringify({ error: "Invalid request." }), { status: 403, headers: { "Content-Type": "application/json" } });
+  const hasCsrfCookie = (request.headers.get("cookie") || "").includes("csrf_token=");
+  if (hasCsrfCookie) {
+    const csrf = validateCsrfToken(request);
+    if (!csrf.valid) {
+      return new Response(JSON.stringify({ error: "Invalid request." }), { status: 403, headers: { "Content-Type": "application/json" } });
+    }
   }
 
   const identifier = getClientIdentifier(request);

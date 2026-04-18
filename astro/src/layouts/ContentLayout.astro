@@ -67,7 +67,23 @@ const { title, description, ogImage } = Astro.props;
             <a href="/search" class="p-2 text-earth-300 hover:text-white hover:bg-white/10 rounded-lg transition" title="Search">
               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
             </a>
-            <a href="/login" class="px-3 py-1.5 text-sm text-earth-200 hover:text-white hover:bg-white/10 rounded-lg transition">Login</a>
+            <!-- Auth: shown when NOT logged in -->
+            <a href="/login" id="nav-login" class="px-3 py-1.5 text-sm text-earth-200 hover:text-white hover:bg-white/10 rounded-lg transition">Login</a>
+
+            <!-- Auth: shown when logged in -->
+            <div id="nav-user-menu" class="hidden relative">
+              <button id="nav-user-btn" class="flex items-center gap-2 px-3 py-1.5 text-sm text-earth-200 hover:text-white hover:bg-white/10 rounded-lg transition">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>
+                <span id="nav-user-name"></span>
+                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
+              </button>
+              <div id="nav-user-dropdown" class="hidden absolute right-0 mt-1 w-48 bg-white dark:bg-earth-800 rounded-lg shadow-lg border border-gray-200 dark:border-earth-700 py-1 z-50">
+                <a href="/dashboard" class="block px-4 py-2 text-sm text-gray-700 dark:text-earth-200 hover:bg-gray-100 dark:hover:bg-earth-700">Dashboard</a>
+                <a href="/profile" class="block px-4 py-2 text-sm text-gray-700 dark:text-earth-200 hover:bg-gray-100 dark:hover:bg-earth-700">Profile</a>
+                <div class="h-px bg-gray-200 dark:bg-earth-700 my-1"></div>
+                <button id="nav-logout-btn" class="w-full text-left px-4 py-2 text-sm text-red-600 dark:text-red-400 hover:bg-gray-100 dark:hover:bg-earth-700">Sign Out</button>
+              </div>
+            </div>
           </nav>
 
           <!-- Mobile menu button -->
@@ -92,7 +108,12 @@ const { title, description, ogImage } = Astro.props;
             <div class="h-px bg-white/10 my-1"></div>
             <a href="/practitioners" class="px-3 py-2 text-sm text-earth-200 hover:bg-white/10 rounded-lg">Find Practitioners</a>
             <a href="/search" class="px-3 py-2 text-sm text-earth-200 hover:bg-white/10 rounded-lg">Search</a>
-            <a href="/login" class="px-3 py-2 text-sm text-earth-200 hover:bg-white/10 rounded-lg">Login</a>
+            <!-- Auth: shown when NOT logged in -->
+            <a href="/login" id="mobile-nav-login" class="px-3 py-2 text-sm text-earth-200 hover:bg-white/10 rounded-lg">Login</a>
+            <!-- Auth: shown when logged in -->
+            <a href="/dashboard" id="mobile-nav-dashboard" class="hidden px-3 py-2 text-sm text-earth-200 hover:bg-white/10 rounded-lg">Dashboard</a>
+            <a href="/profile" id="mobile-nav-profile" class="hidden px-3 py-2 text-sm text-earth-200 hover:bg-white/10 rounded-lg">Profile</a>
+            <button id="mobile-nav-logout" class="hidden text-left px-3 py-2 text-sm text-red-400 hover:bg-white/10 rounded-lg">Sign Out</button>
           </div>
         </nav>
       </div>
@@ -164,7 +185,61 @@ const { title, description, ogImage } = Astro.props;
 </RootLayout>
 
 <script>
+  // Mobile menu toggle
   document.getElementById('mobile-nav-toggle')?.addEventListener('click', () => {
     document.getElementById('mobile-nav')?.classList.toggle('hidden');
   });
+
+  // Auth state: check if user is logged in and update nav
+  (async function checkAuth() {
+    try {
+      const res = await fetch('/api/auth/me');
+      const data = await res.json();
+
+      if (data.user) {
+        const name = data.user.first_name || data.user.email?.split('@')[0] || 'Account';
+
+        // Desktop nav
+        document.getElementById('nav-login')?.classList.add('hidden');
+        const userMenu = document.getElementById('nav-user-menu');
+        if (userMenu) {
+          userMenu.classList.remove('hidden');
+          const nameEl = document.getElementById('nav-user-name');
+          if (nameEl) nameEl.textContent = name;
+        }
+
+        // Mobile nav
+        document.getElementById('mobile-nav-login')?.classList.add('hidden');
+        document.getElementById('mobile-nav-dashboard')?.classList.remove('hidden');
+        document.getElementById('mobile-nav-profile')?.classList.remove('hidden');
+        document.getElementById('mobile-nav-logout')?.classList.remove('hidden');
+      }
+    } catch {
+      // Not logged in — keep defaults
+    }
+  })();
+
+  // Desktop user dropdown toggle
+  document.getElementById('nav-user-btn')?.addEventListener('click', () => {
+    document.getElementById('nav-user-dropdown')?.classList.toggle('hidden');
+  });
+
+  // Close dropdown when clicking outside
+  document.addEventListener('click', (e) => {
+    const menu = document.getElementById('nav-user-menu');
+    if (menu && !menu.contains(e.target as Node)) {
+      document.getElementById('nav-user-dropdown')?.classList.add('hidden');
+    }
+  });
+
+  // Logout handlers
+  async function handleLogout() {
+    try {
+      await fetch('/api/auth/logout', { method: 'POST' });
+    } catch {}
+    window.location.href = '/login';
+  }
+
+  document.getElementById('nav-logout-btn')?.addEventListener('click', handleLogout);
+  document.getElementById('mobile-nav-logout')?.addEventListener('click', handleLogout);
 </script>

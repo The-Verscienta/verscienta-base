@@ -55,7 +55,7 @@ export async function refreshAccessToken(refreshToken: string): Promise<AuthToke
  * Get the current authenticated user
  */
 export async function getCurrentUser(accessToken: string): Promise<DirectusUser> {
-  const response = await fetch(`${DIRECTUS_URL}/users/me`, {
+  const response = await fetch(`${DIRECTUS_URL}/users/me?fields=id,first_name,last_name,email,avatar,role.id,role.name`, {
     headers: { Authorization: `Bearer ${accessToken}` },
   });
 

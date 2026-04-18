@@ -1,27 +1,380 @@
 ---
 import ContentLayout from "@/layouts/ContentLayout.astro";
 import { directus, readItems } from "@/lib/directus";
-let practitioners: any[] = [];
-try { practitioners = await directus.request(readItems("practitioners", { fields: ["id","title","slug","practice_type","bio","address"], sort: ["title"], limit: 50 })) as any; } catch (e) { console.error(e); }
+
+// Fetch modalities for filter dropdown
+let modalities: any[] = [];
+try {
+  modalities = await directus.request(readItems("modalities", { fields: ["id", "title"], sort: ["title"], limit: 100 })) as any;
+} catch (e) { console.error("Failed to load modalities:", e); }
+
+const practiceTypes = [
+  { value: "tcm", label: "TCM" },
+  { value: "western_herbalism", label: "Western Herbalism" },
+  { value: "naturopathy", label: "Naturopathy" },
+  { value: "ayurveda", label: "Ayurveda" },
+  { value: "integrative", label: "Integrative" },
+  { value: "other", label: "Other" },
+];
 ---
-<ContentLayout title="Practitioners — Verscienta Health" description="Find holistic health practitioners near you.">
+
+<ContentLayout title="Find Practitioners — Verscienta Health" description="Search for holistic health practitioners near you by location, specialty, and practice type.">
+  <!-- Hero -->
   <section class="bg-gradient-to-br from-earth-50 via-sage-50/50 to-cream-100 dark:from-earth-950 dark:via-earth-900/50 dark:to-earth-950 border-b border-sage-200/50 dark:border-earth-700">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
       <span class="text-sage-600 font-medium tracking-wide uppercase text-sm">Practitioner Directory</span>
-      <h1 class="font-serif text-4xl md:text-5xl font-bold text-gray-900 dark:text-earth-100 mb-4 mt-2">Practitioners</h1>
-      <p class="text-lg text-gray-600 dark:text-earth-300">Connect with holistic health practitioners in your area.</p>
+      <h1 class="font-serif text-4xl md:text-5xl font-bold text-gray-900 dark:text-earth-100 mb-4 mt-2">Find a Practitioner</h1>
+      <p class="text-lg text-gray-600 dark:text-earth-300 max-w-2xl">Search for holistic health practitioners by location, practice type, and specialty. Find the right provider for your needs.</p>
     </div>
   </section>
+
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-      {practitioners.map((p: any) => (
-        <a href={`/practitioners/${p.slug || p.id}`} class="group bg-white dark:bg-earth-900 rounded-xl shadow-sm border border-gray-100 dark:border-earth-700 hover:shadow-lg transition-all p-6">
-          <h2 class="font-serif text-lg font-bold text-gray-900 dark:text-earth-100 group-hover:text-sage-600 transition-colors">{p.title}</h2>
-          {p.practice_type && <span class="text-xs px-2 py-0.5 rounded-full bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-300 capitalize">{p.practice_type}</span>}
-          {p.address && <p class="text-sm text-gray-500 dark:text-earth-400 mt-2 flex items-center gap-1"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a2 2 0 01-2.828 0l-4.243-4.243a8 8 0 1111.314 0z"/></svg>{p.address}</p>}
-        </a>
-      ))}
+    <div class="lg:grid lg:grid-cols-[320px_1fr] lg:gap-8">
+
+      <!-- Filters Sidebar -->
+      <aside class="mb-8 lg:mb-0">
+        <div class="bg-white dark:bg-earth-900 rounded-xl border border-gray-100 dark:border-earth-700 shadow-sm p-6 lg:sticky lg:top-20">
+          <h2 class="font-semibold text-gray-900 dark:text-earth-100 mb-4 flex items-center gap-2">
+            <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" /></svg>
+            Filters
+          </h2>
+
+          <form id="search-form" class="space-y-5">
+            <!-- Location -->
+            <div>
+              <label for="location-input" class="block text-sm font-medium text-gray-700 dark:text-earth-300 mb-1">Location</label>
+              <div class="relative">
+                <input
+                  type="text"
+                  id="location-input"
+                  placeholder="City, state, or zip code"
+                  class="w-full pl-9 pr-3 py-2.5 text-sm border border-gray-200 dark:border-earth-600 rounded-lg bg-white dark:bg-earth-800 text-gray-900 dark:text-earth-100 focus:ring-2 focus:ring-sage-500 placeholder-gray-400"
+                />
+                <svg class="w-4 h-4 text-gray-400 absolute left-3 top-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a2 2 0 01-2.828 0l-4.243-4.243a8 8 0 1111.314 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
+              </div>
+              <button type="button" id="use-my-location" class="mt-1.5 text-xs text-sage-600 dark:text-sage-400 hover:underline flex items-center gap-1">
+                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                Use my location
+              </button>
+            </div>
+
+            <!-- Distance -->
+            <div>
+              <label for="distance-select" class="block text-sm font-medium text-gray-700 dark:text-earth-300 mb-1">Distance</label>
+              <select id="distance-select" class="w-full px-3 py-2.5 text-sm border border-gray-200 dark:border-earth-600 rounded-lg bg-white dark:bg-earth-800 text-gray-900 dark:text-earth-100 focus:ring-2 focus:ring-sage-500">
+                <option value="">Any distance</option>
+                <option value="10">Within 10 miles</option>
+                <option value="25">Within 25 miles</option>
+                <option value="50" selected>Within 50 miles</option>
+                <option value="100">Within 100 miles</option>
+                <option value="250">Within 250 miles</option>
+              </select>
+            </div>
+
+            <!-- Practice Type -->
+            <div>
+              <label class="block text-sm font-medium text-gray-700 dark:text-earth-300 mb-2">Practice Type</label>
+              <div class="space-y-2">
+                {practiceTypes.map((pt) => (
+                  <label class="flex items-center gap-2 cursor-pointer">
+                    <input type="checkbox" name="practice_type" value={pt.value} class="rounded border-gray-300 dark:border-earth-600 text-sage-600 focus:ring-sage-500 dark:bg-earth-800" />
+                    <span class="text-sm text-gray-700 dark:text-earth-300">{pt.label}</span>
+                  </label>
+                ))}
+              </div>
+            </div>
+
+            <!-- Modality / Specialty -->
+            {modalities.length > 0 && (
+              <div>
+                <label for="modality-select" class="block text-sm font-medium text-gray-700 dark:text-earth-300 mb-1">Specialty</label>
+                <select id="modality-select" class="w-full px-3 py-2.5 text-sm border border-gray-200 dark:border-earth-600 rounded-lg bg-white dark:bg-earth-800 text-gray-900 dark:text-earth-100 focus:ring-2 focus:ring-sage-500">
+                  <option value="">All specialties</option>
+                  {modalities.map((m: any) => (
+                    <option value={m.id}>{m.title}</option>
+                  ))}
+                </select>
+              </div>
+            )}
+
+            <!-- Search button -->
+            <button
+              type="submit"
+              class="w-full px-4 py-2.5 bg-gradient-to-r from-sage-600 to-earth-600 text-white text-sm font-medium rounded-lg shadow hover:shadow-md transition-all"
+            >
+              Search Practitioners
+            </button>
+
+            <button type="button" id="clear-filters" class="w-full px-4 py-2 text-sm text-gray-500 dark:text-earth-400 hover:text-gray-700 dark:hover:text-earth-200 transition">
+              Clear all filters
+            </button>
+          </form>
+        </div>
+      </aside>
+
+      <!-- Results Area -->
+      <div>
+        <!-- Status bar -->
+        <div class="flex items-center justify-between mb-4">
+          <p id="results-count" class="text-sm text-gray-600 dark:text-earth-400">Loading practitioners...</p>
+          <select id="sort-select" class="text-sm border border-gray-200 dark:border-earth-600 rounded-lg bg-white dark:bg-earth-800 text-gray-700 dark:text-earth-300 px-3 py-1.5 focus:ring-2 focus:ring-sage-500">
+            <option value="name">Sort by name</option>
+            <option value="distance">Sort by distance</option>
+            <option value="type">Sort by type</option>
+          </select>
+        </div>
+
+        <!-- Results grid -->
+        <div id="results-grid" class="grid sm:grid-cols-2 gap-4">
+          <!-- Populated by JS -->
+        </div>
+
+        <!-- Empty state -->
+        <div id="results-empty" class="hidden text-center py-16">
+          <svg class="w-16 h-16 mx-auto text-gray-300 dark:text-earth-600 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17.657 16.657L13.414 20.9a2 2 0 01-2.828 0l-4.243-4.243a8 8 0 1111.314 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
+          <h3 class="text-lg font-semibold text-gray-700 dark:text-earth-300 mb-2">No practitioners found</h3>
+          <p class="text-gray-500 dark:text-earth-400 max-w-md mx-auto">Try widening your search area or removing some filters.</p>
+        </div>
+
+        <!-- Loading state -->
+        <div id="results-loading" class="text-center py-16">
+          <div class="inline-block w-8 h-8 border-4 border-sage-200 border-t-sage-600 rounded-full animate-spin"></div>
+          <p class="mt-3 text-sm text-gray-500 dark:text-earth-400">Searching...</p>
+        </div>
+      </div>
     </div>
-    {practitioners.length === 0 && <div class="text-center py-16"><p class="text-gray-600 dark:text-earth-400">No practitioners found.</p></div>}
   </div>
+
+  <script>
+    const DIRECTUS_URL = (document.querySelector('meta[name="directus-url"]') as HTMLMetaElement)?.content
+      || import.meta.env?.PUBLIC_DIRECTUS_URL
+      || 'https://backend.verscienta.com';
+
+    const grid = document.getElementById('results-grid')!;
+    const emptyState = document.getElementById('results-empty')!;
+    const loadingState = document.getElementById('results-loading')!;
+    const countEl = document.getElementById('results-count')!;
+    const sortSelect = document.getElementById('sort-select') as HTMLSelectElement;
+    const locationInput = document.getElementById('location-input') as HTMLInputElement;
+    const distanceSelect = document.getElementById('distance-select') as HTMLSelectElement;
+    const modalitySelect = document.getElementById('modality-select') as HTMLSelectElement;
+
+    let allPractitioners: any[] = [];
+    let userLat: number | null = null;
+    let userLon: number | null = null;
+
+    // ── Haversine distance (miles) ──────────────────────────────────
+    function haversine(lat1: number, lon1: number, lat2: number, lon2: number): number {
+      const R = 3959; // Earth radius in miles
+      const dLat = (lat2 - lat1) * Math.PI / 180;
+      const dLon = (lon2 - lon1) * Math.PI / 180;
+      const a = Math.sin(dLat / 2) ** 2 +
+        Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+        Math.sin(dLon / 2) ** 2;
+      return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    }
+
+    // ── Geocode location text via Nominatim ─────────────────────────
+    async function geocode(query: string): Promise<{ lat: number; lon: number } | null> {
+      try {
+        const res = await fetch(`https://nominatim.openstreetmap.org/search?format=json&limit=1&q=${encodeURIComponent(query)}`, {
+          headers: { 'User-Agent': 'Verscienta Health App' }
+        });
+        const data = await res.json();
+        if (data.length > 0) {
+          return { lat: parseFloat(data[0].lat), lon: parseFloat(data[0].lon) };
+        }
+      } catch {}
+      return null;
+    }
+
+    // ── Practice type label ─────────────────────────────────────────
+    const TYPE_LABELS: Record<string, string> = {
+      tcm: 'TCM',
+      western_herbalism: 'Western Herbalism',
+      naturopathy: 'Naturopathy',
+      ayurveda: 'Ayurveda',
+      integrative: 'Integrative',
+      other: 'Other',
+    };
+
+    const TYPE_COLORS: Record<string, string> = {
+      tcm: 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-300',
+      western_herbalism: 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300',
+      naturopathy: 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300',
+      ayurveda: 'bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-300',
+      integrative: 'bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-300',
+      other: 'bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-300',
+    };
+
+    // ── Render a practitioner card ──────────────────────────────────
+    function renderCard(p: any): string {
+      const typeLabel = TYPE_LABELS[p.practice_type] || p.practice_type || '';
+      const typeColor = TYPE_COLORS[p.practice_type] || TYPE_COLORS.other;
+      const modList = (p.modalities || [])
+        .map((m: any) => m.modalities_id?.title)
+        .filter(Boolean)
+        .join(', ');
+      const distStr = p._distance != null
+        ? `<span class="text-xs text-sage-600 dark:text-sage-400 font-medium">${Math.round(p._distance)} mi</span>`
+        : '';
+      const bioSnippet = p.bio
+        ? p.bio.replace(/<[^>]*>/g, '').slice(0, 120) + (p.bio.length > 120 ? '...' : '')
+        : '';
+
+      return `
+        <a href="/practitioners/${p.slug || p.id}" class="group bg-white dark:bg-earth-900 rounded-xl shadow-sm border border-gray-100 dark:border-earth-700 hover:shadow-lg hover:border-sage-300 dark:hover:border-sage-700 transition-all p-5">
+          <div class="flex items-start justify-between mb-2">
+            <h3 class="font-serif text-lg font-bold text-gray-900 dark:text-earth-100 group-hover:text-sage-600 transition-colors">${p.title}</h3>
+            ${distStr}
+          </div>
+          <div class="flex flex-wrap gap-1.5 mb-3">
+            ${typeLabel ? `<span class="text-xs px-2 py-0.5 rounded-full ${typeColor}">${typeLabel}</span>` : ''}
+            ${modList ? `<span class="text-xs px-2 py-0.5 rounded-full bg-sage-100 text-sage-700 dark:bg-sage-900/30 dark:text-sage-300">${modList}</span>` : ''}
+          </div>
+          ${p.address ? `
+            <p class="text-sm text-gray-500 dark:text-earth-400 mb-2 flex items-center gap-1.5">
+              <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a2 2 0 01-2.828 0l-4.243-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+              ${p.address}
+            </p>
+          ` : ''}
+          ${bioSnippet ? `<p class="text-sm text-gray-600 dark:text-earth-400 line-clamp-2">${bioSnippet}</p>` : ''}
+        </a>
+      `;
+    }
+
+    // ── Filter & render results ─────────────────────────────────────
+    function filterAndRender() {
+      const checkedTypes = Array.from(document.querySelectorAll<HTMLInputElement>('input[name="practice_type"]:checked')).map(el => el.value);
+      const selectedModality = modalitySelect?.value || '';
+      const maxDistance = distanceSelect.value ? parseInt(distanceSelect.value) : null;
+
+      let filtered = allPractitioners.map(p => {
+        const copy = { ...p };
+        if (userLat != null && userLon != null && p.latitude && p.longitude) {
+          copy._distance = haversine(userLat, userLon, parseFloat(p.latitude), parseFloat(p.longitude));
+        } else {
+          copy._distance = null;
+        }
+        return copy;
+      });
+
+      // Filter by distance
+      if (maxDistance && userLat != null) {
+        filtered = filtered.filter(p => p._distance != null && p._distance <= maxDistance);
+      }
+
+      // Filter by practice type
+      if (checkedTypes.length > 0) {
+        filtered = filtered.filter(p => checkedTypes.includes(p.practice_type));
+      }
+
+      // Filter by modality
+      if (selectedModality) {
+        filtered = filtered.filter(p =>
+          (p.modalities || []).some((m: any) => String(m.modalities_id?.id || m.modalities_id) === selectedModality)
+        );
+      }
+
+      // Sort
+      const sortBy = sortSelect.value;
+      if (sortBy === 'distance' && userLat != null) {
+        filtered.sort((a, b) => (a._distance ?? 99999) - (b._distance ?? 99999));
+      } else if (sortBy === 'type') {
+        filtered.sort((a, b) => (a.practice_type || '').localeCompare(b.practice_type || ''));
+      } else {
+        filtered.sort((a, b) => (a.title || '').localeCompare(b.title || ''));
+      }
+
+      // Render
+      loadingState.classList.add('hidden');
+      if (filtered.length === 0) {
+        grid.innerHTML = '';
+        emptyState.classList.remove('hidden');
+        countEl.textContent = 'No practitioners found';
+      } else {
+        emptyState.classList.add('hidden');
+        grid.innerHTML = filtered.map(renderCard).join('');
+        const suffix = userLat != null ? ' near you' : '';
+        countEl.textContent = `${filtered.length} practitioner${filtered.length === 1 ? '' : 's'} found${suffix}`;
+      }
+    }
+
+    // ── Load all practitioners ──────────────────────────────────────
+    async function loadPractitioners() {
+      try {
+        const res = await fetch(`${DIRECTUS_URL}/items/practitioners?fields=id,title,slug,practice_type,bio,address,latitude,longitude,modalities.modalities_id.id,modalities.modalities_id.title&sort=title&limit=500`);
+        const data = await res.json();
+        allPractitioners = data.data || [];
+        filterAndRender();
+      } catch (e) {
+        loadingState.classList.add('hidden');
+        countEl.textContent = 'Failed to load practitioners';
+        console.error(e);
+      }
+    }
+
+    // ── Event listeners ─────────────────────────────────────────────
+    document.getElementById('search-form')?.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      loadingState.classList.remove('hidden');
+      grid.innerHTML = '';
+      emptyState.classList.add('hidden');
+
+      const locationQuery = locationInput.value.trim();
+      if (locationQuery) {
+        const coords = await geocode(locationQuery);
+        if (coords) {
+          userLat = coords.lat;
+          userLon = coords.lon;
+          sortSelect.value = 'distance';
+        } else {
+          countEl.textContent = `Could not find location "${locationQuery}". Showing all results.`;
+        }
+      }
+
+      filterAndRender();
+    });
+
+    // Use my location
+    document.getElementById('use-my-location')?.addEventListener('click', () => {
+      if (!navigator.geolocation) {
+        countEl.textContent = 'Geolocation is not supported by your browser.';
+        return;
+      }
+
+      locationInput.value = 'Detecting location...';
+      navigator.geolocation.getCurrentPosition(
+        (pos) => {
+          userLat = pos.coords.latitude;
+          userLon = pos.coords.longitude;
+          locationInput.value = `${userLat.toFixed(4)}, ${userLon.toFixed(4)}`;
+          sortSelect.value = 'distance';
+          filterAndRender();
+        },
+        () => {
+          locationInput.value = '';
+          countEl.textContent = 'Location access denied. Please type a location.';
+        }
+      );
+    });
+
+    // Sort change
+    sortSelect.addEventListener('change', filterAndRender);
+
+    // Clear filters
+    document.getElementById('clear-filters')?.addEventListener('click', () => {
+      locationInput.value = '';
+      distanceSelect.value = '';
+      if (modalitySelect) modalitySelect.value = '';
+      document.querySelectorAll<HTMLInputElement>('input[name="practice_type"]:checked').forEach(el => el.checked = false);
+      userLat = null;
+      userLon = null;
+      sortSelect.value = 'name';
+      filterAndRender();
+    });
+
+    // Initial load
+    loadPractitioners();
+  </script>
 </ContentLayout>
