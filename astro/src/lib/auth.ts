@@ -76,9 +76,16 @@ export async function registerUser(userData: {
   first_name?: string;
   last_name?: string;
 }): Promise<DirectusUser> {
+  // Use admin token to create users (public /users POST is blocked by default)
+  const DIRECTUS_TOKEN = import.meta.env.DIRECTUS_TOKEN;
+  const headers: Record<string, string> = { "Content-Type": "application/json" };
+  if (DIRECTUS_TOKEN) {
+    headers["Authorization"] = `Bearer ${DIRECTUS_TOKEN}`;
+  }
+
   const response = await fetch(`${DIRECTUS_URL}/users`, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers,
     body: JSON.stringify(userData),
   });
 
