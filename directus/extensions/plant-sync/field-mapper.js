@@ -87,9 +87,19 @@ export function mapTrefleToHerb(plant) {
     : null;
 
   const native = plant.distribution?.native;
-  const nativeRegion = Array.isArray(native)
-    ? native.slice(0, 10).join(", ")
-    : native || null;
+  let nativeRegion = null;
+  if (Array.isArray(native) && native.length > 0) {
+    // Join regions but keep under 250 chars to fit varchar(255)
+    let joined = "";
+    for (const region of native) {
+      const next = joined ? joined + ", " + region : region;
+      if (next.length > 250) break;
+      joined = next;
+    }
+    nativeRegion = joined || null;
+  } else if (typeof native === "string") {
+    nativeRegion = native.slice(0, 250) || null;
+  }
 
   const commonNames = [];
   if (plant.common_name) {
@@ -117,7 +127,9 @@ export function mapTrefleToHerb(plant) {
     species: speciesPart,
     plant_type: plantType,
     native_region: nativeRegion,
-    synonyms: plant.synonyms || [],
+    synonyms: Array.isArray(plant.synonyms)
+      ? plant.synonyms.map((s) => (typeof s === "object" ? s.name : s)).filter(Boolean)
+      : [],
     conservation_status: plant.status || null,
     botanical_description: buildBotanicalDescription(plant),
     contraindications: buildToxicityWarning(plant),
