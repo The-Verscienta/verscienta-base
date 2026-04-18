@@ -8,14 +8,17 @@
 import { defineMiddleware } from "astro:middleware";
 import { generateCsrfToken, CSRF_COOKIE_NAME } from "./lib/csrf";
 
-export const onRequest = defineMiddleware(async ({ request, url }, next) => {
-  const response = await next();
+export const onRequest = defineMiddleware(async ({ request, url, locals }, next) => {
   const isProd = import.meta.env.PROD;
 
-  // Generate per-request nonce for CSP
+  // Generate per-request nonce for CSP — must happen before next() so
+  // layouts can read it from Astro.locals during rendering.
   const nonceArray = new Uint8Array(16);
   crypto.getRandomValues(nonceArray);
   const nonce = Array.from(nonceArray, (b) => b.toString(16).padStart(2, "0")).join("");
+  (locals as Record<string, unknown>).nonce = nonce;
+
+  const response = await next();
 
   // Generate request ID for tracing
   const requestId = crypto.randomUUID();

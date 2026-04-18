@@ -12,6 +12,7 @@ interface Props {
 }
 
 const { title, description, ogImage } = Astro.props;
+const nonce = (Astro.locals as Record<string, unknown>).nonce as string;
 ---
 
 <RootLayout title={title} description={description} ogImage={ogImage}>
@@ -71,7 +72,7 @@ const { title, description, ogImage } = Astro.props;
           </nav>
 
           <!-- Mobile menu button -->
-          <button class="lg:hidden p-2 text-earth-200 hover:text-white" aria-label="Menu" onclick="document.getElementById('mobile-nav').classList.toggle('hidden')">
+          <button id="mobile-nav-toggle" class="lg:hidden p-2 text-earth-200 hover:text-white" aria-label="Menu">
             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" /></svg>
           </button>
         </div>
@@ -97,6 +98,11 @@ const { title, description, ogImage } = Astro.props;
         </nav>
       </div>
     </header>
+    <script is:inline nonce={nonce}>
+      document.getElementById('mobile-nav-toggle').addEventListener('click', function() {
+        document.getElementById('mobile-nav').classList.toggle('hidden');
+      });
+    </script>
   </Fragment>
 
   <!-- Page content -->
