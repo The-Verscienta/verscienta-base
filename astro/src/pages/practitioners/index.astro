@@ -2,7 +2,7 @@
 import ContentLayout from "@/layouts/ContentLayout.astro";
 import { directus, readItems } from "@/lib/directus";
 let practitioners: any[] = [];
-try { practitioners = await directus.request(readItems("practitioners", { fields: ["id","title","slug","practice_type","bio","address"], sort: ["-date_created"], limit: 50 })) as any; } catch (e) { console.error(e); }
+try { practitioners = await directus.request(readItems("practitioners", { fields: ["id","title","slug","practice_type","bio","address"], sort: ["title"], limit: 50 })) as any; } catch (e) { console.error(e); }
 ---
 <ContentLayout title="Practitioners — Verscienta Health" description="Find holistic health practitioners near you.">
   <section class="bg-gradient-to-br from-earth-50 via-sage-50/50 to-cream-100 dark:from-earth-950 dark:via-earth-900/50 dark:to-earth-950 border-b border-sage-200/50 dark:border-earth-700">

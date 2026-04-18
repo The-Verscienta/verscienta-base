@@ -587,6 +587,7 @@ async function createM2MRelations() {
       collection: junctionCollection,
       field: junctionFieldB,
       related_collection: relatedCollection,
+      meta: { junction_field: junctionFieldA },
       schema: { on_delete: "CASCADE" },
     });
   }
