@@ -3,25 +3,31 @@
  *
  * A text input that queries the geocoding-endpoint extension for
  * Geoapify autocomplete suggestions. When a suggestion is selected,
- * it sets the address value AND auto-fills latitude/longitude fields
- * on the same item.
+ * it sets the address value AND auto-fills structured address fields
+ * plus latitude/longitude on the same item.
  *
  * Configuration options:
- *   latitudeField  - field name for latitude (default: "latitude")
- *   longitudeField - field name for longitude (default: "longitude")
+ *   latitudeField   - field name for latitude (default: "latitude")
+ *   longitudeField  - field name for longitude (default: "longitude")
+ *   cityField       - field name for city (default: "city")
+ *   stateField      - field name for state (default: "state")
+ *   zipField        - field name for zip/postal code (default: "zip_code")
  */
 
 export default {
   id: "address-autocomplete",
   name: "Address Autocomplete",
   icon: "place",
-  description: "Address input with Geoapify autocomplete that auto-fills lat/lng",
+  description: "Address input with Geoapify autocomplete that auto-fills city, state, zip, lat/lng",
   component: {
     props: {
       value: { type: String, default: "" },
       disabled: { type: Boolean, default: false },
       latitudeField: { type: String, default: "latitude" },
       longitudeField: { type: String, default: "longitude" },
+      cityField: { type: String, default: "city" },
+      stateField: { type: String, default: "state" },
+      zipField: { type: String, default: "zip_code" },
     },
     emits: ["input"],
     data() {
@@ -42,6 +48,16 @@ export default {
       },
     },
     methods: {
+      _getApiBase() {
+        // Directus admin app sets window.__directus as the API root,
+        // or we can derive from the current page URL
+        if (window.__directus?.api?.defaults?.baseURL) {
+          return window.__directus.api.defaults.baseURL;
+        }
+        // Fallback: use the current origin (works when admin is served by Directus)
+        return window.location.origin;
+      },
+
       async fetchSuggestions() {
         if (!this.query || this.query.length < 3) {
           this.suggestions = [];
@@ -51,8 +67,9 @@ export default {
 
         this.loading = true;
         try {
+          const base = this._getApiBase();
           const res = await fetch(
-            `/geocoding/autocomplete?text=${encodeURIComponent(this.query)}&limit=5`,
+            `${base}/geocoding/autocomplete?text=${encodeURIComponent(this.query)}&limit=5`,
             { credentials: "include" }
           );
           const data = await res.json();
@@ -81,17 +98,14 @@ export default {
         this.suggestions = [];
         this.$emit("input", suggestion.formatted);
 
-        // Auto-fill latitude and longitude via Directus values store
-        if (this.$attrs["onUpdate:modelValue"]) {
-          // Handled by the parent via v-model
-        }
-
-        // Emit a custom event that the form can pick up for lat/lng
-        // We use the Directus field values system
+        // Auto-fill related fields via Directus form values store
         const formValues = this._getFormValues();
         if (formValues) {
-          formValues[this.latitudeField] = suggestion.lat;
-          formValues[this.longitudeField] = suggestion.lon;
+          if (suggestion.lat != null) formValues[this.latitudeField] = suggestion.lat;
+          if (suggestion.lon != null) formValues[this.longitudeField] = suggestion.lon;
+          if (suggestion.city) formValues[this.cityField] = suggestion.city;
+          if (suggestion.state) formValues[this.stateField] = suggestion.state;
+          if (suggestion.postcode) formValues[this.zipField] = suggestion.postcode;
         }
       },
 
@@ -207,6 +221,45 @@ export default {
       },
       schema: {
         default_value: "longitude",
+      },
+    },
+    {
+      field: "cityField",
+      name: "City Field",
+      type: "string",
+      meta: {
+        width: "half",
+        interface: "input",
+        note: "Field name for city on the same collection",
+      },
+      schema: {
+        default_value: "city",
+      },
+    },
+    {
+      field: "stateField",
+      name: "State Field",
+      type: "string",
+      meta: {
+        width: "half",
+        interface: "input",
+        note: "Field name for state on the same collection",
+      },
+      schema: {
+        default_value: "state",
+      },
+    },
+    {
+      field: "zipField",
+      name: "Zip/Postal Code Field",
+      type: "string",
+      meta: {
+        width: "half",
+        interface: "input",
+        note: "Field name for zip/postal code on the same collection",
+      },
+      schema: {
+        default_value: "zip_code",
       },
     },
   ],

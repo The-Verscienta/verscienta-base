@@ -7,7 +7,9 @@ let practitioners: any[] = [];
 let modalities: any[] = [];
 try {
   practitioners = await directus.request(readItems("practitioners", {
-    fields: ["id", "title", "slug", "practice_type", "bio", "address", "latitude", "longitude",
+    fields: ["id", "title", "slug", "practice_type", "bio",
+             "address", "street_address", "suite_apt", "city", "state", "zip_code",
+             "latitude", "longitude",
              "modalities.modalities_id.id", "modalities.modalities_id.title"],
     sort: ["title"],
     limit: 500,
@@ -216,6 +218,23 @@ const practiceTypes = [
       other: 'bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-300',
     };
 
+    // ── Build display address from structured or legacy fields ─────
+    function formatAddress(p: any): string {
+      const parts = [];
+      if (p.street_address) parts.push(p.street_address);
+      if (p.suite_apt) parts.push(p.suite_apt);
+      if (p.city && p.state) {
+        parts.push(`${p.city}, ${p.state}`);
+      } else if (p.city) {
+        parts.push(p.city);
+      } else if (p.state) {
+        parts.push(p.state);
+      }
+      if (p.zip_code) parts.push(p.zip_code);
+      if (parts.length > 0) return parts.join(', ');
+      return p.address || '';
+    }
+
     // ── Render a practitioner card ──────────────────────────────────
     function renderCard(p: any): string {
       const typeLabel = TYPE_LABELS[p.practice_type] || p.practice_type || '';
@@ -230,6 +249,7 @@ const practiceTypes = [
       const bioSnippet = p.bio
         ? p.bio.replace(/<[^>]*>/g, '').slice(0, 120) + (p.bio.length > 120 ? '...' : '')
         : '';
+      const displayAddress = formatAddress(p);
 
       return `
         <a href="/practitioners/${p.slug || p.id}" class="group bg-white dark:bg-earth-900 rounded-xl shadow-sm border border-gray-100 dark:border-earth-700 hover:shadow-lg hover:border-sage-300 dark:hover:border-sage-700 transition-all p-5">
@@ -241,10 +261,10 @@ const practiceTypes = [
             ${typeLabel ? `<span class="text-xs px-2 py-0.5 rounded-full ${typeColor}">${typeLabel}</span>` : ''}
             ${modList ? `<span class="text-xs px-2 py-0.5 rounded-full bg-sage-100 text-sage-700 dark:bg-sage-900/30 dark:text-sage-300">${modList}</span>` : ''}
           </div>
-          ${p.address ? `
+          ${displayAddress ? `
             <p class="text-sm text-gray-500 dark:text-earth-400 mb-2 flex items-center gap-1.5">
               <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a2 2 0 01-2.828 0l-4.243-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
-              ${p.address}
+              ${displayAddress}
             </p>
           ` : ''}
           ${bioSnippet ? `<p class="text-sm text-gray-600 dark:text-earth-400 line-clamp-2">${bioSnippet}</p>` : ''}
