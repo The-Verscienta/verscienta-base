@@ -72,17 +72,24 @@ const practiceTypes = [
           </h2>
 
           <form id="search-form" class="space-y-5">
-            <!-- Location -->
+            <!-- Location with autocomplete -->
             <div>
               <label for="location-input" class="block text-sm font-medium text-gray-700 dark:text-earth-300 mb-1">Location</label>
-              <div class="relative">
+              <div class="relative" id="location-wrapper">
                 <input
                   type="text"
                   id="location-input"
                   placeholder="City, state, or zip code"
-                  class="w-full pl-9 pr-3 py-2.5 text-sm border border-gray-200 dark:border-earth-600 rounded-lg bg-white dark:bg-earth-800 text-gray-900 dark:text-earth-100 focus:ring-2 focus:ring-sage-500 placeholder-gray-400"
+                  autocomplete="off"
+                  class="w-full pl-9 pr-8 py-2.5 text-sm border border-gray-200 dark:border-earth-600 rounded-lg bg-white dark:bg-earth-800 text-gray-900 dark:text-earth-100 focus:ring-2 focus:ring-sage-500 placeholder-gray-400"
                 />
                 <svg class="w-4 h-4 text-gray-400 absolute left-3 top-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a2 2 0 01-2.828 0l-4.243-4.243a8 8 0 1111.314 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
+                <div id="location-spinner" class="hidden absolute right-3 top-3">
+                  <svg class="w-4 h-4 text-gray-400 animate-spin" fill="none" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2" opacity="0.3"/><path d="M12 2a10 10 0 0 1 10 10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+                </div>
+                <!-- Autocomplete dropdown -->
+                <div id="location-dropdown" class="hidden absolute z-50 top-full left-0 right-0 mt-1 bg-white dark:bg-earth-800 border border-gray-200 dark:border-earth-600 rounded-lg shadow-lg max-h-60 overflow-y-auto">
+                </div>
               </div>
               <button type="button" id="use-my-location" class="mt-1.5 text-xs text-sage-600 dark:text-sage-400 hover:underline flex items-center gap-1">
                 <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
@@ -225,6 +232,126 @@ const practiceTypes = [
       return null;
     }
 
+    // ── Location autocomplete ──────────────────────────────────────
+    const locationDropdown = document.getElementById('location-dropdown')!;
+    const locationSpinner = document.getElementById('location-spinner')!;
+    let acDebounce: ReturnType<typeof setTimeout> | null = null;
+    let acSelectedIdx = -1;
+    let acResults: any[] = [];
+
+    async function fetchAutocomplete(text: string) {
+      if (text.length < 3) {
+        hideAutocomplete();
+        return;
+      }
+      locationSpinner.classList.remove('hidden');
+      try {
+        const res = await fetch(`/api/geocode-autocomplete?text=${encodeURIComponent(text)}&limit=5`);
+        const data = await res.json();
+        acResults = data.results || [];
+        if (acResults.length > 0) {
+          renderAutocomplete();
+        } else {
+          hideAutocomplete();
+        }
+      } catch {
+        hideAutocomplete();
+      } finally {
+        locationSpinner.classList.add('hidden');
+      }
+    }
+
+    function renderAutocomplete() {
+      locationDropdown.innerHTML = acResults.map((r, i) => {
+        const main = r.city && r.state ? `${r.city}, ${r.state}` : r.formatted;
+        const detail = r.city && r.state && r.formatted !== `${r.city}, ${r.state}` ? r.formatted : '';
+        return `
+          <div class="ac-item px-3 py-2.5 cursor-pointer text-sm transition-colors
+            ${i === acSelectedIdx ? 'bg-sage-50 dark:bg-earth-700' : 'hover:bg-gray-50 dark:hover:bg-earth-700'}
+            ${i < acResults.length - 1 ? 'border-b border-gray-100 dark:border-earth-600' : ''}"
+            data-index="${i}">
+            <div class="flex items-center gap-2">
+              <svg class="w-4 h-4 text-gray-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a2 2 0 01-2.828 0l-4.243-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+              <div class="min-w-0">
+                <div class="font-medium text-gray-900 dark:text-earth-100 truncate">${main}</div>
+                ${detail ? `<div class="text-xs text-gray-500 dark:text-earth-400 truncate">${detail}</div>` : ''}
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      locationDropdown.classList.remove('hidden');
+
+      // Attach click handlers
+      locationDropdown.querySelectorAll('.ac-item').forEach(el => {
+        el.addEventListener('mousedown', (e) => {
+          e.preventDefault(); // prevent blur before click registers
+          const idx = parseInt((el as HTMLElement).dataset.index || '0');
+          selectAutocomplete(idx);
+        });
+      });
+    }
+
+    function selectAutocomplete(idx: number) {
+      const result = acResults[idx];
+      if (!result) return;
+
+      locationInput.value = result.formatted;
+      userLat = result.lat;
+      userLon = result.lon;
+      sortSelect.value = 'distance';
+      hideAutocomplete();
+      filterAndRender();
+    }
+
+    function hideAutocomplete() {
+      locationDropdown.classList.add('hidden');
+      locationDropdown.innerHTML = '';
+      acSelectedIdx = -1;
+      acResults = [];
+    }
+
+    // Wire up location input for autocomplete
+    locationInput.addEventListener('input', () => {
+      // Reset coords when user edits the location text — will re-geocode on submit if needed
+      userLat = null;
+      userLon = null;
+
+      const val = locationInput.value.trim();
+      if (acDebounce) clearTimeout(acDebounce);
+      if (val.length < 3) {
+        hideAutocomplete();
+        return;
+      }
+      acDebounce = setTimeout(() => fetchAutocomplete(val), 250);
+    });
+
+    locationInput.addEventListener('keydown', (e) => {
+      if (!acResults.length) return;
+
+      if (e.key === 'ArrowDown') {
+        e.preventDefault();
+        acSelectedIdx = Math.min(acSelectedIdx + 1, acResults.length - 1);
+        renderAutocomplete();
+      } else if (e.key === 'ArrowUp') {
+        e.preventDefault();
+        acSelectedIdx = Math.max(acSelectedIdx - 1, -1);
+        renderAutocomplete();
+      } else if (e.key === 'Enter' && acSelectedIdx >= 0) {
+        e.preventDefault();
+        e.stopPropagation();
+        selectAutocomplete(acSelectedIdx);
+      } else if (e.key === 'Escape') {
+        hideAutocomplete();
+      }
+    });
+
+    locationInput.addEventListener('blur', () => {
+      // Small delay so click on dropdown item registers before hide
+      setTimeout(() => hideAutocomplete(), 150);
+    });
+
     // ── Practice type label ─────────────────────────────────────────
     const TYPE_LABELS: Record<string, string> = {
       tcm: 'TCM',
@@ -360,12 +487,14 @@ const practiceTypes = [
     // ── Event listeners ─────────────────────────────────────────────
     document.getElementById('search-form')?.addEventListener('submit', async (e) => {
       e.preventDefault();
+      hideAutocomplete();
       loadingState.classList.remove('hidden');
       grid.innerHTML = '';
       emptyState.classList.add('hidden');
 
       const locationQuery = locationInput.value.trim();
-      if (locationQuery) {
+      if (locationQuery && userLat == null) {
+        // Only geocode if user typed manually without picking an autocomplete suggestion
         const coords = await geocode(locationQuery);
         if (coords) {
           userLat = coords.lat;
