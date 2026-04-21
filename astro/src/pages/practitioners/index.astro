@@ -55,7 +55,7 @@ const practiceTypes = [
   {fetchError && (
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
       <div class="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-4 text-sm text-red-700 dark:text-red-300">
-        <strong>Debug:</strong> {fetchError} | URL: {DIRECTUS_URL} | Token: {DIRECTUS_TOKEN ? "set (" + DIRECTUS_TOKEN.slice(0, 4) + "...)" : "NOT SET"}
+        <strong>Error:</strong> Unable to load practitioners. Please try again later.
       </div>
     </div>
   )}
@@ -177,10 +177,8 @@ const practiceTypes = [
     </div>
   </div>
 
-  <!-- Server-side data passed to client -->
-  <script is:inline define:vars={{ serverPractitioners: practitioners }}>
-    window.__PRACTITIONERS__ = serverPractitioners;
-  </script>
+  <!-- Server-side data embedded in DOM attribute (CSP-safe, no script execution needed) -->
+  <div id="practitioners-data" hidden data-json={JSON.stringify(practitioners)}></div>
 
   <script>
     const grid = document.getElementById('results-grid')!;
@@ -192,7 +190,15 @@ const practiceTypes = [
     const distanceSelect = document.getElementById('distance-select') as HTMLSelectElement;
     const modalitySelect = document.getElementById('modality-select') as HTMLSelectElement;
 
-    let allPractitioners: any[] = (window as any).__PRACTITIONERS__ || [];
+    let allPractitioners: any[] = [];
+    try {
+      const raw = document.getElementById('practitioners-data')?.getAttribute('data-json');
+      if (raw) {
+        allPractitioners = JSON.parse(raw);
+      }
+    } catch (e) {
+      console.error('Failed to parse practitioners data:', e);
+    }
     let userLat: number | null = null;
     let userLon: number | null = null;
 
