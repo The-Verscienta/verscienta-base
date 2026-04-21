@@ -5,32 +5,27 @@ import { directus, readItems } from "@/lib/directus";
 // Fetch practitioners and modalities server-side (avoids CORS)
 let practitioners: any[] = [];
 let modalities: any[] = [];
+let fetchError = "";
+
+const DIRECTUS_URL = import.meta.env.PUBLIC_DIRECTUS_URL || "http://localhost:8055";
+const DIRECTUS_TOKEN = import.meta.env.DIRECTUS_TOKEN || (import.meta.env.DEV ? "" : "");
 
 try {
-  practitioners = await directus.request(readItems("practitioners", {
-    fields: ["*"],
-    sort: ["title"],
-    limit: 500,
-  })) as any;
-} catch (e) {
-  console.error("Failed to load practitioners:", e);
-}
+  const url = `${DIRECTUS_URL}/items/practitioners?fields=*,modalities.modalities_id.id,modalities.modalities_id.title&sort=title&limit=500`;
+  const headers: Record<string, string> = { "Content-Type": "application/json" };
+  if (DIRECTUS_TOKEN) headers["Authorization"] = `Bearer ${DIRECTUS_TOKEN}`;
 
-// If we got practitioners, try to enrich with modality relations
-if (practitioners.length > 0) {
-  try {
-    const withMods = await directus.request(readItems("practitioners", {
-      fields: ["id", "modalities.modalities_id.id", "modalities.modalities_id.title"],
-      sort: ["title"],
-      limit: 500,
-    })) as any;
-    // Merge modalities into practitioners
-    const modMap = new Map(withMods.map((p: any) => [p.id, p.modalities]));
-    practitioners = practitioners.map((p: any) => ({
-      ...p,
-      modalities: modMap.get(p.id) || [],
-    }));
-  } catch { /* modalities relation may not exist yet */ }
+  const res = await fetch(url, { headers });
+  if (!res.ok) {
+    fetchError = `Directus returned ${res.status}: ${await res.text()}`;
+    console.error(fetchError);
+  } else {
+    const json = await res.json();
+    practitioners = json.data || [];
+  }
+} catch (e: any) {
+  fetchError = `Fetch error: ${e?.message || e}`;
+  console.error("Failed to load practitioners:", e);
 }
 
 try {
@@ -56,6 +51,14 @@ const practiceTypes = [
       <p class="text-lg text-gray-600 dark:text-earth-300 max-w-2xl">Search for holistic health practitioners by location, practice type, and specialty. Find the right provider for your needs.</p>
     </div>
   </section>
+
+  {fetchError && (
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+      <div class="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-4 text-sm text-red-700 dark:text-red-300">
+        <strong>Debug:</strong> {fetchError} | URL: {DIRECTUS_URL} | Token: {DIRECTUS_TOKEN ? "set (" + DIRECTUS_TOKEN.slice(0, 4) + "...)" : "NOT SET"}
+      </div>
+    </div>
+  )}
 
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
     <div class="lg:grid lg:grid-cols-[320px_1fr] lg:gap-8">
