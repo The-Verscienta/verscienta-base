@@ -6,12 +6,7 @@
  * it sets the address value AND auto-fills structured address fields
  * plus latitude/longitude on the same item.
  *
- * Configuration options:
- *   latitudeField   - field name for latitude (default: "latitude")
- *   longitudeField  - field name for longitude (default: "longitude")
- *   cityField       - field name for city (default: "city")
- *   stateField      - field name for state (default: "state")
- *   zipField        - field name for zip/postal code (default: "zip_code")
+ * Uses Directus 11's inject('values') for reactive form updates.
  */
 
 export default {
@@ -30,6 +25,9 @@ export default {
       zipField: { type: String, default: "zip_code" },
     },
     emits: ["input"],
+    inject: {
+      values: { from: "values", default: () => ({}) },
+    },
     data() {
       return {
         query: this.value || "",
@@ -49,12 +47,9 @@ export default {
     },
     methods: {
       _getApiBase() {
-        // Directus admin app sets window.__directus as the API root,
-        // or we can derive from the current page URL
         if (window.__directus?.api?.defaults?.baseURL) {
           return window.__directus.api.defaults.baseURL;
         }
-        // Fallback: use the current origin (works when admin is served by Directus)
         return window.location.origin;
       },
 
@@ -98,14 +93,38 @@ export default {
         this.suggestions = [];
         this.$emit("input", suggestion.formatted);
 
-        // Auto-fill related fields via Directus form values store
-        const formValues = this._getFormValues();
-        if (formValues) {
-          if (suggestion.lat != null) formValues[this.latitudeField] = suggestion.lat;
-          if (suggestion.lon != null) formValues[this.longitudeField] = suggestion.lon;
-          if (suggestion.city) formValues[this.cityField] = suggestion.city;
-          if (suggestion.state) formValues[this.stateField] = suggestion.state;
-          if (suggestion.postcode) formValues[this.zipField] = suggestion.postcode;
+        // Auto-fill related fields
+        // Try multiple approaches to ensure reactivity in Directus 11
+        this._setField(this.latitudeField, suggestion.lat);
+        this._setField(this.longitudeField, suggestion.lon);
+        this._setField(this.cityField, suggestion.city);
+        this._setField(this.stateField, suggestion.state);
+        this._setField(this.zipField, suggestion.postcode);
+      },
+
+      _setField(fieldName, value) {
+        if (value == null || !fieldName) return;
+
+        // Method 1: Use injected values (Directus 11 reactive)
+        if (this.values && typeof this.values === "object") {
+          this.values[fieldName] = value;
+        }
+
+        // Method 2: Walk up to find edits object (fallback)
+        let parent = this.$parent;
+        let depth = 0;
+        while (parent && depth < 20) {
+          if (parent.edits && typeof parent.edits === "object") {
+            parent.edits[fieldName] = value;
+            break;
+          }
+          // Some Directus 11 components use a setFieldValue method
+          if (typeof parent.setFieldValue === "function") {
+            parent.setFieldValue(fieldName, value);
+            break;
+          }
+          parent = parent.$parent;
+          depth++;
         }
       },
 
@@ -130,22 +149,9 @@ export default {
       },
 
       onBlur() {
-        // Delay to allow click on suggestion
         setTimeout(() => {
           this.showDropdown = false;
         }, 200);
-      },
-
-      _getFormValues() {
-        // Walk up the component tree to find the form values
-        let parent = this.$parent;
-        while (parent) {
-          if (parent.values || parent.edits) {
-            return parent.edits || parent.values;
-          }
-          parent = parent.$parent;
-        }
-        return null;
       },
     },
     template: `
@@ -159,7 +165,6 @@ export default {
           :disabled="disabled"
           type="text"
           :placeholder="'Start typing an address...'"
-          class="input"
           style="width: 100%; padding: 8px 12px; border: var(--theme--border-width) solid var(--theme--form--field--input--border-color); border-radius: var(--theme--border-radius); background-color: var(--theme--form--field--input--background); color: var(--theme--form--field--input--foreground); font-family: var(--theme--fonts--sans--font-family); font-size: 14px; line-height: 1.5;"
         />
         <div v-if="loading" style="position: absolute; right: 12px; top: 50%; transform: translateY(-50%); color: var(--theme--form--field--input--foreground-subdued);">
@@ -206,9 +211,7 @@ export default {
         interface: "input",
         note: "Field name for latitude on the same collection",
       },
-      schema: {
-        default_value: "latitude",
-      },
+      schema: { default_value: "latitude" },
     },
     {
       field: "longitudeField",
@@ -219,9 +222,7 @@ export default {
         interface: "input",
         note: "Field name for longitude on the same collection",
       },
-      schema: {
-        default_value: "longitude",
-      },
+      schema: { default_value: "longitude" },
     },
     {
       field: "cityField",
@@ -230,11 +231,9 @@ export default {
       meta: {
         width: "half",
         interface: "input",
-        note: "Field name for city on the same collection",
+        note: "Field name for city",
       },
-      schema: {
-        default_value: "city",
-      },
+      schema: { default_value: "city" },
     },
     {
       field: "stateField",
@@ -243,11 +242,9 @@ export default {
       meta: {
         width: "half",
         interface: "input",
-        note: "Field name for state on the same collection",
+        note: "Field name for state",
       },
-      schema: {
-        default_value: "state",
-      },
+      schema: { default_value: "state" },
     },
     {
       field: "zipField",
@@ -256,11 +253,9 @@ export default {
       meta: {
         width: "half",
         interface: "input",
-        note: "Field name for zip/postal code on the same collection",
+        note: "Field name for zip/postal code",
       },
-      schema: {
-        default_value: "zip_code",
-      },
+      schema: { default_value: "zip_code" },
     },
   ],
   types: ["string", "text"],
