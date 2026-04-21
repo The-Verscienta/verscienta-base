@@ -36,7 +36,6 @@ export default {
           text: text.trim(),
           apiKey: API_KEY,
           limit,
-          type: "amenity,street,city,district",
           format: "json",
         });
 
@@ -45,7 +44,8 @@ export default {
         );
 
         if (!response.ok) {
-          logger.warn(`Geoapify autocomplete returned ${response.status}`);
+          const body = await response.text();
+          logger.warn(`Geoapify autocomplete returned ${response.status}: ${body}`);
           return res.status(502).json({ error: "Geocoding service error" });
         }
 
