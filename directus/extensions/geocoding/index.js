@@ -2,7 +2,9 @@
  * Directus Hook: Geocoding for Practitioners via Geoapify
  *
  * On practitioner create/update, if address fields are present and lat/lon
- * are empty (or address changed), geocodes via Geoapify and fills coordinates.
+ * are empty (or address changed), geocodes via Geoapify and fills:
+ *   - latitude, longitude
+ *   - city, state, zip_code (if empty)
  *
  * Supports both structured fields (street_address, city, state, zip_code)
  * and the legacy single "address" field.
@@ -23,24 +25,19 @@ export default ({ action }, { env, logger }) => {
    * Build a geocode query string from structured or legacy address fields
    */
   function buildAddressQuery(item) {
-    // Prefer structured fields
     const parts = [];
     if (item.street_address) parts.push(item.street_address);
-    // suite_apt intentionally excluded from geocoding — it doesn't help
     if (item.city) parts.push(item.city);
     if (item.state) parts.push(item.state);
     if (item.zip_code) parts.push(item.zip_code);
 
     if (parts.length > 0) return parts.join(", ");
-
-    // Fall back to legacy single address field
     if (item.address) return item.address;
-
     return null;
   }
 
   /**
-   * Geocode an address via Geoapify Geocoding API
+   * Geocode an address via Geoapify — returns coords + address components
    */
   async function geocodeAddress(addressQuery) {
     const params = new URLSearchParams({
@@ -63,14 +60,33 @@ export default ({ action }, { env, logger }) => {
       return null;
     }
 
-    const result = data.results[0];
+    const r = data.results[0];
     return {
-      latitude: result.lat,
-      longitude: result.lon,
+      latitude: r.lat,
+      longitude: r.lon,
+      city: r.city || null,
+      state: r.state || null,
+      zip_code: r.postcode || null,
     };
   }
 
-  // Fields that trigger re-geocoding when changed
+  /**
+   * Build the update payload — always set coords, fill address parts only if empty
+   */
+  function buildUpdate(item, geocoded) {
+    const update = {
+      latitude: geocoded.latitude,
+      longitude: geocoded.longitude,
+    };
+
+    // Fill structured address fields only if they're currently empty
+    if (!item.city && geocoded.city) update.city = geocoded.city;
+    if (!item.state && geocoded.state) update.state = geocoded.state;
+    if (!item.zip_code && geocoded.zip_code) update.zip_code = geocoded.zip_code;
+
+    return update;
+  }
+
   const ADDRESS_FIELDS = ["address", "street_address", "city", "state", "zip_code"];
 
   // Geocode on practitioner create
@@ -81,20 +97,21 @@ export default ({ action }, { env, logger }) => {
       const item = items[0];
       if (!item) return;
 
-      if (item.latitude && item.longitude) return; // Already geocoded
+      if (item.latitude && item.longitude) return;
 
       const query = buildAddressQuery(item);
       if (!query) return;
 
-      const coords = await geocodeAddress(query);
-      if (!coords) return;
+      const geocoded = await geocodeAddress(query);
+      if (!geocoded) return;
 
-      await database("practitioners").where({ id: key }).update({
-        latitude: coords.latitude,
-        longitude: coords.longitude,
-      });
+      const update = buildUpdate(item, geocoded);
+      await database("practitioners").where({ id: key }).update(update);
 
-      logger.info(`Geocoded practitioner ${key}: ${coords.latitude}, ${coords.longitude}`);
+      logger.info(`Geocoded practitioner ${key}: ${geocoded.latitude}, ${geocoded.longitude}` +
+        (update.city ? ` | city=${update.city}` : "") +
+        (update.state ? ` | state=${update.state}` : "") +
+        (update.zip_code ? ` | zip=${update.zip_code}` : ""));
     } catch (e) {
       logger.error(`Geocoding error for practitioner ${key}: ${e.message}`);
     }
@@ -102,7 +119,6 @@ export default ({ action }, { env, logger }) => {
 
   // Geocode on practitioner update (if any address field changed)
   action("practitioners.items.update", async ({ keys, payload }, { database }) => {
-    // Only geocode if an address-related field was updated
     const addressChanged = ADDRESS_FIELDS.some((f) => payload?.[f] !== undefined);
     if (!addressChanged) return;
 
@@ -116,15 +132,16 @@ export default ({ action }, { env, logger }) => {
         const query = buildAddressQuery(item);
         if (!query) continue;
 
-        const coords = await geocodeAddress(query);
-        if (!coords) continue;
+        const geocoded = await geocodeAddress(query);
+        if (!geocoded) continue;
 
-        await database("practitioners").where({ id: key }).update({
-          latitude: coords.latitude,
-          longitude: coords.longitude,
-        });
+        const update = buildUpdate(item, geocoded);
+        await database("practitioners").where({ id: key }).update(update);
 
-        logger.info(`Re-geocoded practitioner ${key}: ${coords.latitude}, ${coords.longitude}`);
+        logger.info(`Re-geocoded practitioner ${key}: ${geocoded.latitude}, ${geocoded.longitude}` +
+          (update.city ? ` | city=${update.city}` : "") +
+          (update.state ? ` | state=${update.state}` : "") +
+          (update.zip_code ? ` | zip=${update.zip_code}` : ""));
       } catch (e) {
         logger.error(`Geocoding error for practitioner ${key}: ${e.message}`);
       }

@@ -23,6 +23,7 @@ export default ({ init, action }, { env, logger, getSchema, services }) => {
   const INTERVAL = (parseInt(env.SYNC_INTERVAL_MINUTES) || 60) * 60_000;
   const BATCH_SIZE = parseInt(env.SYNC_BATCH_SIZE) || 20;
   const SYNC_IMAGES = env.SYNC_IMAGES !== "false";
+  const PERENUAL_INTERVAL_DAYS = parseInt(env.PERENUAL_INTERVAL_DAYS) || 7;
 
   if (!TREFLE_KEY) {
     logger.warn("Plant sync disabled: TREFLE_API_KEY not set");
@@ -33,9 +34,16 @@ export default ({ init, action }, { env, logger, getSchema, services }) => {
   const perenual = PERENUAL_KEY ? new PerenualClient(PERENUAL_KEY, logger) : null;
 
   let running = false;
+  let lastPerenualRun = 0; // timestamp of last Perenual enrichment run
+
+  function isPerenualDue() {
+    const now = Date.now();
+    const intervalMs = PERENUAL_INTERVAL_DAYS * 24 * 60 * 60_000;
+    return (now - lastPerenualRun) >= intervalMs;
+  }
 
   init("app.after", async () => {
-    logger.info(`Plant sync enabled: interval=${INTERVAL / 60000}m, batch=${BATCH_SIZE}, images=${SYNC_IMAGES}`);
+    logger.info(`Plant sync enabled: interval=${INTERVAL / 60000}m, batch=${BATCH_SIZE}, images=${SYNC_IMAGES}, perenual every ${PERENUAL_INTERVAL_DAYS}d`);
     logger.info(`Plant sync services available: ${services ? Object.keys(services).join(", ") : "NONE"}`);
 
     // Run first sync after a short delay to let Directus finish starting.
@@ -101,6 +109,10 @@ export default ({ init, action }, { env, logger, getSchema, services }) => {
       }
 
       const plants = response.data.slice(0, BATCH_SIZE);
+      const perenualDue = isPerenualDue();
+      if (perenualDue && perenual) {
+        logger.info("Perenual enrichment is due this cycle");
+      }
       let batchImported = 0;
       let batchUpdated = 0;
       let batchSkipped = 0;
@@ -191,8 +203,8 @@ export default ({ init, action }, { env, logger, getSchema, services }) => {
             }
           }
 
-          // Perenual enrichment for herbs with missing data.
-          if (perenual && perenual.canRequest()) {
+          // Perenual enrichment for herbs with missing data (runs weekly).
+          if (perenual && perenual.canRequest() && perenualDue) {
             const currentHerb = await herbsService.readOne(herbId);
             const emptyFields = ["plant_type", "native_region", "botanical_description", "parts_used"]
               .some((f) => !currentHerb[f]);
@@ -221,6 +233,12 @@ export default ({ init, action }, { env, logger, getSchema, services }) => {
           errors.push(`Plant ${plant.id}: ${e?.message || e}`);
           logger.error(`Plant sync error for ${plant.id}: ${e?.message || e}`, e?.stack ? { stack: e.stack } : {});
         }
+      }
+
+      // Mark Perenual as run so it won't run again for PERENUAL_INTERVAL_DAYS
+      if (perenualDue && perenual) {
+        lastPerenualRun = Date.now();
+        logger.info(`Perenual enrichment done, next run in ${PERENUAL_INTERVAL_DAYS} days`);
       }
 
       // Update import_logs.
