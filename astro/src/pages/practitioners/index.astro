@@ -5,16 +5,33 @@ import { directus, readItems } from "@/lib/directus";
 // Fetch practitioners and modalities server-side (avoids CORS)
 let practitioners: any[] = [];
 let modalities: any[] = [];
+
 try {
   practitioners = await directus.request(readItems("practitioners", {
-    fields: ["id", "title", "slug", "practice_type", "bio",
-             "address", "street_address", "suite_apt", "city", "state", "zip_code",
-             "latitude", "longitude",
-             "modalities.modalities_id.id", "modalities.modalities_id.title"],
+    fields: ["*"],
     sort: ["title"],
     limit: 500,
   })) as any;
-} catch (e) { console.error("Failed to load practitioners:", e); }
+} catch (e) {
+  console.error("Failed to load practitioners:", e);
+}
+
+// If we got practitioners, try to enrich with modality relations
+if (practitioners.length > 0) {
+  try {
+    const withMods = await directus.request(readItems("practitioners", {
+      fields: ["id", "modalities.modalities_id.id", "modalities.modalities_id.title"],
+      sort: ["title"],
+      limit: 500,
+    })) as any;
+    // Merge modalities into practitioners
+    const modMap = new Map(withMods.map((p: any) => [p.id, p.modalities]));
+    practitioners = practitioners.map((p: any) => ({
+      ...p,
+      modalities: modMap.get(p.id) || [],
+    }));
+  } catch { /* modalities relation may not exist yet */ }
+}
 
 try {
   modalities = await directus.request(readItems("modalities", { fields: ["id", "title"], sort: ["title"], limit: 100 })) as any;
