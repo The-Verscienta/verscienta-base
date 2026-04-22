@@ -20,6 +20,7 @@ const SYNCED_COLLECTIONS = {
   conditions: "verscienta_conditions",
   modalities: "verscienta_modalities",
   practitioners: "verscienta_practitioners",
+  clinics: "verscienta_clinics",
 };
 
 // The combined "all" index
@@ -120,7 +121,26 @@ function transformForSearch(collection, item) {
         address: item.address,
         latitude: item.latitude,
         longitude: item.longitude,
-        // MeiliSearch native geo search
+        _geo: item.latitude && item.longitude
+          ? { lat: parseFloat(item.latitude), lng: parseFloat(item.longitude) }
+          : undefined,
+        slug: item.slug,
+      };
+
+    case "clinics":
+      return {
+        ...base,
+        name: item.name,
+        title: item.name,
+        description: stripHtml(item.description),
+        address: item.address,
+        city: item.city,
+        state: item.state,
+        zip_code: item.zip_code,
+        phone: item.phone,
+        services: item.services || [],
+        latitude: item.latitude,
+        longitude: item.longitude,
         _geo: item.latitude && item.longitude
           ? { lat: parseFloat(item.latitude), lng: parseFloat(item.longitude) }
           : undefined,

@@ -1,19 +1,410 @@
 ---
 import ContentLayout from "@/layouts/ContentLayout.astro";
+import { directus, readItems } from "@/lib/directus";
+
+let clinics: any[] = [];
+let fetchError = "";
+
+const DIRECTUS_URL = import.meta.env.PUBLIC_DIRECTUS_URL || "http://localhost:8055";
+const DIRECTUS_TOKEN = import.meta.env.DIRECTUS_TOKEN || "";
+
+try {
+  const url = `${DIRECTUS_URL}/items/clinics?fields=*,practitioners.practitioners_id.id,practitioners.practitioners_id.first_name,practitioners.practitioners_id.last_name,practitioners.practitioners_id.title,practitioners.practitioners_id.slug,practitioners.practitioners_id.practice_type,modalities.modalities_id.id,modalities.modalities_id.title&filter[status][_eq]=active&sort=name&limit=500`;
+  const headers: Record<string, string> = { "Content-Type": "application/json" };
+  if (DIRECTUS_TOKEN) headers["Authorization"] = `Bearer ${DIRECTUS_TOKEN}`;
+
+  const res = await fetch(url, { headers });
+  if (!res.ok) {
+    fetchError = `Directus returned ${res.status}`;
+    console.error(fetchError, await res.text());
+  } else {
+    const json = await res.json();
+    clinics = json.data || [];
+  }
+} catch (e: any) {
+  fetchError = `Fetch error: ${e?.message || e}`;
+  console.error("Failed to load clinics:", e);
+}
 ---
-<ContentLayout title="Clinics — Verscienta Health" description="Find holistic health clinics near you.">
+
+<ContentLayout title="Find Clinics — Verscienta Health" description="Search for holistic health clinics and integrative medicine centers near you.">
+  <!-- Hero -->
   <section class="bg-gradient-to-br from-earth-50 via-sage-50/50 to-cream-100 dark:from-earth-950 dark:via-earth-900/50 dark:to-earth-950 border-b border-sage-200/50 dark:border-earth-700">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
       <span class="text-sage-600 font-medium tracking-wide uppercase text-sm">Directory</span>
-      <h1 class="font-serif text-4xl md:text-5xl font-bold text-gray-900 dark:text-earth-100 mb-4 mt-2">Clinics</h1>
-      <p class="text-lg text-gray-600 dark:text-earth-300">Find holistic health clinics and integrative medicine centers.</p>
+      <h1 class="font-serif text-4xl md:text-5xl font-bold text-gray-900 dark:text-earth-100 mb-4 mt-2">Find a Clinic</h1>
+      <p class="text-lg text-gray-600 dark:text-earth-300 max-w-2xl">Discover holistic health clinics and integrative medicine centers. Search by location, services, or browse the full directory.</p>
     </div>
   </section>
-  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-    <div class="bg-white dark:bg-earth-900 rounded-2xl border border-gray-100 dark:border-earth-700 p-8 text-center">
-      <span class="text-5xl block mb-4">🏥</span>
-      <p class="text-gray-600 dark:text-earth-300 mb-4">Clinic listings will be available as practitioners register their practices.</p>
-      <a href="/practitioners" class="inline-flex items-center gap-2 px-4 py-2 bg-sage-600 text-white rounded-lg hover:bg-sage-700 transition">Browse Practitioners</a>
+
+  {fetchError && (
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+      <div class="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-4 text-sm text-red-700 dark:text-red-300">
+        <strong>Error:</strong> Unable to load clinics. Please try again later.
+      </div>
+    </div>
+  )}
+
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div class="lg:grid lg:grid-cols-[320px_1fr] lg:gap-8">
+
+      <!-- Filters Sidebar -->
+      <aside class="mb-8 lg:mb-0">
+        <div class="bg-white dark:bg-earth-900 rounded-xl border border-gray-100 dark:border-earth-700 shadow-sm p-6 lg:sticky lg:top-20">
+          <h2 class="font-semibold text-gray-900 dark:text-earth-100 mb-4 flex items-center gap-2">
+            <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" /></svg>
+            Filters
+          </h2>
+
+          <form id="search-form" class="space-y-5">
+            <!-- Location with autocomplete -->
+            <div>
+              <label for="location-input" class="block text-sm font-medium text-gray-700 dark:text-earth-300 mb-1">Location</label>
+              <div class="relative" id="location-wrapper">
+                <input
+                  type="text"
+                  id="location-input"
+                  placeholder="City, state, or zip code"
+                  autocomplete="off"
+                  class="w-full pl-9 pr-8 py-2.5 text-sm border border-gray-200 dark:border-earth-600 rounded-lg bg-white dark:bg-earth-800 text-gray-900 dark:text-earth-100 focus:ring-2 focus:ring-sage-500 placeholder-gray-400"
+                />
+                <svg class="w-4 h-4 text-gray-400 absolute left-3 top-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a2 2 0 01-2.828 0l-4.243-4.243a8 8 0 1111.314 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
+                <div id="location-spinner" class="hidden absolute right-3 top-3">
+                  <svg class="w-4 h-4 text-gray-400 animate-spin" fill="none" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2" opacity="0.3"/><path d="M12 2a10 10 0 0 1 10 10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+                </div>
+                <div id="location-dropdown" class="hidden absolute z-50 top-full left-0 right-0 mt-1 bg-white dark:bg-earth-800 border border-gray-200 dark:border-earth-600 rounded-lg shadow-lg max-h-60 overflow-y-auto"></div>
+              </div>
+              <button type="button" id="use-my-location" class="mt-1.5 text-xs text-sage-600 dark:text-sage-400 hover:underline flex items-center gap-1">
+                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                Use my location
+              </button>
+            </div>
+
+            <!-- Distance -->
+            <div>
+              <label for="distance-select" class="block text-sm font-medium text-gray-700 dark:text-earth-300 mb-1">Distance</label>
+              <select id="distance-select" class="w-full px-3 py-2.5 text-sm border border-gray-200 dark:border-earth-600 rounded-lg bg-white dark:bg-earth-800 text-gray-900 dark:text-earth-100 focus:ring-2 focus:ring-sage-500">
+                <option value="">Any distance</option>
+                <option value="10">Within 10 miles</option>
+                <option value="25">Within 25 miles</option>
+                <option value="50" selected>Within 50 miles</option>
+                <option value="100">Within 100 miles</option>
+                <option value="250">Within 250 miles</option>
+              </select>
+            </div>
+
+            <!-- Search button -->
+            <button
+              type="submit"
+              class="w-full px-4 py-2.5 bg-gradient-to-r from-sage-600 to-earth-600 text-white text-sm font-medium rounded-lg shadow hover:shadow-md transition-all"
+            >
+              Search Clinics
+            </button>
+
+            <button type="button" id="clear-filters" class="w-full px-4 py-2 text-sm text-gray-500 dark:text-earth-400 hover:text-gray-700 dark:hover:text-earth-200 transition">
+              Clear all filters
+            </button>
+          </form>
+        </div>
+      </aside>
+
+      <!-- Results Area -->
+      <div>
+        <div class="flex items-center justify-between mb-4">
+          <p id="results-count" class="text-sm text-gray-600 dark:text-earth-400">Loading clinics...</p>
+          <select id="sort-select" class="text-sm border border-gray-200 dark:border-earth-600 rounded-lg bg-white dark:bg-earth-800 text-gray-700 dark:text-earth-300 px-3 py-1.5 focus:ring-2 focus:ring-sage-500">
+            <option value="name">Sort by name</option>
+            <option value="distance">Sort by distance</option>
+          </select>
+        </div>
+
+        <div id="results-grid" class="grid sm:grid-cols-2 gap-4"></div>
+
+        <div id="results-empty" class="hidden text-center py-16">
+          <svg class="w-16 h-16 mx-auto text-gray-300 dark:text-earth-600 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" /></svg>
+          <h3 class="text-lg font-semibold text-gray-700 dark:text-earth-300 mb-2">No clinics found</h3>
+          <p class="text-gray-500 dark:text-earth-400 max-w-md mx-auto">Try widening your search area or check back later as more clinics are added.</p>
+        </div>
+
+        <div id="results-loading" class="text-center py-16">
+          <div class="inline-block w-8 h-8 border-4 border-sage-200 border-t-sage-600 rounded-full animate-spin"></div>
+          <p class="mt-3 text-sm text-gray-500 dark:text-earth-400">Searching...</p>
+        </div>
+      </div>
     </div>
   </div>
+
+  <div id="clinics-data" hidden data-json={JSON.stringify(clinics)}></div>
+
+  <script>
+    const grid = document.getElementById('results-grid')!;
+    const emptyState = document.getElementById('results-empty')!;
+    const loadingState = document.getElementById('results-loading')!;
+    const countEl = document.getElementById('results-count')!;
+    const sortSelect = document.getElementById('sort-select') as HTMLSelectElement;
+    const locationInput = document.getElementById('location-input') as HTMLInputElement;
+    const distanceSelect = document.getElementById('distance-select') as HTMLSelectElement;
+
+    let allClinics: any[] = [];
+    try {
+      const raw = document.getElementById('clinics-data')?.getAttribute('data-json');
+      if (raw) allClinics = JSON.parse(raw);
+    } catch (e) {
+      console.error('Failed to parse clinics data:', e);
+    }
+
+    let userLat: number | null = null;
+    let userLon: number | null = null;
+
+    function haversine(lat1: number, lon1: number, lat2: number, lon2: number): number {
+      const R = 3959;
+      const dLat = (lat2 - lat1) * Math.PI / 180;
+      const dLon = (lon2 - lon1) * Math.PI / 180;
+      const a = Math.sin(dLat / 2) ** 2 +
+        Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+        Math.sin(dLon / 2) ** 2;
+      return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    }
+
+    async function geocode(query: string): Promise<{ lat: number; lon: number } | null> {
+      try {
+        const res = await fetch(`/api/geocode?text=${encodeURIComponent(query)}`);
+        const data = await res.json();
+        if (data.result) return { lat: data.result.lat, lon: data.result.lon };
+      } catch {}
+      return null;
+    }
+
+    // ── Autocomplete ────────────────────────────────────────────────
+    const locationDropdown = document.getElementById('location-dropdown')!;
+    const locationSpinner = document.getElementById('location-spinner')!;
+    let acDebounce: ReturnType<typeof setTimeout> | null = null;
+    let acSelectedIdx = -1;
+    let acResults: any[] = [];
+
+    async function fetchAutocomplete(text: string) {
+      if (text.length < 3) { hideAutocomplete(); return; }
+      locationSpinner.classList.remove('hidden');
+      try {
+        const res = await fetch(`/api/geocode-autocomplete?text=${encodeURIComponent(text)}&limit=5`);
+        const data = await res.json();
+        acResults = data.results || [];
+        acResults.length > 0 ? renderAutocomplete() : hideAutocomplete();
+      } catch { hideAutocomplete(); }
+      finally { locationSpinner.classList.add('hidden'); }
+    }
+
+    function renderAutocomplete() {
+      locationDropdown.innerHTML = acResults.map((r, i) => {
+        const main = r.city && r.state ? `${r.city}, ${r.state}` : r.formatted;
+        const detail = r.city && r.state && r.formatted !== `${r.city}, ${r.state}` ? r.formatted : '';
+        return `<div class="ac-item px-3 py-2.5 cursor-pointer text-sm transition-colors ${i === acSelectedIdx ? 'bg-sage-50 dark:bg-earth-700' : 'hover:bg-gray-50 dark:hover:bg-earth-700'} ${i < acResults.length - 1 ? 'border-b border-gray-100 dark:border-earth-600' : ''}" data-index="${i}">
+          <div class="flex items-center gap-2">
+            <svg class="w-4 h-4 text-gray-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a2 2 0 01-2.828 0l-4.243-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+            <div class="min-w-0"><div class="font-medium text-gray-900 dark:text-earth-100 truncate">${main}</div>${detail ? `<div class="text-xs text-gray-500 dark:text-earth-400 truncate">${detail}</div>` : ''}</div>
+          </div></div>`;
+      }).join('');
+      locationDropdown.classList.remove('hidden');
+      locationDropdown.querySelectorAll('.ac-item').forEach(el => {
+        el.addEventListener('mousedown', (e) => {
+          e.preventDefault();
+          selectAutocomplete(parseInt((el as HTMLElement).dataset.index || '0'));
+        });
+      });
+    }
+
+    function selectAutocomplete(idx: number) {
+      const result = acResults[idx];
+      if (!result) return;
+      locationInput.value = result.formatted;
+      userLat = result.lat;
+      userLon = result.lon;
+      sortSelect.value = 'distance';
+      hideAutocomplete();
+      filterAndRender();
+    }
+
+    function hideAutocomplete() {
+      locationDropdown.classList.add('hidden');
+      locationDropdown.innerHTML = '';
+      acSelectedIdx = -1;
+      acResults = [];
+    }
+
+    locationInput.addEventListener('input', () => {
+      userLat = null; userLon = null;
+      const val = locationInput.value.trim();
+      if (acDebounce) clearTimeout(acDebounce);
+      if (val.length < 3) { hideAutocomplete(); return; }
+      acDebounce = setTimeout(() => fetchAutocomplete(val), 250);
+    });
+
+    locationInput.addEventListener('keydown', (e) => {
+      if (!acResults.length) return;
+      if (e.key === 'ArrowDown') { e.preventDefault(); acSelectedIdx = Math.min(acSelectedIdx + 1, acResults.length - 1); renderAutocomplete(); }
+      else if (e.key === 'ArrowUp') { e.preventDefault(); acSelectedIdx = Math.max(acSelectedIdx - 1, -1); renderAutocomplete(); }
+      else if (e.key === 'Enter' && acSelectedIdx >= 0) { e.preventDefault(); e.stopPropagation(); selectAutocomplete(acSelectedIdx); }
+      else if (e.key === 'Escape') { hideAutocomplete(); }
+    });
+
+    locationInput.addEventListener('blur', () => { setTimeout(() => hideAutocomplete(), 150); });
+
+    // ── Address formatting ──────────────────────────────────────────
+    function formatAddress(c: any): string {
+      const parts = [];
+      if (c.street_address) parts.push(c.street_address);
+      if (c.suite_unit) parts.push(c.suite_unit);
+      if (c.city && c.state) parts.push(`${c.city}, ${c.state}`);
+      else if (c.city) parts.push(c.city);
+      else if (c.state) parts.push(c.state);
+      if (c.zip_code) parts.push(c.zip_code);
+      if (parts.length > 0) return parts.join(', ');
+      return c.address || '';
+    }
+
+    // ── Practitioner name ───────────────────────────────────────────
+    function practitionerName(p: any): string {
+      return [p.first_name, p.last_name].filter(Boolean).join(' ') || p.title || 'Unknown';
+    }
+
+    // ── Render a clinic card ────────────────────────────────────────
+    function renderCard(c: any): string {
+      const distStr = c._distance != null
+        ? `<span class="text-xs text-sage-600 dark:text-sage-400 font-medium">${Math.round(c._distance)} mi</span>`
+        : '';
+      const displayAddress = formatAddress(c);
+      const practitioners = (c.practitioners || [])
+        .map((p: any) => p.practitioners_id)
+        .filter(Boolean);
+      const practList = practitioners
+        .slice(0, 3)
+        .map((p: any) => practitionerName(p))
+        .join(', ');
+      const moreCount = practitioners.length > 3 ? ` +${practitioners.length - 3} more` : '';
+      const services = (c.services || []).slice(0, 4);
+      const descSnippet = c.description
+        ? c.description.replace(/<[^>]*>/g, '').slice(0, 100) + (c.description.length > 100 ? '...' : '')
+        : '';
+
+      return `
+        <a href="/clinics/${c.slug || c.id}" class="group bg-white dark:bg-earth-900 rounded-xl shadow-sm border border-gray-100 dark:border-earth-700 hover:shadow-lg hover:border-sage-300 dark:hover:border-sage-700 transition-all p-5">
+          <div class="flex items-start justify-between mb-2">
+            <h3 class="font-serif text-lg font-bold text-gray-900 dark:text-earth-100 group-hover:text-sage-600 transition-colors">${c.name}</h3>
+            ${distStr}
+          </div>
+          ${displayAddress ? `
+            <p class="text-sm text-gray-500 dark:text-earth-400 mb-2 flex items-center gap-1.5">
+              <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a2 2 0 01-2.828 0l-4.243-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+              ${displayAddress}
+            </p>
+          ` : ''}
+          ${c.phone ? `
+            <p class="text-sm text-gray-500 dark:text-earth-400 mb-2 flex items-center gap-1.5">
+              <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
+              ${c.phone}
+            </p>
+          ` : ''}
+          ${services.length > 0 ? `
+            <div class="flex flex-wrap gap-1.5 mb-2">
+              ${services.map((s: string) => `<span class="text-xs px-2 py-0.5 rounded-full bg-sage-100 text-sage-700 dark:bg-sage-900/30 dark:text-sage-300">${s}</span>`).join('')}
+            </div>
+          ` : ''}
+          ${practList ? `
+            <p class="text-xs text-gray-500 dark:text-earth-400 flex items-center gap-1.5">
+              <svg class="w-3.5 h-3.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+              ${practList}${moreCount}
+            </p>
+          ` : ''}
+          ${descSnippet ? `<p class="text-sm text-gray-600 dark:text-earth-400 mt-2 line-clamp-2">${descSnippet}</p>` : ''}
+        </a>
+      `;
+    }
+
+    // ── Filter & render ─────────────────────────────────────────────
+    function filterAndRender() {
+      const maxDistance = distanceSelect.value ? parseInt(distanceSelect.value) : null;
+
+      let filtered = allClinics.map(c => {
+        const copy = { ...c };
+        if (userLat != null && userLon != null && c.latitude && c.longitude) {
+          copy._distance = haversine(userLat, userLon, parseFloat(c.latitude), parseFloat(c.longitude));
+        } else {
+          copy._distance = null;
+        }
+        return copy;
+      });
+
+      if (maxDistance && userLat != null) {
+        filtered = filtered.filter(c => c._distance == null || c._distance <= maxDistance);
+      }
+
+      const sortBy = sortSelect.value;
+      if (sortBy === 'distance' && userLat != null) {
+        filtered.sort((a, b) => (a._distance ?? 99999) - (b._distance ?? 99999));
+      } else {
+        filtered.sort((a, b) => (a.name || '').localeCompare(b.name || ''));
+      }
+
+      loadingState.classList.add('hidden');
+      if (filtered.length === 0) {
+        grid.innerHTML = '';
+        emptyState.classList.remove('hidden');
+        countEl.textContent = 'No clinics found';
+      } else {
+        emptyState.classList.add('hidden');
+        grid.innerHTML = filtered.map(renderCard).join('');
+        const suffix = userLat != null ? ' near you' : '';
+        countEl.textContent = `${filtered.length} clinic${filtered.length === 1 ? '' : 's'} found${suffix}`;
+      }
+    }
+
+    // ── Event listeners ─────────────────────────────────────────────
+    document.getElementById('search-form')?.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      hideAutocomplete();
+      loadingState.classList.remove('hidden');
+      grid.innerHTML = '';
+      emptyState.classList.add('hidden');
+
+      const locationQuery = locationInput.value.trim();
+      if (locationQuery && userLat == null) {
+        const coords = await geocode(locationQuery);
+        if (coords) {
+          userLat = coords.lat;
+          userLon = coords.lon;
+          sortSelect.value = 'distance';
+        } else {
+          countEl.textContent = `Could not find location "${locationQuery}". Showing all results.`;
+        }
+      }
+      filterAndRender();
+    });
+
+    document.getElementById('use-my-location')?.addEventListener('click', () => {
+      if (!navigator.geolocation) { countEl.textContent = 'Geolocation is not supported.'; return; }
+      locationInput.value = 'Detecting location...';
+      navigator.geolocation.getCurrentPosition(
+        (pos) => {
+          userLat = pos.coords.latitude;
+          userLon = pos.coords.longitude;
+          locationInput.value = `${userLat.toFixed(4)}, ${userLon.toFixed(4)}`;
+          sortSelect.value = 'distance';
+          filterAndRender();
+        },
+        () => { locationInput.value = ''; countEl.textContent = 'Location access denied.'; }
+      );
+    });
+
+    sortSelect.addEventListener('change', filterAndRender);
+
+    document.getElementById('clear-filters')?.addEventListener('click', () => {
+      locationInput.value = '';
+      distanceSelect.value = '';
+      userLat = null; userLon = null;
+      sortSelect.value = 'name';
+      filterAndRender();
+    });
+
+    filterAndRender();
+  </script>
 </ContentLayout>

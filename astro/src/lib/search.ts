@@ -101,4 +101,20 @@ export interface SearchFormula {
   url: string;
 }
 
-export type SearchResult = SearchHerb | SearchModality | SearchCondition | SearchPractitioner | SearchFormula;
+export interface SearchClinic {
+  id: number;
+  name: string;
+  title: string;
+  description?: string;
+  address?: string;
+  city?: string;
+  state?: string;
+  phone?: string;
+  services?: string[];
+  latitude?: number;
+  longitude?: number;
+  type: "clinic";
+  url: string;
+}
+
+export type SearchResult = SearchHerb | SearchModality | SearchCondition | SearchPractitioner | SearchFormula | SearchClinic;

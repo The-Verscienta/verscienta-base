@@ -1,22 +1,22 @@
 /**
- * Directus Hook: Practitioner Lifecycle
+ * Directus Hook: Practitioner & Clinic Lifecycle
  *
- * On practitioner create/update:
- *   1. Auto-computes `title` from first_name + last_name
- *   2. Geocodes address via Geoapify (if address fields present and lat/lon empty)
- *      Fills: latitude, longitude, city, state, zip_code (if empty)
+ * Practitioners:
+ *   - Auto-computes `title` from first_name + last_name
+ *   - Geocodes address via Geoapify
  *
- * Supports both structured fields (street_address, city, state, zip_code)
- * and the legacy single "address" field.
+ * Clinics:
+ *   - Geocodes address via Geoapify
+ *
+ * Geocoding fills: latitude, longitude, city, state, zip_code (if empty)
  *
  * Environment variables:
  *   GEOAPIFY_API_KEY  (required for geocoding)
  */
 
 export default ({ filter, action }, { env, logger }) => {
-  // ── Auto-compute title from first_name + last_name ───────────────
+  // ── Practitioner: auto-compute title from name fields ────────────
 
-  // On create: set title in the payload before save (has both fields)
   filter("practitioners.items.create", (payload) => {
     if (payload.first_name || payload.last_name) {
       const first = (payload.first_name || "").trim();
@@ -26,7 +26,6 @@ export default ({ filter, action }, { env, logger }) => {
     return payload;
   });
 
-  // On update: payload may only have one name field, so read the full record after save
   action("practitioners.items.update", async ({ keys, payload }, { database }) => {
     const nameChanged = payload?.first_name !== undefined || payload?.last_name !== undefined;
     if (!nameChanged) return;
@@ -51,7 +50,8 @@ export default ({ filter, action }, { env, logger }) => {
     }
   });
 
-  // ── Geocoding ────────────────────────────────────────────────────
+  // ── Geocoding (shared by practitioners + clinics) ────────────────
+
   const API_KEY = env.GEOAPIFY_API_KEY;
 
   if (!API_KEY) {
@@ -59,9 +59,6 @@ export default ({ filter, action }, { env, logger }) => {
     return;
   }
 
-  /**
-   * Build a geocode query string from structured or legacy address fields
-   */
   function buildAddressQuery(item) {
     const parts = [];
     if (item.street_address) parts.push(item.street_address);
@@ -74,9 +71,6 @@ export default ({ filter, action }, { env, logger }) => {
     return null;
   }
 
-  /**
-   * Geocode an address via Geoapify — returns coords + address components
-   */
   async function geocodeAddress(addressQuery) {
     const params = new URLSearchParams({
       text: addressQuery,
@@ -108,81 +102,77 @@ export default ({ filter, action }, { env, logger }) => {
     };
   }
 
-  /**
-   * Build the update payload — always set coords, fill address parts only if empty
-   */
   function buildUpdate(item, geocoded) {
     const update = {
       latitude: geocoded.latitude,
       longitude: geocoded.longitude,
     };
-
-    // Fill structured address fields only if they're currently empty
     if (!item.city && geocoded.city) update.city = geocoded.city;
     if (!item.state && geocoded.state) update.state = geocoded.state;
     if (!item.zip_code && geocoded.zip_code) update.zip_code = geocoded.zip_code;
-
     return update;
   }
 
   const ADDRESS_FIELDS = ["address", "street_address", "city", "state", "zip_code"];
+  const ADDRESS_COLS = ["address", "street_address", "city", "state", "zip_code", "latitude", "longitude"];
 
-  // Geocode on practitioner create
-  action("practitioners.items.create", async ({ key, payload }, { database }) => {
-    try {
-      const items = await database("practitioners").where({ id: key })
-        .select("address", "street_address", "city", "state", "zip_code", "latitude", "longitude");
-      const item = items[0];
-      if (!item) return;
-
-      if (item.latitude && item.longitude) return;
-
-      const query = buildAddressQuery(item);
-      if (!query) return;
-
-      const geocoded = await geocodeAddress(query);
-      if (!geocoded) return;
-
-      const update = buildUpdate(item, geocoded);
-      await database("practitioners").where({ id: key }).update(update);
-
-      logger.info(`Geocoded practitioner ${key}: ${geocoded.latitude}, ${geocoded.longitude}` +
-        (update.city ? ` | city=${update.city}` : "") +
-        (update.state ? ` | state=${update.state}` : "") +
-        (update.zip_code ? ` | zip=${update.zip_code}` : ""));
-    } catch (e) {
-      logger.error(`Geocoding error for practitioner ${key}: ${e.message}`);
-    }
-  });
-
-  // Geocode on practitioner update (if any address field changed)
-  action("practitioners.items.update", async ({ keys, payload }, { database }) => {
-    const addressChanged = ADDRESS_FIELDS.some((f) => payload?.[f] !== undefined);
-    if (!addressChanged) return;
-
-    for (const key of keys) {
+  // Generic geocode-on-create for any collection
+  function geocodeOnCreate(collection) {
+    action(`${collection}.items.create`, async ({ key }, { database }) => {
       try {
-        const items = await database("practitioners").where({ id: key })
-          .select("address", "street_address", "city", "state", "zip_code", "latitude", "longitude");
+        const items = await database(collection).where({ id: key }).select(ADDRESS_COLS);
         const item = items[0];
-        if (!item) continue;
+        if (!item) return;
+        if (item.latitude && item.longitude) return;
 
         const query = buildAddressQuery(item);
-        if (!query) continue;
+        if (!query) return;
 
         const geocoded = await geocodeAddress(query);
-        if (!geocoded) continue;
+        if (!geocoded) return;
 
         const update = buildUpdate(item, geocoded);
-        await database("practitioners").where({ id: key }).update(update);
+        await database(collection).where({ id: key }).update(update);
 
-        logger.info(`Re-geocoded practitioner ${key}: ${geocoded.latitude}, ${geocoded.longitude}` +
-          (update.city ? ` | city=${update.city}` : "") +
-          (update.state ? ` | state=${update.state}` : "") +
-          (update.zip_code ? ` | zip=${update.zip_code}` : ""));
+        logger.info(`Geocoded ${collection} ${key}: ${geocoded.latitude}, ${geocoded.longitude}`);
       } catch (e) {
-        logger.error(`Geocoding error for practitioner ${key}: ${e.message}`);
+        logger.error(`Geocoding error for ${collection} ${key}: ${e.message}`);
       }
-    }
-  });
+    });
+  }
+
+  // Generic geocode-on-update for any collection
+  function geocodeOnUpdate(collection) {
+    action(`${collection}.items.update`, async ({ keys, payload }, { database }) => {
+      const addressChanged = ADDRESS_FIELDS.some((f) => payload?.[f] !== undefined);
+      if (!addressChanged) return;
+
+      for (const key of keys) {
+        try {
+          const items = await database(collection).where({ id: key }).select(ADDRESS_COLS);
+          const item = items[0];
+          if (!item) continue;
+
+          const query = buildAddressQuery(item);
+          if (!query) continue;
+
+          const geocoded = await geocodeAddress(query);
+          if (!geocoded) continue;
+
+          const update = buildUpdate(item, geocoded);
+          await database(collection).where({ id: key }).update(update);
+
+          logger.info(`Re-geocoded ${collection} ${key}: ${geocoded.latitude}, ${geocoded.longitude}`);
+        } catch (e) {
+          logger.error(`Geocoding error for ${collection} ${key}: ${e.message}`);
+        }
+      }
+    });
+  }
+
+  // Register geocoding for both collections
+  geocodeOnCreate("practitioners");
+  geocodeOnUpdate("practitioners");
+  geocodeOnCreate("clinics");
+  geocodeOnUpdate("clinics");
 };

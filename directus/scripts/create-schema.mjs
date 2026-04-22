@@ -310,6 +310,27 @@ async function createPrimaryCollections() {
   await safeCreateField("practitioners", { field: "latitude", type: "decimal", meta: { interface: "input", width: "half" }, schema: {} });
   await safeCreateField("practitioners", { field: "longitude", type: "decimal", meta: { interface: "input", width: "half" }, schema: {} });
 
+  // ── clinics ───────────────────────────────────────────────────────────────
+  await safeCreateCollection({ collection: "clinics", meta: { icon: "local_hospital", note: "Holistic health clinics and integrative medicine centers" }, schema: {} });
+  await safeCreateField("clinics", { field: "name", type: "string", meta: { interface: "input", required: true }, schema: { is_nullable: false } });
+  await safeCreateField("clinics", { field: "slug", type: "string", meta: { interface: "input" }, schema: { is_unique: true } });
+  await safeCreateField("clinics", { field: "description", type: "text", meta: { interface: "input-rich-text-html" }, schema: {} });
+  await safeCreateField("clinics", { field: "phone", type: "string", meta: { interface: "input", width: "half" }, schema: {} });
+  await safeCreateField("clinics", { field: "email", type: "string", meta: { interface: "input", width: "half" }, schema: {} });
+  await safeCreateField("clinics", { field: "website", type: "string", meta: { interface: "input" }, schema: {} });
+  await safeCreateField("clinics", { field: "address", type: "text", meta: { interface: "address-autocomplete", options: { latitudeField: "latitude", longitudeField: "longitude", cityField: "city", stateField: "state", zipField: "zip_code" } }, schema: {} });
+  await safeCreateField("clinics", { field: "street_address", type: "string", meta: { interface: "input", width: "half" }, schema: {} });
+  await safeCreateField("clinics", { field: "suite_unit", type: "string", meta: { interface: "input", width: "half", note: "Suite, unit, floor, etc." }, schema: {} });
+  await safeCreateField("clinics", { field: "city", type: "string", meta: { interface: "input", width: "half" }, schema: {} });
+  await safeCreateField("clinics", { field: "state", type: "string", meta: { interface: "input", width: "half" }, schema: {} });
+  await safeCreateField("clinics", { field: "zip_code", type: "string", meta: { interface: "input", width: "half" }, schema: {} });
+  await safeCreateField("clinics", { field: "latitude", type: "decimal", meta: { interface: "input", width: "half" }, schema: {} });
+  await safeCreateField("clinics", { field: "longitude", type: "decimal", meta: { interface: "input", width: "half" }, schema: {} });
+  await safeCreateField("clinics", { field: "hours", type: "json", meta: { interface: "input-code", options: { language: "json" }, note: 'e.g. {"mon":"9am-5pm","tue":"9am-5pm"}' }, schema: {} });
+  await safeCreateField("clinics", { field: "services", type: "json", meta: { interface: "tags", note: "Services offered at this clinic" }, schema: {} });
+  await safeCreateField("clinics", { field: "accepts_insurance", type: "boolean", meta: { interface: "boolean", width: "half" }, schema: { default_value: false } });
+  await safeCreateField("clinics", { field: "status", type: "string", meta: { interface: "select-dropdown", width: "half", options: { choices: choices(["Active", "Inactive", "Pending"]) } }, schema: { default_value: "active" } });
+
   // ── formulas ──────────────────────────────────────────────────────────────
   await safeCreateCollection({ collection: "formulas", meta: { icon: "science", note: "Traditional herbal formulas" }, schema: {} });
   await safeCreateField("formulas", { field: "title", type: "string", meta: { interface: "input", required: true }, schema: { is_nullable: false } });
@@ -603,6 +624,8 @@ async function createM2MRelations() {
   await createM2M("herbs", "tcm_category_tags", "tcm_categories", "herbs_tcm_categories", "herbs_id", "tcm_categories_id");
   await createM2M("modalities", "conditions", "conditions", "modalities_conditions", "modalities_id", "conditions_id");
   await createM2M("practitioners", "modalities", "modalities", "practitioners_modalities", "practitioners_id", "modalities_id");
+  await createM2M("clinics", "practitioners", "practitioners", "clinics_practitioners", "clinics_id", "practitioners_id");
+  await createM2M("clinics", "modalities", "modalities", "clinics_modalities", "clinics_id", "modalities_id");
   await createM2M("tcm_clinical_evidence", "herb_refs", "herbs", "tcm_evidence_herbs", "tcm_clinical_evidence_id", "herbs_id");
   await createM2M("formulas", "conditions", "conditions", "formulas_conditions", "formulas_id", "conditions_id");
   await createM2M("formulas", "related_formulas", "formulas", "formulas_related", "formulas_id", "related_formulas_id");
