@@ -112,7 +112,9 @@ function transformForSearch(collection, item) {
       return {
         ...base,
         title: item.title,
-        name: item.title,
+        first_name: item.first_name,
+        last_name: item.last_name,
+        name: [item.first_name, item.last_name].filter(Boolean).join(" ") || item.title,
         practice_type: item.practice_type,
         bio: stripHtml(item.bio),
         address: item.address,

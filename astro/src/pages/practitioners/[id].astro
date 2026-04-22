@@ -10,26 +10,33 @@ try {
   if (!practitioner && /^\d+$/.test(id!)) practitioner = await directus.request(readItem("practitioners", parseInt(id!), { fields: ["*", "modalities.modalities_id.*"] }));
 } catch (e) { console.error(e); }
 if (!practitioner) return Astro.redirect("/404");
+const fullName = [practitioner.first_name, practitioner.last_name].filter(Boolean).join(" ") || practitioner.title;
 ---
-<ContentLayout title={`${practitioner.title} — Verscienta Health`} description={`${practitioner.practice_type || "Holistic"} practitioner profile.`}>
+<ContentLayout title={`${fullName} — Verscienta Health`} description={`${practitioner.practice_type || "Holistic"} practitioner profile.`}>
   <section class="bg-gradient-to-br from-earth-50 via-sage-50/50 to-cream-100 dark:from-earth-950 dark:via-earth-900/50 dark:to-earth-950 border-b border-sage-200/50 dark:border-earth-700">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
-      <Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Practitioners", href: "/practitioners" }, { label: practitioner.title }]} class="mb-4" />
-      <h1 class="font-serif text-4xl md:text-5xl font-bold text-gray-900 dark:text-earth-100 mb-2">{practitioner.title}</h1>
+      <Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Practitioners", href: "/practitioners" }, { label: fullName }]} class="mb-4" />
+      <h1 class="font-serif text-4xl md:text-5xl font-bold text-gray-900 dark:text-earth-100 mb-2">{fullName}</h1>
       {practitioner.practice_type && <span class="text-sm px-3 py-1 rounded-full bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-300 capitalize">{practitioner.practice_type}</span>}
     </div>
   </section>
   <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
     {practitioner.bio && <section><h2 class="font-serif text-2xl font-bold text-gray-900 dark:text-earth-100 mb-4">About</h2><div class="prose prose-earth dark:prose-invert max-w-none" set:html={practitioner.bio} /></section>}
-    {practitioner.address && (
+    {(practitioner.address || practitioner.street_address || practitioner.city) && (
       <section>
         <h2 class="font-serif text-2xl font-bold text-gray-900 dark:text-earth-100 mb-4">Location</h2>
         <div class="bg-white dark:bg-earth-900 rounded-xl border border-gray-100 dark:border-earth-700 p-6">
-          <p class="text-gray-600 dark:text-earth-300 flex items-center gap-2">
-            <svg class="w-5 h-5 text-sage-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a2 2 0 01-2.828 0l-4.243-4.243a8 8 0 1111.314 0z"/></svg>
-            {practitioner.address}
-          </p>
-          {practitioner.latitude && practitioner.longitude && <p class="text-xs text-gray-400 dark:text-earth-500 mt-2">Coordinates: {practitioner.latitude}, {practitioner.longitude}</p>}
+          <div class="text-gray-600 dark:text-earth-300 flex items-start gap-2">
+            <svg class="w-5 h-5 text-sage-600 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a2 2 0 01-2.828 0l-4.243-4.243a8 8 0 1111.314 0z"/></svg>
+            <div>
+              {practitioner.street_address && <div>{practitioner.street_address}</div>}
+              {practitioner.suite_apt && <div>{practitioner.suite_apt}</div>}
+              {(practitioner.city || practitioner.state || practitioner.zip_code) && (
+                <div>{[practitioner.city, practitioner.state].filter(Boolean).join(", ")}{practitioner.zip_code ? ` ${practitioner.zip_code}` : ""}</div>
+              )}
+              {!practitioner.street_address && !practitioner.city && practitioner.address && <div>{practitioner.address}</div>}
+            </div>
+          </div>
         </div>
       </section>
     )}

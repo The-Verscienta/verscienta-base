@@ -11,7 +11,7 @@ const DIRECTUS_URL = import.meta.env.PUBLIC_DIRECTUS_URL || "http://localhost:80
 const DIRECTUS_TOKEN = import.meta.env.DIRECTUS_TOKEN || (import.meta.env.DEV ? "" : "");
 
 try {
-  const url = `${DIRECTUS_URL}/items/practitioners?fields=*,modalities.modalities_id.id,modalities.modalities_id.title&sort=title&limit=500`;
+  const url = `${DIRECTUS_URL}/items/practitioners?fields=*,modalities.modalities_id.id,modalities.modalities_id.title&sort=last_name,first_name&limit=500`;
   const headers: Record<string, string> = { "Content-Type": "application/json" };
   if (DIRECTUS_TOKEN) headers["Authorization"] = `Bearer ${DIRECTUS_TOKEN}`;
 
@@ -388,8 +388,15 @@ const practiceTypes = [
       return p.address || '';
     }
 
+    // ── Full name helper ──────────────────────────────────────────────
+    function fullName(p: any): string {
+      const parts = [p.first_name, p.last_name].filter(Boolean);
+      return parts.length > 0 ? parts.join(' ') : (p.title || 'Unknown');
+    }
+
     // ── Render a practitioner card ──────────────────────────────────
     function renderCard(p: any): string {
+      const name = fullName(p);
       const typeLabel = TYPE_LABELS[p.practice_type] || p.practice_type || '';
       const typeColor = TYPE_COLORS[p.practice_type] || TYPE_COLORS.other;
       const modList = (p.modalities || [])
@@ -407,7 +414,7 @@ const practiceTypes = [
       return `
         <a href="/practitioners/${p.slug || p.id}" class="group bg-white dark:bg-earth-900 rounded-xl shadow-sm border border-gray-100 dark:border-earth-700 hover:shadow-lg hover:border-sage-300 dark:hover:border-sage-700 transition-all p-5">
           <div class="flex items-start justify-between mb-2">
-            <h3 class="font-serif text-lg font-bold text-gray-900 dark:text-earth-100 group-hover:text-sage-600 transition-colors">${p.title}</h3>
+            <h3 class="font-serif text-lg font-bold text-gray-900 dark:text-earth-100 group-hover:text-sage-600 transition-colors">${name}</h3>
             ${distStr}
           </div>
           <div class="flex flex-wrap gap-1.5 mb-3">
@@ -465,7 +472,7 @@ const practiceTypes = [
       } else if (sortBy === 'type') {
         filtered.sort((a, b) => (a.practice_type || '').localeCompare(b.practice_type || ''));
       } else {
-        filtered.sort((a, b) => (a.title || '').localeCompare(b.title || ''));
+        filtered.sort((a, b) => fullName(a).localeCompare(fullName(b)));
       }
 
       // Render

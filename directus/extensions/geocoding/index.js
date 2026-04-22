@@ -1,19 +1,57 @@
 /**
- * Directus Hook: Geocoding for Practitioners via Geoapify
+ * Directus Hook: Practitioner Lifecycle
  *
- * On practitioner create/update, if address fields are present and lat/lon
- * are empty (or address changed), geocodes via Geoapify and fills:
- *   - latitude, longitude
- *   - city, state, zip_code (if empty)
+ * On practitioner create/update:
+ *   1. Auto-computes `title` from first_name + last_name
+ *   2. Geocodes address via Geoapify (if address fields present and lat/lon empty)
+ *      Fills: latitude, longitude, city, state, zip_code (if empty)
  *
  * Supports both structured fields (street_address, city, state, zip_code)
  * and the legacy single "address" field.
  *
  * Environment variables:
- *   GEOAPIFY_API_KEY  (required)
+ *   GEOAPIFY_API_KEY  (required for geocoding)
  */
 
-export default ({ action }, { env, logger }) => {
+export default ({ filter, action }, { env, logger }) => {
+  // ── Auto-compute title from first_name + last_name ───────────────
+
+  // On create: set title in the payload before save (has both fields)
+  filter("practitioners.items.create", (payload) => {
+    if (payload.first_name || payload.last_name) {
+      const first = (payload.first_name || "").trim();
+      const last = (payload.last_name || "").trim();
+      payload.title = [first, last].filter(Boolean).join(" ");
+    }
+    return payload;
+  });
+
+  // On update: payload may only have one name field, so read the full record after save
+  action("practitioners.items.update", async ({ keys, payload }, { database }) => {
+    const nameChanged = payload?.first_name !== undefined || payload?.last_name !== undefined;
+    if (!nameChanged) return;
+
+    for (const key of keys) {
+      try {
+        const items = await database("practitioners").where({ id: key })
+          .select("first_name", "last_name");
+        const item = items[0];
+        if (!item) continue;
+
+        const first = (item.first_name || "").trim();
+        const last = (item.last_name || "").trim();
+        const title = [first, last].filter(Boolean).join(" ");
+
+        if (title) {
+          await database("practitioners").where({ id: key }).update({ title });
+        }
+      } catch (e) {
+        logger.error(`Title compute error for practitioner ${key}: ${e.message}`);
+      }
+    }
+  });
+
+  // ── Geocoding ────────────────────────────────────────────────────
   const API_KEY = env.GEOAPIFY_API_KEY;
 
   if (!API_KEY) {

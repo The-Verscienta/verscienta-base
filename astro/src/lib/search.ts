@@ -78,6 +78,8 @@ export interface SearchCondition {
 export interface SearchPractitioner {
   id: number;
   title: string;
+  first_name?: string;
+  last_name?: string;
   name: string;
   practice_type?: string;
   address?: string;

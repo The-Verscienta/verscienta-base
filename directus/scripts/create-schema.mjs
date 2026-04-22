@@ -300,7 +300,9 @@ async function createPrimaryCollections() {
 
   // ── practitioners ─────────────────────────────────────────────────────────
   await safeCreateCollection({ collection: "practitioners", meta: { icon: "person", note: "Holistic health practitioners" }, schema: {} });
-  await safeCreateField("practitioners", { field: "title", type: "string", meta: { interface: "input", required: true }, schema: { is_nullable: false } });
+  await safeCreateField("practitioners", { field: "first_name", type: "string", meta: { interface: "input", required: true, width: "half", sort: 1 }, schema: { is_nullable: false } });
+  await safeCreateField("practitioners", { field: "last_name", type: "string", meta: { interface: "input", required: true, width: "half", sort: 2 }, schema: { is_nullable: false } });
+  await safeCreateField("practitioners", { field: "title", type: "string", meta: { interface: "input", hidden: true, note: "Auto-computed from first_name + last_name", sort: 3 }, schema: { is_nullable: false } });
   await safeCreateField("practitioners", { field: "slug", type: "string", meta: { interface: "input" }, schema: { is_unique: true } });
   await safeCreateField("practitioners", { field: "practice_type", type: "string", meta: { interface: "select-dropdown", options: { choices: choices(["TCM", "Western Herbalism", "Naturopathy", "Ayurveda", "Integrative", "Other"]) } }, schema: {} });
   await safeCreateField("practitioners", { field: "bio", type: "text", meta: { interface: "input-rich-text-html" }, schema: {} });
