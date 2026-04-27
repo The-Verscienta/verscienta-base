@@ -10,6 +10,7 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\trash\Exception\UnrestorableEntityException;
+use Drupal\trash\MenuLinkContent\MenuLinkContentIntegrationTrait;
 use Drupal\trash\PathAlias\PathAliasIntegrationTrait;
 use Drupal\trash\TrashManagerInterface;
 use Drupal\trash\Validation\TrashAwareUniqueFieldValueValidator;
@@ -20,6 +21,7 @@ use Drupal\trash\Validation\TrashAwareUniqueFieldValueValidator;
 class DefaultTrashHandler implements TrashHandlerInterface {
 
   use StringTranslationTrait;
+  use MenuLinkContentIntegrationTrait;
   use PathAliasIntegrationTrait;
 
   /**
@@ -60,8 +62,10 @@ class DefaultTrashHandler implements TrashHandlerInterface {
    * {@inheritdoc}
    */
   public function postTrashDelete(EntityInterface $entity): void {
-    // Automatically delete associated path aliases to match core's behavior.
+    // Automatically delete associated path aliases and custom menu links to
+    // match core's behavior.
     $this->deleteAssociatedPathAliases($entity);
+    $this->deleteAssociatedMenuLinkContent($entity);
   }
 
   /**
@@ -102,8 +106,9 @@ class DefaultTrashHandler implements TrashHandlerInterface {
    * {@inheritdoc}
    */
   public function postTrashRestore(EntityInterface $entity, int|string $deleted_timestamp): void {
-    // Automatically restore associated path aliases.
+    // Automatically restore associated path aliases and content menu links.
     $this->restoreAssociatedPathAliases($entity, $deleted_timestamp);
+    $this->restoreAssociatedMenuLinkContent($entity, $deleted_timestamp);
   }
 
   /**

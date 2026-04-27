@@ -64,6 +64,10 @@ services:
   Drupal\trash\Hook\TrashHandler\NodeTrashHandler:
     tags:
       - { name: trash_handler, entity_type_id: node }
+  Drupal\trash\Hook\TrashHandler\TaxonomyTermTrashHandler:
+    autowire: true
+    tags:
+      - { name: trash_handler, entity_type_id: taxonomy_term }
   Drupal\trash\Hook\TrashHandler\MenuLinkContentTrashHandler:
     tags:
       - { name: trash_handler, entity_type_id: menu_link_content }
@@ -74,6 +78,9 @@ services:
   Drupal\trash\Hook\TrashHandler\PathAliasTrashHandler:
     tags:
       - { name: trash_handler, entity_type_id: path_alias }
+  Drupal\trash\Hook\TrashHandler\FileTrashHandler:
+    tags:
+      - { name: trash_handler, entity_type_id: file }
 
   Drupal\trash\Cache\TrashEntityCacheBackend:
     public: false

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\Tests\trash\Kernel;
 
+use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\KernelTests\KernelTestBase;
@@ -26,11 +27,8 @@ abstract class TrashKernelTestBase extends KernelTestBase {
    */
   protected static $modules = [
     'field',
-    'file',
     'filter',
-    'image',
     'node',
-    'media',
     'text',
     'trash',
     'trash_test',
@@ -54,9 +52,7 @@ abstract class TrashKernelTestBase extends KernelTestBase {
   protected function setUp(): void {
     parent::setUp();
 
-    $this->installEntitySchema('file');
     $this->installEntitySchema('node');
-    $this->installEntitySchema('media');
     $this->installEntitySchema('user');
     $this->installEntitySchema('trash_test_entity');
     $this->installSchema('node', ['node_access']);
@@ -142,6 +138,55 @@ abstract class TrashKernelTestBase extends KernelTestBase {
     // Rebuild the container.
     $this->container->get('kernel')->rebuildContainer();
     $this->entityTypeManager = $this->container->get('entity_type.manager');
+  }
+
+  /**
+   * Loads a trashed entity by ID.
+   *
+   * @param string $entity_type_id
+   *   The entity type ID.
+   * @param int|string $entity_id
+   *   The entity ID.
+   *
+   * @return \Drupal\Core\Entity\ContentEntityInterface|null
+   *   The loaded entity, or NULL if not found.
+   */
+  protected function loadTrashedEntity(string $entity_type_id, int|string $entity_id): ?ContentEntityInterface {
+    return $this->getTrashManager()->executeInTrashContext('ignore', fn () =>
+      $this->getEntityTypeManager()->getStorage($entity_type_id)->load($entity_id)
+    );
+  }
+
+  /**
+   * Restores a trashed entity.
+   *
+   * @param string $entity_type_id
+   *   The entity type ID.
+   * @param int|string $entity_id
+   *   The entity ID.
+   */
+  protected function restoreEntity(string $entity_type_id, int|string $entity_id): void {
+    $this->getTrashManager()->executeInTrashContext('ignore', function () use ($entity_type_id, $entity_id): void {
+      if ($entity = $this->getEntityTypeManager()->getStorage($entity_type_id)->load($entity_id)) {
+        trash_restore_entity($entity);
+      }
+    });
+  }
+
+  /**
+   * Permanently deletes a trashed entity.
+   *
+   * @param string $entity_type_id
+   *   The entity type ID.
+   * @param int|string $entity_id
+   *   The entity ID.
+   */
+  protected function purgeEntity(string $entity_type_id, int|string $entity_id): void {
+    $this->getTrashManager()->executeInTrashContext('ignore', function () use ($entity_type_id, $entity_id): void {
+      if ($entity = $this->getEntityTypeManager()->getStorage($entity_type_id)->load($entity_id)) {
+        $this->getEntityTypeManager()->getStorage($entity_type_id)->delete([$entity]);
+      }
+    });
   }
 
 }

@@ -162,7 +162,7 @@ class TrashHooks {
     $trash_handler = $this->trashManager->getHandler($entity_type->id());
     assert($trash_handler instanceof TrashHandlerInterface);
     if (isset($form['description']['#markup']) && $form['description']['#markup'] instanceof TranslatableMarkup) {
-      if ($form['description']['#markup']->getUntranslatedString() === 'This action cannot be undone.') {
+      if (str_contains($form['description']['#markup']->getUntranslatedString(), 'This action cannot be undone.')) {
         if ($is_entity_delete_form) {
           $form['description']['#markup'] = $entity_delete_label;
           $trash_handler->deleteFormAlter($form, $form_state);
@@ -225,13 +225,19 @@ class TrashHooks {
       )
     ) {
       $trash_settings = $this->configFactory->getEditable('trash.settings');
-      $enabled_entity_types = $trash_settings->get('enabled_entity_types');
-      $enabled_entity_types['node'] = [];
+      $enabled_entity_types = $trash_settings->get('enabled_entity_types') ?? [];
+      $enabled_entity_types['node'] ??= [];
 
       if (in_array('path_alias', $modules, TRUE) ||
         (in_array('trash', $modules, TRUE) && $this->moduleHandler->moduleExists('path_alias'))
       ) {
-        $enabled_entity_types['path_alias'] = [];
+        $enabled_entity_types['path_alias'] ??= [];
+      }
+
+      if (in_array('menu_link_content', $modules, TRUE) ||
+        (in_array('trash', $modules, TRUE) && $this->moduleHandler->moduleExists('menu_link_content'))
+      ) {
+        $enabled_entity_types['menu_link_content'] ??= [];
       }
 
       $trash_settings->set('enabled_entity_types', $enabled_entity_types)->save();

@@ -18,6 +18,25 @@ use Drupal\user\Entity\User;
 class TrashKernelTest extends TrashKernelTestBase {
 
   /**
+   * {@inheritdoc}
+   */
+  protected static $modules = [
+    'file',
+    'image',
+    'media',
+  ];
+
+  /**
+   * {@inheritdoc}
+   */
+  protected function setUp(): void {
+    parent::setUp();
+
+    $this->installEntitySchema('file');
+    $this->installEntitySchema('media');
+  }
+
+  /**
    * Test trashing entities.
    */
   public function testDeletion(): void {
@@ -26,7 +45,7 @@ class TrashKernelTest extends TrashKernelTestBase {
     $entity->save();
     $entity_id = $entity->id();
 
-    $this->assertNotNull(TrashTestEntity::load($entity_id));
+    $this->assertNotEmpty(TrashTestEntity::load($entity_id));
     $this->assertFalse(trash_entity_is_deleted($entity));
     $this->assertTrue($entity->get('deleted')->isEmpty());
     $this->assertNull($entity->get('deleted')->value);
@@ -34,15 +53,14 @@ class TrashKernelTest extends TrashKernelTestBase {
     $entity->delete();
 
     // Test the default 'active' trash context.
-    $entity = TrashTestEntity::load($entity_id);
-    $this->assertNull($entity, 'Deleted entities can not be loaded in the default (active) trash context.');
+    $this->assertEmpty(TrashTestEntity::load($entity_id), 'Deleted entities can not be loaded in the default (active) trash context.');
 
     // Test the 'ignore' trash context.
     $entity = $this->getTrashManager()->executeInTrashContext('ignore', function () use ($entity_id) {
       return TrashTestEntity::load($entity_id);
     });
     assert($entity instanceof ContentEntityInterface);
-    $this->assertNotNull($entity, 'Deleted entities can still be loaded in the "ignore" trash context.');
+    $this->assertNotEmpty($entity, 'Deleted entities can still be loaded in the "ignore" trash context.');
     $this->assertTrue(trash_entity_is_deleted($entity));
     $this->assertEquals(\Drupal::time()->getRequestTime(), $entity->get('deleted')->value);
 
@@ -77,7 +95,7 @@ class TrashKernelTest extends TrashKernelTestBase {
     $loaded = $storage->load($nid);
 
     // Sanity checks that caches work.
-    $this->assertNotNull($loaded);
+    $this->assertNotEmpty($loaded);
     $this->assertSame(1, $storage->getLatestRevisionId($nid));
     $this->assertEquals(1, $storage->getLatestTranslationAffectedRevisionId($nid, 'en'));
 
@@ -85,31 +103,27 @@ class TrashKernelTest extends TrashKernelTestBase {
 
     // Deleting an entity should reset the in-memory and persistent entity
     // caches per ids [and revisions in D11].
-    $loaded = $storage->load($nid);
-    $this->assertNull($loaded);
+    $this->assertEmpty($storage->load($nid));
     $this->assertNull($storage->getLatestRevisionId($nid));
     // @todo This returns the pre-deleted revision, looks like a bug.
     $this->assertSame(1, $storage->getLatestTranslationAffectedRevisionId($nid, 'en'));
 
     // Deactivate the Trash context and fill the caches.
     $this->getTrashManager()->setTrashContext('inactive');
-    $loaded = $storage->load($nid);
-    $this->assertNotNull($loaded);
+    $this->assertNotEmpty($storage->load($nid));
     $this->assertSame(2, $storage->getLatestRevisionId($nid));
     $this->assertSame(2, $storage->getLatestTranslationAffectedRevisionId($nid, 'en'));
 
     // Re-activate the caches and ensure the caches have been cleared.
     $this->getTrashManager()->setTrashContext('active');
-    $loaded = $storage->load($nid);
-    $this->assertNull($loaded);
+    $this->assertEmpty($storage->load($nid));
     $this->assertNull($storage->getLatestRevisionId($nid));
     // @todo This returns the pre-deleted revision, looks like a bug.
     $this->assertSame(1, $storage->getLatestTranslationAffectedRevisionId($nid, 'en'));
 
     // Repeat the above with executeInTrashContext().
     $this->getTrashManager()->executeInTrashContext('inactive', function () use ($storage, $nid) {
-      $loaded = $storage->load($nid);
-      $this->assertNotNull($loaded);
+      $this->assertNotEmpty($storage->load($nid));
       $this->assertSame(2, $storage->getLatestRevisionId($nid));
       $this->assertSame(
         2,
@@ -118,8 +132,7 @@ class TrashKernelTest extends TrashKernelTestBase {
     });
 
     // Re-activate the caches and ensure the caches have been cleared.
-    $loaded = $storage->load($nid);
-    $this->assertNull($loaded);
+    $this->assertEmpty($storage->load($nid));
     $this->assertNull($storage->getLatestRevisionId($nid));
     // @todo This returns the pre-deleted revision, looks like a bug.
     $this->assertSame(1, $storage->getLatestTranslationAffectedRevisionId($nid, 'en'));
@@ -135,8 +148,7 @@ class TrashKernelTest extends TrashKernelTestBase {
     $this->assertFalse(trash_entity_is_deleted($nonDeletableNode));
 
     $nonDeletableNode->delete();
-    $nonDeletableNode = Node::load($nonDeletableNode->id());
-    $this->assertNull($nonDeletableNode);
+    $this->assertEmpty(Node::load($nonDeletableNode->id()));
 
     // Check an entity type that's not trash-enabled.
     $nonDeletableEntity = $this->createUser();
@@ -144,8 +156,7 @@ class TrashKernelTest extends TrashKernelTestBase {
     $this->assertFalse(trash_entity_is_deleted($nonDeletableEntity));
 
     $nonDeletableEntity->delete();
-    $nonDeletableEntity = User::load($nonDeletableEntity->id());
-    $this->assertNull($nonDeletableEntity);
+    $this->assertEmpty(User::load($nonDeletableEntity->id()));
   }
 
   /**
@@ -335,6 +346,24 @@ class TrashKernelTest extends TrashKernelTestBase {
     // Switch back to the 'active' context.
     $this->getTrashManager()->setTrashContext('active');
     $this->assertNull($storage->getLatestRevisionId($entity->id()));
+  }
+
+  /**
+   * Tests that hook_modules_installed preserves existing enabled_entity_types.
+   */
+  public function testModulesInstalledPreservesConfig(): void {
+    // TrashKernelTestBase::setUp() seeds enabled_entity_types.node with a
+    // specific bundle list, mimicking a distribution/profile that ships a
+    // pre-configured trash.settings. Firing hook_modules_installed (as
+    // happens at the end of a profile install) must not overwrite that
+    // bundle list with an empty array.
+    $before = \Drupal::config('trash.settings')->get('enabled_entity_types');
+    $this->assertSame(['article'], $before['node']);
+
+    \Drupal::moduleHandler()->invokeAll('modules_installed', [['node'], FALSE]);
+
+    $after = \Drupal::config('trash.settings')->get('enabled_entity_types');
+    $this->assertSame(['article'], $after['node']);
   }
 
 }

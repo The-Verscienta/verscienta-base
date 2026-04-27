@@ -25,8 +25,14 @@ trait PathAliasIntegrationTrait {
    *   TRUE if path aliases should be handled, FALSE otherwise.
    */
   protected function shouldHandlePathAliases(EntityInterface $entity): bool {
-    return $entity->getEntityTypeId() !== 'path_alias'
-      && $this->trashManager->isEntityTypeEnabled('path_alias');
+    if ($entity->getEntityTypeId() === 'path_alias' || !$this->trashManager->isEntityTypeEnabled('path_alias')) {
+      return FALSE;
+    }
+
+    // Only entity types with a "canonical" or "edit-form" link template may
+    // support path aliases.
+    $entity_type = $entity->getEntityType();
+    return $entity_type->hasLinkTemplate('canonical') || $entity_type->hasLinkTemplate('edit-form');
   }
 
   /**

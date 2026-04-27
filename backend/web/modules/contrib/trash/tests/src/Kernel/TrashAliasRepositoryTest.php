@@ -181,8 +181,7 @@ class TrashAliasRepositoryTest extends TrashKernelTestBase {
     $alias->delete();
 
     // Try to reload - should be null since it was hard deleted.
-    $alias = PathAlias::load($alias->id());
-    $this->assertNull($alias, 'Alias was hard deleted when trash is disabled.');
+    $this->assertEmpty(PathAlias::load($alias->id()), 'Alias was hard deleted when trash is disabled.');
   }
 
   /**
@@ -209,8 +208,7 @@ class TrashAliasRepositoryTest extends TrashKernelTestBase {
     $this->assertEquals('/test-cache', $path, 'Deleted alias not found after cache clear.');
 
     // Restore the alias.
-    $storage = $this->container->get('entity_type.manager')->getStorage('path_alias');
-    $storage->restoreFromTrash([$alias]);
+    $this->restoreEntity('path_alias', $alias->id());
 
     // The cache should be cleared again, so lookup should find it.
     $path = $this->aliasManager->getPathByAlias('/test-cache', 'en');

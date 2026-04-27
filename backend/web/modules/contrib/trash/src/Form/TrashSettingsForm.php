@@ -205,9 +205,14 @@ class TrashSettingsForm extends ConfigFormBase {
     $config->save();
 
     // Inform users that they should probably enable support for path aliases
-    // alongside nodes.
-    if (isset($enabled_entity_types['node']) && !isset($enabled_entity_types['path_alias'])) {
-      $this->messenger()->addStatus($this->t('Consider enabling Trash support for URL aliases. This ensures that URL aliases are automatically trashed and restored along with their associated content.'));
+    // and content menu links alongside nodes.
+    if (isset($enabled_entity_types['node'])) {
+      if (!isset($enabled_entity_types['path_alias'])) {
+        $this->messenger()->addStatus($this->t('Consider enabling Trash support for URL aliases. This ensures that URL aliases are automatically trashed and restored along with their associated content.'));
+      }
+      if (!isset($enabled_entity_types['menu_link_content'])) {
+        $this->messenger()->addStatus($this->t('Consider enabling Trash support for Custom menu links. This ensures that menu links are automatically trashed and restored along with their associated content.'));
+      }
     }
 
     parent::submitForm($form, $form_state);
@@ -220,20 +225,9 @@ class TrashSettingsForm extends ConfigFormBase {
     // Disallow enabling trash on entity types that haven't been tested enough.
     $unsupported_entity_types = [
       'comment',
-      'taxonomy_term',
       'user',
       'workspace',
     ];
-
-    if ($this->entityTypeManager->hasDefinition('menu_link_content')) {
-      // Custom menu links can be deleted if there's a module which allows
-      // changing the hierarchy in pending revisions (e.g. wse_menu).
-      $menu_link_content = $this->entityTypeManager->getDefinition('menu_link_content');
-      $constraints = $menu_link_content->getConstraints();
-      if (isset($constraints['MenuTreeHierarchy'])) {
-        $unsupported_entity_types = array_merge($unsupported_entity_types, ['menu_link_content']);
-      }
-    }
 
     return $unsupported_entity_types;
   }

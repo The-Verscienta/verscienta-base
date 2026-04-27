@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Drupal\trash\Hook\TrashHandler;
 
 use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Hook\Attribute\Hook;
 use Drupal\Core\Menu\MenuLinkManagerInterface;
 use Drupal\trash\Handler\DefaultTrashHandler;
 use Drupal\workspaces\Event\WorkspacePostPublishEvent;
@@ -20,6 +21,39 @@ class MenuLinkContentTrashHandler extends DefaultTrashHandler implements EventSu
     protected MenuLinkManagerInterface $menuLinkManager,
     protected ?WorkspaceManagerInterface $workspaceManager = NULL,
   ) {}
+
+  /**
+   * Implements hook_entity_predelete().
+   *
+   * Purges cascade-trashed menu links when their target entity is hard-deleted.
+   *
+   * Core's MenuLinkContentHooks::entityPredelete() finds links via the menu
+   * tree, but cascade-trashed links have already been removed from the tree.
+   * This hook finds them via entity storage instead.
+   */
+  #[Hook('entity_predelete')]
+  public function entityPredelete(EntityInterface $entity): void {
+    if ($this->trashManager->getTrashContext() === 'active') {
+      return;
+    }
+
+    if ($entity->getEntityTypeId() === 'menu_link_content') {
+      return;
+    }
+
+    if (!$this->trashManager->isEntityTypeEnabled('menu_link_content')) {
+      return;
+    }
+
+    $storage = $this->entityTypeManager->getStorage('menu_link_content');
+    $menu_links = $storage->loadByProperties([
+      'link.uri' => 'entity:' . $entity->getEntityTypeId() . '/' . $entity->id(),
+    ]);
+
+    if (!empty($menu_links)) {
+      $storage->delete($menu_links);
+    }
+  }
 
   /**
    * {@inheritdoc}

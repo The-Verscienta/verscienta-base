@@ -17,6 +17,7 @@ use Drupal\Core\Hook\Attribute\LegacyHook;
 use Drupal\Core\Hook\Attribute\LegacyModuleImplementsAlter;
 use Drupal\Core\PhpStorage\PhpStorageFactory;
 use Drupal\Core\Session\AccountInterface;
+use Drupal\file\FileInterface;
 use Drupal\trash\Hook\TrashEntityHooks;
 use Drupal\trash\Hook\TrashEntityInfoHooks;
 use Drupal\trash\Hook\TrashHooks;
@@ -121,6 +122,51 @@ function trash_entity_query_alter(QueryInterface $query): void {
 function trash_query_search_node_search_alter(AlterableInterface $query): void {
   // @phpstan-ignore-next-line
   \Drupal::service('trash.manager')->getHandler('node')?->querySearchNodeSearchAlter($query);
+}
+
+/**
+ * Implements hook_search_plugin_alter().
+ */
+#[LegacyHook]
+function trash_search_plugin_alter(array &$definitions): void {
+  // @phpstan-ignore-next-line
+  \Drupal::service('trash.manager')->getHandler('node')?->searchPluginAlter($definitions);
+}
+
+/**
+ * Implements hook_entity_predelete().
+ */
+#[LegacyHook]
+function trash_entity_predelete(EntityInterface $entity) {
+  // @phpstan-ignore-next-line
+  \Drupal::service('trash.manager')->getHandler('menu_link_content')?->entityPredelete($entity);
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_delete() for the 'file' entity type.
+ */
+#[LegacyHook]
+function trash_file_delete(FileInterface $file): void {
+  // @phpstan-ignore-next-line
+  \Drupal::service('trash.manager')->getHandler('file')?->onFileDelete($file);
+}
+
+/**
+ * Implements hook_query_TAG_alter() for the 'taxonomy_term_access' tag.
+ */
+#[LegacyHook]
+function trash_query_taxonomy_term_access_alter(AlterableInterface $query) {
+  // @phpstan-ignore-next-line
+  \Drupal::service('trash.manager')->getHandler('taxonomy_term')?->queryTaxonomyTermAccessAlter($query);
+}
+
+/**
+ * Implements hook_query_TAG_alter() for the 'term_access' tag.
+ */
+#[LegacyHook]
+function trash_query_term_access_alter(AlterableInterface $query) {
+  // @phpstan-ignore-next-line
+  \Drupal::service('trash.manager')->getHandler('taxonomy_term')?->queryTermAccessAlter($query);
 }
 
 /**

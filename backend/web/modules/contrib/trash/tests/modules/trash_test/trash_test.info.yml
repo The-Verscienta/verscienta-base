@@ -5,7 +5,7 @@ core_version_requirement: ^10.3 | ^11
 dependencies:
   - drupal:trash
 
-# Information added by Drupal.org packaging script on 2026-03-28
-version: '3.0.26'
+# Information added by Drupal.org packaging script on 2026-04-24
+version: '3.0.27'
 project: 'trash'
-datestamp: 1774733818
+datestamp: 1777059107

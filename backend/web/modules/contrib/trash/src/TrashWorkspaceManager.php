@@ -53,8 +53,9 @@ class TrashWorkspaceManager implements WorkspaceManagerInterface {
   /**
    * {@inheritdoc}
    */
-  public function setActiveWorkspace(WorkspaceInterface $workspace) {
-    return $this->inner->setActiveWorkspace($workspace);
+  public function setActiveWorkspace(WorkspaceInterface $workspace, bool $persist = TRUE) {
+    // @phpstan-ignore-next-line
+    return $this->inner->setActiveWorkspace($workspace, $persist);
   }
 
   /**
