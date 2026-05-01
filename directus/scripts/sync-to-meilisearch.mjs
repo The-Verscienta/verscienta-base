@@ -41,7 +41,8 @@ function stripHtml(html) {
 const collections = {
   herbs: {
     index: "verscienta_herbs",
-    fields: ["*"],
+    fields: ["*", "images.file"],
+    filter: { status: { _eq: "published" } },
     transform: (item) => ({
       id: item.id,
       type: "herb",
@@ -73,6 +74,7 @@ const collections = {
       source_databases: item.source_databases || [],
       review_count: item.review_count || 0,
       average_rating: item.average_rating || 0,
+      image: item.images?.[0]?.file || null,
     }),
   },
   formulas: {
@@ -89,6 +91,10 @@ const collections = {
       description: stripHtml(item.description),
       use_cases: item.use_cases || [],
       classic_source: item.classic_source,
+      source_author: item.source_author,
+      source_dynasty: item.source_dynasty,
+      source_year: item.source_year,
+      image: item.image || null,
     }),
   },
   conditions: {
@@ -122,18 +128,54 @@ const collections = {
   practitioners: {
     index: "verscienta_practitioners",
     fields: ["*"],
+    transform: (item) => {
+      const fullName = [item.first_name, item.last_name].filter(Boolean).join(" ") || item.title;
+      return {
+        id: item.id,
+        type: "practitioner",
+        url: `/practitioners/${item.slug || item.id}`,
+        title: fullName,
+        name: fullName,
+        first_name: item.first_name,
+        last_name: item.last_name,
+        slug: item.slug,
+        practice_type: item.practice_type,
+        bio: stripHtml(item.bio),
+        address: item.address,
+        latitude: item.latitude,
+        longitude: item.longitude,
+        image: item.image || null,
+        _geo:
+          item.latitude && item.longitude
+            ? { lat: parseFloat(item.latitude), lng: parseFloat(item.longitude) }
+            : undefined,
+      };
+    },
+  },
+  clinics: {
+    index: "verscienta_clinics",
+    fields: ["*", "images.file"],
+    filter: { status: { _eq: "active" } },
     transform: (item) => ({
       id: item.id,
-      type: "practitioner",
-      url: `/practitioners/${item.slug || item.id}`,
-      title: item.title,
-      name: item.title,
+      type: "clinic",
+      url: `/clinics/${item.slug || item.id}`,
+      title: item.name,
+      name: item.name,
       slug: item.slug,
-      practice_type: item.practice_type,
-      bio: stripHtml(item.bio),
+      description: stripHtml(item.description),
+      phone: item.phone,
+      email: item.email,
+      website: item.website,
       address: item.address,
+      city: item.city,
+      state: item.state,
+      zip_code: item.zip_code,
+      services: item.services || [],
+      accepts_insurance: !!item.accepts_insurance,
       latitude: item.latitude,
       longitude: item.longitude,
+      image: item.images?.[0]?.file || null,
       _geo:
         item.latitude && item.longitude
           ? { lat: parseFloat(item.latitude), lng: parseFloat(item.longitude) }
@@ -158,6 +200,7 @@ async function syncCollection(name, config) {
         fields: config.fields,
         limit,
         offset: (page - 1) * limit,
+        ...(config.filter ? { filter: config.filter } : {}),
       })
     );
 

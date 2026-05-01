@@ -1,8 +1,65 @@
 ---
 import ContentLayout from "@/layouts/ContentLayout.astro";
-import { directus, readItems } from "@/lib/directus";
+import { directus, readItems, aggregate } from "@/lib/directus";
+
+const page = parseInt(Astro.url.searchParams.get("page") || "1");
+const sort = Astro.url.searchParams.get("sort") || "a-z";
+const severity = Astro.url.searchParams.get("severity") || "";
+const q = (Astro.url.searchParams.get("q") || "").trim();
+const limit = 24;
+const offset = (page - 1) * limit;
+
+const sortMap: Record<string, string[]> = {
+  "a-z": ["title"],
+  "z-a": ["-title"],
+  "severity-desc": ["-severity", "title"],
+};
+
+const filter: Record<string, any> = {};
+if (severity) filter.severity = { _eq: severity };
+if (q) {
+  filter._or = [
+    { title: { _icontains: q } },
+    { symptoms: { _icontains: q } },
+    { description: { _icontains: q } },
+  ];
+}
+
 let conditions: any[] = [];
-try { conditions = await directus.request(readItems("conditions", { fields: ["id","title","slug","symptoms","severity","description"], sort: ["title"], limit: -1 })) as any; } catch (e) { console.error(e); }
+let total = 0;
+try {
+  const [items, countResult] = await Promise.all([
+    directus.request(readItems("conditions", {
+      fields: ["id", "title", "slug", "symptoms", "severity"],
+      sort: sortMap[sort] || ["title"],
+      limit,
+      offset,
+      ...(Object.keys(filter).length > 0 ? { filter } : {}),
+    })),
+    directus.request(aggregate("conditions", {
+      aggregate: { count: "*" },
+      ...(Object.keys(filter).length > 0 ? { filter } : {}),
+    })),
+  ]);
+  conditions = items as any[];
+  total = Number((countResult as any)?.[0]?.count ?? 0);
+} catch (e) { console.error("Error fetching conditions:", e); }
+
+const totalPages = Math.ceil(total / limit);
+const severityChoices = ["mild", "moderate", "severe", "critical"];
+
+const buildHref = (overrides: Record<string, string | number>) => {
+  const params = new URLSearchParams();
+  if (q) params.set("q", q);
+  if (sort && sort !== "a-z") params.set("sort", sort);
+  if (severity) params.set("severity", severity);
+  params.set("page", String(page));
+  for (const [k, v] of Object.entries(overrides)) {
+    if (v === "" || v == null) params.delete(k);
+    else params.set(k, String(v));
+  }
+  return `/conditions?${params.toString()}`;
+};
 ---
 <ContentLayout title="Health Conditions — Verscienta Health" description="Browse health conditions with herb and modality recommendations.">
   <section class="bg-gradient-to-br from-earth-50 via-sage-50/50 to-cream-100 dark:from-earth-950 dark:via-earth-900/50 dark:to-earth-950 border-b border-sage-200/50 dark:border-earth-700">
@@ -12,18 +69,81 @@ try { conditions = await directus.request(readItems("conditions", { fields: ["id
       <p class="text-lg text-gray-600 dark:text-earth-300">Health conditions with holistic treatment approaches.</p>
     </div>
   </section>
+
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <!-- Search & Filter -->
+    <form method="get" action="/conditions" class="mb-6 flex flex-wrap gap-2" role="search">
+      <input
+        type="search"
+        name="q"
+        value={q}
+        placeholder="Search by name, symptom, or description…"
+        aria-label="Search conditions"
+        class="flex-1 min-w-[240px] px-4 py-2 rounded-lg border border-gray-200 dark:border-earth-600 bg-white dark:bg-earth-800 text-gray-900 dark:text-earth-100 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-sage-500"
+      />
+      <select name="severity" aria-label="Filter by severity" class="px-3 py-2 rounded-lg border border-gray-200 dark:border-earth-600 bg-white dark:bg-earth-800 text-gray-900 dark:text-earth-100">
+        <option value="">All severities</option>
+        {severityChoices.map(s => <option value={s} selected={severity === s}>{s.charAt(0).toUpperCase() + s.slice(1)}</option>)}
+      </select>
+      <select name="sort" aria-label="Sort" class="px-3 py-2 rounded-lg border border-gray-200 dark:border-earth-600 bg-white dark:bg-earth-800 text-gray-900 dark:text-earth-100">
+        <option value="a-z" selected={sort === "a-z"}>A–Z</option>
+        <option value="z-a" selected={sort === "z-a"}>Z–A</option>
+        <option value="severity-desc" selected={sort === "severity-desc"}>Severity (high to low)</option>
+      </select>
+      <button type="submit" class="px-4 py-2 rounded-lg bg-sage-600 text-white hover:bg-sage-700 transition">Search</button>
+      {(q || severity || sort !== "a-z") && (
+        <a href="/conditions" class="px-4 py-2 rounded-lg text-gray-700 dark:text-earth-200 border border-gray-200 dark:border-earth-600 hover:bg-sage-50 dark:hover:bg-earth-700 transition">Clear</a>
+      )}
+    </form>
+
+    <p class="text-sm text-gray-600 dark:text-earth-400 mb-6">
+      {total > 0
+        ? `Showing ${offset + 1}–${Math.min(offset + limit, total)} of ${total} conditions${q ? ` matching "${q}"` : ""}`
+        : q || severity ? "No conditions match those filters" : "No conditions found"}
+    </p>
+
     <div class="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
       {conditions.map((c: any) => (
-        <a href={`/conditions/${c.slug || c.id}`} class="group bg-white dark:bg-earth-900 rounded-xl shadow-sm border border-gray-100 dark:border-earth-700 hover:shadow-lg transition-all p-5">
-          <div class="flex items-start justify-between mb-2">
+        <a href={`/conditions/${c.slug || c.id}`} class="group bg-white dark:bg-earth-900 rounded-xl shadow-sm border border-gray-100 dark:border-earth-700 hover:shadow-lg hover:border-sage-300 dark:hover:border-sage-700 transition-all p-5">
+          <div class="flex items-start justify-between gap-2 mb-2">
             <h2 class="font-serif text-lg font-bold text-gray-900 dark:text-earth-100 group-hover:text-sage-600 transition-colors">{c.title}</h2>
-            {c.severity && <span class={`text-xs px-2 py-0.5 rounded-full flex-shrink-0 ${c.severity === "severe" || c.severity === "critical" ? "bg-red-100 text-red-700" : c.severity === "moderate" ? "bg-amber-100 text-amber-700" : "bg-green-100 text-green-700"}`}>{c.severity}</span>}
+            {c.severity && <span class={`text-xs px-2 py-0.5 rounded-full flex-shrink-0 capitalize ${c.severity === "severe" || c.severity === "critical" ? "bg-red-100 text-red-700" : c.severity === "moderate" ? "bg-amber-100 text-amber-700" : "bg-green-100 text-green-700"}`}>{c.severity}</span>}
           </div>
-          {c.symptoms?.length > 0 && <div class="flex flex-wrap gap-1 mt-2">{c.symptoms.slice(0,3).map((s:string) => <span class="text-xs px-2 py-0.5 rounded-full bg-sage-100 dark:bg-earth-800 text-sage-700 dark:text-sage-300">{s}</span>)}</div>}
+          {c.symptoms?.length > 0 && (
+            <div class="flex flex-wrap gap-1 mt-2">
+              {c.symptoms.slice(0, 4).map((s: string) => (
+                <span class="text-xs px-2 py-0.5 rounded-full bg-sage-100 dark:bg-earth-800 text-sage-700 dark:text-sage-300">{s}</span>
+              ))}
+              {c.symptoms.length > 4 && <span class="text-xs text-gray-400">+{c.symptoms.length - 4}</span>}
+            </div>
+          )}
         </a>
       ))}
     </div>
-    {conditions.length === 0 && <div class="text-center py-16"><p class="text-gray-600 dark:text-earth-400">No conditions found.</p></div>}
+
+    {conditions.length === 0 && !q && !severity && (
+      <div class="text-center py-16"><p class="text-gray-600 dark:text-earth-400">No conditions found.</p></div>
+    )}
+    {conditions.length === 0 && (q || severity) && (
+      <div class="text-center py-16">
+        <p class="text-gray-600 dark:text-earth-400">Try a different search, or <a href="/conditions" class="text-sage-600 hover:underline">browse all conditions</a>.</p>
+      </div>
+    )}
+
+    <!-- Pagination -->
+    {totalPages > 1 && (
+      <nav class="flex justify-center gap-2 mt-12">
+        {page > 1 && <a href={buildHref({ page: page - 1 })} class="px-4 py-2 rounded-lg text-gray-700 dark:text-earth-200 hover:bg-sage-100 dark:hover:bg-earth-800 transition">‹ Prev</a>}
+        {Array.from({ length: totalPages }, (_, i) => i + 1).slice(Math.max(0, page - 3), page + 2).map(p => (
+          <a
+            href={buildHref({ page: p })}
+            class={`px-4 py-2 rounded-lg transition ${p === page ? "bg-sage-600 text-white" : "text-gray-700 dark:text-earth-200 hover:bg-sage-100 dark:hover:bg-earth-800"}`}
+          >
+            {p}
+          </a>
+        ))}
+        {page < totalPages && <a href={buildHref({ page: page + 1 })} class="px-4 py-2 rounded-lg text-gray-700 dark:text-earth-200 hover:bg-sage-100 dark:hover:bg-earth-800 transition">Next ›</a>}
+      </nav>
+    )}
   </div>
 </ContentLayout>

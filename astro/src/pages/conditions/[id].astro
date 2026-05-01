@@ -1,6 +1,6 @@
 ---
 import ContentLayout from "@/layouts/ContentLayout.astro";
-import { directus, readItems, readItem } from "@/lib/directus";
+import { directus, readItems, readItem, aggregate } from "@/lib/directus";
 const { id } = Astro.params;
 let condition: any = null;
 try {
@@ -9,6 +9,53 @@ try {
   if (!condition && /^\d+$/.test(id!)) condition = await directus.request(readItem("conditions", parseInt(id!), { fields: ["*"] }));
 } catch (e) { console.error(e); }
 if (!condition) return Astro.redirect("/404");
+
+// Reverse relations: herbs that treat, formulas that target, modalities that address
+const HERB_DISPLAY_LIMIT = 24;
+const FORMULA_DISPLAY_LIMIT = 24;
+const MODALITY_DISPLAY_LIMIT = 50;
+
+const herbsFilter = { conditions_treated: { conditions_id: { _eq: condition.id } }, status: { _eq: "published" } };
+const formulasFilter = { conditions: { conditions_id: { _eq: condition.id } } };
+const modalitiesFilter = { conditions: { conditions_id: { _eq: condition.id } } };
+
+let herbs: any[] = [];
+let formulas: any[] = [];
+let modalities: any[] = [];
+let herbsTotal = 0;
+let formulasTotal = 0;
+let modalitiesTotal = 0;
+try {
+  const [herbsRes, formulasRes, modalitiesRes, herbsCount, formulasCount, modalitiesCount] = await Promise.all([
+    directus.request(readItems("herbs", {
+      filter: herbsFilter,
+      fields: ["id", "title", "slug", "scientific_name", "plant_type"],
+      sort: ["title"],
+      limit: HERB_DISPLAY_LIMIT,
+    })).catch(() => []),
+    directus.request(readItems("formulas", {
+      filter: formulasFilter,
+      fields: ["id", "title", "slug", "chinese_name", "pinyin_name"],
+      sort: ["title"],
+      limit: FORMULA_DISPLAY_LIMIT,
+    })).catch(() => []),
+    directus.request(readItems("modalities", {
+      filter: modalitiesFilter,
+      fields: ["id", "title", "slug"],
+      sort: ["title"],
+      limit: MODALITY_DISPLAY_LIMIT,
+    })).catch(() => []),
+    directus.request(aggregate("herbs", { aggregate: { count: "*" }, filter: herbsFilter })).catch(() => []),
+    directus.request(aggregate("formulas", { aggregate: { count: "*" }, filter: formulasFilter })).catch(() => []),
+    directus.request(aggregate("modalities", { aggregate: { count: "*" }, filter: modalitiesFilter })).catch(() => []),
+  ]);
+  herbs = herbsRes as any[];
+  formulas = formulasRes as any[];
+  modalities = modalitiesRes as any[];
+  herbsTotal = Number((herbsCount as any)?.[0]?.count ?? herbs.length);
+  formulasTotal = Number((formulasCount as any)?.[0]?.count ?? formulas.length);
+  modalitiesTotal = Number((modalitiesCount as any)?.[0]?.count ?? modalities.length);
+} catch (e) { console.error("Error fetching condition reverse relations:", e); }
 ---
 <ContentLayout title={`${condition.title} — Verscienta Health`} description={`Information about ${condition.title} including symptoms, holistic treatments, and TCM approaches.`}>
   <section class="bg-gradient-to-br from-earth-50 via-sage-50/50 to-cream-100 dark:from-earth-950 dark:via-earth-900/50 dark:to-earth-950 border-b border-sage-200/50 dark:border-earth-700">
@@ -21,6 +68,70 @@ if (!condition) return Astro.redirect("/404");
   <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
     {condition.symptoms?.length > 0 && <section><h2 class="font-serif text-2xl font-bold text-gray-900 dark:text-earth-100 mb-4">Symptoms</h2><div class="flex flex-wrap gap-2">{condition.symptoms.map((s:string) => <span class="px-3 py-1.5 rounded-full bg-sage-100 dark:bg-earth-800 text-sage-700 dark:text-sage-300 text-sm">{s}</span>)}</div></section>}
     {condition.description && <section><h2 class="font-serif text-2xl font-bold text-gray-900 dark:text-earth-100 mb-4">Overview</h2><div class="prose prose-earth dark:prose-invert max-w-none" set:html={condition.description} /></section>}
+
+    {herbs.length > 0 && (
+      <section>
+        <h2 class="font-serif text-2xl font-bold text-gray-900 dark:text-earth-100 mb-4">
+          Herbs Used to Treat
+          <span class="text-sm font-normal text-gray-500 dark:text-earth-400 ml-2">({herbsTotal})</span>
+        </h2>
+        <div class="grid sm:grid-cols-2 gap-3">
+          {herbs.map((h: any) => (
+            <a href={`/herbs/${h.slug || h.id}`} class="block bg-white dark:bg-earth-900 rounded-lg border border-gray-100 dark:border-earth-700 hover:border-sage-300 dark:hover:border-sage-700 hover:shadow-sm transition p-3">
+              <div class="font-medium text-gray-900 dark:text-earth-100 hover:text-sage-600">{h.title}</div>
+              {h.scientific_name && <div class="text-xs italic text-gray-500 dark:text-earth-400 mt-0.5">{h.scientific_name}</div>}
+              {h.plant_type && <div class="text-xs text-gray-400 dark:text-earth-500 mt-0.5 capitalize">{h.plant_type}</div>}
+            </a>
+          ))}
+        </div>
+        {herbsTotal > herbs.length && (
+          <p class="text-sm text-gray-500 dark:text-earth-400 mt-3">
+            Showing {herbs.length} of {herbsTotal}.
+            <a href={`/herbs?condition=${condition.slug || condition.id}`} class="text-sage-600 hover:underline ml-1">Browse all →</a>
+          </p>
+        )}
+      </section>
+    )}
+
+    {formulas.length > 0 && (
+      <section>
+        <h2 class="font-serif text-2xl font-bold text-gray-900 dark:text-earth-100 mb-4">
+          Formulas Targeting This Condition
+          <span class="text-sm font-normal text-gray-500 dark:text-earth-400 ml-2">({formulasTotal})</span>
+        </h2>
+        <ul class="space-y-2">
+          {formulas.map((f: any) => (
+            <li>
+              <a href={`/formulas/${f.slug || f.id}`} class="block bg-white dark:bg-earth-900 rounded-lg border border-gray-100 dark:border-earth-700 hover:border-sage-300 hover:shadow-sm transition p-3">
+                <div class="font-medium text-gray-900 dark:text-earth-100 hover:text-sage-600">{f.title}</div>
+                {(f.chinese_name || f.pinyin_name) && <div class="text-xs text-gray-500 dark:text-earth-400 mt-0.5">{[f.chinese_name, f.pinyin_name].filter(Boolean).join(" · ")}</div>}
+              </a>
+            </li>
+          ))}
+        </ul>
+        {formulasTotal > formulas.length && (
+          <p class="text-sm text-gray-500 dark:text-earth-400 mt-3">Showing {formulas.length} of {formulasTotal}.</p>
+        )}
+      </section>
+    )}
+
+    {modalities.length > 0 && (
+      <section>
+        <h2 class="font-serif text-2xl font-bold text-gray-900 dark:text-earth-100 mb-4">
+          Modalities That Address This
+          <span class="text-sm font-normal text-gray-500 dark:text-earth-400 ml-2">({modalitiesTotal})</span>
+        </h2>
+        <div class="flex flex-wrap gap-2">
+          {modalities.map((m: any) => (
+            <a href={`/modalities/${m.slug || m.id}`} class="px-3 py-1.5 rounded-full bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 text-sm hover:bg-purple-200 transition">{m.title}</a>
+          ))}
+        </div>
+        {modalitiesTotal > modalities.length && (
+          <p class="text-sm text-gray-500 dark:text-earth-400 mt-3">Showing {modalities.length} of {modalitiesTotal}.</p>
+        )}
+      </section>
+    )}
+
     <div class="bg-sage-50 dark:bg-earth-900 rounded-xl border border-sage-200 dark:border-earth-700 p-6 text-center">
       <p class="text-sm text-gray-600 dark:text-earth-300 mb-3">Looking for holistic approaches?</p>
       <a href="/symptom-checker" class="inline-flex items-center gap-2 px-4 py-2 bg-sage-600 text-white rounded-lg hover:bg-sage-700 transition">Try the AI Symptom Checker</a>

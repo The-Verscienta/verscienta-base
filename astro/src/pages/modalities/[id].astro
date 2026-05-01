@@ -9,6 +9,24 @@ try {
   if (!modality && /^\d+$/.test(id!)) modality = await directus.request(readItem("modalities", parseInt(id!), { fields: ["*", "conditions.conditions_id.*"] }));
 } catch (e) { console.error(e); }
 if (!modality) return Astro.redirect("/404");
+
+// Reverse: practitioners and clinics offering this modality
+let practitioners: any[] = [];
+let clinics: any[] = [];
+try {
+  [practitioners, clinics] = await Promise.all([
+    directus.request(readItems("practitioners", {
+      filter: { modalities: { modalities_id: { _eq: modality.id } } },
+      fields: ["id", "first_name", "last_name", "title", "slug", "practice_type"],
+      limit: 50,
+    })).catch(() => []),
+    directus.request(readItems("clinics", {
+      filter: { modalities: { modalities_id: { _eq: modality.id } } },
+      fields: ["id", "name", "slug", "city", "state"],
+      limit: 50,
+    })).catch(() => []),
+  ]);
+} catch (e) { console.error("Error fetching modality reverse relations:", e); }
 ---
 <ContentLayout title={`${modality.title} — Verscienta Health`} description={`Learn about ${modality.title}: benefits, techniques, and conditions it addresses.`}>
   <section class="bg-gradient-to-br from-earth-50 via-sage-50/50 to-cream-100 dark:from-earth-950 dark:via-earth-900/50 dark:to-earth-950 border-b border-sage-200/50 dark:border-earth-700">
@@ -22,5 +40,38 @@ if (!modality) return Astro.redirect("/404");
     {modality.description && <section><h2 class="font-serif text-2xl font-bold text-gray-900 dark:text-earth-100 mb-4">About</h2><div class="prose prose-earth dark:prose-invert max-w-none" set:html={modality.description} /></section>}
     {modality.benefits && <section><h2 class="font-serif text-2xl font-bold text-gray-900 dark:text-earth-100 mb-4">Benefits</h2><div class="prose prose-earth dark:prose-invert max-w-none" set:html={modality.benefits} /></section>}
     {modality.conditions?.length > 0 && <section><h2 class="font-serif text-2xl font-bold text-gray-900 dark:text-earth-100 mb-4">Conditions Addressed</h2><div class="flex flex-wrap gap-2">{modality.conditions.map((c:any) => <a href={`/conditions/${c.conditions_id?.slug || c.conditions_id?.id}`} class="px-3 py-1.5 rounded-full bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 text-sm hover:bg-blue-200 transition">{c.conditions_id?.title}</a>)}</div></section>}
+
+    {practitioners.length > 0 && (
+      <section>
+        <h2 class="font-serif text-2xl font-bold text-gray-900 dark:text-earth-100 mb-4">Practitioners</h2>
+        <div class="grid sm:grid-cols-2 gap-3">
+          {practitioners.map((p: any) => {
+            const fullName = [p.first_name, p.last_name].filter(Boolean).join(" ") || p.title;
+            return (
+              <a href={`/practitioners/${p.slug || p.id}`} class="block bg-white dark:bg-earth-900 rounded-lg border border-gray-100 dark:border-earth-700 hover:border-sage-300 hover:shadow-sm transition p-3">
+                <div class="font-medium text-gray-900 dark:text-earth-100 hover:text-sage-600">{fullName}</div>
+                {p.practice_type && <div class="text-xs text-gray-500 dark:text-earth-400 mt-0.5 capitalize">{p.practice_type}</div>}
+              </a>
+            );
+          })}
+        </div>
+      </section>
+    )}
+
+    {clinics.length > 0 && (
+      <section>
+        <h2 class="font-serif text-2xl font-bold text-gray-900 dark:text-earth-100 mb-4">Clinics Offering This</h2>
+        <ul class="space-y-2">
+          {clinics.map((c: any) => (
+            <li>
+              <a href={`/clinics/${c.slug || c.id}`} class="block bg-white dark:bg-earth-900 rounded-lg border border-gray-100 dark:border-earth-700 hover:border-sage-300 hover:shadow-sm transition p-3">
+                <span class="font-medium text-gray-900 dark:text-earth-100 hover:text-sage-600">{c.name}</span>
+                {(c.city || c.state) && <span class="text-sm text-gray-500 dark:text-earth-400 ml-2">{[c.city, c.state].filter(Boolean).join(", ")}</span>}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </section>
+    )}
   </div>
 </ContentLayout>

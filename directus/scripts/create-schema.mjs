@@ -306,6 +306,13 @@ async function createPrimaryCollections() {
   await safeCreateField("practitioners", { field: "slug", type: "string", meta: { interface: "input" }, schema: { is_unique: true } });
   await safeCreateField("practitioners", { field: "practice_type", type: "string", meta: { interface: "select-dropdown", options: { choices: choices(["TCM", "Western Herbalism", "Naturopathy", "Ayurveda", "Integrative", "Other"]) } }, schema: {} });
   await safeCreateField("practitioners", { field: "bio", type: "text", meta: { interface: "input-rich-text-html" }, schema: {} });
+  await safeCreateField("practitioners", { field: "image", type: "uuid", meta: { interface: "file-image", note: "Profile photo" }, schema: {} });
+  await safeCreateRelation({
+    collection: "practitioners",
+    field: "image",
+    related_collection: "directus_files",
+    schema: { on_delete: "SET NULL" },
+  });
   await safeCreateField("practitioners", { field: "address", type: "text", meta: { interface: "address-autocomplete", options: { latitudeField: "latitude", longitudeField: "longitude" } }, schema: {} });
   await safeCreateField("practitioners", { field: "latitude", type: "decimal", meta: { interface: "input", width: "half" }, schema: {} });
   await safeCreateField("practitioners", { field: "longitude", type: "decimal", meta: { interface: "input", width: "half" }, schema: {} });
@@ -338,6 +345,13 @@ async function createPrimaryCollections() {
   await safeCreateField("formulas", { field: "chinese_name", type: "string", meta: { interface: "input", width: "half" }, schema: {} });
   await safeCreateField("formulas", { field: "pinyin_name", type: "string", meta: { interface: "input", width: "half" }, schema: {} });
   await safeCreateField("formulas", { field: "description", type: "text", meta: { interface: "input-rich-text-html" }, schema: {} });
+  await safeCreateField("formulas", { field: "image", type: "uuid", meta: { interface: "file-image", note: "Representative image (prepared formula, packaging, etc.)" }, schema: {} });
+  await safeCreateRelation({
+    collection: "formulas",
+    field: "image",
+    related_collection: "directus_files",
+    schema: { on_delete: "SET NULL" },
+  });
   await safeCreateField("formulas", { field: "total_weight", type: "decimal", meta: { interface: "input", width: "half" }, schema: {} });
   await safeCreateField("formulas", { field: "total_weight_unit", type: "string", meta: { interface: "select-dropdown", options: { choices: choices(["g", "mg", "oz", "mL"]) }, width: "half" }, schema: {} });
   await safeCreateField("formulas", { field: "preparation_instructions", type: "text", meta: { interface: "input-rich-text-html" }, schema: {} });
@@ -400,12 +414,20 @@ async function createO2MCollections() {
     await safeCreateCollection({ collection: name, meta: { icon, note, hidden: false }, schema: {} });
     // FK to parent (visible so items can be created directly, not just from the parent O2M)
     await safeCreateField(name, { field: `${parentCollection.slice(0, -1)}_id`, type: "integer", meta: { interface: "select-dropdown-m2o", hidden: false }, schema: {} });
+    const aliasField = name.replace(`${parentCollection.slice(0, -1)}_`, "");
     await safeCreateRelation({
       collection: name,
       field: `${parentCollection.slice(0, -1)}_id`,
       related_collection: parentCollection,
-      meta: { one_field: name.replace(`${parentCollection.slice(0, -1)}_`, ""), sort_field: "sort" },
+      meta: { one_field: aliasField, sort_field: "sort" },
       schema: { on_delete: "CASCADE" },
+    });
+    // Explicit alias field on the parent (Directus 11 doesn't always auto-create this)
+    await safeCreateField(parentCollection, {
+      field: aliasField,
+      type: "alias",
+      meta: { interface: "list-o2m", special: ["o2m"], options: { template: "{{title || name || id}}" } },
+      schema: null,
     });
     // Sort field
     await safeCreateField(name, { field: "sort", type: "integer", meta: { interface: "input", hidden: true }, schema: {} });
@@ -532,6 +554,21 @@ async function createO2MCollections() {
   // file → directus_files relation
   await safeCreateRelation({
     collection: "herb_images",
+    field: "file",
+    related_collection: "directus_files",
+    schema: { on_delete: "SET NULL" },
+  });
+
+  // ── clinic_images ─────────────────────────────────────────────────────────
+  await createChildCollection("clinic_images", "clinics", "image", "Clinic images with metadata", [
+    { field: "file", type: "uuid", meta: { interface: "file-image", required: true }, schema: {} },
+    { field: "image_type", type: "string", meta: { interface: "select-dropdown", options: { choices: choices(["Exterior", "Interior", "Treatment Room", "Reception", "Logo", "Staff", "Other"]) }, width: "half" }, schema: {} },
+    { field: "caption", type: "string", meta: { interface: "input" }, schema: {} },
+    { field: "credit", type: "string", meta: { interface: "input", width: "half" }, schema: {} },
+    { field: "license", type: "string", meta: { interface: "input", width: "half" }, schema: {} },
+  ]);
+  await safeCreateRelation({
+    collection: "clinic_images",
     field: "file",
     related_collection: "directus_files",
     schema: { on_delete: "SET NULL" },

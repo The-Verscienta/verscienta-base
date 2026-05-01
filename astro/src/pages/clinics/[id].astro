@@ -1,14 +1,16 @@
 ---
 import ContentLayout from "@/layouts/ContentLayout.astro";
 import Breadcrumbs from "@/components/ui/Breadcrumbs.astro";
-import { directus, readItems, readItem } from "@/lib/directus";
+import { directus, readItems } from "@/lib/directus";
+import { imageUrl } from "@/lib/image-url";
 const { id } = Astro.params;
 let clinic: any = null;
 try {
   const bySlug = await directus.request(readItems("clinics", {
-    filter: { slug: { _eq: id } },
+    filter: { slug: { _eq: id }, status: { _eq: "active" } },
     fields: [
       "*",
+      "images.*",
       "practitioners.practitioners_id.id",
       "practitioners.practitioners_id.first_name",
       "practitioners.practitioners_id.last_name",
@@ -16,6 +18,7 @@ try {
       "practitioners.practitioners_id.slug",
       "practitioners.practitioners_id.practice_type",
       "practitioners.practitioners_id.bio",
+      "practitioners.practitioners_id.image",
       "modalities.modalities_id.id",
       "modalities.modalities_id.title",
       "modalities.modalities_id.slug",
@@ -24,9 +27,12 @@ try {
   }));
   clinic = bySlug?.[0] || null;
   if (!clinic && /^\d+$/.test(id!)) {
-    clinic = await directus.request(readItem("clinics", parseInt(id!), {
-      fields: ["*", "practitioners.practitioners_id.*", "modalities.modalities_id.*"],
+    const byId = await directus.request(readItems("clinics", {
+      filter: { id: { _eq: parseInt(id!) }, status: { _eq: "active" } },
+      fields: ["*", "images.*", "practitioners.practitioners_id.*", "modalities.modalities_id.*"],
+      limit: 1,
     }));
+    clinic = byId?.[0] || null;
   }
 } catch (e) { console.error(e); }
 if (!clinic) return Astro.redirect("/404");
@@ -74,10 +80,23 @@ const TYPE_LABELS: Record<string, string> = {
   <section class="bg-gradient-to-br from-earth-50 via-sage-50/50 to-cream-100 dark:from-earth-950 dark:via-earth-900/50 dark:to-earth-950 border-b border-sage-200/50 dark:border-earth-700">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
       <Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Clinics", href: "/clinics" }, { label: clinic.name }]} class="mb-4" />
-      <h1 class="font-serif text-4xl md:text-5xl font-bold text-gray-900 dark:text-earth-100 mb-2">{clinic.name}</h1>
-      {clinic.accepts_insurance && (
-        <span class="text-xs px-3 py-1 rounded-full bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300">Accepts Insurance</span>
-      )}
+      <div class="flex flex-col md:flex-row gap-8">
+        <div class="flex-1">
+          <h1 class="font-serif text-4xl md:text-5xl font-bold text-gray-900 dark:text-earth-100 mb-2">{clinic.name}</h1>
+          {clinic.accepts_insurance && (
+            <span class="text-xs px-3 py-1 rounded-full bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300">Accepts Insurance</span>
+          )}
+        </div>
+        {clinic.images?.[0]?.file && (
+          <div class="w-full md:w-80 aspect-video md:aspect-square rounded-xl overflow-hidden shadow-lg flex-shrink-0">
+            <img
+              src={imageUrl(clinic.images[0].file, { width: 640, height: 640 })}
+              alt={clinic.images[0].caption || clinic.name}
+              class="w-full h-full object-cover"
+            />
+          </div>
+        )}
+      </div>
     </div>
   </section>
 
@@ -181,14 +200,55 @@ const TYPE_LABELS: Record<string, string> = {
         <div class="grid sm:grid-cols-2 gap-4">
           {practitioners.map((p: any) => (
             <a href={`/practitioners/${p.slug || p.id}`} class="group bg-white dark:bg-earth-900 rounded-xl border border-gray-100 dark:border-earth-700 hover:border-sage-300 dark:hover:border-sage-700 hover:shadow-md transition-all p-5">
-              <h3 class="font-serif text-lg font-bold text-gray-900 dark:text-earth-100 group-hover:text-sage-600 transition-colors mb-1">{practitionerName(p)}</h3>
-              {p.practice_type && (
-                <span class={`text-xs px-2 py-0.5 rounded-full ${TYPE_COLORS[p.practice_type] || TYPE_COLORS.other}`}>
-                  {TYPE_LABELS[p.practice_type] || p.practice_type}
-                </span>
-              )}
-              {p.bio && <p class="text-sm text-gray-600 dark:text-earth-400 mt-2 line-clamp-2" set:html={p.bio.replace(/<[^>]*>/g, '').slice(0, 120)} />}
+              <div class="flex items-start gap-3">
+                {p.image ? (
+                  <img src={imageUrl(p.image, { width: 128, height: 128 })} alt={practitionerName(p)} class="w-12 h-12 rounded-full object-cover flex-shrink-0 ring-2 ring-sage-100 dark:ring-earth-800" loading="lazy" />
+                ) : (
+                  <div class="w-12 h-12 rounded-full bg-sage-100 dark:bg-earth-800 flex items-center justify-center flex-shrink-0 text-sage-600 dark:text-sage-400 font-medium text-sm">
+                    {practitionerName(p).split(" ").map((s: string) => s[0]).filter(Boolean).slice(0, 2).join("").toUpperCase()}
+                  </div>
+                )}
+                <div class="flex-1 min-w-0">
+                  <h3 class="font-serif text-lg font-bold text-gray-900 dark:text-earth-100 group-hover:text-sage-600 transition-colors mb-1">{practitionerName(p)}</h3>
+                  {p.practice_type && (
+                    <span class={`text-xs px-2 py-0.5 rounded-full ${TYPE_COLORS[p.practice_type] || TYPE_COLORS.other}`}>
+                      {TYPE_LABELS[p.practice_type] || p.practice_type}
+                    </span>
+                  )}
+                  {p.bio && <p class="text-sm text-gray-600 dark:text-earth-400 mt-2 line-clamp-2" set:html={p.bio.replace(/<[^>]*>/g, '').slice(0, 120)} />}
+                </div>
+              </div>
             </a>
+          ))}
+        </div>
+      </section>
+    )}
+
+    <!-- Gallery (additional images beyond hero) -->
+    {clinic.images?.length > 1 && (
+      <section>
+        <h2 class="font-serif text-2xl font-bold text-gray-900 dark:text-earth-100 mb-4">Gallery</h2>
+        <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+          {clinic.images.slice(1).map((img: any) => img.file && (
+            <figure class="bg-white dark:bg-earth-900 rounded-lg border border-gray-100 dark:border-earth-700 overflow-hidden">
+              <a href={imageUrl(img.file, { width: 1600 })} target="_blank" rel="noopener" class="block aspect-square overflow-hidden">
+                <img
+                  src={imageUrl(img.file, { width: 400, height: 400 })}
+                  alt={img.caption || `${clinic.name} — ${img.image_type || "image"}`}
+                  class="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+                  loading="lazy"
+                />
+              </a>
+              {(img.image_type || img.caption || img.credit || img.license) && (
+                <figcaption class="p-3 text-xs text-gray-600 dark:text-earth-300 space-y-1">
+                  {img.image_type && <div class="text-sage-700 dark:text-sage-400 font-medium">{img.image_type}</div>}
+                  {img.caption && <div>{img.caption}</div>}
+                  {(img.credit || img.license) && (
+                    <div class="text-gray-400 dark:text-earth-500 italic">{[img.credit, img.license].filter(Boolean).join(" · ")}</div>
+                  )}
+                </figcaption>
+              )}
+            </figure>
           ))}
         </div>
       </section>

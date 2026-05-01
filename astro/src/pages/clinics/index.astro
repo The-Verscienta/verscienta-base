@@ -9,7 +9,7 @@ const DIRECTUS_URL = import.meta.env.PUBLIC_DIRECTUS_URL || "http://localhost:80
 const DIRECTUS_TOKEN = import.meta.env.DIRECTUS_TOKEN || "";
 
 try {
-  const url = `${DIRECTUS_URL}/items/clinics?fields=*,practitioners.practitioners_id.id,practitioners.practitioners_id.first_name,practitioners.practitioners_id.last_name,practitioners.practitioners_id.title,practitioners.practitioners_id.slug,practitioners.practitioners_id.practice_type,modalities.modalities_id.id,modalities.modalities_id.title&filter[status][_eq]=active&sort=name&limit=500`;
+  const url = `${DIRECTUS_URL}/items/clinics?fields=*,images.file,images.image_type,practitioners.practitioners_id.id,practitioners.practitioners_id.first_name,practitioners.practitioners_id.last_name,practitioners.practitioners_id.title,practitioners.practitioners_id.slug,practitioners.practitioners_id.practice_type,modalities.modalities_id.id,modalities.modalities_id.title&filter[status][_eq]=active&sort=name&limit=500`;
   const headers: Record<string, string> = { "Content-Type": "application/json" };
   if (DIRECTUS_TOKEN) headers["Authorization"] = `Bearer ${DIRECTUS_TOKEN}`;
 
@@ -134,7 +134,7 @@ try {
     </div>
   </div>
 
-  <div id="clinics-data" hidden data-json={JSON.stringify(clinics)}></div>
+  <div id="clinics-data" hidden data-json={JSON.stringify(clinics)} data-directus-url={DIRECTUS_URL}></div>
 
   <script>
     const grid = document.getElementById('results-grid')!;
@@ -146,9 +146,12 @@ try {
     const distanceSelect = document.getElementById('distance-select') as HTMLSelectElement;
 
     let allClinics: any[] = [];
+    let directusUrl = '';
     try {
-      const raw = document.getElementById('clinics-data')?.getAttribute('data-json');
+      const dataEl = document.getElementById('clinics-data');
+      const raw = dataEl?.getAttribute('data-json');
       if (raw) allClinics = JSON.parse(raw);
+      directusUrl = dataEl?.getAttribute('data-directus-url') || '';
     } catch (e) {
       console.error('Failed to parse clinics data:', e);
     }
@@ -285,9 +288,19 @@ try {
       const descSnippet = c.description
         ? c.description.replace(/<[^>]*>/g, '').slice(0, 100) + (c.description.length > 100 ? '...' : '')
         : '';
+      const heroFile = c.images?.[0]?.file;
+      const heroSrc = heroFile && directusUrl
+        ? `${directusUrl}/assets/${heroFile}?width=600&height=300&fit=cover`
+        : '';
 
       return `
-        <a href="/clinics/${c.slug || c.id}" class="group bg-white dark:bg-earth-900 rounded-xl shadow-sm border border-gray-100 dark:border-earth-700 hover:shadow-lg hover:border-sage-300 dark:hover:border-sage-700 transition-all p-5">
+        <a href="/clinics/${c.slug || c.id}" class="group bg-white dark:bg-earth-900 rounded-xl shadow-sm border border-gray-100 dark:border-earth-700 hover:shadow-lg hover:border-sage-300 dark:hover:border-sage-700 transition-all overflow-hidden">
+          ${heroSrc ? `
+            <div class="aspect-[2/1] overflow-hidden bg-sage-50 dark:bg-earth-800">
+              <img src="${heroSrc}" alt="${c.name.replace(/"/g, '&quot;')}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" loading="lazy" />
+            </div>
+          ` : ''}
+          <div class="p-5">
           <div class="flex items-start justify-between mb-2">
             <h3 class="font-serif text-lg font-bold text-gray-900 dark:text-earth-100 group-hover:text-sage-600 transition-colors">${c.name}</h3>
             ${distStr}
@@ -316,6 +329,7 @@ try {
             </p>
           ` : ''}
           ${descSnippet ? `<p class="text-sm text-gray-600 dark:text-earth-400 mt-2 line-clamp-2">${descSnippet}</p>` : ''}
+          </div>
         </a>
       `;
     }

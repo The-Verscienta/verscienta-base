@@ -2,50 +2,107 @@
 import ContentLayout from "@/layouts/ContentLayout.astro";
 import Breadcrumbs from "@/components/ui/Breadcrumbs.astro";
 import { directus, readItems, readItem } from "@/lib/directus";
+import { imageUrl } from "@/lib/image-url";
 const { id } = Astro.params;
+
+const PRACTITIONER_FIELDS = [
+  "*",
+  "modalities.modalities_id.id",
+  "modalities.modalities_id.title",
+  "modalities.modalities_id.slug",
+];
+
 let practitioner: any = null;
 try {
-  const bySlug = await directus.request(readItems("practitioners", { filter: { slug: { _eq: id } }, fields: ["*", "modalities.modalities_id.id", "modalities.modalities_id.title", "modalities.modalities_id.slug"], limit: 1 }));
+  const bySlug = await directus.request(readItems("practitioners", { filter: { slug: { _eq: id } }, fields: PRACTITIONER_FIELDS, limit: 1 }));
   practitioner = bySlug?.[0] || null;
-  if (!practitioner && /^\d+$/.test(id!)) practitioner = await directus.request(readItem("practitioners", parseInt(id!), { fields: ["*", "modalities.modalities_id.*"] }));
+  if (!practitioner && /^\d+$/.test(id!)) practitioner = await directus.request(readItem("practitioners", parseInt(id!), { fields: PRACTITIONER_FIELDS }));
 } catch (e) { console.error(e); }
 if (!practitioner) return Astro.redirect("/404");
+
+// Reverse: clinics where this practitioner works
+let clinics: any[] = [];
+try {
+  clinics = await directus.request(readItems("clinics", {
+    filter: { practitioners: { practitioners_id: { _eq: practitioner.id } } },
+    fields: ["id", "name", "slug", "city", "state"],
+    limit: 20,
+  }));
+} catch (e) { console.error("Error fetching practitioner clinics:", e); }
+
 const fullName = [practitioner.first_name, practitioner.last_name].filter(Boolean).join(" ") || practitioner.title;
+const hasCoords = practitioner.latitude != null && practitioner.longitude != null;
+const mapsUrl = hasCoords
+  ? `https://www.google.com/maps/search/?api=1&query=${practitioner.latitude},${practitioner.longitude}`
+  : practitioner.address
+    ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(practitioner.address)}`
+    : null;
 ---
 <ContentLayout title={`${fullName} — Verscienta Health`} description={`${practitioner.practice_type || "Holistic"} practitioner profile.`}>
   <section class="bg-gradient-to-br from-earth-50 via-sage-50/50 to-cream-100 dark:from-earth-950 dark:via-earth-900/50 dark:to-earth-950 border-b border-sage-200/50 dark:border-earth-700">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
       <Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Practitioners", href: "/practitioners" }, { label: fullName }]} class="mb-4" />
-      <h1 class="font-serif text-4xl md:text-5xl font-bold text-gray-900 dark:text-earth-100 mb-2">{fullName}</h1>
-      {practitioner.practice_type && <span class="text-sm px-3 py-1 rounded-full bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-300 capitalize">{practitioner.practice_type}</span>}
+      <div class="flex flex-col sm:flex-row gap-6 items-start">
+        {practitioner.image && (
+          <div class="w-32 h-32 sm:w-40 sm:h-40 rounded-full overflow-hidden shadow-lg ring-4 ring-white dark:ring-earth-800 flex-shrink-0">
+            <img
+              src={imageUrl(practitioner.image, { width: 320, height: 320 })}
+              alt={fullName}
+              class="w-full h-full object-cover"
+            />
+          </div>
+        )}
+        <div class="flex-1">
+          <h1 class="font-serif text-4xl md:text-5xl font-bold text-gray-900 dark:text-earth-100 mb-2">{fullName}</h1>
+          {practitioner.practice_type && <span class="text-sm px-3 py-1 rounded-full bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-300 capitalize">{practitioner.practice_type}</span>}
+        </div>
+      </div>
     </div>
   </section>
   <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
     {practitioner.bio && <section><h2 class="font-serif text-2xl font-bold text-gray-900 dark:text-earth-100 mb-4">About</h2><div class="prose prose-earth dark:prose-invert max-w-none" set:html={practitioner.bio} /></section>}
-    {(practitioner.address || practitioner.street_address || practitioner.city) && (
+
+    {practitioner.address && (
       <section>
         <h2 class="font-serif text-2xl font-bold text-gray-900 dark:text-earth-100 mb-4">Location</h2>
         <div class="bg-white dark:bg-earth-900 rounded-xl border border-gray-100 dark:border-earth-700 p-6">
           <div class="text-gray-600 dark:text-earth-300 flex items-start gap-2">
             <svg class="w-5 h-5 text-sage-600 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a2 2 0 01-2.828 0l-4.243-4.243a8 8 0 1111.314 0z"/></svg>
-            <div>
-              {practitioner.street_address && <div>{practitioner.street_address}</div>}
-              {practitioner.suite_apt && <div>{practitioner.suite_apt}</div>}
-              {(practitioner.city || practitioner.state || practitioner.zip_code) && (
-                <div>{[practitioner.city, practitioner.state].filter(Boolean).join(", ")}{practitioner.zip_code ? ` ${practitioner.zip_code}` : ""}</div>
+            <div class="flex-1">
+              <div class="whitespace-pre-line">{practitioner.address}</div>
+              {mapsUrl && (
+                <a href={mapsUrl} target="_blank" rel="noopener" class="inline-block text-sm text-sage-600 hover:underline mt-2">
+                  Open in Google Maps →
+                </a>
               )}
-              {!practitioner.street_address && !practitioner.city && practitioner.address && <div>{practitioner.address}</div>}
             </div>
           </div>
         </div>
       </section>
     )}
+
     {practitioner.modalities?.length > 0 && (
       <section>
         <h2 class="font-serif text-2xl font-bold text-gray-900 dark:text-earth-100 mb-4">Modalities Practiced</h2>
         <div class="flex flex-wrap gap-2">
           {practitioner.modalities.map((m: any) => <a href={`/modalities/${m.modalities_id?.slug || m.modalities_id?.id}`} class="px-3 py-1.5 rounded-full bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 text-sm hover:bg-purple-200 transition">{m.modalities_id?.title}</a>)}
         </div>
+      </section>
+    )}
+
+    {clinics.length > 0 && (
+      <section>
+        <h2 class="font-serif text-2xl font-bold text-gray-900 dark:text-earth-100 mb-4">Affiliated Clinics</h2>
+        <ul class="space-y-2">
+          {clinics.map((c: any) => (
+            <li>
+              <a href={`/clinics/${c.slug || c.id}`} class="block bg-white dark:bg-earth-900 rounded-lg border border-gray-100 dark:border-earth-700 hover:border-sage-300 dark:hover:border-sage-700 hover:shadow-sm transition p-4">
+                <span class="font-medium text-gray-900 dark:text-earth-100 hover:text-sage-600">{c.name}</span>
+                {(c.city || c.state) && <span class="text-sm text-gray-500 dark:text-earth-400 ml-2">{[c.city, c.state].filter(Boolean).join(", ")}</span>}
+              </a>
+            </li>
+          ))}
+        </ul>
       </section>
     )}
   </div>

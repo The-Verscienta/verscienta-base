@@ -1,28 +1,41 @@
 ---
 import ContentLayout from "@/layouts/ContentLayout.astro";
 import { directus, readItems, readItem } from "@/lib/directus";
+import { imageUrl } from "@/lib/image-url";
 
 const { id } = Astro.params;
+
+const FORMULA_FIELDS = [
+  "*",
+  "ingredients.*", "ingredients.herb_id.id", "ingredients.herb_id.title", "ingredients.herb_id.slug",
+  "modifications.*", "modifications.herb_id.id", "modifications.herb_id.title", "modifications.herb_id.slug",
+  "conditions.conditions_id.id", "conditions.conditions_id.title", "conditions.conditions_id.slug",
+  "related_formulas.related_formulas_id.id", "related_formulas.related_formulas_id.title", "related_formulas.related_formulas_id.slug",
+];
+
 let formula: any = null;
 try {
   const bySlug = await directus.request(readItems("formulas", {
     filter: { slug: { _eq: id } },
-    fields: ["*",
-      "ingredients.*", "ingredients.herb_id.id", "ingredients.herb_id.title", "ingredients.herb_id.slug",
-      "modifications.*", "modifications.herb_id.id", "modifications.herb_id.title",
-      "conditions.conditions_id.id", "conditions.conditions_id.title", "conditions.conditions_id.slug",
-      "related_formulas.related_formulas_id.id", "related_formulas.related_formulas_id.title", "related_formulas.related_formulas_id.slug",
-    ],
+    fields: FORMULA_FIELDS,
     limit: 1,
   }));
   formula = bySlug?.[0] || null;
   if (!formula && /^\d+$/.test(id!)) {
-    formula = await directus.request(readItem("formulas", parseInt(id!), {
-      fields: ["*", "ingredients.*", "ingredients.herb_id.*", "modifications.*", "modifications.herb_id.*", "conditions.conditions_id.*"],
-    }));
+    formula = await directus.request(readItem("formulas", parseInt(id!), { fields: FORMULA_FIELDS }));
   }
 } catch (e) { console.error("Error:", e); }
 if (!formula) return Astro.redirect("/404");
+
+// Inline TCM clinical evidence linked to this formula
+let tcmEvidence: any[] = [];
+try {
+  tcmEvidence = await directus.request(readItems("tcm_clinical_evidence", {
+    filter: { formula_id: { _eq: formula.id } },
+    fields: ["id", "title", "evidence_id", "study_type", "summary", "outcome", "source_url", "source_db"],
+    limit: 20,
+  }));
+} catch (e) { console.error("Error fetching TCM evidence:", e); }
 
 const roleLabels: Record<string, string> = { chief: "Jun (Chief)", deputy: "Chen (Deputy)", assistant: "Zuo (Assistant)", envoy: "Shi (Envoy)" };
 const roleColors: Record<string, string> = { chief: "bg-amber-100 text-amber-700 border-amber-200", deputy: "bg-blue-100 text-blue-700 border-blue-200", assistant: "bg-green-100 text-green-700 border-green-200", envoy: "bg-purple-100 text-purple-700 border-purple-200" };
@@ -32,9 +45,35 @@ const roleColors: Record<string, string> = { chief: "bg-amber-100 text-amber-700
   <section class="bg-gradient-to-br from-earth-50 via-sage-50/50 to-cream-100 dark:from-earth-950 dark:via-earth-900/50 dark:to-earth-950 border-b border-sage-200/50 dark:border-earth-700">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
       <nav class="text-sm text-gray-500 dark:text-earth-400 mb-4"><a href="/" class="hover:text-sage-600">Home</a> / <a href="/formulas" class="hover:text-sage-600">Formulas</a> / <span class="text-gray-900 dark:text-earth-100">{formula.title}</span></nav>
-      <h1 class="font-serif text-4xl md:text-5xl font-bold text-gray-900 dark:text-earth-100 mb-2">{formula.title}</h1>
-      {formula.chinese_name && <p class="text-xl font-chinese text-sage-600 dark:text-sage-400">{formula.chinese_name} {formula.pinyin_name && `(${formula.pinyin_name})`}</p>}
-      {formula.classic_source && <p class="text-sm text-gray-500 dark:text-earth-400 mt-2">Source: {formula.classic_source} {formula.source_author && `— ${formula.source_author}`} {formula.source_dynasty && `(${formula.source_dynasty})`}</p>}
+      <div class="flex flex-col md:flex-row gap-8">
+        <div class="flex-1">
+          <h1 class="font-serif text-4xl md:text-5xl font-bold text-gray-900 dark:text-earth-100 mb-2">{formula.title}</h1>
+          {formula.chinese_name && <p class="text-xl font-chinese text-sage-600 dark:text-sage-400">{formula.chinese_name} {formula.pinyin_name && `(${formula.pinyin_name})`}</p>}
+          {formula.classic_source && (
+            <p class="text-sm text-gray-500 dark:text-earth-400 mt-2">
+              Source: {formula.classic_source}
+              {formula.source_author && ` — ${formula.source_author}`}
+              {(formula.source_dynasty || formula.source_year) && ` (${[formula.source_dynasty, formula.source_year].filter(Boolean).join(", ")})`}
+            </p>
+          )}
+          {formula.use_cases?.length > 0 && (
+            <div class="flex flex-wrap gap-2 mt-4">
+              {formula.use_cases.map((u: string) => (
+                <span class="text-xs px-3 py-1 rounded-full bg-sage-100 dark:bg-earth-800 text-sage-700 dark:text-sage-300">{u}</span>
+              ))}
+            </div>
+          )}
+        </div>
+        {formula.image && (
+          <div class="w-full md:w-64 aspect-square rounded-xl overflow-hidden shadow-lg flex-shrink-0">
+            <img
+              src={imageUrl(formula.image, { width: 512, height: 512 })}
+              alt={formula.title}
+              class="w-full h-full object-cover"
+            />
+          </div>
+        )}
+      </div>
     </div>
   </section>
 
@@ -55,8 +94,11 @@ const roleColors: Record<string, string> = { chief: "bg-amber-100 text-amber-700
             </tr></thead>
             <tbody>
               {formula.ingredients.sort((a: any, b: any) => { const order = ["chief","deputy","assistant","envoy"]; return (order.indexOf(a.role)||99) - (order.indexOf(b.role)||99); }).map((ing: any) => (
-                <tr class="border-b border-gray-100 dark:border-earth-800">
-                  <td class="px-4 py-3"><a href={`/herbs/${ing.herb_id?.slug || ing.herb_id?.id}`} class="text-sage-600 dark:text-sage-400 hover:underline font-medium">{ing.herb_id?.title || "Herb"}</a></td>
+                <tr class="border-b border-gray-100 dark:border-earth-800 align-top">
+                  <td class="px-4 py-3">
+                    <a href={`/herbs/${ing.herb_id?.slug || ing.herb_id?.id}`} class="text-sage-600 dark:text-sage-400 hover:underline font-medium">{ing.herb_id?.title || "Herb"}</a>
+                    {ing.notes && <div class="text-xs text-gray-500 dark:text-earth-400 mt-1 whitespace-pre-line">{ing.notes}</div>}
+                  </td>
                   <td class="px-4 py-3 text-gray-600 dark:text-earth-300">{ing.quantity}{ing.unit} {ing.percentage ? `(${ing.percentage}%)` : ""}</td>
                   <td class="px-4 py-3">{ing.role && <span class={`text-xs px-2 py-0.5 rounded-full border ${roleColors[ing.role] || "bg-gray-100 text-gray-700"}`}>{roleLabels[ing.role] || ing.role}</span>}</td>
                   <td class="px-4 py-3 text-gray-600 dark:text-earth-300">{ing.function || "—"}</td>
@@ -78,7 +120,7 @@ const roleColors: Record<string, string> = { chief: "bg-amber-100 text-amber-700
             <div class="bg-white dark:bg-earth-900 rounded-lg border border-gray-100 dark:border-earth-700 p-4">
               <div class="flex items-center gap-2 mb-1">
                 <span class={`text-xs px-2 py-0.5 rounded-full font-medium ${mod.action === "add" ? "bg-green-100 text-green-700" : mod.action === "remove" ? "bg-red-100 text-red-700" : "bg-amber-100 text-amber-700"}`}>{mod.action}</span>
-                <a href={`/herbs/${mod.herb_id?.id}`} class="font-medium text-sage-600 hover:underline">{mod.herb_id?.title || "Herb"}</a>
+                <a href={`/herbs/${mod.herb_id?.slug || mod.herb_id?.id}`} class="font-medium text-sage-600 hover:underline">{mod.herb_id?.title || "Herb"}</a>
                 {mod.amount && <span class="text-sm text-gray-500">({mod.amount})</span>}
               </div>
               <p class="text-sm text-gray-600 dark:text-earth-300"><span class="font-medium">When:</span> {mod.condition}</p>
@@ -99,6 +141,48 @@ const roleColors: Record<string, string> = { chief: "bg-amber-100 text-amber-700
         <div class="flex flex-wrap gap-2">
           {formula.conditions.map((c: any) => (
             <a href={`/conditions/${c.conditions_id?.slug || c.conditions_id?.id}`} class="px-3 py-1.5 rounded-full bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 text-sm hover:bg-blue-200 transition">{c.conditions_id?.title}</a>
+          ))}
+        </div>
+      </section>
+    )}
+
+    {/* Related formulas (M2M) */}
+    {formula.related_formulas?.length > 0 && (
+      <section>
+        <h2 class="font-serif text-2xl font-bold text-gray-900 dark:text-earth-100 mb-4">Related Formulas</h2>
+        <div class="flex flex-wrap gap-2">
+          {formula.related_formulas.map((rf: any) => (
+            <a href={`/formulas/${rf.related_formulas_id?.slug || rf.related_formulas_id?.id}`} class="px-3 py-1.5 rounded-full bg-sage-100 dark:bg-sage-900/30 text-sage-700 dark:text-sage-300 text-sm hover:bg-sage-200 transition">
+              {rf.related_formulas_id?.title}
+            </a>
+          ))}
+        </div>
+      </section>
+    )}
+
+    {/* Inline TCM Clinical Evidence */}
+    {tcmEvidence.length > 0 && (
+      <section>
+        <h2 class="font-serif text-2xl font-bold text-gray-900 dark:text-earth-100 mb-4">Clinical Evidence</h2>
+        <div class="space-y-3">
+          {tcmEvidence.map((ev: any) => (
+            <div class="bg-white dark:bg-earth-900 rounded-lg border border-gray-100 dark:border-earth-700 p-4">
+              <div class="flex items-center justify-between flex-wrap gap-2">
+                <h3 class="font-medium text-gray-900 dark:text-earth-100">{ev.title}</h3>
+                <div class="flex gap-2 text-xs text-gray-500 dark:text-earth-400">
+                  {ev.evidence_id && <span class="font-mono">{ev.evidence_id}</span>}
+                  {ev.source_db && <span class="px-2 py-0.5 rounded-full bg-gray-100 dark:bg-earth-800">{ev.source_db}</span>}
+                </div>
+              </div>
+              {ev.study_type?.length > 0 && (
+                <div class="flex flex-wrap gap-1 mt-1">
+                  {ev.study_type.map((s: string) => <span class="text-xs px-2 py-0.5 rounded-full bg-sage-100 dark:bg-earth-800 text-sage-700 dark:text-sage-300">{s}</span>)}
+                </div>
+              )}
+              {ev.summary && <div class="text-sm text-gray-600 dark:text-earth-300 mt-2 prose prose-sm dark:prose-invert" set:html={ev.summary} />}
+              {ev.outcome && <div class="text-sm text-gray-600 dark:text-earth-300 mt-2"><span class="font-medium">Outcome:</span> <div class="prose prose-sm dark:prose-invert inline" set:html={ev.outcome} /></div>}
+              {ev.source_url && <a href={ev.source_url} target="_blank" rel="noopener" class="text-xs text-sage-600 hover:underline mt-2 inline-block">Source →</a>}
+            </div>
           ))}
         </div>
       </section>

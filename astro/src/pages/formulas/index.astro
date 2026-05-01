@@ -1,6 +1,7 @@
 ---
 import ContentLayout from "@/layouts/ContentLayout.astro";
 import { directus, readItems, aggregate } from "@/lib/directus";
+import { imageUrl } from "@/lib/image-url";
 
 const page = parseInt(Astro.url.searchParams.get("page") || "1");
 const q = (Astro.url.searchParams.get("q") || "").trim();
@@ -24,7 +25,7 @@ let total = 0;
 try {
   const [items, countResult] = await Promise.all([
     directus.request(readItems("formulas", {
-      fields: ["id", "title", "slug", "chinese_name", "pinyin_name", "description", "use_cases", "classic_source", "source_dynasty",
+      fields: ["id", "title", "slug", "chinese_name", "pinyin_name", "description", "use_cases", "classic_source", "source_dynasty", "image",
         "ingredients.herb_id.title", "ingredients.role"],
       sort: ["title"],
       limit, offset,
@@ -83,10 +84,29 @@ const buildHref = (overrides: Record<string, string | number>) => {
 
     <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
       {formulas.map((f: any) => (
-        <a href={`/formulas/${f.slug || f.id}`} class="group bg-white dark:bg-earth-900 rounded-xl shadow-sm border border-gray-100 dark:border-earth-700 hover:shadow-lg transition-all p-6">
+        <a href={`/formulas/${f.slug || f.id}`} class="group bg-white dark:bg-earth-900 rounded-xl shadow-sm border border-gray-100 dark:border-earth-700 hover:shadow-lg transition-all overflow-hidden">
+          {f.image && (
+            <div class="aspect-[4/3] overflow-hidden bg-sage-50 dark:bg-earth-800">
+              <img
+                src={imageUrl(f.image, { width: 400, height: 300 })}
+                alt={f.title}
+                class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                loading="lazy"
+              />
+            </div>
+          )}
+          <div class="p-6">
           <h2 class="font-serif text-lg font-bold text-gray-900 dark:text-earth-100 group-hover:text-sage-600 transition-colors">{f.title}</h2>
           {f.chinese_name && <p class="text-sm font-chinese text-gray-500 dark:text-earth-400">{f.chinese_name} {f.pinyin_name && `(${f.pinyin_name})`}</p>}
-          {f.classic_source && <p class="text-xs text-sage-600 dark:text-sage-400 mt-1">Source: {f.classic_source}</p>}
+          {f.classic_source && <p class="text-xs text-sage-600 dark:text-sage-400 mt-1">Source: {f.classic_source}{f.source_dynasty && ` (${f.source_dynasty})`}</p>}
+          {f.use_cases?.length > 0 && (
+            <div class="flex flex-wrap gap-1 mt-2">
+              {f.use_cases.slice(0, 3).map((u: string) => (
+                <span class="text-xs px-2 py-0.5 rounded-full bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300">{u}</span>
+              ))}
+              {f.use_cases.length > 3 && <span class="text-xs text-gray-400">+{f.use_cases.length - 3}</span>}
+            </div>
+          )}
           {f.ingredients?.length > 0 && (
             <div class="flex flex-wrap gap-1 mt-3">
               {f.ingredients.slice(0, 4).map((ing: any) => (
@@ -97,6 +117,7 @@ const buildHref = (overrides: Record<string, string | number>) => {
               {f.ingredients.length > 4 && <span class="text-xs text-gray-400">+{f.ingredients.length - 4}</span>}
             </div>
           )}
+          </div>
         </a>
       ))}
     </div>
