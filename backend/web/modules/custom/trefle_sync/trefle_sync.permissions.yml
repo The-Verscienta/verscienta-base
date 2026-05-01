@@ -1,8 +1,0 @@
-administer trefle sync:
-  title: 'Administer Trefle Sync'
-  description: 'Configure Trefle API settings and manage sync operations.'
-  restrict access: true
-
-import trefle plants:
-  title: 'Import plants from Trefle'
-  description: 'Search and import plant data from the Trefle.io API.'

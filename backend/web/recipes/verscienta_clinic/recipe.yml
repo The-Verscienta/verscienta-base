@@ -1,7 +1,0 @@
-name: Verscienta Clinic
-type: Content Type
-description: Provides the Clinic content type for holistic health clinic listings with location, contact info, Google Reviews, and practitioner relationships.
-install:
-  - node
-  - text
-  - options

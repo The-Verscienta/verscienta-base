@@ -1,6 +1,0 @@
-{
-  "tokenSetOrder": ["color/primitives", "semantic/theme"],
-  "version": "1.0.0",
-  "name": "Verscienta Design Tokens",
-  "description": "DTCG-compatible metadata. Primitives are the single source for Tailwind and CSS. Semantic tokens live in semantic/theme.json."
-}

@@ -1,8 +1,0 @@
-services:
-  perenual_sync.commands:
-    class: Drupal\perenual_sync\Commands\PerenualSyncCommands
-    arguments:
-      - '@perenual_sync.service'
-      - '@entity_type.manager'
-    tags:
-      - { name: drush.command }

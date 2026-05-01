@@ -1,9 +1,0 @@
-api_key_id: ''
-batch_size: 20
-sync_images: true
-update_existing: false
-enable_logging: true
-filter_edible_only: false
-filter_medicinal: true
-skip_existing_herbs: true
-use_as_fallback: true

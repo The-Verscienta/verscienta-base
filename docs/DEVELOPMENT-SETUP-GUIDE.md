@@ -18,7 +18,7 @@ The error you're seeing means the Next.js frontend (`http://localhost:3000`) can
 
 ```bash
 # Navigate to project root
-cd /home/pf1/verscienta-drupal
+cd /home/pf1/verscienta-base
 
 # Start DDEV
 ddev start
@@ -135,7 +135,7 @@ If you get SSL certificate warnings, that's normal for DDEV - click "Advanced" a
 
 ```bash
 # Navigate to frontend directory
-cd /home/pf1/verscienta-drupal/frontend
+cd /home/pf1/verscienta-base/frontend
 
 # Install dependencies (if not already done)
 npm install
@@ -246,11 +246,11 @@ exit
 
 ```bash
 # 1. Start Drupal
-cd /home/pf1/verscienta-drupal
+cd /home/pf1/verscienta-base
 ddev start
 
 # 2. Start Next.js (in a new terminal)
-cd /home/pf1/verscienta-drupal/frontend
+cd /home/pf1/verscienta-base/frontend
 npm run dev
 
 # 3. Access the sites:
@@ -265,7 +265,7 @@ npm run dev
 # Stop Next.js: Press Ctrl+C in the terminal
 
 # Stop DDEV
-cd /home/pf1/verscienta-drupal
+cd /home/pf1/verscienta-base
 ddev stop
 
 # Or stop and remove containers
@@ -316,7 +316,7 @@ NEXT_PUBLIC_ALGOLIA_SEARCH_API_KEY=your-search-key
 
 ```bash
 # From frontend directory
-cd /home/pf1/verscienta-drupal/frontend
+cd /home/pf1/verscienta-base/frontend
 
 # Test the connection
 node -e "
@@ -345,7 +345,7 @@ https.get('https://backend.ddev.site/jsonapi/node/modality', { agent }, (res) =>
 ### Check DDEV Logs
 
 ```bash
-cd /home/pf1/verscienta-drupal
+cd /home/pf1/verscienta-base
 ddev logs
 
 # Or for web server logs
@@ -412,7 +412,7 @@ If SSL is causing issues, you can use HTTP for local development:
 
 ```bash
 # Edit .ddev/config.yaml
-cd /home/pf1/verscienta-drupal
+cd /home/pf1/verscienta-base
 ddev config --additional-fqdns=backend.ddev.local --router-http-port=80
 
 # Then update frontend/.env.local
@@ -428,7 +428,7 @@ npm run dev
 
 **Quick Summary for Your Current Error:**
 
-1. Run `ddev start` in `/home/pf1/verscienta-drupal`
+1. Run `ddev start` in `/home/pf1/verscienta-base`
 2. Enable CORS: `ddev ssh` → `drush en cors -y` → `drush cr` → `exit`
 3. Test backend: Visit `https://backend.ddev.site/jsonapi` in browser
 4. If it works, restart Next.js: `npm run dev`

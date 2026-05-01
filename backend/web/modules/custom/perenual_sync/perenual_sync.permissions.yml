@@ -1,8 +1,0 @@
-administer perenual sync:
-  title: 'Administer Perenual Sync'
-  description: 'Configure Perenual API settings and manage sync operations.'
-  restrict access: true
-
-import perenual plants:
-  title: 'Import plants from Perenual'
-  description: 'Search and import plant data from the Perenual API.'

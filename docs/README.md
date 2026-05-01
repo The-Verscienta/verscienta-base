@@ -46,7 +46,7 @@ Verscienta Health provides:
 ## 📁 Project Structure
 
 ```
-verscienta-drupal/
+verscienta-base/
 ├── frontend/                    # Next.js application
 │   ├── app/                     # App Router pages
 │   │   ├── herbs/              # Herb database pages
@@ -98,7 +98,7 @@ verscienta-drupal/
 ### 1. Clone Repository
 
 ```bash
-cd /home/pf1/verscienta-drupal
+cd /home/pf1/verscienta-base
 ```
 
 ### 2. Start Drupal Backend

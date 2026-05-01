@@ -1,7 +1,0 @@
-services:
-  trefle_sync.commands:
-    class: Drupal\trefle_sync\Commands\TrefleSyncCommands
-    arguments:
-      - '@trefle_sync.service'
-    tags:
-      - { name: drush.command }

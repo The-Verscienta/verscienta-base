@@ -1,7 +1,0 @@
-name: Verscienta Formula Contribution
-type: Content Type
-description: Allows users to submit clinical notes and formula modifications for admin approval.
-install:
-  - node
-  - text
-  - options

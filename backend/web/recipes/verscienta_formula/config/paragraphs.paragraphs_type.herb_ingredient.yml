@@ -1,9 +1,0 @@
-langcode: en
-status: true
-dependencies: {  }
-id: herb_ingredient
-label: 'Herb Ingredient'
-description: 'An herb ingredient within a formula, including quantity, role, and function.'
-icon_uuid: null
-icon_default: null
-behavior_plugins: {  }

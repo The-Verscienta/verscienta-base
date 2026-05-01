@@ -1,6 +1,0 @@
-services:
-  cloudflare_media_offload.commands:
-    class: \Drupal\cloudflare_media_offload\Commands\CloudflareCommands
-    arguments: ['@config.factory', '@entity_type.manager', '@cloudflare_media_offload.api_client', '@queue']
-    tags:
-      - { name: drush.command }

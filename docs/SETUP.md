@@ -35,7 +35,7 @@ Move the project to WSL2 for better Docker performance:
 
 ```bash
 # In WSL2 terminal
-cd /mnt/c/Users/pf1/OneDrive/Documents/GitHub/verscienta-drupal
+cd /mnt/c/Users/pf1/OneDrive/Documents/GitHub/verscienta-base
 docker-compose down
 docker-compose up -d postgres redis
 docker-compose exec drupal composer install
