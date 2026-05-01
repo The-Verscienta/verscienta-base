@@ -29,7 +29,13 @@ import ContentLayout from "@/layouts/ContentLayout.astro";
     <div class="bg-white dark:bg-earth-900 rounded-xl border border-gray-100 dark:border-earth-700 p-6">
       <label for="medications" class="block text-sm font-medium text-gray-700 dark:text-earth-300 mb-2">Enter your medications (one per line or comma-separated)</label>
       <textarea id="medications" rows="4" placeholder="e.g., Warfarin, Metformin, Lisinopril..." class="w-full px-4 py-3 border border-gray-200 dark:border-earth-600 rounded-xl bg-white dark:bg-earth-800 text-gray-900 dark:text-earth-100 focus:ring-2 focus:ring-sage-500 mb-4"></textarea>
-      <button type="button" class="w-full px-6 py-3 bg-gradient-to-r from-sage-600 to-earth-600 text-white font-medium rounded-xl shadow hover:shadow-lg transition-all" onclick="alert('The full interaction checker will be available when the React component is ported in Phase 6.')">Check Interactions</button>
+      <button id="check-interactions-btn" type="button" class="w-full px-6 py-3 bg-gradient-to-r from-sage-600 to-earth-600 text-white font-medium rounded-xl shadow hover:shadow-lg transition-all">Check Interactions</button>
     </div>
   </div>
 </ContentLayout>
+
+<script>
+  document.getElementById("check-interactions-btn")?.addEventListener("click", () => {
+    alert("The full interaction checker will be available when the React component is ported in Phase 6.");
+  });
+</script>
