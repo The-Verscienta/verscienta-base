@@ -4,11 +4,12 @@
  * Replaces frontend/app/herbs/page.tsx.
  */
 import ContentLayout from "@/layouts/ContentLayout.astro";
-import { directus, readItems } from "@/lib/directus";
+import { directus, readItems, aggregate } from "@/lib/directus";
 import { imageUrl } from "@/lib/image-url";
 
 const page = parseInt(Astro.url.searchParams.get("page") || "1");
 const sort = Astro.url.searchParams.get("sort") || "title";
+const q = (Astro.url.searchParams.get("q") || "").trim();
 const limit = 12;
 const offset = (page - 1) * limit;
 
@@ -19,36 +20,59 @@ const sortMap: Record<string, string[]> = {
   oldest: ["date_created"],
 };
 
+const filter = q
+  ? {
+      _or: [
+        { title: { _icontains: q } },
+        { scientific_name: { _icontains: q } },
+        { common_names: { _icontains: q } },
+      ],
+    }
+  : undefined;
+
 let herbs: any[] = [];
 let total = 0;
 
 try {
-  herbs = await directus.request(
-    readItems("herbs", {
-      fields: [
-        "id", "title", "slug", "scientific_name", "common_names",
-        "plant_type", "tcm_temperature", "tcm_taste", "parts_used",
-        "conservation_status", "peer_review_status",
-        "images.file", "images.caption",
-      ],
-      sort: sortMap[sort] || ["title"],
-      limit,
-      offset,
-      meta: "total_count",
-    })
-  ) as any;
-
-  // If meta is returned separately, extract total
-  total = (herbs as any)?.meta?.total_count || herbs.length;
-  if (Array.isArray(herbs)) {
-    // herbs is already the array
-  }
+  const [items, countResult] = await Promise.all([
+    directus.request(
+      readItems("herbs", {
+        fields: [
+          "id", "title", "slug", "scientific_name", "common_names",
+          "plant_type", "tcm_temperature", "tcm_taste", "parts_used",
+          "conservation_status", "peer_review_status",
+          "images.file", "images.caption",
+        ],
+        sort: sortMap[sort] || ["title"],
+        limit,
+        offset,
+        ...(filter ? { filter } : {}),
+      })
+    ),
+    directus.request(
+      aggregate("herbs", {
+        aggregate: { count: "*" },
+        ...(filter ? { filter } : {}),
+      })
+    ),
+  ]);
+  herbs = items as any[];
+  total = Number((countResult as any)?.[0]?.count ?? 0);
 } catch (e) {
   console.error("Error fetching herbs:", e);
 }
 
 const totalPages = Math.ceil(total / limit);
 const directusUrl = import.meta.env.PUBLIC_DIRECTUS_URL;
+
+const buildHref = (overrides: Record<string, string | number>) => {
+  const params = new URLSearchParams();
+  if (q) params.set("q", q);
+  params.set("sort", sort);
+  params.set("page", String(page));
+  for (const [k, v] of Object.entries(overrides)) params.set(k, String(v));
+  return `/herbs?${params.toString()}`;
+};
 ---
 
 <ContentLayout
@@ -69,15 +93,34 @@ const directusUrl = import.meta.env.PUBLIC_DIRECTUS_URL;
   </section>
 
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <!-- Search -->
+    <form method="get" action="/herbs" class="mb-6 flex gap-2" role="search">
+      <input type="hidden" name="sort" value={sort} />
+      <input
+        type="search"
+        name="q"
+        value={q}
+        placeholder="Search by name, scientific name, or common name…"
+        aria-label="Search herbs"
+        class="flex-1 px-4 py-2 rounded-lg border border-gray-200 dark:border-earth-600 bg-white dark:bg-earth-800 text-gray-900 dark:text-earth-100 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-sage-500"
+      />
+      <button type="submit" class="px-4 py-2 rounded-lg bg-sage-600 text-white hover:bg-sage-700 transition">Search</button>
+      {q && (
+        <a href={`/herbs?sort=${sort}`} class="px-4 py-2 rounded-lg text-gray-700 dark:text-earth-200 border border-gray-200 dark:border-earth-600 hover:bg-sage-50 dark:hover:bg-earth-700 transition">Clear</a>
+      )}
+    </form>
+
     <!-- Sort controls -->
     <div class="flex items-center justify-between mb-8">
       <p class="text-sm text-gray-600 dark:text-earth-400">
-        {total > 0 ? `Showing ${offset + 1}–${Math.min(offset + limit, total)} of ${total} herbs` : "No herbs found"}
+        {total > 0
+          ? `Showing ${offset + 1}–${Math.min(offset + limit, total)} of ${total} herbs${q ? ` matching "${q}"` : ""}`
+          : q ? `No herbs found matching "${q}"` : "No herbs found"}
       </p>
       <div class="flex gap-2">
         {["a-z", "z-a", "newest", "oldest"].map(s => (
           <a
-            href={`/herbs?sort=${s}&page=1`}
+            href={buildHref({ sort: s, page: 1 })}
             class={`px-3 py-1.5 rounded-lg text-sm transition ${sort === s ? "bg-sage-600 text-white" : "bg-white dark:bg-earth-800 text-gray-700 dark:text-earth-200 border border-gray-200 dark:border-earth-600 hover:bg-sage-50 dark:hover:bg-earth-700"}`}
           >
             {s === "a-z" ? "A → Z" : s === "z-a" ? "Z → A" : s === "newest" ? "Newest" : "Oldest"}
@@ -120,10 +163,15 @@ const directusUrl = import.meta.env.PUBLIC_DIRECTUS_URL;
       ))}
     </div>
 
-    {herbs.length === 0 && (
+    {herbs.length === 0 && !q && (
       <div class="text-center py-16">
         <p class="text-2xl mb-2">🌿</p>
         <p class="text-gray-600 dark:text-earth-400">No herbs found. Check back soon as we populate the database.</p>
+      </div>
+    )}
+    {herbs.length === 0 && q && (
+      <div class="text-center py-16">
+        <p class="text-gray-600 dark:text-earth-400">Try a different search term, or <a href={`/herbs?sort=${sort}`} class="text-sage-600 hover:underline">browse all herbs</a>.</p>
       </div>
     )}
 
@@ -131,18 +179,18 @@ const directusUrl = import.meta.env.PUBLIC_DIRECTUS_URL;
     {totalPages > 1 && (
       <nav class="flex justify-center gap-2 mt-12">
         {page > 1 && (
-          <a href={`/herbs?sort=${sort}&page=${page - 1}`} class="px-4 py-2 rounded-lg text-gray-700 dark:text-earth-200 hover:bg-sage-100 dark:hover:bg-earth-800 transition">‹ Prev</a>
+          <a href={buildHref({ page: page - 1 })} class="px-4 py-2 rounded-lg text-gray-700 dark:text-earth-200 hover:bg-sage-100 dark:hover:bg-earth-800 transition">‹ Prev</a>
         )}
         {Array.from({ length: totalPages }, (_, i) => i + 1).slice(Math.max(0, page - 3), page + 2).map(p => (
           <a
-            href={`/herbs?sort=${sort}&page=${p}`}
+            href={buildHref({ page: p })}
             class={`px-4 py-2 rounded-lg transition ${p === page ? "bg-sage-600 text-white" : "text-gray-700 dark:text-earth-200 hover:bg-sage-100 dark:hover:bg-earth-800"}`}
           >
             {p}
           </a>
         ))}
         {page < totalPages && (
-          <a href={`/herbs?sort=${sort}&page=${page + 1}`} class="px-4 py-2 rounded-lg text-gray-700 dark:text-earth-200 hover:bg-sage-100 dark:hover:bg-earth-800 transition">Next ›</a>
+          <a href={buildHref({ page: page + 1 })} class="px-4 py-2 rounded-lg text-gray-700 dark:text-earth-200 hover:bg-sage-100 dark:hover:bg-earth-800 transition">Next ›</a>
         )}
       </nav>
     )}

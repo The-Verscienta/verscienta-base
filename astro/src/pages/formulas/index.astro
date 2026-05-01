@@ -1,20 +1,53 @@
 ---
 import ContentLayout from "@/layouts/ContentLayout.astro";
-import { directus, readItems } from "@/lib/directus";
+import { directus, readItems, aggregate } from "@/lib/directus";
 
 const page = parseInt(Astro.url.searchParams.get("page") || "1");
+const q = (Astro.url.searchParams.get("q") || "").trim();
 const limit = 12;
 const offset = (page - 1) * limit;
 
+const filter = q
+  ? {
+      _or: [
+        { title: { _icontains: q } },
+        { chinese_name: { _icontains: q } },
+        { pinyin_name: { _icontains: q } },
+        { description: { _icontains: q } },
+        { classic_source: { _icontains: q } },
+      ],
+    }
+  : undefined;
+
 let formulas: any[] = [];
+let total = 0;
 try {
-  formulas = await directus.request(readItems("formulas", {
-    fields: ["id", "title", "slug", "chinese_name", "pinyin_name", "description", "use_cases", "classic_source", "source_dynasty",
-      "ingredients.herb_id.title", "ingredients.role"],
-    sort: ["title"],
-    limit, offset,
-  })) as any;
+  const [items, countResult] = await Promise.all([
+    directus.request(readItems("formulas", {
+      fields: ["id", "title", "slug", "chinese_name", "pinyin_name", "description", "use_cases", "classic_source", "source_dynasty",
+        "ingredients.herb_id.title", "ingredients.role"],
+      sort: ["title"],
+      limit, offset,
+      ...(filter ? { filter } : {}),
+    })),
+    directus.request(aggregate("formulas", {
+      aggregate: { count: "*" },
+      ...(filter ? { filter } : {}),
+    })),
+  ]);
+  formulas = items as any[];
+  total = Number((countResult as any)?.[0]?.count ?? 0);
 } catch (e) { console.error("Error fetching formulas:", e); }
+
+const totalPages = Math.ceil(total / limit);
+
+const buildHref = (overrides: Record<string, string | number>) => {
+  const params = new URLSearchParams();
+  if (q) params.set("q", q);
+  params.set("page", String(page));
+  for (const [k, v] of Object.entries(overrides)) params.set(k, String(v));
+  return `/formulas?${params.toString()}`;
+};
 ---
 
 <ContentLayout title="Formula Library — Verscienta Health" description="Traditional herbal formulas with ingredients, roles, and modifications.">
@@ -26,6 +59,28 @@ try {
     </div>
   </section>
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <!-- Search -->
+    <form method="get" action="/formulas" class="mb-6 flex gap-2" role="search">
+      <input
+        type="search"
+        name="q"
+        value={q}
+        placeholder="Search by name, Chinese name, source, or description…"
+        aria-label="Search formulas"
+        class="flex-1 px-4 py-2 rounded-lg border border-gray-200 dark:border-earth-600 bg-white dark:bg-earth-800 text-gray-900 dark:text-earth-100 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-sage-500"
+      />
+      <button type="submit" class="px-4 py-2 rounded-lg bg-sage-600 text-white hover:bg-sage-700 transition">Search</button>
+      {q && (
+        <a href="/formulas" class="px-4 py-2 rounded-lg text-gray-700 dark:text-earth-200 border border-gray-200 dark:border-earth-600 hover:bg-sage-50 dark:hover:bg-earth-700 transition">Clear</a>
+      )}
+    </form>
+
+    <p class="text-sm text-gray-600 dark:text-earth-400 mb-6">
+      {total > 0
+        ? `Showing ${offset + 1}–${Math.min(offset + limit, total)} of ${total} formulas${q ? ` matching "${q}"` : ""}`
+        : q ? `No formulas found matching "${q}"` : "No formulas found"}
+    </p>
+
     <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
       {formulas.map((f: any) => (
         <a href={`/formulas/${f.slug || f.id}`} class="group bg-white dark:bg-earth-900 rounded-xl shadow-sm border border-gray-100 dark:border-earth-700 hover:shadow-lg transition-all p-6">
@@ -45,6 +100,31 @@ try {
         </a>
       ))}
     </div>
-    {formulas.length === 0 && <div class="text-center py-16"><p class="text-gray-600 dark:text-earth-400">No formulas found.</p></div>}
+    {formulas.length === 0 && !q && <div class="text-center py-16"><p class="text-gray-600 dark:text-earth-400">No formulas found.</p></div>}
+    {formulas.length === 0 && q && (
+      <div class="text-center py-16">
+        <p class="text-gray-600 dark:text-earth-400">Try a different search term, or <a href="/formulas" class="text-sage-600 hover:underline">browse all formulas</a>.</p>
+      </div>
+    )}
+
+    <!-- Pagination -->
+    {totalPages > 1 && (
+      <nav class="flex justify-center gap-2 mt-12">
+        {page > 1 && (
+          <a href={buildHref({ page: page - 1 })} class="px-4 py-2 rounded-lg text-gray-700 dark:text-earth-200 hover:bg-sage-100 dark:hover:bg-earth-800 transition">‹ Prev</a>
+        )}
+        {Array.from({ length: totalPages }, (_, i) => i + 1).slice(Math.max(0, page - 3), page + 2).map(p => (
+          <a
+            href={buildHref({ page: p })}
+            class={`px-4 py-2 rounded-lg transition ${p === page ? "bg-sage-600 text-white" : "text-gray-700 dark:text-earth-200 hover:bg-sage-100 dark:hover:bg-earth-800"}`}
+          >
+            {p}
+          </a>
+        ))}
+        {page < totalPages && (
+          <a href={buildHref({ page: page + 1 })} class="px-4 py-2 rounded-lg text-gray-700 dark:text-earth-200 hover:bg-sage-100 dark:hover:bg-earth-800 transition">Next ›</a>
+        )}
+      </nav>
+    )}
   </div>
 </ContentLayout>

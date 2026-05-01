@@ -5,7 +5,7 @@
  * Provides a typed Directus client for all data fetching.
  */
 
-import { createDirectus, rest, staticToken, readItems, readItem } from "@directus/sdk";
+import { createDirectus, rest, staticToken, readItems, readItem, aggregate } from "@directus/sdk";
 
 const DIRECTUS_URL = import.meta.env.PUBLIC_DIRECTUS_URL || "http://localhost:8055";
 const DIRECTUS_TOKEN = import.meta.env.DIRECTUS_TOKEN;
@@ -27,7 +27,7 @@ export const directusPublic = createDirectus(DIRECTUS_URL).with(rest());
 /**
  * Re-export SDK functions for convenience
  */
-export { readItems, readItem };
+export { readItems, readItem, aggregate };
 
 /**
  * User type (replaces DrupalUser)
