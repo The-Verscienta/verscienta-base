@@ -124,6 +124,13 @@ const renderJsonItem = (item: any): string => {
   return String(item);
 };
 
+// Trim trailing zeros, cap at 2 decimal places. "87.00000" → "87", "87.567" → "87.57"
+const fmtNum = (v: any): string => {
+  if (v == null || v === "") return "";
+  const n = Number(v);
+  return Number.isFinite(n) ? String(parseFloat(n.toFixed(2))) : String(v);
+};
+
 const showTcm = has(herb.tcm_taste) || has(herb.tcm_temperature) || has(herb.tcm_meridians) || has(herb.tcm_functions) || has(herb.tcm_category) || has(herb.tcm_category_tags);
 const showWestern = has(herb.western_properties) || has(herb.dosage_forms);
 const showBotanical = has(herb.botanical_description) || has(herb.habitat) || has(herb.native_region) || has(herb.conservation_notes);
@@ -714,7 +721,7 @@ const showToxicity = has(herb.toxicity_level) && herb.toxicity_level !== "none_k
           <section id="chemistry" class="scroll-mt-24">
             <h2 class="font-serif text-2xl font-bold text-gray-900 dark:text-earth-100 mb-4">Chemistry &amp; External Identifiers</h2>
             <div class="bg-white dark:bg-earth-900 rounded-xl border border-gray-100 dark:border-earth-700 p-6 grid sm:grid-cols-2 gap-x-6 gap-y-3 text-sm">
-              {herb.molecular_weight && <div><dt class="text-gray-500 dark:text-earth-400">Molecular Weight</dt><dd class="font-medium">{herb.molecular_weight}</dd></div>}
+              {herb.molecular_weight && <div><dt class="text-gray-500 dark:text-earth-400">Molecular Weight</dt><dd class="font-medium">{fmtNum(herb.molecular_weight)}</dd></div>}
               {herb.pubchem_cid && (
                 <div>
                   <dt class="text-gray-500 dark:text-earth-400">PubChem CID</dt>
@@ -780,7 +787,7 @@ const showToxicity = has(herb.toxicity_level) && herb.toxicity_level !== "none_k
                             {ti.pubchem_cid ? <a href={`https://pubchem.ncbi.nlm.nih.gov/compound/${ti.pubchem_cid}`} target="_blank" rel="noopener" class="text-sage-600 hover:underline">{ti.pubchem_cid}</a> : "—"}
                           </td>
                           <td class="px-4 py-2 text-gray-600 dark:text-earth-300">{ti.cas_number || "—"}</td>
-                          <td class="px-4 py-2 text-gray-600 dark:text-earth-300">{ti.molecular_weight || "—"}</td>
+                          <td class="px-4 py-2 text-gray-600 dark:text-earth-300">{ti.molecular_weight ? fmtNum(ti.molecular_weight) : "—"}</td>
                           <td class="px-4 py-2 text-gray-500 dark:text-earth-400 text-xs">{ti.source_db || "—"}</td>
                         </tr>
                       ))}

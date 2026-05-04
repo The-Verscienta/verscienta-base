@@ -39,6 +39,13 @@ try {
 
 const roleLabels: Record<string, string> = { chief: "Jun (Chief)", deputy: "Chen (Deputy)", assistant: "Zuo (Assistant)", envoy: "Shi (Envoy)" };
 const roleColors: Record<string, string> = { chief: "bg-amber-100 text-amber-700 border-amber-200", deputy: "bg-blue-100 text-blue-700 border-blue-200", assistant: "bg-green-100 text-green-700 border-green-200", envoy: "bg-purple-100 text-purple-700 border-purple-200" };
+
+// Trim trailing zeros, cap at 2 decimal places. "87.00000" → "87", "87.567" → "87.57"
+const fmtNum = (v: any): string => {
+  if (v == null || v === "") return "";
+  const n = Number(v);
+  return Number.isFinite(n) ? String(parseFloat(n.toFixed(2))) : String(v);
+};
 ---
 
 <ContentLayout title={`${formula.title} — Verscienta Health`} description={`Traditional herbal formula: ${formula.title}. Ingredients, modifications, and clinical notes.`}>
@@ -99,7 +106,7 @@ const roleColors: Record<string, string> = { chief: "bg-amber-100 text-amber-700
                     <a href={`/herbs/${ing.herb_id?.slug || ing.herb_id?.id}`} class="text-sage-600 dark:text-sage-400 hover:underline font-medium">{ing.herb_id?.title || "Herb"}</a>
                     {ing.notes && <div class="text-xs text-gray-500 dark:text-earth-400 mt-1 whitespace-pre-line">{ing.notes}</div>}
                   </td>
-                  <td class="px-4 py-3 text-gray-600 dark:text-earth-300">{ing.quantity}{ing.unit} {ing.percentage ? `(${ing.percentage}%)` : ""}</td>
+                  <td class="px-4 py-3 text-gray-600 dark:text-earth-300">{fmtNum(ing.quantity)}{ing.unit} {ing.percentage ? `(${fmtNum(ing.percentage)}%)` : ""}</td>
                   <td class="px-4 py-3">{ing.role && <span class={`text-xs px-2 py-0.5 rounded-full border ${roleColors[ing.role] || "bg-gray-100 text-gray-700"}`}>{roleLabels[ing.role] || ing.role}</span>}</td>
                   <td class="px-4 py-3 text-gray-600 dark:text-earth-300">{ing.function || "—"}</td>
                 </tr>
@@ -107,7 +114,7 @@ const roleColors: Record<string, string> = { chief: "bg-amber-100 text-amber-700
             </tbody>
           </table>
         </div>
-        {formula.total_weight && <p class="text-sm text-gray-500 dark:text-earth-400 mt-2">Total weight: {formula.total_weight}{formula.total_weight_unit || "g"}</p>}
+        {formula.total_weight && <p class="text-sm text-gray-500 dark:text-earth-400 mt-2">Total weight: {fmtNum(formula.total_weight)}{formula.total_weight_unit || "g"}</p>}
       </section>
     )}
 
