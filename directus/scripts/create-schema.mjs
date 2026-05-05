@@ -227,6 +227,11 @@ async function createPrimaryCollections() {
   await safeCreateField("herbs", { field: "western_properties", type: "json", meta: { interface: "select-multiple-checkbox", options: { choices: choices(["Adaptogen", "Alterative", "Analgesic", "Anti-inflammatory", "Antimicrobial", "Antioxidant", "Antispasmodic", "Astringent", "Bitter", "Carminative", "Demulcent", "Diaphoretic", "Diuretic", "Expectorant", "Hepatic", "Nervine", "Sedative", "Stimulant", "Tonic", "Vulnerary"]) }, width: "full" }, schema: {} });
   await safeCreateField("herbs", { field: "dosage_forms", type: "json", meta: { interface: "select-multiple-checkbox", options: { choices: choices(["Tincture", "Tea/Infusion", "Decoction", "Capsule", "Tablet", "Powder", "Extract", "Essential Oil", "Poultice", "Salve", "Syrup", "Compress"]) }, width: "full" }, schema: {} });
 
+  // Typical dose range (for decoction / standard preparation; per-form specifics live in herb_dosages O2M)
+  await safeCreateField("herbs", { field: "typical_dose_min", type: "decimal", meta: { interface: "input", width: "third", note: "Minimum typical dose" }, schema: {} });
+  await safeCreateField("herbs", { field: "typical_dose_max", type: "decimal", meta: { interface: "input", width: "third", note: "Maximum typical dose" }, schema: {} });
+  await safeCreateField("herbs", { field: "typical_dose_unit", type: "string", meta: { interface: "select-dropdown", options: { choices: choices(["g", "mg", "oz", "mL", "tsp", "tbsp", "drops"]) }, width: "third", default_value: "g" }, schema: { default_value: "g" } });
+
   // Medicinal (rich text)
   for (const f of ["therapeutic_uses", "pharmacological_effects", "contraindications", "side_effects", "allergenic_potential"]) {
     await safeCreateField("herbs", { field: f, type: "text", meta: { interface: "input-rich-text-html", width: "full" }, schema: {} });

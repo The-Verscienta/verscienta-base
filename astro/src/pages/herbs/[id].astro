@@ -929,6 +929,16 @@ const showToxicity = has(herb.toxicity_level) && herb.toxicity_level !== "none_k
             {herb.conservation_status && <div><dt class="text-gray-500 dark:text-earth-400">Conservation</dt><dd class="font-medium capitalize">{herb.conservation_status.replace(/_/g, " ")}</dd></div>}
             {herb.western_properties?.length > 0 && <div><dt class="text-gray-500 dark:text-earth-400">Western Actions</dt><dd class="flex flex-wrap gap-1 mt-1">{herb.western_properties.map((p: string) => <span class="text-xs px-2 py-0.5 rounded-full bg-sage-100 dark:bg-earth-800 text-sage-700 dark:text-sage-300 capitalize">{p}</span>)}</dd></div>}
             {herb.dosage_forms?.length > 0 && <div><dt class="text-gray-500 dark:text-earth-400">Available Forms</dt><dd class="font-medium capitalize">{herb.dosage_forms.join(", ")}</dd></div>}
+            {(has(herb.typical_dose_min) || has(herb.typical_dose_max)) && (
+              <div>
+                <dt class="text-gray-500 dark:text-earth-400">Typical Dose</dt>
+                <dd class="font-medium">
+                  {has(herb.typical_dose_min) ? fmtNum(herb.typical_dose_min) : "?"}
+                  –{has(herb.typical_dose_max) ? fmtNum(herb.typical_dose_max) : "?"}
+                  {herb.typical_dose_unit || ""}
+                </dd>
+              </div>
+            )}
             {herb.peer_review_status && <div><dt class="text-gray-500 dark:text-earth-400">Review Status</dt><dd class="font-medium">{herb.peer_review_status}</dd></div>}
             {herb.average_rating && (
               <div>

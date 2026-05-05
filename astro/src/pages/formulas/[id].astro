@@ -7,7 +7,9 @@ const { id } = Astro.params;
 
 const FORMULA_FIELDS = [
   "*",
-  "ingredients.*", "ingredients.herb_id.id", "ingredients.herb_id.title", "ingredients.herb_id.slug",
+  "ingredients.*",
+  "ingredients.herb_id.id", "ingredients.herb_id.title", "ingredients.herb_id.slug",
+  "ingredients.herb_id.typical_dose_min", "ingredients.herb_id.typical_dose_max", "ingredients.herb_id.typical_dose_unit",
   "modifications.*", "modifications.herb_id.id", "modifications.herb_id.title", "modifications.herb_id.slug",
   "conditions.conditions_id.id", "conditions.conditions_id.title", "conditions.conditions_id.slug",
   "related_formulas.related_formulas_id.id", "related_formulas.related_formulas_id.title", "related_formulas.related_formulas_id.slug",
@@ -120,13 +122,34 @@ const ingredientPct = (ing: any): number | null => {
             <tbody>
               {formula.ingredients.sort((a: any, b: any) => { const order = ["chief","deputy","assistant","envoy"]; return (order.indexOf(a.role)||99) - (order.indexOf(b.role)||99); }).map((ing: any) => {
                 const pct = ingredientPct(ing);
+                const h = ing.herb_id;
+                const tMin = h?.typical_dose_min;
+                const tMax = h?.typical_dose_max;
+                const tUnit = h?.typical_dose_unit;
+                const hasRange = (tMin != null && tMin !== "") || (tMax != null && tMax !== "");
+                const rangeStr = hasRange
+                  ? `${tMin != null && tMin !== "" ? fmtNum(tMin) : "?"}–${tMax != null && tMax !== "" ? fmtNum(tMax) : "?"}${tUnit || ""}`
+                  : null;
+                // Flag dose outside typical range when units match
+                const q = Number(ing.quantity);
+                const outOfRange = ing.unit && tUnit === ing.unit && Number.isFinite(q) && (
+                  (tMin != null && tMin !== "" && q < Number(tMin)) ||
+                  (tMax != null && tMax !== "" && q > Number(tMax))
+                );
                 return (
                 <tr class="border-b border-gray-100 dark:border-earth-800 align-top">
                   <td class="px-4 py-3">
                     <a href={`/herbs/${ing.herb_id?.slug || ing.herb_id?.id}`} class="text-sage-600 dark:text-sage-400 hover:underline font-medium">{ing.herb_id?.title || "Herb"}</a>
                     {ing.notes && <div class="text-xs text-gray-500 dark:text-earth-400 mt-1 whitespace-pre-line">{ing.notes}</div>}
                   </td>
-                  <td class="px-4 py-3 text-gray-600 dark:text-earth-300 whitespace-nowrap">{fmtNum(ing.quantity)}{ing.unit}</td>
+                  <td class="px-4 py-3 text-gray-600 dark:text-earth-300 whitespace-nowrap">
+                    <span class={outOfRange ? "text-amber-700 dark:text-amber-400 font-medium" : ""} title={outOfRange ? "Outside typical dose range" : undefined}>
+                      {fmtNum(ing.quantity)}{ing.unit}
+                    </span>
+                    {rangeStr && (
+                      <div class="text-xs text-gray-400 dark:text-earth-500 mt-0.5 whitespace-nowrap">typical {rangeStr}</div>
+                    )}
+                  </td>
                   <td class="px-4 py-3 text-right text-gray-600 dark:text-earth-300 tabular-nums">{pct != null ? `${fmtNum(pct)}%` : "—"}</td>
                   <td class="px-4 py-3">{ing.role && <span class={`text-xs px-2 py-0.5 rounded-full border ${roleColors[ing.role] || "bg-gray-100 text-gray-700"}`}>{roleLabels[ing.role] || ing.role}</span>}</td>
                   <td class="px-4 py-3 text-gray-600 dark:text-earth-300">{ing.function || "—"}</td>
