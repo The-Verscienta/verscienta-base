@@ -46,6 +46,23 @@ const fmtNum = (v: any): string => {
   const n = Number(v);
   return Number.isFinite(n) ? String(parseFloat(n.toFixed(2))) : String(v);
 };
+
+// Sum quantities per unit so we can compute percentage when not explicitly set.
+// Falls back to ing.percentage if provided.
+const unitTotals: Record<string, number> = {};
+for (const ing of formula.ingredients || []) {
+  const q = Number(ing?.quantity);
+  if (ing?.unit && Number.isFinite(q)) {
+    unitTotals[ing.unit] = (unitTotals[ing.unit] || 0) + q;
+  }
+}
+const ingredientPct = (ing: any): number | null => {
+  if (ing?.percentage != null && ing.percentage !== "") return Number(ing.percentage);
+  const total = unitTotals[ing?.unit];
+  const q = Number(ing?.quantity);
+  if (!total || !Number.isFinite(q) || total === 0) return null;
+  return (q / total) * 100;
+};
 ---
 
 <ContentLayout title={`${formula.title} — Verscienta Health`} description={`Traditional herbal formula: ${formula.title}. Ingredients, modifications, and clinical notes.`}>
@@ -96,21 +113,26 @@ const fmtNum = (v: any): string => {
             <thead><tr class="bg-sage-50 dark:bg-earth-800 border-b border-gray-200 dark:border-earth-700">
               <th class="text-left px-4 py-3 font-medium text-gray-500 dark:text-earth-400">Herb</th>
               <th class="text-left px-4 py-3 font-medium text-gray-500 dark:text-earth-400">Amount</th>
+              <th class="text-right px-4 py-3 font-medium text-gray-500 dark:text-earth-400">%</th>
               <th class="text-left px-4 py-3 font-medium text-gray-500 dark:text-earth-400">Role</th>
               <th class="text-left px-4 py-3 font-medium text-gray-500 dark:text-earth-400">Function</th>
             </tr></thead>
             <tbody>
-              {formula.ingredients.sort((a: any, b: any) => { const order = ["chief","deputy","assistant","envoy"]; return (order.indexOf(a.role)||99) - (order.indexOf(b.role)||99); }).map((ing: any) => (
+              {formula.ingredients.sort((a: any, b: any) => { const order = ["chief","deputy","assistant","envoy"]; return (order.indexOf(a.role)||99) - (order.indexOf(b.role)||99); }).map((ing: any) => {
+                const pct = ingredientPct(ing);
+                return (
                 <tr class="border-b border-gray-100 dark:border-earth-800 align-top">
                   <td class="px-4 py-3">
                     <a href={`/herbs/${ing.herb_id?.slug || ing.herb_id?.id}`} class="text-sage-600 dark:text-sage-400 hover:underline font-medium">{ing.herb_id?.title || "Herb"}</a>
                     {ing.notes && <div class="text-xs text-gray-500 dark:text-earth-400 mt-1 whitespace-pre-line">{ing.notes}</div>}
                   </td>
-                  <td class="px-4 py-3 text-gray-600 dark:text-earth-300">{fmtNum(ing.quantity)}{ing.unit} {ing.percentage ? `(${fmtNum(ing.percentage)}%)` : ""}</td>
+                  <td class="px-4 py-3 text-gray-600 dark:text-earth-300 whitespace-nowrap">{fmtNum(ing.quantity)}{ing.unit}</td>
+                  <td class="px-4 py-3 text-right text-gray-600 dark:text-earth-300 tabular-nums">{pct != null ? `${fmtNum(pct)}%` : "—"}</td>
                   <td class="px-4 py-3">{ing.role && <span class={`text-xs px-2 py-0.5 rounded-full border ${roleColors[ing.role] || "bg-gray-100 text-gray-700"}`}>{roleLabels[ing.role] || ing.role}</span>}</td>
                   <td class="px-4 py-3 text-gray-600 dark:text-earth-300">{ing.function || "—"}</td>
                 </tr>
-              ))}
+                );
+              })}
             </tbody>
           </table>
         </div>

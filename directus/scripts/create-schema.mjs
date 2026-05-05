@@ -23,6 +23,7 @@ import {
   createCollection,
   createField,
   createRelation,
+  updateCollection,
 } from "@directus/sdk";
 
 const DIRECTUS_URL = process.env.DIRECTUS_URL || "http://localhost:8055";
@@ -696,6 +697,47 @@ async function createM2MRelations() {
   });
 }
 
+// ─── 5. Display Templates ───────────────────────────────────────────────────
+// Without these, O2M/M2O lists in the admin show row IDs instead of meaningful labels.
+
+async function setDisplayTemplates() {
+  console.log("\n=== Display Templates ===");
+  const templates = [
+    ["formula_ingredients", "{{herb_id.title}} — {{quantity}}{{unit}} ({{role}})"],
+    ["formula_modifications", "{{action}} {{herb_id.title}} — when {{condition}}"],
+    ["herb_clinical_studies", "{{title}} ({{year}})"],
+    ["herb_drug_interactions", "{{drug_name}} — {{interaction_type}}"],
+    ["herb_dosages", "{{form}} — {{amount}} {{frequency}}"],
+    ["herb_constituents", "{{name}}{{chemical_class}}"],
+    ["herb_preparations", "{{method}}"],
+    ["herb_historical_texts", "{{source_name}} — {{author}}"],
+    ["herb_practitioner_notes", "{{author_name}} ({{tradition}})"],
+    ["herb_case_studies", "{{title}}"],
+    ["herb_references", "{{authors}} — {{title}} ({{year}})"],
+    ["herb_images", "{{image_type}}: {{caption}}"],
+    ["clinic_images", "{{image_type}}: {{caption}}"],
+    ["herbs", "{{title}} ({{scientific_name}})"],
+    ["formulas", "{{title}} {{chinese_name}}"],
+    ["conditions", "{{title}}"],
+    ["modalities", "{{title}}"],
+    ["practitioners", "{{first_name}} {{last_name}}"],
+    ["clinics", "{{name}}"],
+    ["tcm_ingredients", "{{title}}"],
+    ["tcm_target_interactions", "{{target_name}} ({{gene_name}})"],
+    ["tcm_clinical_evidence", "{{title}}"],
+    ["herb_tags", "{{name}}"],
+    ["tcm_categories", "{{name}}"],
+  ];
+  for (const [collection, template] of templates) {
+    try {
+      await client.request(updateCollection(collection, { meta: { display_template: template } }));
+      console.log(`  + ${collection}: ${template}`);
+    } catch (e) {
+      console.error(`  ! ${collection}: ${e?.errors?.[0]?.message || e.message}`);
+    }
+  }
+}
+
 // ─── Main ───────────────────────────────────────────────────────────────────
 
 async function main() {
@@ -707,6 +749,7 @@ async function main() {
   await createPrimaryCollections();
   await createO2MCollections();
   await createM2MRelations();
+  await setDisplayTemplates();
 
   console.log("\n=====================================");
   console.log("Schema creation complete!");
