@@ -129,6 +129,20 @@ try {
 
 const title = `${herb.title} (${herb.scientific_name || ""}) — Verscienta Health`;
 
+// Formula role display (used by the "Used In Formulas" section)
+const roleColors: Record<string, string> = {
+  chief: "bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-300",
+  deputy: "bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300",
+  assistant: "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300",
+  envoy: "bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-300",
+};
+const roleLabels: Record<string, string> = {
+  chief: "Chief (Jun)",
+  deputy: "Deputy (Chen)",
+  assistant: "Assistant (Zuo)",
+  envoy: "Envoy (Shi)",
+};
+
 // Helpers
 const has = (v: any) => v !== null && v !== undefined && v !== "" && !(Array.isArray(v) && v.length === 0);
 const renderJsonItem = (item: any): string => {
@@ -310,15 +324,6 @@ const showToxicity = has(herb.toxicity_level) && herb.toxicity_level !== "none_k
                   const hid = typeof i.herb_id === "object" ? i.herb_id?.id : i.herb_id;
                   return Number(hid) === Number(herb.id);
                 });
-                const roleColors: Record<string, string> = {
-                  chief: "bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-300",
-                  deputy: "bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300",
-                  assistant: "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300",
-                  envoy: "bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-300",
-                };
-                const roleLabels: Record<string, string> = {
-                  chief: "Chief (Jun)", deputy: "Deputy (Chen)", assistant: "Assistant (Zuo)", envoy: "Envoy (Shi)",
-                };
                 return (
                   <a href={`/formulas/${f.slug || f.id}`} class="block bg-white dark:bg-earth-900 rounded-lg border border-gray-100 dark:border-earth-700 hover:border-sage-300 dark:hover:border-sage-700 hover:shadow-sm transition p-4">
                     <div class="font-medium text-gray-900 dark:text-earth-100 hover:text-sage-600">{f.title}</div>
