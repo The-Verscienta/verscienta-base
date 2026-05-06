@@ -7,7 +7,7 @@ import DisclaimerBox from "@/components/ui/DisclaimerBox.astro";
 import BotanicalDivider from "@/components/ui/BotanicalDivider.astro";
 import Breadcrumbs from "@/components/ui/Breadcrumbs.astro";
 import BackLink from "@/components/ui/BackLink.astro";
-import { directus, readItems } from "@/lib/directus";
+import { directus, readItems, aggregate } from "@/lib/directus";
 import { imageUrl } from "@/lib/image-url";
 
 const { id } = Astro.params;
@@ -84,8 +84,13 @@ if (!herb) {
 let tcmIngredients: any[] = [];
 let tcmTargets: any[] = [];
 let tcmEvidence: any[] = [];
+// Reverse: formulas that include this herb as an ingredient
+let formulasUsing: any[] = [];
+let formulasUsingTotal = 0;
+const FORMULAS_DISPLAY_LIMIT = 24;
 try {
-  [tcmIngredients, tcmTargets, tcmEvidence] = await Promise.all([
+  const formulasFilter = { ingredients: { herb_id: { _eq: herb.id } } };
+  const [tcmI, tcmT, tcmE, fItems, fCount] = await Promise.all([
     directus.request(readItems("tcm_ingredients", {
       filter: { herb_sources: { herbs_id: { _eq: herb.id } } },
       fields: ["id", "title", "pubchem_cid", "cas_number", "molecular_weight", "source_db"],
@@ -102,9 +107,24 @@ try {
       fields: ["id", "title", "evidence_id", "study_type", "summary", "outcome", "source_url", "source_db"],
       limit: 20,
     })).catch(() => []),
+    directus.request(readItems("formulas", {
+      filter: formulasFilter,
+      fields: [
+        "id", "title", "slug", "chinese_name", "pinyin_name", "classic_source",
+        "ingredients.herb_id", "ingredients.role", "ingredients.quantity", "ingredients.unit",
+      ],
+      sort: ["title"],
+      limit: FORMULAS_DISPLAY_LIMIT,
+    })).catch(() => []),
+    directus.request(aggregate("formulas", { aggregate: { count: "*" }, filter: formulasFilter })).catch(() => []),
   ]);
+  tcmIngredients = tcmI as any[];
+  tcmTargets = tcmT as any[];
+  tcmEvidence = tcmE as any[];
+  formulasUsing = fItems as any[];
+  formulasUsingTotal = Number((fCount as any)?.[0]?.count ?? formulasUsing.length);
 } catch (e) {
-  console.error("Error fetching TCM cross-refs:", e);
+  console.error("Error fetching herb cross-refs:", e);
 }
 
 const title = `${herb.title} (${herb.scientific_name || ""}) — Verscienta Health`;
@@ -273,6 +293,62 @@ const showToxicity = has(herb.toxicity_level) && herb.toxicity_level !== "none_k
           <section id="pharmacology" class="scroll-mt-24">
             <h2 class="font-serif text-2xl font-bold text-gray-900 dark:text-earth-100 mb-4">Pharmacological Effects</h2>
             <div class="prose prose-earth dark:prose-invert max-w-none" set:html={herb.pharmacological_effects} />
+          </section>
+        )}
+
+        {/* Formulas this herb appears in */}
+        {formulasUsing.length > 0 && (
+          <section id="formulas-using" class="scroll-mt-24">
+            <h2 class="font-serif text-2xl font-bold text-gray-900 dark:text-earth-100 mb-4">
+              Used In Formulas
+              <span class="text-sm font-normal text-gray-500 dark:text-earth-400 ml-2">({formulasUsingTotal})</span>
+            </h2>
+            <div class="grid sm:grid-cols-2 gap-3">
+              {formulasUsing.map((f: any) => {
+                // Find this herb's ingredient row in the formula to surface role + amount
+                const ing = (f.ingredients || []).find((i: any) => {
+                  const hid = typeof i.herb_id === "object" ? i.herb_id?.id : i.herb_id;
+                  return Number(hid) === Number(herb.id);
+                });
+                const roleColors: Record<string, string> = {
+                  chief: "bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-300",
+                  deputy: "bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300",
+                  assistant: "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300",
+                  envoy: "bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-300",
+                };
+                const roleLabels: Record<string, string> = {
+                  chief: "Chief (Jun)", deputy: "Deputy (Chen)", assistant: "Assistant (Zuo)", envoy: "Envoy (Shi)",
+                };
+                return (
+                  <a href={`/formulas/${f.slug || f.id}`} class="block bg-white dark:bg-earth-900 rounded-lg border border-gray-100 dark:border-earth-700 hover:border-sage-300 dark:hover:border-sage-700 hover:shadow-sm transition p-4">
+                    <div class="font-medium text-gray-900 dark:text-earth-100 hover:text-sage-600">{f.title}</div>
+                    {(f.chinese_name || f.pinyin_name) && (
+                      <div class="text-xs text-gray-500 dark:text-earth-400 mt-0.5">{[f.chinese_name, f.pinyin_name].filter(Boolean).join(" · ")}</div>
+                    )}
+                    {f.classic_source && (
+                      <div class="text-xs text-gray-400 dark:text-earth-500 mt-0.5">{f.classic_source}</div>
+                    )}
+                    <div class="flex flex-wrap gap-2 mt-2 text-xs">
+                      {ing?.role && (
+                        <span class={`px-2 py-0.5 rounded-full ${roleColors[ing.role] || "bg-gray-100 text-gray-700"}`}>
+                          {roleLabels[ing.role] || ing.role}
+                        </span>
+                      )}
+                      {ing?.quantity != null && (
+                        <span class="px-2 py-0.5 rounded-full bg-gray-100 dark:bg-earth-800 text-gray-600 dark:text-earth-300">
+                          {fmtNum(ing.quantity)}{ing.unit || ""}
+                        </span>
+                      )}
+                    </div>
+                  </a>
+                );
+              })}
+            </div>
+            {formulasUsingTotal > formulasUsing.length && (
+              <p class="text-sm text-gray-500 dark:text-earth-400 mt-3">
+                Showing {formulasUsing.length} of {formulasUsingTotal}.
+              </p>
+            )}
           </section>
         )}
 
@@ -898,6 +974,7 @@ const showToxicity = has(herb.toxicity_level) && herb.toxicity_level !== "none_k
             {showWestern && <a href="#western" class="block py-1.5 px-3 text-gray-600 dark:text-earth-300 hover:bg-earth-50 dark:hover:bg-earth-800 rounded-lg transition">Western Properties</a>}
             {herb.therapeutic_uses && <a href="#therapeutic" class="block py-1.5 px-3 text-gray-600 dark:text-earth-300 hover:bg-earth-50 dark:hover:bg-earth-800 rounded-lg transition">Therapeutic Uses</a>}
             {herb.pharmacological_effects && <a href="#pharmacology" class="block py-1.5 px-3 text-gray-600 dark:text-earth-300 hover:bg-earth-50 dark:hover:bg-earth-800 rounded-lg transition">Pharmacology</a>}
+            {formulasUsing.length > 0 && <a href="#formulas-using" class="block py-1.5 px-3 text-gray-600 dark:text-earth-300 hover:bg-earth-50 dark:hover:bg-earth-800 rounded-lg transition">Used In Formulas</a>}
             {herb.images?.length > 1 && <a href="#gallery" class="block py-1.5 px-3 text-gray-600 dark:text-earth-300 hover:bg-earth-50 dark:hover:bg-earth-800 rounded-lg transition">Gallery</a>}
             {showBotanical && <a href="#botanical" class="block py-1.5 px-3 text-gray-600 dark:text-earth-300 hover:bg-earth-50 dark:hover:bg-earth-800 rounded-lg transition">Botanical Description</a>}
             {herb.constituents?.length > 0 && <a href="#constituents" class="block py-1.5 px-3 text-gray-600 dark:text-earth-300 hover:bg-earth-50 dark:hover:bg-earth-800 rounded-lg transition">Active Constituents</a>}
