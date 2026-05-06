@@ -34,7 +34,8 @@ export const POST: APIRoute = async ({ request }) => {
     }
 
     const medList = validation.data.medications.split(/[,\n]+/).map((m) => m.trim()).filter(Boolean);
-    const result = await checkHerbDrugInteractions(medList);
+    const herbList = validation.data.herbs?.map((h) => h.trim()).filter(Boolean);
+    const result = await checkHerbDrugInteractions(medList, herbList);
 
     return new Response(JSON.stringify({ success: true, ...result }), { status: 200, headers: { "Content-Type": "application/json", ...rlHeaders } });
   } catch (error) {

@@ -1,12 +1,12 @@
 ---
 /**
  * Herb-Drug Interaction Checker — Astro shell with React island.
- * TODO Phase 6: Port interactive form from frontend/app/tools/herb-drug-interactions/page.tsx
  */
 import ContentLayout from "@/layouts/ContentLayout.astro";
+import HerbDrugChecker from "@/components/HerbDrugChecker";
 ---
 
-<ContentLayout title="Herb-Drug Interaction Checker — Verscienta Health" description="Check potential interactions between herbs and pharmaceutical medications.">
+<ContentLayout title="Herb-Drug Interaction Checker — Verscienta Health" description="Check potential interactions between herbs and pharmaceutical medications. AI-powered clinical analysis with mechanism explanations.">
   <section class="bg-gradient-to-br from-earth-50 via-sage-50/50 to-cream-100 dark:from-earth-950 dark:via-earth-900/50 dark:to-earth-950 border-b border-sage-200/50 dark:border-earth-700">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
       <div class="max-w-2xl">
@@ -15,27 +15,18 @@ import ContentLayout from "@/layouts/ContentLayout.astro";
           <span class="text-sage-600 font-medium tracking-wide uppercase text-sm">Safety Tool</span>
         </div>
         <h1 class="font-serif text-4xl md:text-5xl font-bold text-gray-900 dark:text-earth-100 mb-4">Drug Interaction Checker</h1>
-        <p class="text-lg text-gray-600 dark:text-earth-300">Enter your current medications to check for potential interactions with common herbs.</p>
+        <p class="text-lg text-gray-600 dark:text-earth-300">Enter your medications and any herbs you're taking. Our AI clinical pharmacologist analyzes pharmacokinetic and pharmacodynamic interactions, flags severity, and explains mechanisms.</p>
       </div>
     </div>
   </section>
 
   <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
     <div class="bg-amber-50 dark:bg-earth-900 border border-amber-200 dark:border-earth-700 rounded-xl p-4 mb-8">
-      <p class="text-sm text-amber-700 dark:text-amber-400"><strong>Important:</strong> This tool provides general guidance only. Always consult your healthcare provider before combining herbs with medications.</p>
+      <p class="text-sm text-amber-700 dark:text-amber-400"><strong>Important:</strong> This tool provides clinical guidance to inform your conversations with healthcare providers. It does not replace professional medical advice. Always consult your doctor or pharmacist before combining herbs with prescription medications, especially for conditions like blood thinning, diabetes, blood pressure, or psychiatric medications.</p>
     </div>
 
-    <!-- TODO Phase 6: <HerbDrugChecker client:load /> -->
     <div class="bg-white dark:bg-earth-900 rounded-xl border border-gray-100 dark:border-earth-700 p-6">
-      <label for="medications" class="block text-sm font-medium text-gray-700 dark:text-earth-300 mb-2">Enter your medications (one per line or comma-separated)</label>
-      <textarea id="medications" rows="4" placeholder="e.g., Warfarin, Metformin, Lisinopril..." class="w-full px-4 py-3 border border-gray-200 dark:border-earth-600 rounded-xl bg-white dark:bg-earth-800 text-gray-900 dark:text-earth-100 focus:ring-2 focus:ring-sage-500 mb-4"></textarea>
-      <button id="check-interactions-btn" type="button" class="w-full px-6 py-3 bg-gradient-to-r from-sage-600 to-earth-600 text-white font-medium rounded-xl shadow hover:shadow-lg transition-all">Check Interactions</button>
+      <HerbDrugChecker client:load />
     </div>
   </div>
 </ContentLayout>
-
-<script>
-  document.getElementById("check-interactions-btn")?.addEventListener("click", () => {
-    alert("The full interaction checker will be available when the React component is ported in Phase 6.");
-  });
-</script>

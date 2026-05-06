@@ -1,0 +1,28 @@
+---
+/**
+ * Saved Reports — list of the current user's saved AI reports.
+ * Auth-gated: redirects to /login if no access_token cookie.
+ */
+import ContentLayout from "@/layouts/ContentLayout.astro";
+import SavedReportsList from "@/components/SavedReportsList";
+
+const cookieHeader = Astro.request.headers.get("cookie") || "";
+const hasToken = /access_token=/.test(cookieHeader);
+if (!hasToken) {
+  return Astro.redirect("/login?redirect=/saved-reports");
+}
+---
+
+<ContentLayout title="Saved Reports — Verscienta Health" description="Your saved AI-generated reports.">
+  <section class="bg-gradient-to-br from-earth-50 via-sage-50/50 to-cream-100 dark:from-earth-950 dark:via-earth-900/50 dark:to-earth-950 border-b border-sage-200/50 dark:border-earth-700">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
+      <span class="text-sage-600 font-medium tracking-wide uppercase text-sm">Your Library</span>
+      <h1 class="font-serif text-4xl md:text-5xl font-bold text-gray-900 dark:text-earth-100 mb-4 mt-2">Saved Reports</h1>
+      <p class="text-lg text-gray-600 dark:text-earth-300">Drug interaction checks, formula explanations, and symptom analyses you've saved.</p>
+    </div>
+  </section>
+
+  <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <SavedReportsList client:load />
+  </div>
+</ContentLayout>

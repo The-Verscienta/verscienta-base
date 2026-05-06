@@ -34,6 +34,7 @@ These are read only inside Astro endpoints / SSR — never in client code. Set a
 | `DIRECTUS_TOKEN` | Admin static token for server-side Directus calls (auth flows, server-rendered pages) | [`src/lib/directus.ts`](../astro/src/lib/directus.ts), several `pages/api/auth/*.ts` |
 | `XAI_API_KEY` | Grok API auth — symptom analysis, formula explanations, herb-drug check | [`src/lib/grok.ts`](../astro/src/lib/grok.ts), `pages/api/grok/*.ts` |
 | `XAI_API_URL` | Optional override; defaults to `https://api.x.ai/v1` | [`src/lib/grok.ts`](../astro/src/lib/grok.ts) |
+| `XAI_MODEL` | Optional override; defaults to `grok-4.3` | [`src/lib/grok.ts`](../astro/src/lib/grok.ts) |
 | `GEOAPIFY_API_KEY` | Practitioner / clinic finder geocoding + autocomplete | `pages/api/geocode.ts`, `pages/api/geocode-autocomplete.ts` |
 | `TURNSTILE_SECRET_KEY` | Server-side validation of Turnstile tokens during registration | [`src/lib/turnstile.ts`](../astro/src/lib/turnstile.ts) |
 | `SYMPY_SERVICE_URL` | URL of the SymPy compute service (default `http://localhost:8001`) | `pages/api/symbolic-compute.ts` |

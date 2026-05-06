@@ -110,6 +110,51 @@ import ContentLayout from "@/layouts/ContentLayout.astro";
           </div>
         </a>
 
+        <a href="/saved-reports" class="group p-5 bg-white dark:bg-earth-900 rounded-xl border border-gray-100 dark:border-earth-700 shadow-sm hover:shadow-md transition-all">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 bg-sage-100 dark:bg-sage-900/30 rounded-lg flex items-center justify-center flex-shrink-0">
+              <svg class="w-5 h-5 text-sage-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" /></svg>
+            </div>
+            <div>
+              <h3 class="font-semibold text-gray-900 dark:text-earth-100 group-hover:text-sage-600">Saved Reports</h3>
+              <p class="text-xs text-gray-500 dark:text-earth-400">Your AI analyses & explanations</p>
+            </div>
+          </div>
+        </a>
+
+        <a href="/tools/consultation-prep" class="group p-5 bg-white dark:bg-earth-900 rounded-xl border border-gray-100 dark:border-earth-700 shadow-sm hover:shadow-md transition-all">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 bg-blue-100 dark:bg-blue-900/30 rounded-lg flex items-center justify-center flex-shrink-0 text-xl">📝</div>
+            <div>
+              <h3 class="font-semibold text-gray-900 dark:text-earth-100 group-hover:text-blue-600">Consultation Prep</h3>
+              <p class="text-xs text-gray-500 dark:text-earth-400">Get ready for your holistic visit</p>
+            </div>
+          </div>
+        </a>
+
+        <!-- Practitioner-only AI tools -->
+        <a href="/tools/formula-constructor" id="dash-pro-formula" class="hidden group p-5 bg-white dark:bg-earth-900 rounded-xl border border-amber-200 dark:border-amber-800 shadow-sm hover:shadow-md transition-all relative">
+          <span class="absolute top-2 right-2 text-[10px] px-1.5 py-0.5 rounded bg-amber-100 dark:bg-amber-900/40 text-amber-700 dark:text-amber-300 font-semibold uppercase tracking-wide">Pro</span>
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 bg-amber-100 dark:bg-amber-900/30 rounded-lg flex items-center justify-center flex-shrink-0 text-xl">🧪</div>
+            <div>
+              <h3 class="font-semibold text-gray-900 dark:text-earth-100 group-hover:text-amber-600">Formula Constructor</h3>
+              <p class="text-xs text-gray-500 dark:text-earth-400">AI-built custom formulas</p>
+            </div>
+          </div>
+        </a>
+
+        <a href="/tools/safety-check" id="dash-pro-safety" class="hidden group p-5 bg-white dark:bg-earth-900 rounded-xl border border-amber-200 dark:border-amber-800 shadow-sm hover:shadow-md transition-all relative">
+          <span class="absolute top-2 right-2 text-[10px] px-1.5 py-0.5 rounded bg-amber-100 dark:bg-amber-900/40 text-amber-700 dark:text-amber-300 font-semibold uppercase tracking-wide">Pro</span>
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 bg-amber-100 dark:bg-amber-900/30 rounded-lg flex items-center justify-center flex-shrink-0 text-xl">🛡️</div>
+            <div>
+              <h3 class="font-semibold text-gray-900 dark:text-earth-100 group-hover:text-amber-600">Patient Safety Check</h3>
+              <p class="text-xs text-gray-500 dark:text-earth-400">Patient-specific risk evaluation</p>
+            </div>
+          </div>
+        </a>
+
         <!-- Professional-only card -->
         <a href="/practitioners" id="dash-pro-practitioners" class="hidden group p-5 bg-white dark:bg-earth-900 rounded-xl border border-amber-200 dark:border-amber-800 shadow-sm hover:shadow-md transition-all">
           <div class="flex items-center gap-3">
@@ -256,6 +301,8 @@ import ContentLayout from "@/layouts/ContentLayout.astro";
 
           if (isPro) {
             document.getElementById('dash-pro-practitioners')?.classList.remove('hidden');
+            document.getElementById('dash-pro-formula')?.classList.remove('hidden');
+            document.getElementById('dash-pro-safety')?.classList.remove('hidden');
           }
         }
       } catch {

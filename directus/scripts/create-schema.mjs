@@ -398,6 +398,22 @@ async function createPrimaryCollections() {
   await safeCreateField("tcm_clinical_evidence", { field: "source_url", type: "string", meta: { interface: "input" }, schema: {} });
   await safeCreateField("tcm_clinical_evidence", { field: "source_db", type: "string", meta: { interface: "input", width: "half" }, schema: {} });
 
+  // ── saved_reports ─────────────────────────────────────────────────────────
+  // Per-user persistence for AI tool results (interaction checks, formula explanations, etc.)
+  await safeCreateCollection({ collection: "saved_reports", meta: { icon: "save", note: "User-saved AI reports", accountability: "all" }, schema: {} });
+  await safeCreateField("saved_reports", { field: "user_id", type: "uuid", meta: { interface: "select-dropdown-m2o", display: "user", required: true, hidden: false, special: ["user-created"] }, schema: { is_nullable: false } });
+  await safeCreateRelation({
+    collection: "saved_reports",
+    field: "user_id",
+    related_collection: "directus_users",
+    schema: { on_delete: "CASCADE" },
+  });
+  await safeCreateField("saved_reports", { field: "report_type", type: "string", meta: { interface: "select-dropdown", required: true, options: { choices: choices(["Interaction Check", "Formula Explanation", "Symptom Analysis", "Other"]) } }, schema: { is_nullable: false } });
+  await safeCreateField("saved_reports", { field: "title", type: "string", meta: { interface: "input", required: true }, schema: { is_nullable: false } });
+  await safeCreateField("saved_reports", { field: "summary", type: "text", meta: { interface: "input-multiline", note: "Short human-readable summary for the dashboard list" }, schema: {} });
+  await safeCreateField("saved_reports", { field: "data", type: "json", meta: { interface: "input-code", options: { language: "json" }, note: "Full report payload (inputs + AI response)" }, schema: {} });
+  await safeCreateField("saved_reports", { field: "date_created", type: "timestamp", meta: { interface: "datetime", readonly: true, special: ["date-created"] }, schema: {} });
+
   // ── import_logs ───────────────────────────────────────────────────────────
   await safeCreateCollection({ collection: "import_logs", meta: { icon: "history", note: "Data ingestion run tracking" }, schema: {} });
   await safeCreateField("import_logs", { field: "title", type: "string", meta: { interface: "input", required: true }, schema: { is_nullable: false } });

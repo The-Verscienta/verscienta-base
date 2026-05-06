@@ -3,6 +3,7 @@ import ContentLayout from "@/layouts/ContentLayout.astro";
 import { directus, readItems, readItem } from "@/lib/directus";
 import { imageUrl } from "@/lib/image-url";
 import { fetchAllFormulasForSimilarity, computeSimilarFormulas } from "@/lib/formula-similarity";
+import ExplainFormulaButton from "@/components/ExplainFormulaButton";
 
 const { id } = Astro.params;
 
@@ -76,6 +77,19 @@ const ingredientPct = (ing: any): number | null => {
   if (!total || !Number.isFinite(q) || total === 0) return null;
   return (q / total) * 100;
 };
+
+// Strip HTML for the explain-formula description payload
+const stripHtml = (html: string | null | undefined) =>
+  html ? html.replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim().slice(0, 1500) : undefined;
+
+// Shape the formula for the ExplainFormulaButton React island
+const explainHerbs = (formula.ingredients || [])
+  .filter((ing: any) => ing?.herb_id?.title)
+  .map((ing: any) => ({
+    name: ing.herb_id.title,
+    role: ing.role || undefined,
+    amount: ing.quantity != null && ing.quantity !== "" ? `${fmtNum(ing.quantity)}${ing.unit || ""}` : undefined,
+  }));
 ---
 
 <ContentLayout title={`${formula.title} — Verscienta Health`} description={`Traditional herbal formula: ${formula.title}. Ingredients, modifications, and clinical notes.`}>
@@ -98,6 +112,16 @@ const ingredientPct = (ing: any): number | null => {
               {formula.use_cases.map((u: string) => (
                 <span class="text-xs px-3 py-1 rounded-full bg-sage-100 dark:bg-earth-800 text-sage-700 dark:text-sage-300">{u}</span>
               ))}
+            </div>
+          )}
+          {explainHerbs.length > 0 && (
+            <div class="mt-5">
+              <ExplainFormulaButton
+                client:load
+                formulaName={formula.title}
+                description={stripHtml(formula.description)}
+                herbs={explainHerbs}
+              />
             </div>
           )}
         </div>

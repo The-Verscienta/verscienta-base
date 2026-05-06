@@ -1,0 +1,35 @@
+---
+/**
+ * Consultation Prep — patient-facing AI tool.
+ */
+import ContentLayout from "@/layouts/ContentLayout.astro";
+import AccessGate from "@/components/AccessGate";
+import ConsultationPrep from "@/components/ConsultationPrep";
+---
+
+<ContentLayout title="Consultation Prep — Verscienta Health" description="Get ready for your holistic health visit with AI-generated questions, observations, and a checklist.">
+  <section class="bg-gradient-to-br from-earth-50 via-sage-50/50 to-cream-100 dark:from-earth-950 dark:via-earth-900/50 dark:to-earth-950 border-b border-sage-200/50 dark:border-earth-700">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
+      <div class="max-w-2xl">
+        <div class="flex items-center gap-3 mb-4">
+          <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-sage-500 to-earth-600 flex items-center justify-center shadow-lg"><span class="text-xl">📝</span></div>
+          <span class="text-sage-600 font-medium tracking-wide uppercase text-sm">Patient Tool</span>
+        </div>
+        <h1 class="font-serif text-4xl md:text-5xl font-bold text-gray-900 dark:text-earth-100 mb-4">Prep for Your Visit</h1>
+        <p class="text-lg text-gray-600 dark:text-earth-300">Going to a TCM doc, naturopath, or herbalist? Get a personalized checklist of questions to ask, symptoms to track in advance, and what to bring — so you walk in prepared and walk out with answers.</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <AccessGate
+      client:load
+      level="authenticated"
+      title="Sign in to use Consultation Prep"
+      toolDescription="Build a personalized prep checklist for your upcoming holistic health visit — questions to ask, symptoms to track, and what to bring with you."
+      redirectPath="/tools/consultation-prep"
+    >
+      <ConsultationPrep client:load />
+    </AccessGate>
+  </div>
+</ContentLayout>

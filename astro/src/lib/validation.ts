@@ -99,6 +99,7 @@ export const herbDrugCheckSchema = z.object({
     .string()
     .min(2, 'Please enter at least one medication name')
     .max(500, 'Too many medications listed (max 500 characters)'),
+  herbs: z.array(z.string().min(1).max(120)).max(20).optional(),
 });
 
 // Contact/Communication Schemas
@@ -245,9 +246,62 @@ export const dosageComputeSchema = z.object({
 // Explain Formula Schema (Grok AI patient explanation)
 export const explainFormulaSchema = z.object({
   formulaName: z.string().min(1).max(200),
-  ingredients: z.array(z.string()).max(50),
-  actions: z.string().max(500),
-  indications: z.string().max(500),
+  herbs: z.array(
+    z.object({
+      name: z.string().min(1).max(200),
+      role: z.string().max(50).optional(),
+      amount: z.string().max(50).optional(),
+    })
+  ).min(1).max(50),
+  description: z.string().max(2000).optional(),
+  audience: z.enum(["patient", "student", "practitioner"]).optional(),
+});
+
+const patientContextSchema = z.object({
+  age: z.number().int().min(0).max(130).optional(),
+  sex: z.string().max(40).optional(),
+  weight_kg: z.number().min(1).max(500).optional(),
+  pregnant: z.boolean().optional(),
+  breastfeeding: z.boolean().optional(),
+  conditions: z.array(z.string().max(120)).max(30).optional(),
+  medications: z.array(z.string().max(120)).max(30).optional(),
+  allergies: z.array(z.string().max(120)).max(30).optional(),
+  pediatric: z.boolean().optional(),
+  geriatric: z.boolean().optional(),
+});
+
+export const constructFormulaSchema = z.object({
+  presentation: z.string().min(10).max(2000),
+  tradition: z.enum(["TCM", "Western", "Ayurvedic", "Integrative"]),
+  pattern: z.string().max(200).optional(),
+  patient: patientContextSchema.optional(),
+  availableHerbs: z.array(z.string().max(120)).max(200).optional(),
+  excludedHerbs: z.array(z.string().max(120)).max(50).optional(),
+  preferredForm: z.enum(["decoction", "tincture", "powder", "tea", "capsule"]).optional(),
+});
+
+export const safetyCheckSchema = z.object({
+  subject: z.object({
+    kind: z.enum(["herb", "formula"]),
+    name: z.string().min(1).max(200),
+    ingredients: z.array(z.string().max(120)).max(50).optional(),
+  }),
+  patient: patientContextSchema,
+  concerns: z.array(z.string().max(300)).max(10).optional(),
+});
+
+export const consultationPrepSchema = z.object({
+  practitionerType: z.enum(["TCM", "Western Herbalist", "Naturopath", "Ayurvedic", "Integrative", "Other"]),
+  primaryComplaint: z.string().min(5).max(1000),
+  duration: z.string().max(120).optional(),
+  goals: z.array(z.string().max(300)).max(10).optional(),
+  triedAlready: z.array(z.string().max(300)).max(20).optional(),
+  context: z.object({
+    age: z.number().int().min(0).max(130).optional(),
+    sex: z.string().max(40).optional(),
+    medications: z.array(z.string().max(120)).max(30).optional(),
+    conditions: z.array(z.string().max(120)).max(30).optional(),
+  }).optional(),
 });
 
 // Utility function to validate and parse data

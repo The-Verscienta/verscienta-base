@@ -1,0 +1,42 @@
+---
+/**
+ * Safety Check — practitioner-only AI tool.
+ */
+import ContentLayout from "@/layouts/ContentLayout.astro";
+import AccessGate from "@/components/AccessGate";
+import SafetyCheck from "@/components/SafetyCheck";
+---
+
+<ContentLayout title="Safety Check — Verscienta Health" description="Patient-specific herb and formula safety evaluation for clinical practitioners.">
+  <section class="bg-gradient-to-br from-earth-50 via-sage-50/50 to-cream-100 dark:from-earth-950 dark:via-earth-900/50 dark:to-earth-950 border-b border-sage-200/50 dark:border-earth-700">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
+      <div class="max-w-2xl">
+        <div class="flex items-center gap-3 mb-4">
+          <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-sage-500 to-earth-600 flex items-center justify-center shadow-lg"><span class="text-xl">🛡️</span></div>
+          <span class="text-sage-600 font-medium tracking-wide uppercase text-sm">Practitioner Tool</span>
+          <span class="text-xs px-2 py-0.5 rounded bg-amber-100 dark:bg-amber-900/40 text-amber-700 dark:text-amber-300 font-semibold uppercase tracking-wide">Pro</span>
+        </div>
+        <h1 class="font-serif text-4xl md:text-5xl font-bold text-gray-900 dark:text-earth-100 mb-4">Patient Safety Check</h1>
+        <p class="text-lg text-gray-600 dark:text-earth-300">Evaluate whether a specific herb or formula is appropriate for a specific patient. Triggers checks against pregnancy, age, conditions, medications, and allergies — with mechanism-level reasoning.</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div class="bg-amber-50 dark:bg-earth-900 border border-amber-200 dark:border-earth-700 rounded-xl p-4 mb-8">
+      <p class="text-sm text-amber-700 dark:text-amber-400">
+        <strong>Clinical decision support, not replacement.</strong> Safety analysis depends on the completeness of your input. Always cross-reference with primary sources for high-risk patients.
+      </p>
+    </div>
+
+    <AccessGate
+      client:load
+      level="professional"
+      title="Patient Safety Check"
+      toolDescription="The AI safety check is available to verified practitioners. It evaluates an herb or formula against a specific patient's age, pregnancy status, conditions, medications, and allergies."
+      redirectPath="/tools/safety-check"
+    >
+      <SafetyCheck client:load />
+    </AccessGate>
+  </div>
+</ContentLayout>
