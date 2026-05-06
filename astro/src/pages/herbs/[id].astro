@@ -87,7 +87,8 @@ let tcmEvidence: any[] = [];
 // Reverse: formulas that include this herb as an ingredient
 let formulasUsing: any[] = [];
 let formulasUsingTotal = 0;
-const FORMULAS_DISPLAY_LIMIT = 24;
+// Hard cap as a safety rail (DOM size) — well above any realistic single-herb count.
+const FORMULAS_DISPLAY_LIMIT = 500;
 try {
   const formulasFilter = { ingredients: { herb_id: { _eq: herb.id } } };
   const [tcmI, tcmT, tcmE, fItems, fCount] = await Promise.all([
@@ -113,6 +114,9 @@ try {
         "id", "title", "slug", "chinese_name", "pinyin_name", "classic_source",
         "ingredients.herb_id", "ingredients.role", "ingredients.quantity", "ingredients.unit",
       ],
+      // Only return THIS herb's ingredient row per formula, instead of every ingredient.
+      // Cuts payload size proportional to formula complexity.
+      deep: { ingredients: { _filter: { herb_id: { _eq: herb.id } } } },
       sort: ["title"],
       limit: FORMULAS_DISPLAY_LIMIT,
     })).catch(() => []),

@@ -2,6 +2,7 @@
 import ContentLayout from "@/layouts/ContentLayout.astro";
 import { directus, readItems, readItem } from "@/lib/directus";
 import { imageUrl } from "@/lib/image-url";
+import { fetchAllFormulasForSimilarity, computeSimilarFormulas } from "@/lib/formula-similarity";
 
 const { id } = Astro.params;
 
@@ -29,15 +30,25 @@ try {
 } catch (e) { console.error("Error:", e); }
 if (!formula) return Astro.redirect("/404");
 
-// Inline TCM clinical evidence linked to this formula
+// Inline TCM clinical evidence + similar formulas (parallel)
 let tcmEvidence: any[] = [];
+let similarFormulas: any[] = [];
 try {
-  tcmEvidence = await directus.request(readItems("tcm_clinical_evidence", {
-    filter: { formula_id: { _eq: formula.id } },
-    fields: ["id", "title", "evidence_id", "study_type", "summary", "outcome", "source_url", "source_db"],
-    limit: 20,
-  }));
-} catch (e) { console.error("Error fetching TCM evidence:", e); }
+  const [evidence, allFormulas] = await Promise.all([
+    directus.request(readItems("tcm_clinical_evidence", {
+      filter: { formula_id: { _eq: formula.id } },
+      fields: ["id", "title", "evidence_id", "study_type", "summary", "outcome", "source_url", "source_db"],
+      limit: 20,
+    })).catch(() => []),
+    fetchAllFormulasForSimilarity().catch(() => []),
+  ]);
+  tcmEvidence = evidence as any[];
+  // Find this formula in the cached list (already has the same shape with ingredient herb_ids)
+  const sourceForSim = allFormulas.find((f) => f.id === formula.id);
+  if (sourceForSim) {
+    similarFormulas = computeSimilarFormulas(sourceForSim, allFormulas, { minSimilarity: 30, maxResults: 8 });
+  }
+} catch (e) { console.error("Error fetching evidence / similar formulas:", e); }
 
 const roleLabels: Record<string, string> = { chief: "Jun (Chief)", deputy: "Chen (Deputy)", assistant: "Zuo (Assistant)", envoy: "Shi (Envoy)" };
 const roleColors: Record<string, string> = { chief: "bg-amber-100 text-amber-700 border-amber-200", deputy: "bg-blue-100 text-blue-700 border-blue-200", assistant: "bg-green-100 text-green-700 border-green-200", envoy: "bg-purple-100 text-purple-700 border-purple-200" };
@@ -198,7 +209,7 @@ const ingredientPct = (ing: any): number | null => {
       </section>
     )}
 
-    {/* Related formulas (M2M) */}
+    {/* Related formulas (M2M, manually curated) */}
     {formula.related_formulas?.length > 0 && (
       <section>
         <h2 class="font-serif text-2xl font-bold text-gray-900 dark:text-earth-100 mb-4">Related Formulas</h2>
@@ -209,6 +220,50 @@ const ingredientPct = (ing: any): number | null => {
             </a>
           ))}
         </div>
+      </section>
+    )}
+
+    {/* Similar formulas (auto-computed by ingredient + dosage similarity) */}
+    {similarFormulas.length > 0 && (
+      <section>
+        <h2 class="font-serif text-2xl font-bold text-gray-900 dark:text-earth-100 mb-4">
+          Similar Formulas
+          <span class="text-sm font-normal text-gray-500 dark:text-earth-400 ml-2">
+            by composition
+          </span>
+        </h2>
+        <div class="grid sm:grid-cols-2 gap-3">
+          {similarFormulas.map((sf: any) => (
+            <a href={`/formulas/${sf.slug || sf.id}`} class="block bg-white dark:bg-earth-900 rounded-lg border border-gray-100 dark:border-earth-700 hover:border-sage-300 dark:hover:border-sage-700 hover:shadow-sm transition p-4">
+              <div class="flex items-start justify-between gap-3">
+                <div class="flex-1 min-w-0">
+                  <div class="font-medium text-gray-900 dark:text-earth-100 hover:text-sage-600">{sf.title}</div>
+                  {(sf.chinese_name || sf.pinyin_name) && (
+                    <div class="text-xs text-gray-500 dark:text-earth-400 mt-0.5">{[sf.chinese_name, sf.pinyin_name].filter(Boolean).join(" · ")}</div>
+                  )}
+                  {sf.classic_source && (
+                    <div class="text-xs text-gray-400 dark:text-earth-500 mt-0.5">{sf.classic_source}</div>
+                  )}
+                </div>
+                <div class="flex flex-col items-end flex-shrink-0">
+                  <span class={`text-sm font-bold tabular-nums ${sf.similarity >= 70 ? "text-green-700 dark:text-green-400" : sf.similarity >= 50 ? "text-sage-700 dark:text-sage-400" : "text-gray-600 dark:text-earth-300"}`}>
+                    {sf.similarity}%
+                  </span>
+                  <span class="text-[10px] uppercase tracking-wide text-gray-400 dark:text-earth-500">match</span>
+                </div>
+              </div>
+              <div class="mt-2 text-xs text-gray-500 dark:text-earth-400">
+                {sf.sharedCount} shared {sf.sharedCount === 1 ? "herb" : "herbs"} of {sf.herbCount}
+                {sf.sharedHerbs.length > 0 && (
+                  <span class="ml-1 text-gray-400 dark:text-earth-500">— {sf.sharedHerbs.slice(0, 4).join(", ")}{sf.sharedHerbs.length > 4 ? ` +${sf.sharedHerbs.length - 4}` : ""}</span>
+                )}
+              </div>
+            </a>
+          ))}
+        </div>
+        <p class="text-xs text-gray-400 dark:text-earth-500 mt-3 italic">
+          Match score combines dosage-weighted composition (cosine, 70%) with shared-herb overlap (Jaccard, 30%).
+        </p>
       </section>
     )}
 
