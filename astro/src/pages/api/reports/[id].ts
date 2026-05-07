@@ -10,14 +10,9 @@ import {
   createRateLimitHeaders,
 } from "@/lib/rate-limit";
 import { validateCsrfToken } from "@/lib/csrf";
+import { getRequestAccessToken } from "@/lib/auth-server";
 
 const DIRECTUS_URL = import.meta.env.PUBLIC_DIRECTUS_URL || "http://localhost:8055";
-
-function getAccessToken(request: Request): string | null {
-  const cookieHeader = request.headers.get("cookie") || "";
-  const m = cookieHeader.match(/access_token=([^;]*)/);
-  return m ? decodeURIComponent(m[1]) : null;
-}
 
 function unauthorized(rlHeaders: Record<string, string>) {
   return new Response(JSON.stringify({ error: "Sign in to access reports." }), {
@@ -26,7 +21,7 @@ function unauthorized(rlHeaders: Record<string, string>) {
   });
 }
 
-export const GET: APIRoute = async ({ request, params }) => {
+export const GET: APIRoute = async ({ request, params, locals }) => {
   const identifier = getClientIdentifier(request);
   const rl = checkRateLimit(`reports:get:${identifier}`, RATE_LIMITS.api);
   const rlHeaders = createRateLimitHeaders(rl);
@@ -37,7 +32,7 @@ export const GET: APIRoute = async ({ request, params }) => {
     });
   }
 
-  const accessToken = getAccessToken(request);
+  const accessToken = getRequestAccessToken(request, locals);
   if (!accessToken) return unauthorized(rlHeaders);
 
   try {
@@ -65,7 +60,7 @@ export const GET: APIRoute = async ({ request, params }) => {
   }
 };
 
-export const DELETE: APIRoute = async ({ request, params }) => {
+export const DELETE: APIRoute = async ({ request, params, locals }) => {
   const csrf = validateCsrfToken(request);
   if (!csrf.valid) {
     return new Response(JSON.stringify({ error: "Invalid request." }), {
@@ -84,7 +79,7 @@ export const DELETE: APIRoute = async ({ request, params }) => {
     });
   }
 
-  const accessToken = getAccessToken(request);
+  const accessToken = getRequestAccessToken(request, locals);
   if (!accessToken) return unauthorized(rlHeaders);
 
   try {

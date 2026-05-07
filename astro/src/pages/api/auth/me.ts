@@ -4,9 +4,10 @@
  */
 import type { APIRoute } from "astro";
 import { getCurrentUser } from "@/lib/auth";
+import { getRequestAccessToken } from "@/lib/auth-server";
 import { checkRateLimit, getClientIdentifier, RATE_LIMITS, createRateLimitHeaders } from "@/lib/rate-limit";
 
-export const GET: APIRoute = async ({ request }) => {
+export const GET: APIRoute = async ({ request, locals }) => {
   const identifier = getClientIdentifier(request);
   const rl = checkRateLimit(`auth:me:${identifier}`, RATE_LIMITS.api);
   const rlHeaders = createRateLimitHeaders(rl);
@@ -16,9 +17,7 @@ export const GET: APIRoute = async ({ request }) => {
   }
 
   try {
-    const cookieHeader = request.headers.get("cookie") || "";
-    const tokenMatch = cookieHeader.match(/access_token=([^;]*)/);
-    const accessToken = tokenMatch?.[1];
+    const accessToken = getRequestAccessToken(request, locals);
 
     if (!accessToken) {
       return new Response(JSON.stringify({ user: null }), { status: 200, headers: { "Content-Type": "application/json", ...rlHeaders } });

@@ -6,8 +6,11 @@
 import ContentLayout from "@/layouts/ContentLayout.astro";
 import SavedReportsList from "@/components/SavedReportsList";
 
+// Middleware refreshes expired tokens and stashes the result on locals,
+// so that — not the (possibly stale) request cookie — is the source of truth.
+const stashedToken = (Astro.locals as { accessToken?: string }).accessToken;
 const cookieHeader = Astro.request.headers.get("cookie") || "";
-const hasToken = /access_token=/.test(cookieHeader);
+const hasToken = stashedToken || /access_token=/.test(cookieHeader);
 if (!hasToken) {
   return Astro.redirect("/login?redirect=/saved-reports");
 }

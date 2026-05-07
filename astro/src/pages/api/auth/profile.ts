@@ -5,10 +5,11 @@
 import type { APIRoute } from "astro";
 import { checkRateLimit, getClientIdentifier, RATE_LIMITS, createRateLimitHeaders } from "@/lib/rate-limit";
 import { validateCsrfToken } from "@/lib/csrf";
+import { getRequestAccessToken } from "@/lib/auth-server";
 
 const DIRECTUS_URL = import.meta.env.PUBLIC_DIRECTUS_URL || "http://localhost:8055";
 
-export const PATCH: APIRoute = async ({ request }) => {
+export const PATCH: APIRoute = async ({ request, locals }) => {
   const csrf = validateCsrfToken(request);
   if (!csrf.valid) {
     return new Response(JSON.stringify({ error: "Invalid request." }), { status: 403, headers: { "Content-Type": "application/json" } });
@@ -23,9 +24,7 @@ export const PATCH: APIRoute = async ({ request }) => {
   }
 
   try {
-    const cookieHeader = request.headers.get("cookie") || "";
-    const tokenMatch = cookieHeader.match(/access_token=([^;]*)/);
-    const accessToken = tokenMatch?.[1];
+    const accessToken = getRequestAccessToken(request, locals);
 
     if (!accessToken) {
       return new Response(JSON.stringify({ error: "Not authenticated" }), { status: 401, headers: { "Content-Type": "application/json" } });

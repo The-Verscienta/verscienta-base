@@ -37,7 +37,7 @@ export const POST: APIRoute = async ({ request, locals }) => {
     });
   }
 
-  const user = await getAuthedUser(request);
+  const user = await getAuthedUser(request, locals);
   if (!user) return gatedResponse("auth", rlHeaders);
   if (!userHasAccess(user, "professional")) return gatedResponse("upgrade", rlHeaders);
 

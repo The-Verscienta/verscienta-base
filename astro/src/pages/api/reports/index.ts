@@ -15,6 +15,7 @@ import {
   createRateLimitHeaders,
 } from "@/lib/rate-limit";
 import { validateCsrfToken } from "@/lib/csrf";
+import { getRequestAccessToken } from "@/lib/auth-server";
 
 const DIRECTUS_URL = import.meta.env.PUBLIC_DIRECTUS_URL || "http://localhost:8055";
 
@@ -25,12 +26,6 @@ const reportSchema = z.object({
   data: z.record(z.string(), z.any()).optional(),
 });
 
-function getAccessToken(request: Request): string | null {
-  const cookieHeader = request.headers.get("cookie") || "";
-  const m = cookieHeader.match(/access_token=([^;]*)/);
-  return m ? decodeURIComponent(m[1]) : null;
-}
-
 function unauthorized(rlHeaders: Record<string, string>) {
   return new Response(JSON.stringify({ error: "Sign in to save reports." }), {
     status: 401,
@@ -38,7 +33,7 @@ function unauthorized(rlHeaders: Record<string, string>) {
   });
 }
 
-export const GET: APIRoute = async ({ request, url }) => {
+export const GET: APIRoute = async ({ request, url, locals }) => {
   const identifier = getClientIdentifier(request);
   const rl = checkRateLimit(`reports:list:${identifier}`, RATE_LIMITS.api);
   const rlHeaders = createRateLimitHeaders(rl);
@@ -49,7 +44,7 @@ export const GET: APIRoute = async ({ request, url }) => {
     });
   }
 
-  const accessToken = getAccessToken(request);
+  const accessToken = getRequestAccessToken(request, locals);
   if (!accessToken) return unauthorized(rlHeaders);
 
   const reportType = url.searchParams.get("type");
@@ -82,7 +77,7 @@ export const GET: APIRoute = async ({ request, url }) => {
   }
 };
 
-export const POST: APIRoute = async ({ request }) => {
+export const POST: APIRoute = async ({ request, locals }) => {
   const csrf = validateCsrfToken(request);
   if (!csrf.valid) {
     return new Response(JSON.stringify({ error: "Invalid request." }), {
@@ -101,7 +96,7 @@ export const POST: APIRoute = async ({ request }) => {
     });
   }
 
-  const accessToken = getAccessToken(request);
+  const accessToken = getRequestAccessToken(request, locals);
   if (!accessToken) return unauthorized(rlHeaders);
 
   let body: unknown;
