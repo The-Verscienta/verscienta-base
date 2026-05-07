@@ -6,6 +6,7 @@
  */
 import type { APIRoute } from "astro";
 import { constructFormula } from "@/lib/grok";
+import { getAiEnv, hasAiKey } from "@/lib/env";
 import {
   checkRateLimit,
   getClientIdentifier,
@@ -16,7 +17,7 @@ import { validateCsrfToken } from "@/lib/csrf";
 import { constructFormulaSchema, formatZodErrors } from "@/lib/validation";
 import { getAuthedUser, userHasAccess, gatedResponse } from "@/lib/auth-server";
 
-export const POST: APIRoute = async ({ request }) => {
+export const POST: APIRoute = async ({ request, locals }) => {
   const csrf = validateCsrfToken(request);
   if (!csrf.valid) {
     return new Response(JSON.stringify({ error: "Invalid request." }), {
@@ -50,14 +51,15 @@ export const POST: APIRoute = async ({ request }) => {
       });
     }
 
-    if (!import.meta.env.XAI_API_KEY) {
+    const env = getAiEnv(locals);
+    if (!hasAiKey(env)) {
       return new Response(JSON.stringify({ error: "AI service is not configured.", isConfigError: true }), {
         status: 503,
         headers: { "Content-Type": "application/json", ...rlHeaders },
       });
     }
 
-    const formula = await constructFormula(parsed.data);
+    const formula = await constructFormula(parsed.data, env);
     return new Response(JSON.stringify({ formula }), {
       status: 200,
       headers: { "Content-Type": "application/json", ...rlHeaders },

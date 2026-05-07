@@ -4,11 +4,12 @@
  */
 import type { APIRoute } from "astro";
 import { analyzeSymptoms } from "@/lib/grok";
+import { getAiEnv, hasAiKey } from "@/lib/env";
 import { checkRateLimit, getClientIdentifier, RATE_LIMITS, createRateLimitHeaders } from "@/lib/rate-limit";
 import { validateCsrfToken } from "@/lib/csrf";
 import { symptomAnalysisSchema, formatZodErrors } from "@/lib/validation";
 
-export const POST: APIRoute = async ({ request }) => {
+export const POST: APIRoute = async ({ request, locals }) => {
   const csrf = validateCsrfToken(request);
   if (!csrf.valid) {
     return new Response(JSON.stringify({ error: "Invalid request. Please refresh the page and try again." }), { status: 403, headers: { "Content-Type": "application/json" } });
@@ -29,12 +30,13 @@ export const POST: APIRoute = async ({ request }) => {
       return new Response(JSON.stringify({ error: "Validation failed", errors: formatZodErrors(validation.error) }), { status: 400, headers: { "Content-Type": "application/json" } });
     }
 
-    if (!import.meta.env.XAI_API_KEY) {
+    const env = getAiEnv(locals);
+    if (!hasAiKey(env)) {
       return new Response(JSON.stringify({ error: "AI service is not configured.", isConfigError: true }), { status: 503, headers: { "Content-Type": "application/json" } });
     }
 
     const { symptoms, followUpAnswers, context } = validation.data;
-    const analysis = await analyzeSymptoms({ symptoms: symptoms.trim(), followUpAnswers, context });
+    const analysis = await analyzeSymptoms({ symptoms: symptoms.trim(), followUpAnswers, context }, env);
 
     return new Response(JSON.stringify({ success: true, ...analysis }), { status: 200, headers: { "Content-Type": "application/json", ...rlHeaders } });
   } catch (error) {

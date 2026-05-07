@@ -1,14 +1,25 @@
 /**
  * Grok AI Integration Library
  *
- * Ported from frontend/lib/grok.ts — uses xAI API.
- * Only change: import.meta.env instead of process.env.
+ * Server-side only — never expose XAI_API_KEY to the client.
  *
- * Note: This is server-side only. Never expose XAI_API_KEY to the client.
+ * The env (XAI_API_KEY etc.) must be passed in per call. On Cloudflare
+ * Workers, runtime secrets aren't visible to `import.meta.env`, so each
+ * API route reads the env via `getAiEnv(locals)` and threads it down.
  */
 
-const XAI_API_URL = import.meta.env.XAI_API_URL || "https://api.x.ai/v1";
-const XAI_API_KEY = import.meta.env.XAI_API_KEY;
+import type { AiEnv } from "./env";
+
+const DEFAULT_API_URL = "https://api.x.ai/v1";
+const DEFAULT_MODEL = "grok-4.3";
+
+function resolveEnv(env: AiEnv) {
+  return {
+    apiKey: env.XAI_API_KEY,
+    apiUrl: env.XAI_API_URL || DEFAULT_API_URL,
+    model: env.XAI_MODEL || DEFAULT_MODEL,
+  };
+}
 
 export interface SymptomAnalysisRequest {
   symptoms: string;
@@ -93,27 +104,26 @@ function anonymizeData(data: SymptomAnalysisRequest): string {
   });
 }
 
-const MODEL = () => import.meta.env.XAI_MODEL || "grok-4.3";
-
 /**
  * Open a streaming chat completion against xAI. Returns the raw upstream
  * Response (SSE body); the caller is responsible for parsing.
  *
  * Throws if the API key is missing or the upstream returns non-2xx.
  */
-export async function callGrokStream(systemPrompt: string, userPrompt: string): Promise<Response> {
-  if (!XAI_API_KEY) {
+export async function callGrokStream(systemPrompt: string, userPrompt: string, env: AiEnv): Promise<Response> {
+  const { apiKey, apiUrl, model } = resolveEnv(env);
+  if (!apiKey) {
     throw new Error("XAI_API_KEY is not configured");
   }
-  const response = await fetch(`${XAI_API_URL}/chat/completions`, {
+  const response = await fetch(`${apiUrl}/chat/completions`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${XAI_API_KEY}`,
+      Authorization: `Bearer ${apiKey}`,
       Accept: "text/event-stream",
     },
     body: JSON.stringify({
-      model: MODEL(),
+      model,
       messages: [
         { role: "system", content: systemPrompt },
         { role: "user", content: userPrompt },
@@ -130,19 +140,20 @@ export async function callGrokStream(systemPrompt: string, userPrompt: string): 
   return response;
 }
 
-async function callGrok(systemPrompt: string, userPrompt: string, parseJson = true): Promise<any> {
-  if (!XAI_API_KEY) {
+async function callGrok(systemPrompt: string, userPrompt: string, env: AiEnv, parseJson = true): Promise<any> {
+  const { apiKey, apiUrl, model } = resolveEnv(env);
+  if (!apiKey) {
     throw new Error("XAI_API_KEY is not configured");
   }
 
-  const response = await fetch(`${XAI_API_URL}/chat/completions`, {
+  const response = await fetch(`${apiUrl}/chat/completions`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${XAI_API_KEY}`,
+      Authorization: `Bearer ${apiKey}`,
     },
     body: JSON.stringify({
-      model: MODEL(),
+      model,
       messages: [
         { role: "system", content: systemPrompt },
         { role: "user", content: userPrompt },
@@ -177,7 +188,7 @@ async function callGrok(systemPrompt: string, userPrompt: string, parseJson = tr
 /**
  * Analyze symptoms using Grok AI
  */
-export async function analyzeSymptoms(request: SymptomAnalysisRequest): Promise<SymptomAnalysisResponse> {
+export async function analyzeSymptoms(request: SymptomAnalysisRequest, env: AiEnv): Promise<SymptomAnalysisResponse> {
   const systemPrompt = `You are a holistic health advisor assistant with expertise in Traditional Chinese Medicine (TCM). Analyze the user's symptoms and provide both Western holistic recommendations and TCM pattern differentiation.
 
 IMPORTANT:
@@ -206,7 +217,7 @@ Respond in JSON format:
 }`;
 
   const userPrompt = `Patient data (anonymized): ${anonymizeData(request)}`;
-  return callGrok(systemPrompt, userPrompt);
+  return callGrok(systemPrompt, userPrompt, env);
 }
 
 /**
@@ -214,12 +225,13 @@ Respond in JSON format:
  */
 export async function generateFollowUpQuestions(
   symptoms: string,
-  previousAnswers?: Record<string, string>
+  previousAnswers: Record<string, string> | undefined,
+  env: AiEnv
 ): Promise<FollowUpQuestion[]> {
   const systemPrompt = `Generate 2-3 follow-up questions to better understand the patient's condition for TCM pattern differentiation. Return as JSON array of { id, question, type, options }.`;
 
   const userPrompt = `Symptoms: ${symptoms}${previousAnswers ? `\nPrevious answers: ${JSON.stringify(previousAnswers)}` : ""}`;
-  return callGrok(systemPrompt, userPrompt);
+  return callGrok(systemPrompt, userPrompt, env);
 }
 
 /** Build the system + user prompts used by both streaming and non-streaming explainFormula. */
@@ -243,9 +255,9 @@ export function buildExplainFormulaPrompts(req: ExplainFormulaRequest): { system
 /**
  * Explain a formula in audience-appropriate language (non-streaming).
  */
-export async function explainFormula(req: ExplainFormulaRequest): Promise<string> {
+export async function explainFormula(req: ExplainFormulaRequest, env: AiEnv): Promise<string> {
   const { systemPrompt, userPrompt } = buildExplainFormulaPrompts(req);
-  return callGrok(systemPrompt, userPrompt, false);
+  return callGrok(systemPrompt, userPrompt, env, false);
 }
 
 // ─── Formula Constructor ───────────────────────────────────────────────────
@@ -301,7 +313,7 @@ export interface ConstructedFormula {
   disclaimer: string;
 }
 
-export async function constructFormula(req: ConstructFormulaRequest): Promise<ConstructedFormula> {
+export async function constructFormula(req: ConstructFormulaRequest, env: AiEnv): Promise<ConstructedFormula> {
   const systemPrompt = `You are a senior clinical herbalist with formal training in ${req.tradition}. Construct a custom herbal formula appropriate to the patient case described.
 
 Principles:
@@ -342,7 +354,7 @@ Return ONLY valid JSON in this exact shape:
 Tradition: ${req.tradition}
 ${req.pattern ? `Identified pattern/dx: ${req.pattern}\n` : ""}${req.preferredForm ? `Preferred form: ${req.preferredForm}\n` : ""}${req.patient ? `Patient context: ${JSON.stringify(req.patient)}\n` : ""}${req.availableHerbs?.length ? `Restrict to these herbs only: ${req.availableHerbs.join(", ")}\n` : ""}${req.excludedHerbs?.length ? `Exclude these herbs: ${req.excludedHerbs.join(", ")}\n` : ""}`;
 
-  return callGrok(systemPrompt, userPrompt);
+  return callGrok(systemPrompt, userPrompt, env);
 }
 
 // ─── Safety Check ──────────────────────────────────────────────────────────
@@ -390,7 +402,7 @@ export interface SafetyCheckResponse {
   disclaimer: string;
 }
 
-export async function safetyCheck(req: SafetyCheckRequest): Promise<SafetyCheckResponse> {
+export async function safetyCheck(req: SafetyCheckRequest, env: AiEnv): Promise<SafetyCheckResponse> {
   const systemPrompt = `You are a clinical pharmacognosist evaluating the safety of an herbal product for a specific patient. Be rigorous and conservative — patient safety overrides therapeutic enthusiasm.
 
 Checklist (evaluate every category):
@@ -426,7 +438,7 @@ Return ONLY valid JSON in this exact shape:
 Patient: ${JSON.stringify(req.patient)}
 ${req.concerns?.length ? `Specific concerns: ${req.concerns.join("; ")}` : ""}`;
 
-  return callGrok(systemPrompt, userPrompt);
+  return callGrok(systemPrompt, userPrompt, env);
 }
 
 // ─── Consultation Prep ─────────────────────────────────────────────────────
@@ -455,7 +467,7 @@ export interface ConsultationPrepResponse {
   disclaimer: string;
 }
 
-export async function consultationPrep(req: ConsultationPrepRequest): Promise<ConsultationPrepResponse> {
+export async function consultationPrep(req: ConsultationPrepRequest, env: AiEnv): Promise<ConsultationPrepResponse> {
   const systemPrompt = `You are a patient-advocate preparing someone for a holistic health consultation. Help them get maximum value from the appointment by surfacing the right questions, observations, and information to bring.
 
 The practitioner type matters — adapt suggestions accordingly:
@@ -481,7 +493,7 @@ Return ONLY valid JSON:
 Primary complaint: ${req.primaryComplaint}
 ${req.duration ? `Duration: ${req.duration}\n` : ""}${req.goals?.length ? `Patient's goals: ${req.goals.join("; ")}\n` : ""}${req.triedAlready?.length ? `Already tried: ${req.triedAlready.join("; ")}\n` : ""}${req.context ? `Context: ${JSON.stringify(req.context)}` : ""}`;
 
-  return callGrok(systemPrompt, userPrompt);
+  return callGrok(systemPrompt, userPrompt, env);
 }
 
 /**
@@ -491,7 +503,8 @@ ${req.duration ? `Duration: ${req.duration}\n` : ""}${req.goals?.length ? `Patie
  */
 export async function checkHerbDrugInteractions(
   medications: string[],
-  herbs?: string[]
+  herbs: string[] | undefined,
+  env: AiEnv
 ): Promise<HerbDrugCheckResponse> {
   const scope = herbs && herbs.length > 0
     ? "Focus your analysis ONLY on interactions between the listed herbs and the listed medications."
@@ -529,5 +542,5 @@ Do not include herbs that have no clinically meaningful interaction. If nothing 
     ? `Medications: ${medications.join(", ")}\nHerbs being taken: ${herbs.join(", ")}`
     : `Medications: ${medications.join(", ")}`;
 
-  return callGrok(systemPrompt, userPrompt);
+  return callGrok(systemPrompt, userPrompt, env);
 }
