@@ -1,0 +1,16 @@
+{
+  "motion": {
+    "duration": {
+      "instant": { "value": "0ms",   "type": "duration" },
+      "fast":    { "value": "120ms", "type": "duration", "comment": "Hovers, taps" },
+      "normal":  { "value": "200ms", "type": "duration", "comment": "Default transitions" },
+      "slow":    { "value": "320ms", "type": "duration", "comment": "Modals, drawers" }
+    },
+    "easing": {
+      "standard":  { "value": "cubic-bezier(0.2, 0, 0, 1)",      "type": "cubicBezier" },
+      "emphasized":{ "value": "cubic-bezier(0.3, 0, 0, 1)",      "type": "cubicBezier" },
+      "decelerate":{ "value": "cubic-bezier(0, 0, 0, 1)",        "type": "cubicBezier" },
+      "accelerate":{ "value": "cubic-bezier(0.3, 0, 1, 1)",      "type": "cubicBezier" }
+    }
+  }
+}

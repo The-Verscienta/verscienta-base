@@ -16,39 +16,39 @@ const { id, title, subtitle, icon, variant = "default", class: className = "" } 
 
 const variantStyles: Record<string, { container: string; title: string; subtitle: string }> = {
   default: {
-    container: "bg-white dark:bg-earth-900 border-earth-200 dark:border-earth-700",
-    title: "text-gray-900 dark:text-earth-100",
-    subtitle: "text-gray-600 dark:text-earth-300",
+    container: "bg-surface border-default",
+    title: "text-primary",
+    subtitle: "text-secondary",
   },
   warning: {
-    container: "bg-gradient-to-br from-red-50 to-orange-50 dark:from-red-950/30 dark:to-orange-950/20 border-red-200 dark:border-red-800",
-    title: "text-red-800 dark:text-red-200",
-    subtitle: "text-red-700 dark:text-red-300",
+    container: "bg-gradient-to-br from-warm-50 to-gold-50 dark:from-warm-950/40 dark:to-gold-950/30 border-warm-200 dark:border-warm-800",
+    title: "text-warm-800 dark:text-warm-200",
+    subtitle: "text-warm-700 dark:text-warm-300",
   },
   tcm: {
-    container: "bg-gradient-to-br from-amber-50 via-orange-50/50 to-red-50/30 dark:from-amber-950/30 dark:via-orange-950/20 dark:to-red-950/20 border-amber-300 dark:border-amber-800",
-    title: "text-amber-900 dark:text-amber-200",
-    subtitle: "text-amber-800 dark:text-amber-300",
+    container: "bg-gradient-to-br from-tcm-50 via-gold-50/60 to-warm-50/40 dark:from-tcm-950/40 dark:via-gold-950/30 dark:to-warm-950/30 border-tcm-200 dark:border-tcm-800",
+    title: "text-tcm-800 dark:text-tcm-200",
+    subtitle: "text-tcm-700 dark:text-tcm-300",
   },
   cultural: {
-    container: "bg-gradient-to-br from-sage-50 to-earth-50 dark:from-sage-950/30 dark:to-earth-950/30 border-sage-300 dark:border-sage-800",
-    title: "text-gray-900 dark:text-earth-100",
-    subtitle: "text-gray-600 dark:text-earth-300",
+    container: "bg-gradient-to-br from-sage-50 to-earth-50 dark:from-sage-950/40 dark:to-earth-950/40 border-sage-300 dark:border-sage-800",
+    title: "text-primary",
+    subtitle: "text-secondary",
   },
   feature: {
     container: "bg-gradient-to-br from-earth-50 to-sage-50 dark:from-earth-900 dark:to-sage-900/50 border-earth-200 dark:border-earth-700",
-    title: "text-gray-900 dark:text-earth-100",
-    subtitle: "text-gray-600 dark:text-earth-300",
+    title: "text-primary",
+    subtitle: "text-secondary",
   },
   card: {
-    container: "bg-white dark:bg-earth-900 border-earth-100 dark:border-earth-700 shadow-sm",
-    title: "text-gray-900 dark:text-earth-100",
-    subtitle: "text-gray-600 dark:text-earth-300",
+    container: "bg-surface-elevated border-subtle shadow-sm",
+    title: "text-primary",
+    subtitle: "text-secondary",
   },
   botanical: {
     container: "bg-gradient-to-br from-cream-50 to-sage-50/30 dark:from-earth-900 dark:to-sage-950/30 border-sage-200 dark:border-sage-800",
-    title: "text-gray-900 dark:text-earth-100",
-    subtitle: "text-gray-600 dark:text-earth-300",
+    title: "text-primary",
+    subtitle: "text-secondary",
   },
 };
 

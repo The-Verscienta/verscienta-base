@@ -1,0 +1,10 @@
+{
+  "radius": {
+    "sm":   { "value": "0.375rem", "type": "borderRadius", "comment": "6px — small chips, inline pills" },
+    "md":   { "value": "0.5rem",   "type": "borderRadius", "comment": "8px — buttons, inputs" },
+    "lg":   { "value": "0.75rem",  "type": "borderRadius", "comment": "12px — cards" },
+    "xl":   { "value": "1rem",     "type": "borderRadius", "comment": "16px — large cards" },
+    "2xl":  { "value": "1.5rem",   "type": "borderRadius", "comment": "24px — sections, hero blocks" },
+    "full": { "value": "9999px",   "type": "borderRadius", "comment": "Pills, avatars" }
+  }
+}

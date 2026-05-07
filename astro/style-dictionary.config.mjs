@@ -80,6 +80,14 @@ export default {
           format: "css/semantic-theme",
           filter: (token) => token.path[0] === "semantic",
         },
+        {
+          destination: "dimensions.css",
+          format: "css/variables",
+          filter: (token) =>
+            token.path[0] === "radius" ||
+            token.path[0] === "shadow" ||
+            token.path[0] === "motion",
+        },
       ],
     },
     json: {

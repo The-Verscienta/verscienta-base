@@ -35,7 +35,8 @@
     "600": "var(--color-tcm-600)",
     "700": "var(--color-tcm-700)",
     "800": "var(--color-tcm-800)",
-    "900": "var(--color-tcm-900)"
+    "900": "var(--color-tcm-900)",
+    "950": "var(--color-tcm-950)"
   },
   "gold": {
     "50": "var(--color-gold-50)",
@@ -47,7 +48,8 @@
     "600": "var(--color-gold-600)",
     "700": "var(--color-gold-700)",
     "800": "var(--color-gold-800)",
-    "900": "var(--color-gold-900)"
+    "900": "var(--color-gold-900)",
+    "950": "var(--color-gold-950)"
   },
   "cream": {
     "50": "var(--color-cream-50)",
@@ -64,7 +66,10 @@
     "400": "var(--color-warm-400)",
     "500": "var(--color-warm-500)",
     "600": "var(--color-warm-600)",
-    "700": "var(--color-warm-700)"
+    "700": "var(--color-warm-700)",
+    "800": "var(--color-warm-800)",
+    "900": "var(--color-warm-900)",
+    "950": "var(--color-warm-950)"
   },
   "status": {
     "success": "var(--color-status-success)",

@@ -49,16 +49,23 @@ const canonicalUrl = new URL(Astro.url.pathname, siteUrl).href;
     <link
       href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,400;0,600;0,700;1,400&family=Source+Sans+3:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Noto+Serif+SC:wght@400;600;700&display=swap"
       rel="stylesheet"
+      media="print"
+      onload="this.media='all'"
     />
+    <noscript>
+      <link
+        href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,400;0,600;0,700;1,400&family=Source+Sans+3:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Noto+Serif+SC:wght@400;600;700&display=swap"
+        rel="stylesheet"
+      />
+    </noscript>
 
     <!-- Theme detection (runs before paint to prevent flash) -->
     <script is:inline>
       (function () {
         const stored = localStorage.getItem("verscienta_theme");
         const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-        if (stored === "dark" || (!stored && prefersDark)) {
-          document.documentElement.classList.add("dark");
-        }
+        const isDark = stored === "dark" || (!stored && prefersDark);
+        document.documentElement.classList.toggle("dark", isDark);
       })();
     </script>
 
@@ -69,12 +76,12 @@ const canonicalUrl = new URL(Astro.url.pathname, siteUrl).href;
   </head>
 
   <body
-    class="min-h-screen bg-gradient-to-br from-earth-50 to-sage-50 dark:from-earth-950 dark:to-sage-950 text-gray-900 dark:text-earth-100 transition-colors"
+    class="min-h-screen bg-gradient-to-br from-earth-50 to-sage-50 dark:from-earth-950 dark:to-sage-950 text-primary transition-colors"
   >
     <!-- Skip to content (accessibility) -->
     <a
       href="#main-content"
-      class="sr-only focus:not-sr-only focus:absolute focus:z-50 focus:p-4 focus:bg-white focus:text-earth-900"
+      class="sr-only focus:not-sr-only focus:absolute focus:z-50 focus:p-4 focus:bg-surface focus:text-primary focus:ring-focus"
     >
       Skip to content
     </a>

@@ -16,18 +16,18 @@ const { items, class: className = "" } = Astro.props;
 ---
 
 <nav aria-label="Breadcrumb" class={`text-sm ${className}`}>
-  <ol class="flex items-center gap-1.5 text-gray-500 dark:text-earth-400">
+  <ol class="flex items-center gap-1.5 text-tertiary">
     {items.map((item, i) => (
       <li class="flex items-center gap-1.5">
         {i > 0 && (
-          <svg class="w-3.5 h-3.5 text-gray-300 dark:text-earth-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg class="w-3.5 h-3.5 text-disabled" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
           </svg>
         )}
         {item.href ? (
-          <a href={item.href} class="hover:text-sage-600 dark:hover:text-sage-400 transition-colors">{item.label}</a>
+          <a href={item.href} class="hover:text-link transition-colors">{item.label}</a>
         ) : (
-          <span class="text-gray-900 dark:text-earth-100 font-medium">{item.label}</span>
+          <span class="text-primary font-medium">{item.label}</span>
         )}
       </li>
     ))}

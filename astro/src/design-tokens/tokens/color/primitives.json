@@ -36,19 +36,21 @@
       "600": { "value": "#c1272d", "type": "color", "description": "Traditional Chinese red" },
       "700": { "value": "#a01f23", "type": "color" },
       "800": { "value": "#7f1a1d", "type": "color" },
-      "900": { "value": "#651618", "type": "color" }
+      "900": { "value": "#651618", "type": "color" },
+      "950": { "value": "#3f0d0e", "type": "color" }
     },
     "gold": {
       "50": { "value": "#faf4ed", "type": "color" },
       "100": { "value": "#f5e9d8", "type": "color" },
       "200": { "value": "#ead3b0", "type": "color" },
-      "300": { "value": "#dfbd88", "type": "color" },
-      "400": { "value": "#e0b589", "type": "color" },
-      "500": { "value": "#d4a574", "type": "color" },
+      "300": { "value": "#dec092", "type": "color" },
+      "400": { "value": "#d2ad7c", "type": "color" },
+      "500": { "value": "#d4a574", "type": "color", "description": "Brand gold" },
       "600": { "value": "#c8955f", "type": "color" },
-      "700": { "value": "#855f30", "type": "color" },
-      "800": { "value": "#85602e", "type": "color" },
-      "900": { "value": "#644817", "type": "color" }
+      "700": { "value": "#a3783f", "type": "color" },
+      "800": { "value": "#7d5b2e", "type": "color" },
+      "900": { "value": "#5a401e", "type": "color" },
+      "950": { "value": "#382712", "type": "color" }
     },
     "cream": {
       "50": { "value": "#fffef9", "type": "color" },
@@ -59,13 +61,16 @@
     },
     "warm": {
       "50": { "value": "#fef7f6", "type": "color" },
-      "100": { "value": "#fee2e2", "type": "color" },
-      "200": { "value": "#fecaca", "type": "color" },
-      "300": { "value": "#fca5a5", "type": "color" },
-      "400": { "value": "#f87171", "type": "color" },
-      "500": { "value": "#c25b56", "type": "color" },
-      "600": { "value": "#dc2626", "type": "color" },
-      "700": { "value": "#991b1b", "type": "color" }
+      "100": { "value": "#fde4e1", "type": "color" },
+      "200": { "value": "#f9c4be", "type": "color" },
+      "300": { "value": "#f29b92", "type": "color" },
+      "400": { "value": "#e57366", "type": "color" },
+      "500": { "value": "#c25b56", "type": "color", "description": "Brand terracotta" },
+      "600": { "value": "#a3463f", "type": "color" },
+      "700": { "value": "#82342e", "type": "color" },
+      "800": { "value": "#622621", "type": "color" },
+      "900": { "value": "#451a17", "type": "color" },
+      "950": { "value": "#2a0f0d", "type": "color" }
     },
     "status": {
       "success": { "value": "#10b981", "type": "color" },

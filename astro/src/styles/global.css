@@ -1,17 +1,17 @@
 /* Import generated design tokens */
 @import "./generated/primitives.css";
 @import "./generated/semantic.css";
+@import "./generated/dimensions.css";
 
 /* Tailwind CSS 4 — CSS-first configuration */
 @import "tailwindcss";
 
 /*
- * Register custom colors with Tailwind's @theme directive.
- * This maps our CSS variables to Tailwind utility classes
- * like bg-earth-500, text-sage-600, etc.
+ * Bind our CSS variables into Tailwind's @theme so they are exposed as
+ * utility classes (bg-earth-500, text-text-primary, rounded-2xl, ...).
  */
 @theme {
-  /* Earth tones (primary green) */
+  /* ─── Brand palettes (primitives) ──────────────────────────────────── */
   --color-earth-50: var(--color-earth-50);
   --color-earth-100: var(--color-earth-100);
   --color-earth-200: var(--color-earth-200);
@@ -24,7 +24,6 @@
   --color-earth-900: var(--color-earth-900);
   --color-earth-950: var(--color-earth-950);
 
-  /* Sage (secondary green) */
   --color-sage-50: var(--color-sage-50);
   --color-sage-100: var(--color-sage-100);
   --color-sage-200: var(--color-sage-200);
@@ -37,7 +36,6 @@
   --color-sage-900: var(--color-sage-900);
   --color-sage-950: var(--color-sage-950);
 
-  /* TCM red */
   --color-tcm-50: var(--color-tcm-50);
   --color-tcm-100: var(--color-tcm-100);
   --color-tcm-200: var(--color-tcm-200);
@@ -48,8 +46,8 @@
   --color-tcm-700: var(--color-tcm-700);
   --color-tcm-800: var(--color-tcm-800);
   --color-tcm-900: var(--color-tcm-900);
+  --color-tcm-950: var(--color-tcm-950);
 
-  /* Gold accent */
   --color-gold-50: var(--color-gold-50);
   --color-gold-100: var(--color-gold-100);
   --color-gold-200: var(--color-gold-200);
@@ -60,15 +58,14 @@
   --color-gold-700: var(--color-gold-700);
   --color-gold-800: var(--color-gold-800);
   --color-gold-900: var(--color-gold-900);
+  --color-gold-950: var(--color-gold-950);
 
-  /* Cream */
   --color-cream-50: var(--color-cream-50);
   --color-cream-100: var(--color-cream-100);
   --color-cream-200: var(--color-cream-200);
   --color-cream-300: var(--color-cream-300);
   --color-cream-400: var(--color-cream-400);
 
-  /* Warm */
   --color-warm-50: var(--color-warm-50);
   --color-warm-100: var(--color-warm-100);
   --color-warm-200: var(--color-warm-200);
@@ -77,14 +74,88 @@
   --color-warm-500: var(--color-warm-500);
   --color-warm-600: var(--color-warm-600);
   --color-warm-700: var(--color-warm-700);
+  --color-warm-800: var(--color-warm-800);
+  --color-warm-900: var(--color-warm-900);
+  --color-warm-950: var(--color-warm-950);
 
-  /* Fonts */
+  /* Semantic colors (surface/text/border/status/...) live as plain CSS
+   * variables in semantic.css. They're exposed below via @utility so we
+   * get clean class names (text-primary, bg-surface) without doubled
+   * prefixes (text-text-primary). The vars switch automatically under
+   * .dark so no dark: variant is needed on these utilities. */
+
+  /* ─── Radii ────────────────────────────────────────────────────────── */
+  --radius-sm: var(--radius-sm);
+  --radius-md: var(--radius-md);
+  --radius-lg: var(--radius-lg);
+  --radius-xl: var(--radius-xl);
+  --radius-2xl: var(--radius-2xl);
+  --radius-full: var(--radius-full);
+
+  /* ─── Shadows ──────────────────────────────────────────────────────── */
+  --shadow-sm: var(--shadow-sm);
+  --shadow-md: var(--shadow-md);
+  --shadow-lg: var(--shadow-lg);
+  --shadow-xl: var(--shadow-xl);
+  --shadow-inner: var(--shadow-inner);
+  --shadow-ring: var(--shadow-ring);
+
+  /* ─── Fonts ────────────────────────────────────────────────────────── */
   --font-sans: "Source Sans 3", system-ui, sans-serif;
   --font-serif: "Crimson Pro", Georgia, serif;
   --font-mono: "JetBrains Mono", monospace;
 }
 
-/* ─── Base Styles ──────────────────────────────────────────────────────────── */
+/* ─── Semantic utility classes ─────────────────────────────────────────── */
+/* Backed by CSS variables in semantic.css — automatically theme-aware. */
+
+@utility bg-surface { background-color: var(--surface); }
+@utility bg-surface-elevated { background-color: var(--surface-elevated); }
+@utility bg-surface-sunken { background-color: var(--surface-sunken); }
+@utility bg-surface-muted { background-color: var(--surface-muted); }
+
+@utility text-primary { color: var(--text-primary); }
+@utility text-secondary { color: var(--text-secondary); }
+@utility text-tertiary { color: var(--text-tertiary); }
+@utility text-disabled { color: var(--text-disabled); }
+@utility text-brand { color: var(--text-brand); }
+@utility text-on-brand { color: var(--text-on-brand); }
+
+@utility border-default { border-color: var(--border-default); }
+@utility border-subtle { border-color: var(--border-subtle); }
+@utility border-strong { border-color: var(--border-strong); }
+
+@utility bg-interactive-primary { background-color: var(--interactive-primary); }
+@utility bg-interactive-primary-hover { background-color: var(--interactive-primary-hover); }
+@utility bg-interactive-secondary { background-color: var(--interactive-secondary); }
+@utility text-interactive-primary { color: var(--interactive-primary); }
+
+@utility text-link { color: var(--link); }
+@utility text-link-hover { color: var(--link-hover); }
+
+@utility bg-success { background-color: var(--status-success-bg); }
+@utility text-success { color: var(--status-success); }
+@utility bg-warning { background-color: var(--status-warning-bg); }
+@utility text-warning { color: var(--status-warning); }
+@utility bg-danger { background-color: var(--status-danger-bg); }
+@utility text-danger { color: var(--status-danger); }
+@utility bg-info { background-color: var(--status-info-bg); }
+@utility text-info { color: var(--status-info); }
+
+@utility ring-focus {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
+}
+
+/* ─── Base Styles ──────────────────────────────────────────────────────── */
+
+:root {
+  color-scheme: light;
+}
+
+.dark {
+  color-scheme: dark;
+}
 
 body {
   font-family: var(--font-sans);
@@ -97,34 +168,48 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .font-chinese {
-  font-family: "Noto Serif SC", serif;
+  /* Chinese script fallback chain — system fonts before generic serif. */
+  font-family: "Noto Serif SC", "Songti SC", "STSong", "PingFang SC",
+    "Hiragino Sans GB", "Microsoft YaHei", "SimSun", serif;
+}
+
+/* Honor user's reduced-motion preference globally. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
 
 /* Prose styling for rich text content */
 .prose a {
-  color: var(--color-sage-600);
+  color: var(--link);
 }
 
 .prose a:hover {
-  color: var(--color-sage-800);
+  color: var(--link-hover);
 }
 
 /* Dark mode prose */
 .dark .prose {
-  color: var(--color-earth-200);
+  color: var(--text-secondary);
 }
 
 .dark .prose a {
-  color: var(--color-sage-400);
+  color: var(--link);
 }
 
 .dark .prose strong {
-  color: var(--color-earth-100);
+  color: var(--text-primary);
 }
 
 .dark .prose h1,
 .dark .prose h2,
 .dark .prose h3,
 .dark .prose h4 {
-  color: var(--color-earth-100);
+  color: var(--text-primary);
 }

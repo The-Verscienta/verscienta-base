@@ -11,8 +11,8 @@ const { href, label = "Go Back" } = Astro.props;
 ---
 
 <div class="flex justify-center py-8">
-  <a href={href} class="group inline-flex items-center gap-2 text-sage-600 dark:text-sage-400 hover:text-sage-800 dark:hover:text-sage-300 font-medium transition-colors">
-    <svg class="w-4 h-4 transition-transform group-hover:-translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+  <a href={href} class="group inline-flex items-center gap-2 text-link hover:text-link-hover font-medium transition-colors">
+    <svg class="w-4 h-4 transition-transform group-hover:-translate-x-1 motion-reduce:group-hover:translate-x-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
     </svg>
     {label}
