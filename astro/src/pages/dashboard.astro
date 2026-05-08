@@ -173,29 +173,18 @@ import ContentLayout from "@/layouts/ContentLayout.astro";
       <h2 class="text-lg font-semibold text-gray-900 dark:text-earth-100 mb-4">Account</h2>
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
 
-        <!-- Change Password -->
-        <div class="bg-white dark:bg-earth-900 rounded-xl border border-gray-100 dark:border-earth-700 p-6 shadow-sm">
-          <h3 class="font-semibold text-gray-900 dark:text-earth-100 mb-4 flex items-center gap-2">
-            <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" /></svg>
-            Change Password
-          </h3>
-          <form id="change-password-form" class="space-y-3">
-            <div>
-              <label class="block text-xs font-medium text-gray-600 dark:text-earth-400 mb-1">Current Password</label>
-              <input type="password" name="currentPassword" required class="w-full px-3 py-2 text-sm border border-gray-200 dark:border-earth-600 rounded-lg bg-white dark:bg-earth-800 text-gray-900 dark:text-earth-100 focus:ring-2 focus:ring-sage-500" />
+        <!-- Manage Profile -->
+        <a href="/profile" class="group p-5 bg-white dark:bg-earth-900 rounded-xl border border-gray-100 dark:border-earth-700 shadow-sm hover:shadow-md transition-all">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 bg-sage-100 dark:bg-sage-900/30 rounded-lg flex items-center justify-center flex-shrink-0">
+              <svg class="w-5 h-5 text-sage-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>
             </div>
             <div>
-              <label class="block text-xs font-medium text-gray-600 dark:text-earth-400 mb-1">New Password</label>
-              <input type="password" name="newPassword" required minlength="8" class="w-full px-3 py-2 text-sm border border-gray-200 dark:border-earth-600 rounded-lg bg-white dark:bg-earth-800 text-gray-900 dark:text-earth-100 focus:ring-2 focus:ring-sage-500" />
+              <h3 class="font-semibold text-gray-900 dark:text-earth-100 group-hover:text-sage-600">Manage your profile</h3>
+              <p class="text-xs text-gray-500 dark:text-earth-400">Identity, password, avatar, preferences</p>
             </div>
-            <div>
-              <label class="block text-xs font-medium text-gray-600 dark:text-earth-400 mb-1">Confirm New Password</label>
-              <input type="password" name="confirmNewPassword" required class="w-full px-3 py-2 text-sm border border-gray-200 dark:border-earth-600 rounded-lg bg-white dark:bg-earth-800 text-gray-900 dark:text-earth-100 focus:ring-2 focus:ring-sage-500" />
-            </div>
-            <div id="password-msg" class="hidden text-sm rounded-lg p-2"></div>
-            <button type="submit" class="w-full px-4 py-2 text-sm bg-sage-600 hover:bg-sage-700 text-white rounded-lg transition">Update Password</button>
-          </form>
-        </div>
+          </div>
+        </a>
 
         <!-- Newsletter & Preferences -->
         <div class="space-y-6">
@@ -213,23 +202,6 @@ import ContentLayout from "@/layouts/ContentLayout.astro";
               </label>
               <span id="newsletter-status" class="text-sm text-gray-600 dark:text-earth-400">Subscribe to newsletter</span>
             </div>
-          </div>
-
-          <!-- Preferred Practitioner -->
-          <div class="bg-white dark:bg-earth-900 rounded-xl border border-gray-100 dark:border-earth-700 p-6 shadow-sm">
-            <h3 class="font-semibold text-gray-900 dark:text-earth-100 mb-2 flex items-center gap-2">
-              <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>
-              My Practitioner
-            </h3>
-            <p class="text-sm text-gray-500 dark:text-earth-400 mb-3">Set a preferred practitioner for personalized recommendations.</p>
-            <div id="preferred-practitioner-display" class="hidden flex items-center justify-between p-3 bg-sage-50 dark:bg-sage-900/20 rounded-lg mb-2">
-              <span id="preferred-practitioner-name" class="text-sm font-medium text-sage-800 dark:text-sage-200"></span>
-              <button id="remove-practitioner-btn" class="text-xs text-red-500 hover:text-red-700">Remove</button>
-            </div>
-            <a href="/practitioners" class="inline-flex items-center gap-1 text-sm text-sage-600 dark:text-sage-400 hover:underline">
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
-              Browse practitioners
-            </a>
           </div>
 
           <!-- Theme Preference -->
@@ -260,8 +232,6 @@ import ContentLayout from "@/layouts/ContentLayout.astro";
   </div>
 
   <script>
-    import { apiFetch } from "../lib/api-client";
-
     (async function loadDashboard() {
       const loading = document.getElementById('dash-loading')!;
       const unauthenticated = document.getElementById('dash-unauthenticated')!;
@@ -310,45 +280,6 @@ import ContentLayout from "@/layouts/ContentLayout.astro";
         unauthenticated.classList.remove('hidden');
       }
     })();
-
-    // ── Change Password ─────────────────────────────────────────────
-    document.getElementById('change-password-form')?.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const form = e.target as HTMLFormElement;
-      const formData = new FormData(form);
-      const msgEl = document.getElementById('password-msg')!;
-
-      const newPassword = formData.get('newPassword') as string;
-      const confirmNewPassword = formData.get('confirmNewPassword') as string;
-
-      if (newPassword !== confirmNewPassword) {
-        msgEl.textContent = 'New passwords do not match.';
-        msgEl.className = 'text-sm rounded-lg p-2 bg-red-50 dark:bg-red-900/20 text-red-700 dark:text-red-300';
-        msgEl.classList.remove('hidden');
-        return;
-      }
-
-      try {
-        const res = await apiFetch('/api/auth/profile', {
-          method: 'PATCH',
-          body: JSON.stringify({ password: newPassword }),
-        });
-
-        if (res.ok) {
-          msgEl.textContent = 'Password updated successfully.';
-          msgEl.className = 'text-sm rounded-lg p-2 bg-green-50 dark:bg-green-900/20 text-green-700 dark:text-green-300';
-          form.reset();
-        } else {
-          const data = await res.json();
-          msgEl.textContent = data.error || 'Failed to update password.';
-          msgEl.className = 'text-sm rounded-lg p-2 bg-red-50 dark:bg-red-900/20 text-red-700 dark:text-red-300';
-        }
-      } catch {
-        msgEl.textContent = 'Something went wrong. Please try again.';
-        msgEl.className = 'text-sm rounded-lg p-2 bg-red-50 dark:bg-red-900/20 text-red-700 dark:text-red-300';
-      }
-      msgEl.classList.remove('hidden');
-    });
 
     // ── Theme Toggle ────────────────────────────────────────────────
     const themeToggle = document.getElementById('theme-toggle') as HTMLInputElement;
