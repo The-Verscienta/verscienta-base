@@ -1,4 +1,5 @@
 import { useEffect, useState, useCallback } from "react";
+import IdentitySection from "./IdentitySection";
 
 export interface ProfileUser {
   id: string;
@@ -71,10 +72,6 @@ export default function ProfilePanel() {
     );
   }
 
-  // Suppress unused-var warning for refreshUser/onSessionExpired (used by subsections in Tasks 12-16).
-  void refreshUser;
-  void onSessionExpired;
-
   return (
     <div className="space-y-6">
       <p className="text-sm text-gray-500 dark:text-earth-400">
@@ -82,7 +79,7 @@ export default function ProfilePanel() {
       </p>
       {user && (
         <>
-          <SectionPlaceholder name="Identity" />
+          <IdentitySection user={user} refreshUser={refreshUser} onSessionExpired={onSessionExpired} />
           <SectionPlaceholder name="Password" />
           <SectionPlaceholder name="Avatar" />
           <SectionPlaceholder name="Preferred practitioner" />
