@@ -35,7 +35,7 @@ export const PATCH: APIRoute = async ({ request, locals }) => {
     if (!accessToken) {
       return new Response(JSON.stringify({ error: "Not authenticated" }), {
         status: 401,
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json", ...rlHeaders },
       });
     }
 
@@ -43,9 +43,19 @@ export const PATCH: APIRoute = async ({ request, locals }) => {
     const { first_name, last_name, email, password, current_password } = body;
 
     const requiresPassword = email !== undefined || password !== undefined;
-    if (requiresPassword && !current_password) {
+    if (requiresPassword && (typeof current_password !== "string" || current_password.length === 0)) {
       return new Response(
         JSON.stringify({ error: "current_password required to change email or password." }),
+        { status: 400, headers: { "Content-Type": "application/json", ...rlHeaders } }
+      );
+    }
+
+    function badField(v: unknown): boolean {
+      return v !== undefined && (typeof v !== "string" || v.length === 0);
+    }
+    if (badField(first_name) || badField(last_name) || badField(email) || badField(password)) {
+      return new Response(
+        JSON.stringify({ error: "Field values must be non-empty strings." }),
         { status: 400, headers: { "Content-Type": "application/json", ...rlHeaders } }
       );
     }
@@ -81,7 +91,17 @@ export const PATCH: APIRoute = async ({ request, locals }) => {
           headers: { "Content-Type": "application/json", ...rlHeaders },
         });
       }
-      // Discard the returned token; we don't use it.
+      // Consume the response body and revoke the throwaway session.
+      const verifyJson = await verifyRes.json().catch(() => ({}));
+      const tmpRefresh = verifyJson?.data?.refresh_token;
+      if (tmpRefresh) {
+        // Fire-and-forget: revoke the throwaway session
+        fetch(`${DIRECTUS_URL}/auth/logout`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ refresh_token: tmpRefresh }),
+        }).catch(() => {});
+      }
     }
 
     const updateData: Record<string, unknown> = {};

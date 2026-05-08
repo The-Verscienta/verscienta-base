@@ -38,6 +38,8 @@ describe("PATCH /api/auth/profile", () => {
     const req = buildRequest({ method: "PATCH", body: { password: "newpass123" } });
     const res = await PATCH({ request: req, locals: emptyLocals } as any);
     expect(res.status).toBe(400);
+    const json = await res.json();
+    expect(json.error).toMatch(/current_password/);
   });
 
   it("rejects when current_password is wrong", async () => {
@@ -55,6 +57,33 @@ describe("PATCH /api/auth/profile", () => {
     expect(res.status).toBe(401);
     const json = await res.json();
     expect(json.error).toMatch(/incorrect/i);
+  });
+
+  it("rejects email change with empty current_password", async () => {
+    const req = buildRequest({
+      method: "PATCH",
+      body: { email: "new@example.com", current_password: "" },
+    });
+    const res = await PATCH({ request: req, locals: emptyLocals } as any);
+    expect(res.status).toBe(400);
+  });
+
+  it("rejects null email value", async () => {
+    const req = buildRequest({
+      method: "PATCH",
+      body: { email: null, current_password: "anything" },
+    });
+    const res = await PATCH({ request: req, locals: emptyLocals } as any);
+    expect(res.status).toBe(400);
+  });
+
+  it("rejects non-string first_name", async () => {
+    const req = buildRequest({
+      method: "PATCH",
+      body: { first_name: 123 },
+    });
+    const res = await PATCH({ request: req, locals: emptyLocals } as any);
+    expect(res.status).toBe(400);
   });
 
   it("accepts email change with correct current_password", async () => {
