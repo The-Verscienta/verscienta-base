@@ -2,6 +2,7 @@ import { useEffect, useState, useCallback } from "react";
 import AvatarSection from "./AvatarSection";
 import IdentitySection from "./IdentitySection";
 import PasswordSection from "./PasswordSection";
+import PreferredPractitionerSection from "./PreferredPractitionerSection";
 
 export interface ProfileUser {
   id: string;
@@ -84,7 +85,7 @@ export default function ProfilePanel() {
           <IdentitySection user={user} refreshUser={refreshUser} onSessionExpired={onSessionExpired} />
           <PasswordSection onSessionExpired={onSessionExpired} />
           <AvatarSection user={user} refreshUser={refreshUser} onSessionExpired={onSessionExpired} />
-          <SectionPlaceholder name="Preferred practitioner" />
+          <PreferredPractitionerSection onSessionExpired={onSessionExpired} />
           <SectionPlaceholder name="Email verification" />
         </>
       )}
