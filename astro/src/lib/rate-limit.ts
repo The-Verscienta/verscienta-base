@@ -96,6 +96,7 @@ export const RATE_LIMITS = {
   ai: { interval: 60 * 1000, maxRequests: 10 },
   search: { interval: 60 * 1000, maxRequests: 30 },
   symbolic: { interval: 60 * 1000, maxRequests: 15 },
+  verification: { interval: 60 * 60 * 1000, maxRequests: 3 },
 } as const;
 
 /**
