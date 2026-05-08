@@ -3,6 +3,7 @@ import ContentLayout from "@/layouts/ContentLayout.astro";
 import Breadcrumbs from "@/components/ui/Breadcrumbs.astro";
 import { directus, readItems, readItem } from "@/lib/directus";
 import { imageUrl } from "@/lib/image-url";
+import SetAsMyPractitionerButton from "@/components/profile/SetAsMyPractitionerButton";
 const { id } = Astro.params;
 
 const PRACTITIONER_FIELDS = [
@@ -55,6 +56,9 @@ const mapsUrl = hasCoords
         <div class="flex-1">
           <h1 class="font-serif text-4xl md:text-5xl font-bold text-gray-900 dark:text-earth-100 mb-2">{fullName}</h1>
           {practitioner.practice_type && <span class="text-sm px-3 py-1 rounded-full bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-300 capitalize">{practitioner.practice_type}</span>}
+          <div class="mt-3">
+            <SetAsMyPractitionerButton client:load practitionerId={practitioner.id} />
+          </div>
         </div>
       </div>
     </div>
