@@ -1,5 +1,6 @@
 import { useEffect, useState, useCallback } from "react";
 import AvatarSection from "./AvatarSection";
+import EmailVerificationSection from "./EmailVerificationSection";
 import IdentitySection from "./IdentitySection";
 import PasswordSection from "./PasswordSection";
 import PreferredPractitionerSection from "./PreferredPractitionerSection";
@@ -86,18 +87,9 @@ export default function ProfilePanel() {
           <PasswordSection onSessionExpired={onSessionExpired} />
           <AvatarSection user={user} refreshUser={refreshUser} onSessionExpired={onSessionExpired} />
           <PreferredPractitionerSection onSessionExpired={onSessionExpired} />
-          <SectionPlaceholder name="Email verification" />
+          <EmailVerificationSection user={user} onSessionExpired={onSessionExpired} />
         </>
       )}
     </div>
-  );
-}
-
-function SectionPlaceholder({ name }: { name: string }) {
-  return (
-    <section className="bg-white dark:bg-earth-900 rounded-xl border border-gray-100 dark:border-earth-700 p-6 shadow-sm">
-      <h2 className="font-semibold text-gray-900 dark:text-earth-100">{name}</h2>
-      <p className="text-xs text-gray-400 mt-1">(placeholder)</p>
-    </section>
   );
 }
