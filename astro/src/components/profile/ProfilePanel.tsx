@@ -1,4 +1,5 @@
 import { useEffect, useState, useCallback } from "react";
+import AvatarSection from "./AvatarSection";
 import IdentitySection from "./IdentitySection";
 import PasswordSection from "./PasswordSection";
 
@@ -82,7 +83,7 @@ export default function ProfilePanel() {
         <>
           <IdentitySection user={user} refreshUser={refreshUser} onSessionExpired={onSessionExpired} />
           <PasswordSection onSessionExpired={onSessionExpired} />
-          <SectionPlaceholder name="Avatar" />
+          <AvatarSection user={user} refreshUser={refreshUser} onSessionExpired={onSessionExpired} />
           <SectionPlaceholder name="Preferred practitioner" />
           <SectionPlaceholder name="Email verification" />
         </>
