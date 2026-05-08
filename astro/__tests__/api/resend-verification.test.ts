@@ -36,6 +36,6 @@ describe("POST /api/auth/resend-verification", () => {
     expect(res.status).toBe(200);
     expect(spy).toHaveBeenCalledTimes(2);
     // Second call should hit /auth-resend-verify
-    expect(spy.mock.calls[1][0]).toMatch(/\/auth-resend-verify$/);
+    expect((spy.mock.calls[1] as unknown[])[0]).toMatch(/\/auth-resend-verify$/);
   });
 });
