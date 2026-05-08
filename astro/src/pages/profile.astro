@@ -1,18 +1,11 @@
 ---
-/**
- * Profile page — requires auth. Shell page for React island.
- * TODO Phase 6: <ProfileForm client:load /> with useAuth hook
- */
 import ContentLayout from "@/layouts/ContentLayout.astro";
+import ProfilePanel from "@/components/profile/ProfilePanel";
 ---
 
 <ContentLayout title="Profile — Verscienta Health" description="Manage your Verscienta Health account settings.">
-  <div class="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+  <div class="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
     <h1 class="font-serif text-3xl font-bold text-gray-900 dark:text-earth-100 mb-8">Your Profile</h1>
-    <!-- TODO Phase 6: <ProfileForm client:load /> -->
-    <div class="bg-white dark:bg-earth-900 rounded-xl border border-gray-100 dark:border-earth-700 p-6 text-center">
-      <p class="text-gray-600 dark:text-earth-300">Profile management will be available when the React component is ported in Phase 6.</p>
-      <a href="/login" class="inline-block mt-4 px-4 py-2 bg-sage-600 text-white rounded-lg hover:bg-sage-700 transition">Sign In</a>
-    </div>
+    <ProfilePanel client:load />
   </div>
 </ContentLayout>
