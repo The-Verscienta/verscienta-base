@@ -93,7 +93,7 @@ export default function AvatarSection({ user, refreshUser, onSessionExpired }: P
           {user.avatar ? (
             <img src={imageUrl(user.avatar, { width: 160, height: 160 })} alt="" className="w-full h-full object-cover" />
           ) : (
-            <span className="text-2xl text-earth-400">{(user.first_name?.[0] || user.email[0] || "?").toUpperCase()}</span>
+            <span className="text-2xl text-earth-400">{(user.first_name?.[0] || user.email?.[0] || "?").toUpperCase()}</span>
           )}
         </div>
         <div className="flex flex-col gap-2">
