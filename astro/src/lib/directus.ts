@@ -35,6 +35,7 @@ export { readItems, readItem, aggregate };
 export interface DirectusUser {
   id: string;
   email: string;
+  email_verified?: boolean;
   first_name?: string;
   last_name?: string;
   role: string;
