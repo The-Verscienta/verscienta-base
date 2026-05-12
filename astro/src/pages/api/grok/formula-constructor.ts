@@ -23,10 +23,6 @@ interface HerbRow {
   scientific_name?: string;
   pinyin_name?: string;
   traditions?: string[] | null;
-  tcm_category?: string | null;
-  traditional_chinese_uses?: string | null;
-  western_properties?: string[] | null;
-  traditional_american_uses?: string | null;
 }
 
 type Tradition = "TCM" | "Western" | "Ayurvedic" | "Integrative";
@@ -40,43 +36,19 @@ const TRADITION_TAG: Record<Tradition, string | null> = {
   Integrative: null,
 };
 
-function hasContent(v: unknown): boolean {
-  if (v == null) return false;
-  if (typeof v === "string") return v.trim().length > 0;
-  if (Array.isArray(v)) return v.length > 0;
-  return true;
-}
-
 /**
- * Decide whether a herb belongs to the requested tradition.
+ * True if the herb is tagged for the requested tradition. A herb without
+ * any `traditions` tag is excluded — tagging is the single source of truth.
  *
- * Primary signal is the `traditions` tag (multi-select on each herb).
- * For herbs that haven't been tagged yet, fall back to the legacy
- * heuristic: presence of tradition-specific data fields.
- *
- * Tradition-side filtering runs in-process rather than as a Directus
- * filter because Directus 11's `_contains` operator is rejected on
- * `json` field types — `{traditions: {_contains: "tcm"}}` errors with
- * INVALID_QUERY at the API level.
+ * Filtering happens in-process because Directus 11 rejects `_contains` on
+ * `json` columns (INVALID_QUERY).
  */
 function herbMatchesTradition(h: HerbRow, tradition: Tradition): boolean {
   if (tradition === "Integrative") return true;
   const tag = TRADITION_TAG[tradition];
+  if (!tag) return false;
   const tags = Array.isArray(h.traditions) ? h.traditions : [];
-
-  if (tags.length > 0) {
-    return tag ? tags.includes(tag) : true;
-  }
-
-  // Fallback: tag is empty/null — infer from legacy fields.
-  if (tradition === "TCM") {
-    return hasContent(h.pinyin_name) || hasContent(h.tcm_category) || hasContent(h.traditional_chinese_uses);
-  }
-  if (tradition === "Western") {
-    return hasContent(h.western_properties) || hasContent(h.traditional_american_uses);
-  }
-  // Ayurvedic has no legacy signal — herb must be explicitly tagged.
-  return false;
+  return tags.includes(tag);
 }
 
 /**
@@ -91,16 +63,7 @@ async function fetchAvailableHerbs(tradition: Tradition): Promise<string[]> {
   try {
     const items = (await directus.request(
       readItems("herbs", {
-        fields: [
-          "title",
-          "scientific_name",
-          "pinyin_name",
-          "traditions",
-          "tcm_category",
-          "traditional_chinese_uses",
-          "western_properties",
-          "traditional_american_uses",
-        ],
+        fields: ["title", "scientific_name", "pinyin_name", "traditions"],
         filter: { status: { _eq: "published" } },
         sort: ["title"],
         limit: -1,
