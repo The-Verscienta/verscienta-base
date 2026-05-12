@@ -22,6 +22,7 @@ interface HerbRow {
   title?: string;
   scientific_name?: string;
   pinyin_name?: string;
+  traditions?: string[] | null;
 }
 
 type Tradition = "TCM" | "Western" | "Ayurvedic" | "Integrative";
@@ -36,57 +37,18 @@ const TRADITION_TAG: Record<Tradition, string | null> = {
 };
 
 /**
- * Build a Directus filter narrowing herbs to those tagged with the chosen
- * tradition. Falls back to legacy heuristics (presence of tradition-specific
- * fields) for herbs whose `traditions` tag hasn't been backfilled yet.
+ * True if the herb is tagged for the requested tradition. A herb without
+ * any `traditions` tag is excluded — tagging is the single source of truth.
  *
- * Run `directus/scripts/add-herbs-traditions-field.mjs` to populate the tag.
+ * Filtering happens in-process because Directus 11 rejects `_contains` on
+ * `json` columns (INVALID_QUERY).
  */
-function traditionFilter(tradition: Tradition): Record<string, unknown> | null {
+function herbMatchesTradition(h: HerbRow, tradition: Tradition): boolean {
+  if (tradition === "Integrative") return true;
   const tag = TRADITION_TAG[tradition];
-  if (!tag) return null;
-
-  const tagClause = { traditions: { _contains: tag } };
-
-  if (tradition === "TCM") {
-    return {
-      _or: [
-        tagClause,
-        {
-          _and: [
-            { traditions: { _null: true } },
-            {
-              _or: [
-                { pinyin_name: { _nnull: true } },
-                { tcm_category: { _nnull: true } },
-                { traditional_chinese_uses: { _nnull: true } },
-              ],
-            },
-          ],
-        },
-      ],
-    };
-  }
-  if (tradition === "Western") {
-    return {
-      _or: [
-        tagClause,
-        {
-          _and: [
-            { traditions: { _null: true } },
-            {
-              _or: [
-                { western_properties: { _nnull: true } },
-                { traditional_american_uses: { _nnull: true } },
-              ],
-            },
-          ],
-        },
-      ],
-    };
-  }
-  // Ayurvedic: no legacy heuristic — rely solely on the tag.
-  return tagClause;
+  if (!tag) return false;
+  const tags = Array.isArray(h.traditions) ? h.traditions : [];
+  return tags.includes(tag);
 }
 
 /**
@@ -99,14 +61,10 @@ function traditionFilter(tradition: Tradition): Record<string, unknown> | null {
  */
 async function fetchAvailableHerbs(tradition: Tradition): Promise<string[]> {
   try {
-    const filter: Record<string, unknown> = { status: { _eq: "published" } };
-    const tFilter = traditionFilter(tradition);
-    if (tFilter) Object.assign(filter, tFilter);
-
     const items = (await directus.request(
       readItems("herbs", {
-        fields: ["title", "scientific_name", "pinyin_name"],
-        filter,
+        fields: ["title", "scientific_name", "pinyin_name", "traditions"],
+        filter: { status: { _eq: "published" } },
         sort: ["title"],
         limit: -1,
       })
@@ -114,6 +72,7 @@ async function fetchAvailableHerbs(tradition: Tradition): Promise<string[]> {
 
     const names = new Set<string>();
     for (const h of items) {
+      if (!herbMatchesTradition(h, tradition)) continue;
       const base = h.title || h.scientific_name;
       if (!base) continue;
       const parts: string[] = [base];
