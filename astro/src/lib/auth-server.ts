@@ -111,12 +111,14 @@ export async function getAuthedUser(
     // Don't URL-encode the fields list — Directus 11 expects bare commas in
     // the `fields` query param and 403s on `%2C`-escaped variants. The values
     // are URL-safe already (alphanumeric + dot + comma). userId is a UUID.
+    // Note: email_verified is a custom field that may not exist on every
+    // Directus deployment — Directus 403s the whole query when an unknown
+    // field is requested. Profile components that need it fetch it separately.
     const fields = [
       "id",
       "first_name",
       "last_name",
       "email",
-      "email_verified",
       "avatar",
       "role.id",
       "role.name",
