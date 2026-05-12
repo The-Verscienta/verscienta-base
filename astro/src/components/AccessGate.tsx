@@ -25,9 +25,20 @@ interface Props {
   children: ReactNode;
 }
 
+interface PolicyLink {
+  policy?: { admin_access?: boolean } | null;
+}
+
 interface User {
   id: string;
-  role?: { name?: string };
+  role?: { name?: string; policies?: PolicyLink[] };
+  policies?: PolicyLink[];
+}
+
+function isAdmin(user: User): boolean {
+  const fromRole = user.role?.policies?.some((p) => p?.policy?.admin_access === true) ?? false;
+  const direct = user.policies?.some((p) => p?.policy?.admin_access === true) ?? false;
+  return fromRole || direct;
 }
 
 export default function AccessGate({ level, title, toolDescription, redirectPath, children }: Props) {
@@ -43,7 +54,8 @@ export default function AccessGate({ level, title, toolDescription, redirectPath
           return;
         }
         const roleName = user.role?.name || "";
-        const isPro = PROFESSIONAL_ROLES.has(roleName);
+        const admin = isAdmin(user);
+        const isPro = admin || PROFESSIONAL_ROLES.has(roleName);
         const isPatient = PATIENT_ROLES.has(roleName);
         if (level === "professional") {
           setState(isPro ? "ok" : "upgrade-required");

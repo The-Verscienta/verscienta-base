@@ -3,8 +3,7 @@
  * Return the currently authenticated user from Directus.
  */
 import type { APIRoute } from "astro";
-import { getCurrentUser } from "@/lib/auth";
-import { getRequestAccessToken } from "@/lib/auth-server";
+import { getAuthedUser } from "@/lib/auth-server";
 import { checkRateLimit, getClientIdentifier, RATE_LIMITS, createRateLimitHeaders } from "@/lib/rate-limit";
 
 export const GET: APIRoute = async ({ request, locals }) => {
@@ -17,13 +16,10 @@ export const GET: APIRoute = async ({ request, locals }) => {
   }
 
   try {
-    const accessToken = getRequestAccessToken(request, locals);
-
-    if (!accessToken) {
-      return new Response(JSON.stringify({ user: null }), { status: 200, headers: { "Content-Type": "application/json", ...rlHeaders } });
-    }
-
-    const user = await getCurrentUser(accessToken);
+    // getAuthedUser does a two-step lookup: verify session token, then fetch
+    // role/policies via the server's admin static token (most deployments
+    // restrict directus_users self-read so a user can't see their own role).
+    const user = await getAuthedUser(request, locals);
     return new Response(JSON.stringify({ user }), { status: 200, headers: { "Content-Type": "application/json", ...rlHeaders } });
   } catch (error) {
     console.error("Get user error:", error);

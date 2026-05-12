@@ -35,3 +35,13 @@ export function getAiEnv(locals: unknown): AiEnv {
 export function hasAiKey(env: AiEnv): boolean {
   return Boolean(env.XAI_API_KEY);
 }
+
+/**
+ * Read the Directus admin static token at request time. On Cloudflare
+ * Workers, secrets are only available via `locals.runtime.env` — reading
+ * them at module scope captures `undefined` forever.
+ */
+export function getDirectusAdminToken(locals: unknown): string | undefined {
+  const runtimeEnv = (locals as CloudflareLocals | undefined)?.runtime?.env;
+  return runtimeEnv?.DIRECTUS_TOKEN ?? import.meta.env.DIRECTUS_TOKEN;
+}

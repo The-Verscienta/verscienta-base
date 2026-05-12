@@ -55,9 +55,10 @@ export async function refreshAccessToken(refreshToken: string): Promise<AuthToke
  * Get the current authenticated user
  */
 export async function getCurrentUser(accessToken: string): Promise<DirectusUser> {
-  const response = await fetch(`${DIRECTUS_URL}/users/me?fields=id,first_name,last_name,email,email_verified,avatar,role.id,role.name`, {
-    headers: { Authorization: `Bearer ${accessToken}` },
-  });
+  const response = await fetch(
+    `${DIRECTUS_URL}/users/me?fields=id,first_name,last_name,email,email_verified,avatar,role.id,role.name,role.policies.policy.admin_access,policies.policy.admin_access`,
+    { headers: { Authorization: `Bearer ${accessToken}` } }
+  );
 
   if (!response.ok) {
     throw new Error("Failed to fetch current user");

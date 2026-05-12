@@ -16,6 +16,117 @@ import {
 import { validateCsrfToken } from "@/lib/csrf";
 import { constructFormulaSchema, formatZodErrors } from "@/lib/validation";
 import { getAuthedUser, userHasAccess, gatedResponse } from "@/lib/auth-server";
+import { directus, readItems } from "@/lib/directus";
+
+interface HerbRow {
+  title?: string;
+  scientific_name?: string;
+  pinyin_name?: string;
+}
+
+type Tradition = "TCM" | "Western" | "Ayurvedic" | "Integrative";
+
+/** Map the prompt-facing tradition name to the herbs.traditions tag value. */
+const TRADITION_TAG: Record<Tradition, string | null> = {
+  TCM: "tcm",
+  Western: "western",
+  Ayurvedic: "ayurvedic",
+  // Integrative is a deliberate cross-tradition mix — no narrowing.
+  Integrative: null,
+};
+
+/**
+ * Build a Directus filter narrowing herbs to those tagged with the chosen
+ * tradition. Falls back to legacy heuristics (presence of tradition-specific
+ * fields) for herbs whose `traditions` tag hasn't been backfilled yet.
+ *
+ * Run `directus/scripts/add-herbs-traditions-field.mjs` to populate the tag.
+ */
+function traditionFilter(tradition: Tradition): Record<string, unknown> | null {
+  const tag = TRADITION_TAG[tradition];
+  if (!tag) return null;
+
+  const tagClause = { traditions: { _contains: tag } };
+
+  if (tradition === "TCM") {
+    return {
+      _or: [
+        tagClause,
+        {
+          _and: [
+            { traditions: { _null: true } },
+            {
+              _or: [
+                { pinyin_name: { _nnull: true } },
+                { tcm_category: { _nnull: true } },
+                { traditional_chinese_uses: { _nnull: true } },
+              ],
+            },
+          ],
+        },
+      ],
+    };
+  }
+  if (tradition === "Western") {
+    return {
+      _or: [
+        tagClause,
+        {
+          _and: [
+            { traditions: { _null: true } },
+            {
+              _or: [
+                { western_properties: { _nnull: true } },
+                { traditional_american_uses: { _nnull: true } },
+              ],
+            },
+          ],
+        },
+      ],
+    };
+  }
+  // Ayurvedic: no legacy heuristic — rely solely on the tag.
+  return tagClause;
+}
+
+/**
+ * Fetch the catalog of herbs the AI is allowed to choose from. Returns a
+ * deduplicated list of canonical names; the AI is told to pick only from
+ * this list. Falls back to an empty array on error so the endpoint stays up.
+ *
+ * For TCM the pinyin name is included in the display string so the model can
+ * reference herbs by their standard TCM nomenclature.
+ */
+async function fetchAvailableHerbs(tradition: Tradition): Promise<string[]> {
+  try {
+    const filter: Record<string, unknown> = { status: { _eq: "published" } };
+    const tFilter = traditionFilter(tradition);
+    if (tFilter) Object.assign(filter, tFilter);
+
+    const items = (await directus.request(
+      readItems("herbs", {
+        fields: ["title", "scientific_name", "pinyin_name"],
+        filter,
+        sort: ["title"],
+        limit: -1,
+      })
+    )) as HerbRow[];
+
+    const names = new Set<string>();
+    for (const h of items) {
+      const base = h.title || h.scientific_name;
+      if (!base) continue;
+      const parts: string[] = [base];
+      if (h.scientific_name && h.scientific_name !== base) parts.push(`(${h.scientific_name})`);
+      if (tradition === "TCM" && h.pinyin_name) parts.push(`[${h.pinyin_name}]`);
+      names.add(parts.join(" ").trim());
+    }
+    return Array.from(names).slice(0, 2000);
+  } catch (err) {
+    console.error("fetchAvailableHerbs failed:", err);
+    return [];
+  }
+}
 
 export const POST: APIRoute = async ({ request, locals }) => {
   const csrf = validateCsrfToken(request);
@@ -59,7 +170,27 @@ export const POST: APIRoute = async ({ request, locals }) => {
       });
     }
 
-    const formula = await constructFormula(parsed.data, env);
+    // Constrain the AI to our published herb catalog, pre-filtered by tradition.
+    // Client-supplied availableHerbs (e.g. dispensary subset) is intersected
+    // with the catalog so it can narrow further but never escape it.
+    const catalog = await fetchAvailableHerbs(parsed.data.tradition);
+    let availableHerbs = catalog;
+    if (parsed.data.availableHerbs?.length && catalog.length) {
+      const norm = (s: string) => s.toLowerCase();
+      const catalogSet = new Set(catalog.map(norm));
+      availableHerbs = parsed.data.availableHerbs.filter((h) => catalogSet.has(norm(h)));
+    }
+
+    if (!availableHerbs.length) {
+      return new Response(
+        JSON.stringify({
+          error: `No published herbs found for the ${parsed.data.tradition} tradition.`,
+        }),
+        { status: 503, headers: { "Content-Type": "application/json", ...rlHeaders } }
+      );
+    }
+
+    const formula = await constructFormula({ ...parsed.data, availableHerbs }, env);
     return new Response(JSON.stringify({ formula }), {
       status: 200,
       headers: { "Content-Type": "application/json", ...rlHeaders },
