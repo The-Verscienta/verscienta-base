@@ -22,6 +22,11 @@ interface HerbRow {
   title?: string;
   scientific_name?: string;
   pinyin_name?: string;
+  traditions?: string[] | null;
+  tcm_category?: string | null;
+  traditional_chinese_uses?: string | null;
+  western_properties?: string[] | null;
+  traditional_american_uses?: string | null;
 }
 
 type Tradition = "TCM" | "Western" | "Ayurvedic" | "Integrative";
@@ -35,58 +40,43 @@ const TRADITION_TAG: Record<Tradition, string | null> = {
   Integrative: null,
 };
 
+function hasContent(v: unknown): boolean {
+  if (v == null) return false;
+  if (typeof v === "string") return v.trim().length > 0;
+  if (Array.isArray(v)) return v.length > 0;
+  return true;
+}
+
 /**
- * Build a Directus filter narrowing herbs to those tagged with the chosen
- * tradition. Falls back to legacy heuristics (presence of tradition-specific
- * fields) for herbs whose `traditions` tag hasn't been backfilled yet.
+ * Decide whether a herb belongs to the requested tradition.
  *
- * Run `directus/scripts/add-herbs-traditions-field.mjs` to populate the tag.
+ * Primary signal is the `traditions` tag (multi-select on each herb).
+ * For herbs that haven't been tagged yet, fall back to the legacy
+ * heuristic: presence of tradition-specific data fields.
+ *
+ * Tradition-side filtering runs in-process rather than as a Directus
+ * filter because Directus 11's `_contains` operator is rejected on
+ * `json` field types — `{traditions: {_contains: "tcm"}}` errors with
+ * INVALID_QUERY at the API level.
  */
-function traditionFilter(tradition: Tradition): Record<string, unknown> | null {
+function herbMatchesTradition(h: HerbRow, tradition: Tradition): boolean {
+  if (tradition === "Integrative") return true;
   const tag = TRADITION_TAG[tradition];
-  if (!tag) return null;
+  const tags = Array.isArray(h.traditions) ? h.traditions : [];
 
-  const tagClause = { traditions: { _contains: tag } };
+  if (tags.length > 0) {
+    return tag ? tags.includes(tag) : true;
+  }
 
+  // Fallback: tag is empty/null — infer from legacy fields.
   if (tradition === "TCM") {
-    return {
-      _or: [
-        tagClause,
-        {
-          _and: [
-            { traditions: { _null: true } },
-            {
-              _or: [
-                { pinyin_name: { _nnull: true } },
-                { tcm_category: { _nnull: true } },
-                { traditional_chinese_uses: { _nnull: true } },
-              ],
-            },
-          ],
-        },
-      ],
-    };
+    return hasContent(h.pinyin_name) || hasContent(h.tcm_category) || hasContent(h.traditional_chinese_uses);
   }
   if (tradition === "Western") {
-    return {
-      _or: [
-        tagClause,
-        {
-          _and: [
-            { traditions: { _null: true } },
-            {
-              _or: [
-                { western_properties: { _nnull: true } },
-                { traditional_american_uses: { _nnull: true } },
-              ],
-            },
-          ],
-        },
-      ],
-    };
+    return hasContent(h.western_properties) || hasContent(h.traditional_american_uses);
   }
-  // Ayurvedic: no legacy heuristic — rely solely on the tag.
-  return tagClause;
+  // Ayurvedic has no legacy signal — herb must be explicitly tagged.
+  return false;
 }
 
 /**
@@ -99,14 +89,19 @@ function traditionFilter(tradition: Tradition): Record<string, unknown> | null {
  */
 async function fetchAvailableHerbs(tradition: Tradition): Promise<string[]> {
   try {
-    const filter: Record<string, unknown> = { status: { _eq: "published" } };
-    const tFilter = traditionFilter(tradition);
-    if (tFilter) Object.assign(filter, tFilter);
-
     const items = (await directus.request(
       readItems("herbs", {
-        fields: ["title", "scientific_name", "pinyin_name"],
-        filter,
+        fields: [
+          "title",
+          "scientific_name",
+          "pinyin_name",
+          "traditions",
+          "tcm_category",
+          "traditional_chinese_uses",
+          "western_properties",
+          "traditional_american_uses",
+        ],
+        filter: { status: { _eq: "published" } },
         sort: ["title"],
         limit: -1,
       })
@@ -114,6 +109,7 @@ async function fetchAvailableHerbs(tradition: Tradition): Promise<string[]> {
 
     const names = new Set<string>();
     for (const h of items) {
+      if (!herbMatchesTradition(h, tradition)) continue;
       const base = h.title || h.scientific_name;
       if (!base) continue;
       const parts: string[] = [base];
