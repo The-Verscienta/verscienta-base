@@ -13,13 +13,17 @@
  * `locals` to `getAuthedUser` and stay oblivious.
  */
 
+import { directus, readItem } from "./directus";
+
 const DIRECTUS_URL = import.meta.env.PUBLIC_DIRECTUS_URL || "http://localhost:8055";
 
 export interface AuthedUser {
   id: string;
   email?: string;
+  email_verified?: boolean;
   first_name?: string;
   last_name?: string;
+  avatar?: string | null;
   role?: {
     id: string;
     name?: string;
@@ -53,7 +57,34 @@ export function getRequestAccessToken(request: Request, locals?: unknown): strin
 }
 
 /**
+ * Verify the bearer token by asking Directus who it belongs to. Returns just
+ * the user id (or null if the token is missing/invalid). Most user records
+ * are unreadable to the user themselves (default Directus permissions), so we
+ * only rely on this call for identity — privileged fields are fetched below
+ * via the static admin token.
+ */
+async function verifyTokenIdentity(token: string): Promise<string | null> {
+  try {
+    const res = await fetch(`${DIRECTUS_URL}/users/me?fields=id`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    if (!res.ok) return null;
+    const data = await res.json();
+    const id = (data?.data?.id as string | undefined) ?? null;
+    return id;
+  } catch {
+    return null;
+  }
+}
+
+/**
  * Fetch the authenticated user from Directus, or null if no/invalid token.
+ *
+ * Two-step lookup:
+ *  1. Verify the user's session token (returns their id).
+ *  2. Use the server's admin static token to fetch role/policies — most
+ *     deployments restrict directus_users self-read, so the session token
+ *     alone can't see these fields.
  *
  * @param request - the incoming Request
  * @param locals  - Astro.locals (middleware may have stashed a refreshed
@@ -66,15 +97,30 @@ export async function getAuthedUser(
   const stashed = (locals as AuthLocals | undefined)?.accessToken;
   const token = stashed || getAccessToken(request);
   if (!token) return null;
+
+  const userId = await verifyTokenIdentity(token);
+  if (!userId) return null;
+
   try {
-    const res = await fetch(
-      `${DIRECTUS_URL}/users/me?fields=id,first_name,last_name,email,role.id,role.name,role.policies.policy.admin_access,policies.policy.admin_access`,
-      { headers: { Authorization: `Bearer ${token}` } }
-    );
-    if (!res.ok) return null;
-    const data = await res.json();
-    return (data?.data as AuthedUser) || null;
-  } catch {
+    const data = (await directus.request(
+      readItem("directus_users", userId, {
+        fields: [
+          "id",
+          "first_name",
+          "last_name",
+          "email",
+          "email_verified",
+          "avatar",
+          "role.id",
+          "role.name",
+          "role.policies.policy.admin_access",
+          "policies.policy.admin_access",
+        ],
+      })
+    )) as AuthedUser;
+    return data || null;
+  } catch (err) {
+    console.error("getAuthedUser admin lookup failed:", err);
     return null;
   }
 }
