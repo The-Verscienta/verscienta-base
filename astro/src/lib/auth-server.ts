@@ -13,7 +13,7 @@
  * `locals` to `getAuthedUser` and stay oblivious.
  */
 
-import { directus, readItem } from "./directus";
+import { getDirectusAdminToken } from "./env";
 
 const DIRECTUS_URL = import.meta.env.PUBLIC_DIRECTUS_URL || "http://localhost:8055";
 
@@ -101,24 +101,35 @@ export async function getAuthedUser(
   const userId = await verifyTokenIdentity(token);
   if (!userId) return null;
 
+  const adminToken = getDirectusAdminToken(locals);
+  if (!adminToken) {
+    console.error("DIRECTUS_TOKEN not configured — cannot look up user role/policies");
+    return null;
+  }
+
   try {
-    const data = (await directus.request(
-      readItem("directus_users", userId, {
-        fields: [
-          "id",
-          "first_name",
-          "last_name",
-          "email",
-          "email_verified",
-          "avatar",
-          "role.id",
-          "role.name",
-          "role.policies.policy.admin_access",
-          "policies.policy.admin_access",
-        ],
-      })
-    )) as AuthedUser;
-    return data || null;
+    const fields = [
+      "id",
+      "first_name",
+      "last_name",
+      "email",
+      "email_verified",
+      "avatar",
+      "role.id",
+      "role.name",
+      "role.policies.policy.admin_access",
+      "policies.policy.admin_access",
+    ].join(",");
+    const res = await fetch(
+      `${DIRECTUS_URL}/users/${encodeURIComponent(userId)}?fields=${encodeURIComponent(fields)}`,
+      { headers: { Authorization: `Bearer ${adminToken}` } }
+    );
+    if (!res.ok) {
+      console.error("getAuthedUser admin lookup non-ok:", res.status);
+      return null;
+    }
+    const data = await res.json();
+    return (data?.data as AuthedUser) || null;
   } catch (err) {
     console.error("getAuthedUser admin lookup failed:", err);
     return null;
