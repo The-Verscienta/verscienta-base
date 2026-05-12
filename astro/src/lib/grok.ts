@@ -321,7 +321,9 @@ Principles:
 - Doses must be within accepted clinical ranges for the chosen form.
 - ALWAYS check the patient context for contraindications: pregnancy, breastfeeding, pediatric/geriatric age, medications, allergies, organ system concerns.
 - If the case is ambiguous, contradicts safe practice, or lacks information critical to formulation, surface that in the "cautions" array — but still produce a best-effort formula unless the case is clearly unsafe.
-- If availableHerbs is provided, ONLY use herbs from that list. If excludedHerbs is provided, do NOT use any of them.
+- HARD CONSTRAINT: Every ingredient's "name" MUST appear in the availableHerbs list exactly as written there (you may keep the parenthetical Latin name). Do not invent herbs, substitute synonyms, or use herbs from your training data that are absent from the list. If no listed herb is appropriate, omit that role rather than fabricate.
+- If the listed herbs cannot reasonably address the case, return a formula with the best available subset and explain the gap in "cautions".
+- If excludedHerbs is provided, do NOT use any of them.
 - Provide concise rationale per ingredient (one sentence) and overall (one paragraph).
 
 Return ONLY valid JSON in this exact shape:

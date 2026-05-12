@@ -275,7 +275,7 @@ export const constructFormulaSchema = z.object({
   tradition: z.enum(["TCM", "Western", "Ayurvedic", "Integrative"]),
   pattern: z.string().max(200).optional(),
   patient: patientContextSchema.optional(),
-  availableHerbs: z.array(z.string().max(120)).max(200).optional(),
+  availableHerbs: z.array(z.string().max(120)).max(2000).optional(),
   excludedHerbs: z.array(z.string().max(120)).max(50).optional(),
   preferredForm: z.enum(["decoction", "tincture", "powder", "tea", "capsule"]).optional(),
 });

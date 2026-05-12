@@ -20,7 +20,14 @@ export interface AuthedUser {
   email?: string;
   first_name?: string;
   last_name?: string;
-  role?: { id: string; name?: string };
+  role?: {
+    id: string;
+    name?: string;
+    /** Directus 11: policies attached to the role. */
+    policies?: Array<{ policy?: { admin_access?: boolean } | null }>;
+  };
+  /** Policies attached directly to the user (in addition to role policies). */
+  policies?: Array<{ policy?: { admin_access?: boolean } | null }>;
 }
 
 /** Locals slot the middleware uses to publish a freshly-refreshed token. */
@@ -60,9 +67,10 @@ export async function getAuthedUser(
   const token = stashed || getAccessToken(request);
   if (!token) return null;
   try {
-    const res = await fetch(`${DIRECTUS_URL}/users/me?fields=id,first_name,last_name,email,role.id,role.name`, {
-      headers: { Authorization: `Bearer ${token}` },
-    });
+    const res = await fetch(
+      `${DIRECTUS_URL}/users/me?fields=id,first_name,last_name,email,role.id,role.name,role.policies.policy.admin_access,policies.policy.admin_access`,
+      { headers: { Authorization: `Bearer ${token}` } }
+    );
     if (!res.ok) return null;
     const data = await res.json();
     return (data?.data as AuthedUser) || null;
@@ -81,11 +89,26 @@ export const AUTHENTICATED_ROLES = new Set([
 
 export type AuthGate = "professional" | "authenticated";
 
+/**
+ * True if any policy attached to the user (directly or via role) grants
+ * admin_access. In Directus 11 this is the authoritative way to identify
+ * an admin — role names can be customized but admin_access is canonical.
+ */
+export function userIsAdmin(user: AuthedUser | null): boolean {
+  if (!user) return false;
+  const fromRole = user.role?.policies?.some((p) => p?.policy?.admin_access === true) ?? false;
+  const direct = user.policies?.some((p) => p?.policy?.admin_access === true) ?? false;
+  return fromRole || direct;
+}
+
 export function userHasAccess(user: AuthedUser | null, gate: AuthGate): boolean {
-  if (!user?.role?.name) return false;
-  if (gate === "professional") return PROFESSIONAL_ROLES.has(user.role.name);
+  if (!user) return false;
+  if (userIsAdmin(user)) return true;
+  const roleName = user.role?.name;
+  if (!roleName) return false;
+  if (gate === "professional") return PROFESSIONAL_ROLES.has(roleName);
   if (gate === "authenticated") {
-    return PROFESSIONAL_ROLES.has(user.role.name) || PATIENT_ROLES.has(user.role.name);
+    return PROFESSIONAL_ROLES.has(roleName) || PATIENT_ROLES.has(roleName);
   }
   return false;
 }

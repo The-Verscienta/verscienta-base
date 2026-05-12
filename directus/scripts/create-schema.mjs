@@ -216,6 +216,10 @@ async function createPrimaryCollections() {
   await safeCreateField("herbs", { field: "conservation_status", type: "string", meta: { interface: "select-dropdown", options: { choices: choices(["Least Concern", "Near Threatened", "Vulnerable", "Endangered", "Critically Endangered", "Extinct in Wild", "Not Evaluated", "Data Deficient"]) }, width: "half" }, schema: {} });
   await safeCreateField("herbs", { field: "conservation_notes", type: "text", meta: { interface: "input-rich-text-html", width: "full" }, schema: {} });
 
+  // Traditions — which herbal systems classify/use this herb. Used to scope the
+  // Formula Constructor's available-herb list to the practitioner's chosen tradition.
+  await safeCreateField("herbs", { field: "traditions", type: "json", meta: { interface: "select-multiple-checkbox", options: { choices: choices(["TCM", "Western", "Ayurvedic", "Native American", "Other"]) }, width: "full", note: "Which herbal traditions classify/use this herb. Drives Formula Constructor filtering." }, schema: {} });
+
   // TCM Properties
   await safeCreateField("herbs", { field: "tcm_taste", type: "json", meta: { interface: "select-multiple-checkbox", options: { choices: choices(["Sweet", "Bitter", "Sour", "Pungent", "Salty", "Bland"]) }, width: "half" }, schema: {} });
   await safeCreateField("herbs", { field: "tcm_temperature", type: "string", meta: { interface: "select-dropdown", options: { choices: choices(["Hot", "Warm", "Neutral", "Cool", "Cold"]) }, width: "half" }, schema: {} });
