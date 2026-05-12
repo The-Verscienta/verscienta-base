@@ -108,6 +108,9 @@ export async function getAuthedUser(
   }
 
   try {
+    // Don't URL-encode the fields list — Directus 11 expects bare commas in
+    // the `fields` query param and 403s on `%2C`-escaped variants. The values
+    // are URL-safe already (alphanumeric + dot + comma). userId is a UUID.
     const fields = [
       "id",
       "first_name",
@@ -120,12 +123,13 @@ export async function getAuthedUser(
       "role.policies.policy.admin_access",
       "policies.policy.admin_access",
     ].join(",");
-    const res = await fetch(
-      `${DIRECTUS_URL}/users/${encodeURIComponent(userId)}?fields=${encodeURIComponent(fields)}`,
-      { headers: { Authorization: `Bearer ${adminToken}` } }
-    );
+    const url = `${DIRECTUS_URL}/users/${userId}?fields=${fields}`;
+    const res = await fetch(url, {
+      headers: { Authorization: `Bearer ${adminToken}` },
+    });
     if (!res.ok) {
-      console.error("getAuthedUser admin lookup non-ok:", res.status);
+      const body = await res.text().catch(() => "");
+      console.error("getAuthedUser admin lookup non-ok:", res.status, body.slice(0, 200));
       return null;
     }
     const data = await res.json();
